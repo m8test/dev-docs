@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
-<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-03-23T10:47:15.255264098"><title>动作 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"hb2qie_12","level":0,"title":"动作列表","anchor":"#hb2qie_12"},{"id":"hb2qie_20","level":0,"title":"通过命令执行动作","anchor":"#hb2qie_20"},{"id":"hb2qie_51","level":0,"title":"自定义动作","anchor":"#hb2qie_51"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="动作 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/actions.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="动作 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-03-23T10:59:08.871548534"><title>动作 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"pm3845_4","level":0,"title":"动作列表","anchor":"#pm3845_4"},{"id":"pm3845_5","level":0,"title":"通过命令执行动作","anchor":"#pm3845_5"},{"id":"pm3845_6","level":0,"title":"自定义动作","anchor":"#pm3845_6"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.22.0-b725/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="动作 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/actions.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="动作 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
     "@context": "http://schema.org",
     "@type": "WebPage",
     "@id": "writerside-documentation/actions.html#webpage",
@@ -13,12 +13,311 @@
     "@id": "writerside-documentation/#website",
     "url": "writerside-documentation/",
     "name": "M8Test Help"
-}</script><!-- End Schema.org --></head><body data-id="actions" data-main-title="动作" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="advanced.md|高级"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="actions" id="actions.md">动作</h1><p id="hb2qie_11">动作可以是功能性的, 例如跳转到某个界面、 保存编辑器更改到文件中等. 也可以是带界面的, 例如新建文件(需要通过对话框输入文件名)、删除文件(需要用户通过对话框确认删除)等.</p><section class="chapter"><h2 id="hb2qie_12" data-toc="hb2qie_12">动作列表</h2><p id="hb2qie_13">点击悬浮菜单中动作列表按钮</p><figure id="hb2qie_14"><img alt="42" src="https://raw.githubusercontent.com/m8test/Images/refs/heads/main/42.png" title="42"></figure><p id="hb2qie_15">可以看到当前页面可用的所有分组</p><figure id="hb2qie_16"><img alt="43" src="https://raw.githubusercontent.com/m8test/Images/refs/heads/main/43.png" title="43"></figure><p id="hb2qie_17">点击某个分组可以看到该分组中可用的动作, 右上角的角标的数字表示该 action 被引用多少次, 例如删除文件 action, 界面中包含多个文件, 每个文件都有引用了删除文件 action, 右上角的角标的数字就会显示有多少个文件</p><figure id="hb2qie_18"><img alt="44" src="https://raw.githubusercontent.com/m8test/Images/refs/heads/main/44.png" title="44"></figure><p id="hb2qie_19">如果需要执行某个动作可以直接点击</p></section><section class="chapter"><h2 id="hb2qie_20" data-toc="hb2qie_20">通过命令执行动作</h2><section class="chapter"><h3 id="hb2qie_21" data-toc="hb2qie_21">简单执行动作</h3><div class="code-block" data-lang="bash">
+}</script><!-- End Schema.org --></head><body data-id="actions" data-main-title="动作" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="advanced.md|高级"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="actions" id="actions.md">动作</h1><p id="pm3845_3">动作可以是功能性的, 例如跳转到某个界面、 保存编辑器更改到文件中等. 也可以是带界面的, 例如新建文件(需要通过对话框输入文件名)、删除文件(需要用户通过对话框确认删除)等.</p><section class="chapter"><h2 id="pm3845_4" data-toc="pm3845_4">动作列表</h2><p id="pm3845_7">点击悬浮菜单中动作列表按钮</p><figure id="pm3845_8"><img alt="42" src="https://raw.githubusercontent.com/m8test/Images/refs/heads/main/42.png" title="42"></figure><p id="pm3845_9">可以看到当前页面可用的所有分组</p><figure id="pm3845_10"><img alt="43" src="https://raw.githubusercontent.com/m8test/Images/refs/heads/main/43.png" title="43"></figure><p id="pm3845_11">点击某个分组可以看到该分组中可用的动作, 右上角的角标的数字表示该 action 被引用多少次, 例如删除文件 action, 界面中包含多个文件, 每个文件都有引用了删除文件 action, 右上角的角标的数字就会显示有多少个文件</p><figure id="pm3845_12"><img alt="44" src="https://raw.githubusercontent.com/m8test/Images/refs/heads/main/44.png" title="44"></figure><p id="pm3845_13">如果需要执行某个动作可以直接点击</p></section><section class="chapter"><h2 id="pm3845_5" data-toc="pm3845_5">通过命令执行动作</h2><section class="chapter"><h3 id="pm3845_14" data-toc="pm3845_14">简单执行动作</h3><div class="code-block" data-lang="bash">
 action aaa
-</div><ul class="list _bullet" id="hb2qie_23"><li class="list__item" id="hb2qie_24"><p>action: 表示执行动作</p></li><li class="list__item" id="hb2qie_25"><p>aaa: 表示动作Id</p></li></ul></section><section class="chapter"><h3 id="hb2qie_26" data-toc="hb2qie_26">指定动作分组</h3><div class="code-block" data-lang="bash">
+</div><ul class="list _bullet" id="pm3845_19"><li class="list__item" id="pm3845_20"><p id="pm3845_22">action: 表示执行动作</p></li><li class="list__item" id="pm3845_21"><p id="pm3845_23">aaa: 表示动作Id</p></li></ul></section><section class="chapter"><h3 id="pm3845_15" data-toc="pm3845_15">指定动作分组</h3><div class="code-block" data-lang="bash">
 action aaa --group-id=xxx
-</div><ul class="list _bullet" id="hb2qie_28"><li class="list__item" id="hb2qie_29"><p>action: 表示执行动作</p></li><li class="list__item" id="hb2qie_30"><p>aaa: 表示动作Id</p></li><li class="list__item" id="hb2qie_31"><p>--group-id=xxx: 指定动作分组为xxx</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="hb2qie_32"><p id="hb2qie_33">当有多个分组中包含相同id的动作时可以指定动作组id以筛选正确的动作.</p></aside></section><section class="chapter"><h3 id="hb2qie_34" data-toc="hb2qie_34">指定动作能力</h3><div class="code-block" data-lang="bash">
+</div><ul class="list _bullet" id="pm3845_25"><li class="list__item" id="pm3845_27"><p id="pm3845_30">action: 表示执行动作</p></li><li class="list__item" id="pm3845_28"><p id="pm3845_31">aaa: 表示动作Id</p></li><li class="list__item" id="pm3845_29"><p id="pm3845_32">--group-id=xxx: 指定动作分组为xxx</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="pm3845_26"><p id="pm3845_33">当有多个分组中包含相同id的动作时可以指定动作组id以筛选正确的动作.</p></aside></section><section class="chapter"><h3 id="pm3845_16" data-toc="pm3845_16">指定动作能力</h3><div class="code-block" data-lang="bash">
 action aaa --ability=xxx
-</div><ul class="list _bullet" id="hb2qie_36"><li class="list__item" id="hb2qie_37"><p>action: 表示执行动作</p></li><li class="list__item" id="hb2qie_38"><p>aaa: 表示动作Id</p></li><li class="list__item" id="hb2qie_39"><p>--ability=xxx: 指定动作能力为xxx</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="hb2qie_40"><p id="hb2qie_41">当一个分组中的动作被多次引用时需要指定动作能力来区分不同的引用, 例如删除文件的动作的ability一般为其文件名, 这样就可以表示删除特定的文件.</p></aside></section><section class="chapter"><h3 id="hb2qie_42" data-toc="hb2qie_42">同时指定动作分组和动作能力</h3><div class="code-block" data-lang="bash">
+</div><ul class="list _bullet" id="pm3845_35"><li class="list__item" id="pm3845_37"><p id="pm3845_40">action: 表示执行动作</p></li><li class="list__item" id="pm3845_38"><p id="pm3845_41">aaa: 表示动作Id</p></li><li class="list__item" id="pm3845_39"><p id="pm3845_42">--ability=xxx: 指定动作能力为xxx</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="pm3845_36"><p id="pm3845_43">当一个分组中的动作被多次引用时需要指定动作能力来区分不同的引用, 例如删除文件的动作的ability一般为其文件名, 这样就可以表示删除特定的文件.</p></aside></section><section class="chapter"><h3 id="pm3845_17" data-toc="pm3845_17">同时指定动作分组和动作能力</h3><div class="code-block" data-lang="bash">
 action aaa --ability=xxx --group-id=yyy
-</div><ul class="list _bullet" id="hb2qie_44"><li class="list__item" id="hb2qie_45"><p>action: 表示执行动作</p></li><li class="list__item" id="hb2qie_46"><p>aaa: 表示动作Id</p></li><li class="list__item" id="hb2qie_47"><p>--ability=xxx: 指定动作能力为xxx</p></li><li class="list__item" id="hb2qie_48"><p>--group-id=yyy: 指定动作分组为yyy</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="hb2qie_49"><p id="hb2qie_50">当有多个分组中包含相同id的动作并且该动作被引用多次时可以同时指定分组和能力以锁定特定的动作.</p></aside></section></section><section class="chapter"><h2 id="hb2qie_51" data-toc="hb2qie_51">自定义动作</h2><p id="hb2qie_52">如果想要自定义动作的话需要通过插件实现, 如果您还不会开发插件可以先查看 <a href="common-plugin.html" id="hb2qie_53" data-tooltip="开发通用插件步骤如下:">插件开发</a></p><ol class="list _decimal" id="hb2qie_54" type="1"><li class="list__item" id="hb2qie_55"><p>编写动作分组继承 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.action.impl/-abstract-action-group/index.html" id="hb2qie_56" data-external="true" rel="noopener noreferrer">AbstractActionGroup</a>, 并实现其中的 <code class="code" id="hb2qie_57">getId</code> 和 <code class="code" id="hb2qie_58">getName</code> 方法</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true"></div><aside class="prompt" data-type="tip" data-title="" id="hb2qie_60"><p id="hb2qie_61"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/TestActionGroup.kt" id="hb2qie_62" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/TestActionGroup.kt</a></p></aside><aside class="prompt" data-type="tip" data-title="" id="hb2qie_63"><p id="hb2qie_64">此步骤可选, 如果需要将动作添加到已存在的动作分组的话可以通过 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.util/-action-utils/register-action.html" id="hb2qie_65" data-external="true" rel="noopener noreferrer">ActionUtils.registerAction</a> 方法实现</p></aside><ol class="list _decimal" id="hb2qie_66" type="1" start="2"><li class="list__item" id="hb2qie_67"><p>在 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.plugin.impl/-abstract-composable-pluggable-apk-plugin/index.html" id="hb2qie_68" data-external="true" rel="noopener noreferrer">AbstractComposablePluggableApkPlugin</a> 中的 <code class="code" id="hb2qie_69">onInstall</code> 方法注册动作分组, 以及在 <code class="code" id="hb2qie_70">onUninstall</code> 方法取消注册动作分组, 并在其中注册需要的动作, 并通过 <code class="code" id="hb2qie_71">ActionGroupLazyColumn</code> 和 <code class="code" id="hb2qie_72">ActionGroupLazyRow</code> 显示动作分组.</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true"></div><aside class="prompt" data-type="tip" data-title="" id="hb2qie_74"><p id="hb2qie_75"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ActionPlugin.kt" id="hb2qie_76" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ActionPlugin.kt</a></p></aside><ol class="list _decimal" id="hb2qie_77" type="1" start="3"><li class="list__item" id="hb2qie_78"><p>编写测试用的动作, 下面是 jetpack compose 实现的动作</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true"></div><aside class="prompt" data-type="tip" data-title="" id="hb2qie_80"><p id="hb2qie_81"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ComposableActions.kt" id="hb2qie_82" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ComposableActions.kt</a></p></aside><ol class="list _decimal" id="hb2qie_83" type="1" start="4"><li class="list__item" id="hb2qie_84"><p>继续编写测试用的动作, 下面是 View 实现的动作</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true"></div><aside class="prompt" data-type="tip" data-title="" id="hb2qie_86"><p id="hb2qie_87"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ViewActions.kt" id="hb2qie_88" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ViewActions.kt</a></p></aside><aside class="prompt" data-type="tip" data-title="" id="hb2qie_89"><p><a href="https://github.com/m8test/Plugins/tree/main/common/action/" id="hb2qie_90" data-external="true" rel="noopener noreferrer">示例代码</a></p></aside></section><div class="last-modified">Last modified: 23 March 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="command.html" class="navigation-links__prev">命令</a><a href="navigation.html" class="navigation-links__next">导航</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.js"></script></body></html>
+</div><ul class="list _bullet" id="pm3845_45"><li class="list__item" id="pm3845_47"><p id="pm3845_51">action: 表示执行动作</p></li><li class="list__item" id="pm3845_48"><p id="pm3845_52">aaa: 表示动作Id</p></li><li class="list__item" id="pm3845_49"><p id="pm3845_53">--ability=xxx: 指定动作能力为xxx</p></li><li class="list__item" id="pm3845_50"><p id="pm3845_54">--group-id=yyy: 指定动作分组为yyy</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="pm3845_46"><p id="pm3845_55">当有多个分组中包含相同id的动作并且该动作被引用多次时可以同时指定分组和能力以锁定特定的动作.</p></aside></section></section><section class="chapter"><h2 id="pm3845_6" data-toc="pm3845_6">自定义动作</h2><p id="pm3845_56">如果想要自定义动作的话需要通过插件实现, 如果您还不会开发插件可以先查看 <a href="common-plugin.html" id="pm3845_97" data-tooltip="开发通用插件步骤如下:">插件开发</a></p><ol class="list _decimal" id="pm3845_60" type="1"><li class="list__item" id="pm3845_98"><p id="pm3845_99">编写动作分组继承 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.action.impl/-abstract-action-group/index.html" id="pm3845_100" data-external="true" rel="noopener noreferrer">AbstractActionGroup</a>, 并实现其中的 <code class="code" id="pm3845_101">getId</code> 和 <code class="code" id="pm3845_102">getName</code> 方法</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.plugins.common.action
+
+import com.hjq.toast.Toaster
+import com.m8test.action.impl.AbstractActionGroup
+import com.m8test.action.impl.DefaultFunctionalAction
+import com.m8test.plugin.api.PluggableApkPlugin
+
+/**
+ * Description TODO
+ *
+ * @date 2025/01/02 14:35:21
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class TestActionGroup(plugin: PluggableApkPlugin) : AbstractActionGroup() {
+    init {
+        registerAction(ComposableActions.getWrapContentDialogAction(plugin))
+        registerAction(ComposableActions.getWrapContentBottomSheetAction(plugin))
+        registerAction(ComposableActions.getWrapContentFloatyAction(plugin))
+        registerAction(ComposableActions.getFullscreenDialogAction(plugin))
+        registerAction(ComposableActions.getFullscreenBottomSheetAction(plugin))
+        registerAction(ComposableActions.getFullscreenFloatyAction(plugin))
+        registerAction(ViewActions.getWrapContentDialogAction(plugin))
+        registerAction(ViewActions.getWrapContentBottomSheetAction(plugin))
+        registerAction(ViewActions.getWrapContentFloatyAction(plugin))
+        registerAction(ViewActions.getFullscreenDialogAction(plugin))
+        registerAction(ViewActions.getFullscreenBottomSheetAction(plugin))
+        registerAction(ViewActions.getFullscreenFloatyAction(plugin))
+        registerAction(
+            DefaultFunctionalAction(
+                resources = plugin.getResources(),
+                iconId = R.drawable.ic_launcher,
+                name = &quot;FunctionalAction&quot;,
+                id = &quot;FunctionalAction&quot;,
+                onPerform = { Toaster.show(&quot;FunctionalAction&quot;) })
+        )
+    }
+
+    override fun getId(): String {
+        return &quot;TestActionGroup&quot;
+    }
+
+    override fun getName(): String {
+        return &quot;TestActionGroup&quot;
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="pm3845_79"><p id="pm3845_103"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/TestActionGroup.kt" id="pm3845_104" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/TestActionGroup.kt</a></p></aside><aside class="prompt" data-type="tip" data-title="" id="pm3845_65"><p id="pm3845_105">此步骤可选, 如果需要将动作添加到已存在的动作分组的话可以通过 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.util/-action-utils/register-action.html" id="pm3845_106" data-external="true" rel="noopener noreferrer">ActionUtils.registerAction</a> 方法实现</p></aside><ol class="list _decimal" id="pm3845_68" type="1" start="2"><li class="list__item" id="pm3845_107"><p id="pm3845_108">在 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.plugin.impl/-abstract-composable-pluggable-apk-plugin/index.html" id="pm3845_109" data-external="true" rel="noopener noreferrer">AbstractComposablePluggableApkPlugin</a> 中的 <code class="code" id="pm3845_110">onInstall</code> 方法注册动作分组, 以及在 <code class="code" id="pm3845_111">onUninstall</code> 方法取消注册动作分组, 并在其中注册需要的动作, 并通过 <code class="code" id="pm3845_112">ActionGroupLazyColumn</code> 和 <code class="code" id="pm3845_113">ActionGroupLazyRow</code> 显示动作分组.</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.plugins.common.action
+
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.currentRecomposeScope
+import androidx.compose.ui.Modifier
+import com.google.accompanist.imageloading.rememberDrawablePainter
+import com.m8test.action.impl.ability.DefaultActionAbilityFactory
+import com.m8test.compose.widget.BackTopBarScaffold
+import com.m8test.plugin.api.ApkPluginProvider
+import com.m8test.plugin.impl.AbstractComposablePluggableApkPlugin
+import com.m8test.util.ActionUtils
+import com.m8test.util.ActionUtils.ActionGroupLazyColumn
+import com.m8test.util.ActionUtils.ActionGroupLazyRow
+
+/**
+ * Description TODO
+ *
+ * @date 2025/01/01 12:14:31
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class ActionPlugin(apkPluginProvider: ApkPluginProvider) :
+    AbstractComposablePluggableApkPlugin(apkPluginProvider) {
+    private val actionGroup = TestActionGroup(this)
+    override fun onInstall() {
+        super.onInstall()
+        ActionUtils.registerGroup(this, actionGroup)
+    }
+
+    override fun onUninstall() {
+        super.onUninstall()
+        ActionUtils.unregisterGroup(this, actionGroup)
+    }
+
+    @Composable
+    override fun Content() {
+        val recomposeScope = currentRecomposeScope
+        val onBackPressedDispatcher =
+            LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+        BackTopBarScaffold(
+            onBackPress = { onBackPressedDispatcher?.onBackPressed() },
+            titleText = getResources().getString(R.string.text_settings)
+        ) { paddingValues -&gt;
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                val factory = DefaultActionAbilityFactory(
+                    ability = Unit,
+                    onInvalidate = { recomposeScope.invalidate() })
+                ActionGroupLazyRow(
+                    actionGroup = actionGroup,
+                    factory = { factory },
+                    itemContent = { action, isEnabled, onClick -&gt;
+                        IconButton(enabled = isEnabled, onClick = onClick) {
+                            Icon(
+                                painter = rememberDrawablePainter(
+                                    drawable = action.getResources()
+                                        .getDrawable(action.getIconId(), null)
+                                ),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                )
+                ActionGroupLazyColumn(
+                    actionGroup = actionGroup,
+                    factory = { factory },
+                    itemContent = { action, isEnabled, onClick -&gt;
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable(enabled = isEnabled, onClick = onClick)
+                        ) {
+                            Icon(
+                                painter = rememberDrawablePainter(
+                                    drawable = action.getResources()
+                                        .getDrawable(action.getIconId(), null)
+                                ),
+                                contentDescription = null
+                            )
+                            Text(text = action.getName())
+                        }
+                    }
+                )
+            }
+        }
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="pm3845_84"><p id="pm3845_114"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ActionPlugin.kt" id="pm3845_115" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ActionPlugin.kt</a></p></aside><ol class="list _decimal" id="pm3845_70" type="1" start="3"><li class="list__item" id="pm3845_116"><p id="pm3845_117">编写测试用的动作, 下面是 jetpack compose 实现的动作</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.plugins.common.action
+
+import androidx.compose.material3.Text
+import com.m8test.action.api.VisualAction
+import com.m8test.action.impl.DefaultComposableAction
+import com.m8test.plugin.api.PluggableApkPlugin
+
+/**
+ * Description TODO
+ *
+ * @date 2025/01/01 12:26:18
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+object ComposableActions {
+    fun getWrapContentDialogAction(plugin: PluggableApkPlugin) = DefaultComposableAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;非全屏对话框(Composable)&quot;,
+        id = &quot;ComposableWrapContentDialog&quot;,
+        location = VisualAction.Location.WrapContentDialog,
+        content = { ability -&gt;
+            Text(text = &quot;非全屏对话框(Composable)&quot;)
+        }
+    )
+
+    fun getWrapContentBottomSheetAction(plugin: PluggableApkPlugin) = DefaultComposableAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;非全屏底部弹窗(Composable)&quot;,
+        id = &quot;ComposableWrapContentBottomSheet&quot;,
+        location = VisualAction.Location.WrapContentBottomSheet,
+        content = { ability -&gt;
+            Text(text = &quot;非全屏底部弹窗(Composable)&quot;)
+        })
+
+    fun getFullscreenDialogAction(plugin: PluggableApkPlugin) = DefaultComposableAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;全屏对话框(Composable)&quot;,
+        id = &quot;ComposableFullscreenDialog&quot;,
+        location = VisualAction.Location.FullscreenDialog,
+        content = { ability -&gt;
+            Text(text = &quot;全屏对话框(Composable)&quot;)
+        }
+    )
+
+    fun getFullscreenBottomSheetAction(plugin: PluggableApkPlugin) = DefaultComposableAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;全屏底部弹窗(Composable)&quot;,
+        id = &quot;ComposableFullscreenBottomSheet&quot;,
+        location = VisualAction.Location.FullscreenBottomSheet,
+        content = {
+            Text(text = &quot;全屏底部弹窗(Composable)&quot;)
+        }
+    )
+
+    fun getWrapContentFloatyAction(plugin: PluggableApkPlugin) = DefaultComposableAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;非全屏悬浮窗口(Composable)&quot;,
+        id = &quot;ComposableWrapContentFloaty&quot;,
+        location = VisualAction.Location.WrapContentFloaty,
+        content = { ability -&gt;
+            Text(text = &quot;非全屏悬浮窗口(Composable)&quot;)
+        }
+    )
+
+    fun getFullscreenFloatyAction(plugin: PluggableApkPlugin) = DefaultComposableAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;全屏悬浮窗口(Composable)&quot;,
+        id = &quot;ComposableFullscreenFloaty&quot;,
+        location = VisualAction.Location.FullscreenFloaty,
+        content = { ability -&gt;
+            Text(text = &quot;全屏悬浮窗口(Composable)&quot;)
+        }
+    )
+}</div><aside class="prompt" data-type="tip" data-title="" id="pm3845_89"><p id="pm3845_118"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ComposableActions.kt" id="pm3845_119" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ComposableActions.kt</a></p></aside><ol class="list _decimal" id="pm3845_72" type="1" start="4"><li class="list__item" id="pm3845_120"><p id="pm3845_121">继续编写测试用的动作, 下面是 View 实现的动作</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.plugins.common.action
+
+import android.widget.TextView
+import com.m8test.action.api.VisualAction
+import com.m8test.action.impl.DefaultViewAction
+import com.m8test.plugin.api.PluggableApkPlugin
+
+/**
+ * Description TODO
+ *
+ * @date 2025/01/01 12:26:18
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+object ViewActions {
+    fun getWrapContentDialogAction(plugin: PluggableApkPlugin) = DefaultViewAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;非全屏对话框(View)&quot;,
+        id = &quot;ViewWrapContentDialog&quot;,
+        location = VisualAction.Location.WrapContentDialog,
+        viewCreator = { ability -&gt;
+            TextView(ability.getContext()).apply { text = &quot;非全屏对话框(View)&quot; }
+        }
+    )
+
+    fun getWrapContentBottomSheetAction(plugin: PluggableApkPlugin) = DefaultViewAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;非全屏底部弹窗(View)&quot;,
+        id = &quot;ViewWrapContentBottomSheet&quot;,
+        location = VisualAction.Location.WrapContentBottomSheet,
+        viewCreator = { ability -&gt;
+            TextView(ability.getContext()).apply { text = &quot;非全屏底部弹窗(View)&quot; }
+        }
+    )
+
+    fun getFullscreenDialogAction(plugin: PluggableApkPlugin) = DefaultViewAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;全屏对话框(View)&quot;,
+        id = &quot;ViewFullscreenDialog&quot;,
+        location = VisualAction.Location.FullscreenDialog,
+        viewCreator = { ability -&gt;
+            TextView(ability.getContext()).apply { text = &quot;全屏对话框(View)&quot; }
+        }
+    )
+
+    fun getFullscreenBottomSheetAction(plugin: PluggableApkPlugin) = DefaultViewAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;全屏底部弹窗(View)&quot;,
+        id = &quot;ViewFullscreenBottomSheet&quot;,
+        location = VisualAction.Location.FullscreenBottomSheet,
+        viewCreator = { ability -&gt;
+            TextView(ability.getContext()).apply { text = &quot;全屏底部弹窗(View)&quot; }
+        }
+    )
+
+    fun getWrapContentFloatyAction(plugin: PluggableApkPlugin) = DefaultViewAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;非全屏悬浮窗口(View)&quot;,
+        id = &quot;ViewWrapContentFloaty&quot;,
+        location = VisualAction.Location.WrapContentFloaty,
+        viewCreator = { ability -&gt;
+            TextView(ability.getContext()).apply { text = &quot;非全屏悬浮窗口(View)&quot; }
+        }
+    )
+
+    fun getFullscreenFloatyAction(plugin: PluggableApkPlugin) = DefaultViewAction(
+        resources = plugin.getResources(),
+        iconId = R.drawable.ic_launcher,
+        name = &quot;全屏悬浮窗口(View)&quot;,
+        id = &quot;ViewFullscreenFloaty&quot;,
+        location = VisualAction.Location.FullscreenFloaty,
+        viewCreator = { ability -&gt;
+            TextView(ability.getContext()).apply { text = &quot;全屏悬浮窗口(View)&quot; }
+        }
+    )
+}</div><aside class="prompt" data-type="tip" data-title="" id="pm3845_94"><p id="pm3845_122"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ViewActions.kt" id="pm3845_123" data-external="true" rel="noopener noreferrer">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/common/action/src/main/kotlin/com/m8test/plugins/common/action/ViewActions.kt</a></p></aside><aside class="prompt" data-type="tip" data-title="" id="pm3845_96"><p><a href="https://github.com/m8test/Plugins/tree/main/common/action/" id="pm3845_124" data-external="true" rel="noopener noreferrer">示例代码</a></p></aside></section><div class="last-modified">Last modified: 23 March 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="command.html" class="navigation-links__prev">命令</a><a href="navigation.html" class="navigation-links__next">导航</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.22.0-b725/app.js"></script></body></html>
