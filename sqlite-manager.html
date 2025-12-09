@@ -1,0 +1,1247 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:25.407067876"><title>Sqlite数据库 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Sqlite数据库 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/sqlite-manager.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Sqlite数据库 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/sqlite-manager.html#webpage",
+    "url": "writerside-documentation/sqlite-manager.html",
+    "name": "Sqlite数据库 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="sqlite-manager" data-main-title="Sqlite数据库" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="utility-tools.md|实用工具"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="sqlite-manager" id="sqlite-manager.md">Sqlite数据库</h1><div class="tabs" id="tugyy3_6" data-group="languages" data-anchors="[tugyy3_12,tugyy3_15,tugyy3_18,tugyy3_21,tugyy3_24,tugyy3_27,tugyy3_30,tugyy3_9]"><div class="tabs__content" data-gtm="tab" id="tugyy3_9" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/**
+ * Sqlite 与 SqliteManager 接口测试脚本
+ * 全局变量: _sqliteManager
+ */
+
+// 辅助函数
+fun assertLog(name: String, actual: Any?, expected: Any?) {
+    if (actual == expected) {
+        _console.log(&quot;✅ [$name] Passed. Result: $actual&quot;)
+    } else {
+        _console.error(&quot;❌ [$name] Failed.\n   Expected: $expected\n   Actual  : $actual&quot;)
+    }
+}
+
+_console.log(&quot;🚀 开始测试 Sqlite 数据库模块...&quot;)
+
+// ==========================================
+// 1. 准备工作 &amp; SqliteManager 测试
+// ==========================================
+val dbName = &quot;test_m8_data.db&quot;
+val tableName = &quot;users&quot;
+
+// 确保测试前环境干净
+if (_sqliteManager.exists(dbName)) {
+    _sqliteManager.delete(dbName)
+}
+assertLog(&quot;exists (初始状态)&quot;, _sqliteManager.exists(dbName), false)
+
+// 打开/创建数据库
+// 此时会返回一个 Sqlite 接口对象
+val db = _sqliteManager.open(dbName)
+
+if (db != null &amp;&amp; db.isOpen()) {
+    _console.log(&quot;✅ 数据库打开成功: $dbName&quot;)
+} else {
+    _console.error(&quot;❌ 数据库打开失败&quot;)
+    // 这里用 return@file 或直接 throw 异常，kts 中直接 return 可能会有上下文限制，
+    // 但作为脚本顶层可以直接停止执行，这里为了代码块完整性不做强制退出，但逻辑上应该退出
+    throw RuntimeException(&quot;数据库打开失败&quot;)
+}
+
+// 验证文件现在是否存在
+assertLog(&quot;exists (打开后)&quot;, _sqliteManager.exists(dbName), true)
+
+// ==========================================
+// 2. 表结构操作 (DDL)
+// ==========================================
+
+// createTable
+// 定义列: id 自增主键, name 文本, age 整数, score 浮点
+// Kotlin Map 语法
+val columns = mapOf(
+    &quot;id&quot; to &quot;INTEGER PRIMARY KEY AUTOINCREMENT&quot;,
+    &quot;name&quot; to &quot;TEXT NOT NULL&quot;,
+    &quot;age&quot; to &quot;INTEGER&quot;,
+    &quot;score&quot; to &quot;REAL&quot;
+)
+
+val createRes = db.createTable(tableName, columns)
+assertLog(&quot;createTable&quot;, createRes, true)
+
+// hasTable
+assertLog(&quot;hasTable&quot;, db.hasTable(tableName), true)
+
+// ==========================================
+// 3. 数据操作 (CRUD)
+// ==========================================
+
+// --- Insert ---
+_console.log(&quot;\n--- 测试 Insert ---&quot;)
+val user1 = mapOf(&quot;name&quot; to &quot;Alice&quot;, &quot;age&quot; to 25, &quot;score&quot; to 88.5)
+val rowId1 = db.insert(tableName, null, user1)
+_console.log(&quot;插入 Alice, RowID: &quot; + rowId1)
+
+val user2 = mapOf(&quot;name&quot; to &quot;Bob&quot;, &quot;age&quot; to 30, &quot;score&quot; to 92.0)
+val rowId2 = db.insert(tableName, null, user2)
+_console.log(&quot;插入 Bob, RowID: &quot; + rowId2)
+
+if (rowId1 != -1L &amp;&amp; rowId2 != -1L) { // 假设 rowId 返回 Long 或 Int
+    _console.log(&quot;✅ Insert 成功&quot;)
+} else {
+    _console.error(&quot;❌ Insert 失败&quot;)
+}
+
+// --- Query ---
+_console.log(&quot;\n--- 测试 Query ---&quot;)
+// 注意：query 方法的 bindArgs 需要 String 数组
+val querySql = &quot;SELECT * FROM $tableName WHERE name = ?&quot;
+// Kotlin 中 arrayOf 创建数组
+val results = db.query(querySql, arrayOf(&quot;Alice&quot;))
+
+if (results.size &gt; 0) {
+    val user = results[0]
+    _console.log(&quot;查询结果: &quot; + user)
+    // 验证数据 (注意：接口返回的值统一为 String，所以对比字符串 &quot;25&quot;)
+    if (user[&quot;name&quot;] == &quot;Alice&quot; &amp;&amp; user[&quot;age&quot;] == &quot;25&quot;) {
+        _console.log(&quot;✅ Query 数据验证通过&quot;)
+    } else {
+        _console.error(&quot;❌ Query 数据验证失败&quot;)
+    }
+} else {
+    _console.error(&quot;❌ Query 未找到数据&quot;)
+}
+
+// --- Update ---
+_console.log(&quot;\n--- 测试 Update ---&quot;)
+val updateValues = mapOf(&quot;score&quot; to 95.5) // 修改 Alice 的分数
+val rowsAffected = db.update(tableName, updateValues, &quot;name = ?&quot;, arrayOf(&quot;Alice&quot;))
+assertLog(&quot;update (受影响行数)&quot;, rowsAffected, 1)
+
+// 验证更新是否生效
+val verifyUpdate = db.query(&quot;SELECT score FROM $tableName WHERE name = 'Alice'&quot;, null)
+if (verifyUpdate[0][&quot;score&quot;] == &quot;95.5&quot;) {
+    _console.log(&quot;✅ Update 生效验证通过&quot;)
+} else {
+    _console.error(&quot;❌ Update 生效验证失败, 实际值: &quot; + verifyUpdate[0][&quot;score&quot;])
+}
+
+// --- Delete ---
+_console.log(&quot;\n--- 测试 Delete ---&quot;)
+val deleteRows = db.delete(tableName, &quot;name = ?&quot;, arrayOf(&quot;Bob&quot;))
+assertLog(&quot;delete (受影响行数)&quot;, deleteRows, 1)
+
+// ==========================================
+// 4. 原生 SQL 与 事务 (Transaction)
+// ==========================================
+_console.log(&quot;\n--- 测试 Transaction &amp; execSQL ---&quot;)
+
+db.beginTransaction()
+try {
+    // 使用 execSQL 插入一条数据
+    // 注意：bindArgs 是 Array&lt;Any?&gt;，可以传 int/string 等
+    val sql = &quot;INSERT INTO $tableName (name, age, score) VALUES (?, ?, ?)&quot;
+    db.execSQL(sql, arrayOf&lt;Any?&gt;(&quot;Charlie&quot;, 20, 60.0))
+
+    // 标记事务成功
+    db.setTransactionSuccessful()
+    _console.log(&quot;✅ 事务执行完毕 (Committed)&quot;)
+} catch (e: Exception) {
+    _console.error(&quot;❌ 事务执行异常: &quot; + e)
+} finally {
+    // 结束事务（如果之前没调用 setTransactionSuccessful，这里会自动回滚）
+    db.endTransaction()
+}
+
+// 验证 Charlie 是否存在
+val charlieRes = db.query(&quot;SELECT * FROM $tableName WHERE name = 'Charlie'&quot;, null)
+assertLog(&quot;事务插入验证&quot;, charlieRes.size, 1)
+
+// ==========================================
+// 5. 清理与关闭
+// ==========================================
+_console.log(&quot;\n--- 测试 清理操作 ---&quot;)
+
+// dropTable
+assertLog(&quot;dropTable&quot;, db.dropTable(tableName), true)
+assertLog(&quot;hasTable (删除后)&quot;, db.hasTable(tableName), false)
+
+// 关闭连接
+db.close()
+assertLog(&quot;isOpen (关闭后)&quot;, db.isOpen(), false)
+
+// 删除数据库文件
+val deleteDbRes = _sqliteManager.delete(dbName)
+assertLog(&quot;SqliteManager.delete&quot;, deleteDbRes, true)
+assertLog(&quot;exists (最终检查)&quot;, _sqliteManager.exists(dbName), false)
+
+_console.log(&quot;🎉 Sqlite 接口测试完毕。&quot;)
+
+_script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="tugyy3_12" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/**
+ * Sqlite 与 SqliteManager 接口测试脚本
+ * 全局变量: $sqliteManager
+ */
+
+$console.log(&quot;🚀 开始测试 Sqlite 数据库模块...&quot;)
+
+// ==========================================
+// 1. 准备工作 &amp; SqliteManager 测试
+// ==========================================
+def dbName = &quot;test_m8_data.db&quot;
+def tableName = &quot;users&quot;
+
+// 确保测试前环境干净
+if ($sqliteManager.exists(dbName)) {
+    $sqliteManager.delete(dbName)
+}
+assertLog(&quot;exists (初始状态)&quot;, $sqliteManager.exists(dbName), false)
+
+// 打开/创建数据库
+// 此时会返回一个 Sqlite 接口对象
+def db = $sqliteManager.open(dbName)
+
+if (db != null &amp;&amp; db.isOpen()) {
+    $console.log(&quot;✅ 数据库打开成功: ${dbName}&quot;)
+} else {
+    $console.error(&quot;❌ 数据库打开失败&quot;)
+    return // 无法继续
+}
+
+// 验证文件现在是否存在
+assertLog(&quot;exists (打开后)&quot;, $sqliteManager.exists(dbName), true)
+
+// ==========================================
+// 2. 表结构操作 (DDL)
+// ==========================================
+
+// createTable
+// 定义列: id 自增主键, name 文本, age 整数, score 浮点
+def columns = [
+        &quot;id&quot;: &quot;INTEGER PRIMARY KEY AUTOINCREMENT&quot;,
+        &quot;name&quot;: &quot;TEXT NOT NULL&quot;,
+        &quot;age&quot;: &quot;INTEGER&quot;,
+        &quot;score&quot;: &quot;REAL&quot;
+]
+
+def createRes = db.createTable(tableName, columns)
+assertLog(&quot;createTable&quot;, createRes, true)
+
+// hasTable
+assertLog(&quot;hasTable&quot;, db.hasTable(tableName), true)
+
+// ==========================================
+// 3. 数据操作 (CRUD)
+// ==========================================
+
+// --- Insert ---
+$console.log(&quot;\n--- 测试 Insert ---&quot;)
+def user1 = [&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 25, &quot;score&quot;: 88.5]
+def rowId1 = db.insert(tableName, null, user1)
+$console.log(&quot;插入 Alice, RowID: &quot; + rowId1)
+
+def user2 = [&quot;name&quot;: &quot;Bob&quot;, &quot;age&quot;: 30, &quot;score&quot;: 92.0]
+def rowId2 = db.insert(tableName, null, user2)
+$console.log(&quot;插入 Bob, RowID: &quot; + rowId2)
+
+if (rowId1 != -1 &amp;&amp; rowId2 != -1) {
+    $console.log(&quot;✅ Insert 成功&quot;)
+} else {
+    $console.error(&quot;❌ Insert 失败&quot;)
+}
+
+// --- Query ---
+$console.log(&quot;\n--- 测试 Query ---&quot;)
+// 注意：query 方法的 bindArgs 需要 String 数组
+def querySql = &quot;SELECT * FROM $tableName WHERE name = ?&quot;
+// 根据接口定义，返回值 Map 的 Value 都是 String 类型
+def results = db.query(querySql, [&quot;Alice&quot;] as String[])
+
+if (results.size() &gt; 0) {
+    def user = results[0]
+    $console.log(&quot;查询结果: &quot; + user)
+    // 验证数据 (注意：接口返回的值统一为 String，所以对比字符串 &quot;25&quot;)
+    if (user[&quot;name&quot;] == &quot;Alice&quot; &amp;&amp; user[&quot;age&quot;] == &quot;25&quot;) {
+        $console.log(&quot;✅ Query 数据验证通过&quot;)
+    } else {
+        $console.error(&quot;❌ Query 数据验证失败&quot;)
+    }
+} else {
+    $console.error(&quot;❌ Query 未找到数据&quot;)
+}
+
+// --- Update ---
+$console.log(&quot;\n--- 测试 Update ---&quot;)
+def updateValues = [&quot;score&quot;: 95.5] // 修改 Alice 的分数
+def rowsAffected = db.update(tableName, updateValues, &quot;name = ?&quot;, [&quot;Alice&quot;] as String[])
+assertLog(&quot;update (受影响行数)&quot;, rowsAffected, 1)
+
+// 验证更新是否生效
+def verifyUpdate = db.query(&quot;SELECT score FROM $tableName WHERE name = 'Alice'&quot;, null)
+if (verifyUpdate[0][&quot;score&quot;] == &quot;95.5&quot;) {
+    $console.log(&quot;✅ Update 生效验证通过&quot;)
+} else {
+    $console.error(&quot;❌ Update 生效验证失败, 实际值: &quot; + verifyUpdate[0][&quot;score&quot;])
+}
+
+// --- Delete ---
+$console.log(&quot;\n--- 测试 Delete ---&quot;)
+def deleteRows = db.delete(tableName, &quot;name = ?&quot;, [&quot;Bob&quot;] as String[])
+assertLog(&quot;delete (受影响行数)&quot;, deleteRows, 1)
+
+// ==========================================
+// 4. 原生 SQL 与 事务 (Transaction)
+// ==========================================
+$console.log(&quot;\n--- 测试 Transaction &amp; execSQL ---&quot;)
+
+db.beginTransaction()
+try {
+    // 使用 execSQL 插入一条数据
+    // 注意：bindArgs 是 Array&lt;Any?&gt;，可以传 int/string 等
+    def sql = &quot;INSERT INTO $tableName (name, age, score) VALUES (?, ?, ?)&quot;
+    db.execSQL(sql, [&quot;Charlie&quot;, 20, 60.0] as Object[])
+
+    // 标记事务成功
+    db.setTransactionSuccessful()
+    $console.log(&quot;✅ 事务执行完毕 (Committed)&quot;)
+} catch (Exception e) {
+    $console.error(&quot;❌ 事务执行异常: &quot; + e)
+} finally {
+    // 结束事务（如果之前没调用 setTransactionSuccessful，这里会自动回滚）
+    db.endTransaction()
+}
+
+// 验证 Charlie 是否存在
+def charlieRes = db.query(&quot;SELECT * FROM $tableName WHERE name = 'Charlie'&quot;, null)
+assertLog(&quot;事务插入验证&quot;, charlieRes.size(), 1)
+
+// ==========================================
+// 5. 清理与关闭
+// ==========================================
+$console.log(&quot;\n--- 测试 清理操作 ---&quot;)
+
+// dropTable
+assertLog(&quot;dropTable&quot;, db.dropTable(tableName), true)
+assertLog(&quot;hasTable (删除后)&quot;, db.hasTable(tableName), false)
+
+// 关闭连接
+// Sqlite 继承自 ScriptCloseable，通常有关闭方法
+db.close()
+assertLog(&quot;isOpen (关闭后)&quot;, db.isOpen(), false)
+
+// 删除数据库文件
+def deleteDbRes = $sqliteManager.delete(dbName)
+assertLog(&quot;SqliteManager.delete&quot;, deleteDbRes, true)
+assertLog(&quot;exists (最终检查)&quot;, $sqliteManager.exists(dbName), false)
+
+$console.log(&quot;🎉 Sqlite 接口测试完毕。&quot;)
+
+// ==========================================
+// 辅助函数
+// ==========================================
+def assertLog(name, actual, expected) {
+    if (actual == expected) {
+        $console.log(&quot;✅ [${name}] Passed. Result: ${actual}&quot;)
+    } else {
+        $console.error(&quot;❌ [${name}] Failed.\n   Expected: ${expected}\n   Actual  : ${actual}&quot;)
+    }
+}
+
+$script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="tugyy3_15" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="tugyy3_18" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * Sqlite 与 SqliteManager 接口测试脚本
+ * 全局变量: $sqliteManager, $reflectors, $arrays, $maps
+ */
+
+$console.log(&quot;🚀 开始测试 Sqlite 数据库模块...&quot;);
+
+// ==========================================
+// 0. 准备 Class 对象
+// ==========================================
+// 修正：使用 $reflectors 获取 Class 对象，避免硬编码
+const StringClass = $reflectors.reflectClassName(&quot;java.lang.String&quot;).getTargetClass();
+const ObjectClass = $reflectors.reflectClassName(&quot;java.lang.Object&quot;).getTargetClass();
+
+
+// ==========================================
+// 1. 准备工作 &amp; SqliteManager 测试
+// ==========================================
+const dbName = &quot;test_m8_data.db&quot;;
+const tableName = &quot;users&quot;;
+
+// 确保测试前环境干净
+if ($sqliteManager.exists(dbName) == true) {
+    $sqliteManager.delete(dbName);
+}
+assertLog(&quot;exists (初始状态)&quot;, $sqliteManager.exists(dbName), false);
+
+// 打开/创建数据库
+const db = $sqliteManager.open(dbName);
+
+if (db != null &amp;&amp; db.isOpen() == true) {
+    $console.log(&quot;✅ 数据库打开成功: &quot; + dbName);
+} else {
+    $console.error(&quot;❌ 数据库打开失败&quot;);
+    throw new Error(&quot;数据库打开失败，测试终止&quot;);
+}
+
+// 验证文件现在是否存在
+assertLog(&quot;exists (打开后)&quot;, $sqliteManager.exists(dbName), true);
+
+// ==========================================
+// 2. 表结构操作 (DDL)
+// ==========================================
+
+// createTable
+const columns = $maps.mapOf(
+    $maps.pairOf(&quot;id&quot;, &quot;INTEGER PRIMARY KEY AUTOINCREMENT&quot;),
+    $maps.pairOf(&quot;name&quot;, &quot;TEXT NOT NULL&quot;),
+    $maps.pairOf(&quot;age&quot;, &quot;INTEGER&quot;),
+    $maps.pairOf(&quot;score&quot;, &quot;REAL&quot;)
+);
+
+const createRes = db.createTable(tableName, columns);
+assertLog(&quot;createTable&quot;, createRes, true);
+
+// hasTable
+assertLog(&quot;hasTable&quot;, db.hasTable(tableName), true);
+
+// ==========================================
+// 3. 数据操作 (CRUD)
+// ==========================================
+
+// --- Insert ---
+$console.log(&quot;\n--- 测试 Insert ---&quot;);
+const user1 = $maps.mapOf($maps.pairOf(&quot;name&quot;, &quot;Alice&quot;), $maps.pairOf(&quot;age&quot;, 25), $maps.pairOf(&quot;score&quot;, 88.5));
+const rowId1 = db.insert(tableName, null, user1);
+$console.log(&quot;插入 Alice, RowID: &quot; + rowId1);
+
+const user2 = $maps.mapOf($maps.pairOf(&quot;name&quot;, &quot;Bob&quot;), $maps.pairOf(&quot;age&quot;, 30), $maps.pairOf(&quot;score&quot;, 92.0));
+const rowId2 = db.insert(tableName, null, user2);
+$console.log(&quot;插入 Bob, RowID: &quot; + rowId2);
+
+if (rowId1 != -1 &amp;&amp; rowId2 != -1) {
+    $console.log(&quot;✅ Insert 成功&quot;);
+} else {
+    $console.error(&quot;❌ Insert 失败&quot;);
+}
+
+// --- Query ---
+$console.log(&quot;\n--- 测试 Query ---&quot;);
+const querySql = &quot;SELECT * FROM &quot; + tableName + &quot; WHERE name = ?&quot;;
+const results = db.query(querySql, $arrays.arrayOf(StringClass, &quot;Alice&quot;));
+
+if (results.size() &gt; 0) {
+    const user = results.get(0);
+    $console.log(&quot;查询结果: &quot; + user);
+    if (user.get(&quot;name&quot;) == &quot;Alice&quot; &amp;&amp; user.get(&quot;age&quot;) == &quot;25&quot;) {
+        $console.log(&quot;✅ Query 数据验证通过&quot;);
+    } else {
+        $console.error(&quot;❌ Query 数据验证失败&quot;);
+    }
+} else {
+    $console.error(&quot;❌ Query 未找到数据&quot;);
+}
+
+// --- Update ---
+$console.log(&quot;\n--- 测试 Update ---&quot;);
+const updateValues = $maps.mapOf($maps.pairOf(&quot;score&quot;, 95.5));
+const rowsAffected = db.update(tableName, updateValues, &quot;name = ?&quot;, $arrays.arrayOf(StringClass, &quot;Alice&quot;));
+assertLog(&quot;update (受影响行数)&quot;, rowsAffected, 1);
+
+// 验证更新是否生效
+const verifyUpdate = db.query(&quot;SELECT score FROM &quot; + tableName + &quot; WHERE name = 'Alice'&quot;, null);
+if (verifyUpdate.get(0).get(&quot;score&quot;) == &quot;95.5&quot;) {
+    $console.log(&quot;✅ Update 生效验证通过&quot;);
+} else {
+    $console.error(&quot;❌ Update 生效验证失败, 实际值: &quot; + verifyUpdate.get(0).get(&quot;score&quot;));
+}
+
+// --- Delete ---
+$console.log(&quot;\n--- 测试 Delete ---&quot;);
+const deleteRows = db.delete(tableName, &quot;name = ?&quot;, $arrays.arrayOf(StringClass, &quot;Bob&quot;));
+assertLog(&quot;delete (受影响行数)&quot;, deleteRows, 1);
+
+// ==========================================
+// 4. 原生 SQL 与 事务 (Transaction)
+// ==========================================
+$console.log(&quot;\n--- 测试 Transaction &amp; execSQL ---&quot;);
+
+db.beginTransaction();
+try {
+    const sql = &quot;INSERT INTO &quot; + tableName + &quot; (name, age, score) VALUES (?, ?, ?)&quot;;
+    db.execSQL(sql, $arrays.arrayOf(ObjectClass, &quot;Charlie&quot;, 20, 60.0));
+    db.setTransactionSuccessful();
+    $console.log(&quot;✅ 事务执行完毕 (Committed)&quot;);
+} catch (e) {
+    $console.error(&quot;❌ 事务执行异常: &quot; + e);
+} finally {
+    db.endTransaction();
+}
+
+// 验证 Charlie 是否存在
+const charlieRes = db.query(&quot;SELECT * FROM &quot; + tableName + &quot; WHERE name = 'Charlie'&quot;, null);
+assertLog(&quot;事务插入验证&quot;, charlieRes.size(), 1);
+
+// ==========================================
+// 5. 清理与关闭
+// ==========================================
+$console.log(&quot;\n--- 测试 清理操作 ---&quot;);
+
+// dropTable
+assertLog(&quot;dropTable&quot;, db.dropTable(tableName), true);
+assertLog(&quot;hasTable (删除后)&quot;, db.hasTable(tableName), false);
+
+// 关闭连接
+db.close();
+assertLog(&quot;isOpen (关闭后)&quot;, db.isOpen(), false);
+
+// 删除数据库文件
+const deleteDbRes = $sqliteManager.delete(dbName);
+assertLog(&quot;SqliteManager.delete&quot;, deleteDbRes, true);
+assertLog(&quot;exists (最终检查)&quot;, $sqliteManager.exists(dbName), false);
+
+$console.log(&quot;🎉 Sqlite 接口测试完毕。&quot;);
+
+// ==========================================
+// 辅助函数
+// ==========================================
+/**
+ * @param {string} name
+ * @param {any} actual
+ * @param {any} expected
+ */
+function assertLog(name, actual, expected) {
+    if (actual == expected) {
+        $console.log(&quot;✅ [&quot; + name + &quot;] Passed. Result: &quot; + actual);
+    } else {
+        $console.error(&quot;❌ [&quot; + name + &quot;] Failed.\n   Expected: &quot; + expected + &quot;\n   Actual  : &quot; + actual);
+    }
+}
+
+$script.getThreads().getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="tugyy3_21" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 文件名: 5.lua
+
+-- 引入转换所需的 Java 类
+local String = require(&quot;m8test_java.java.lang.String&quot;)
+local Object = require(&quot;m8test_java.java.lang.Object&quot;)
+
+---
+-- Sqlite 与 SqliteManager 接口测试脚本
+-- 全局变量: _sqliteManager
+--
+
+_console:log(&quot;🚀 开始测试 Sqlite 数据库模块...&quot;)
+
+-- ==========================================
+-- 辅助函数
+-- ==========================================
+local function assertLog(name, actual, expected)
+    if actual == expected then
+        _console:log(&quot;✅ [&quot; .. name .. &quot;] Passed. Result: &quot; .. tostring(actual))
+    else
+        _console:error(&quot;❌ [&quot; .. name .. &quot;] Failed.\n   Expected: &quot; .. tostring(expected) .. &quot;\n   Actual  : &quot; .. tostring(actual))
+    end
+end
+
+
+-- ==========================================
+-- 1. 准备工作 &amp; SqliteManager 测试
+-- ==========================================
+local dbName = &quot;test_m8_data.db&quot;
+local tableName = &quot;users&quot;
+
+-- 确保测试前环境干净
+if _sqliteManager:exists(dbName) then
+    _sqliteManager:delete(dbName)
+end
+assertLog(&quot;exists (初始状态)&quot;, _sqliteManager:exists(dbName), false)
+
+-- 打开/创建数据库
+local db = _sqliteManager:open(dbName)
+
+if db ~= nil and db:isOpen() then
+    _console:log(&quot;✅ 数据库打开成功: &quot; .. dbName)
+else
+    _console:error(&quot;❌ 数据库打开失败&quot;)
+    return -- 无法继续
+end
+
+-- 验证文件现在是否存在
+assertLog(&quot;exists (打开后)&quot;, _sqliteManager:exists(dbName), true)
+
+-- ==========================================
+-- 2. 表结构操作 (DDL)
+-- ==========================================
+
+-- createTable
+local columns = _maps:mutableMapOf(
+    _maps:pairOf(&quot;id&quot;, &quot;INTEGER PRIMARY KEY AUTOINCREMENT&quot;),
+    _maps:pairOf(&quot;name&quot;, &quot;TEXT NOT NULL&quot;),
+    _maps:pairOf(&quot;age&quot;, &quot;INTEGER&quot;),
+    _maps:pairOf(&quot;score&quot;, &quot;REAL&quot;)
+)
+
+local createRes = db:createTable(tableName, columns)
+assertLog(&quot;createTable&quot;, createRes, true)
+
+-- hasTable
+assertLog(&quot;hasTable&quot;, db:hasTable(tableName), true)
+
+-- ==========================================
+-- 3. 数据操作 (CRUD)
+-- ==========================================
+
+-- --- Insert ---
+_console:log(&quot;\n--- 测试 Insert ---&quot;)
+-- &lt;&lt;&lt;&lt;&lt; 核心修正点 #1：将 Lua table 转换为 Java Map &gt;&gt;&gt;&gt;&gt;
+local user1 = _maps:mutableMapOf(
+    _maps:pairOf(&quot;name&quot;, &quot;Alice&quot;),
+    _maps:pairOf(&quot;age&quot;, 25),
+    _maps:pairOf(&quot;score&quot;, 88.5)
+)
+local rowId1 = db:insert(tableName, nil, user1)
+_console:log(&quot;插入 Alice, RowID: &quot; .. tostring(rowId1))
+
+local user2 = _maps:mutableMapOf(
+    _maps:pairOf(&quot;name&quot;, &quot;Bob&quot;),
+    _maps:pairOf(&quot;age&quot;, 30),
+    _maps:pairOf(&quot;score&quot;, 92.0)
+)
+local rowId2 = db:insert(tableName, nil, user2)
+_console:log(&quot;插入 Bob, RowID: &quot; .. tostring(rowId2))
+
+if rowId1 ~= -1 and rowId2 ~= -1 then
+    _console:log(&quot;✅ Insert 成功&quot;)
+else
+    _console:error(&quot;❌ Insert 失败&quot;)
+end
+
+-- --- Query ---
+_console:log(&quot;\n--- 测试 Query ---&quot;)
+local querySql = &quot;SELECT * FROM &quot; .. tableName .. &quot; WHERE name = ?&quot;
+local wrappedResults = _objectWrappers:wrapList(db:query(querySql, _arrays:arrayOf(String, &quot;Alice&quot;)))
+
+if wrappedResults:count() &gt; 0 then
+    local userMap = wrappedResults:getOrigin():get(0)
+    local wrappedUser = _objectWrappers:wrapMap(userMap)
+    _console:log(&quot;查询结果: &quot; .. tostring(wrappedUser:getOrigin()))
+    if wrappedUser:get(&quot;name&quot;) == &quot;Alice&quot; and wrappedUser:get(&quot;age&quot;) == &quot;25&quot; then
+        _console:log(&quot;✅ Query 数据验证通过&quot;)
+    else
+        _console:error(&quot;❌ Query 数据验证失败&quot;)
+    end
+else
+    _console:error(&quot;❌ Query 未找到数据&quot;)
+end
+
+-- --- Update ---
+_console:log(&quot;\n--- 测试 Update ---&quot;)
+-- &lt;&lt;&lt;&lt;&lt; 核心修正点 #2：将 Lua table 转换为 Java Map &gt;&gt;&gt;&gt;&gt;
+local updateValues = _maps:mutableMapOf(
+    _maps:pairOf(&quot;score&quot;, 95.5)
+)
+local rowsAffected = db:update(tableName, updateValues, &quot;name = ?&quot;, _arrays:arrayOf(String, &quot;Alice&quot;))
+assertLog(&quot;update (受影响行数)&quot;, rowsAffected, 1)
+
+-- 验证更新是否生效
+local rawVerifyUpdate = db:query(&quot;SELECT score FROM &quot; .. tableName .. &quot; WHERE name = 'Alice'&quot;, nil)
+local wrappedVerifyUpdate = _objectWrappers:wrapList(rawVerifyUpdate)
+local updatedUserMap = _objectWrappers:wrapMap(wrappedVerifyUpdate:getOrigin():get(0))
+if updatedUserMap:get(&quot;score&quot;) == &quot;95.5&quot; then
+    _console:log(&quot;✅ Update 生效验证通过&quot;)
+else
+    _console:error(&quot;❌ Update 生效验证失败, 实际值: &quot; .. updatedUserMap:get(&quot;score&quot;))
+end
+
+-- --- Delete ---
+_console:log(&quot;\n--- 测试 Delete ---&quot;)
+local deleteRows = db:delete(tableName, &quot;name = ?&quot;, _arrays:arrayOf(String, &quot;Bob&quot;))
+assertLog(&quot;delete (受影响行数)&quot;, deleteRows, 1)
+
+-- ==========================================
+-- 4. 原生 SQL 与 事务 (Transaction)
+-- ==========================================
+_console:log(&quot;\n--- 测试 Transaction &amp; execSQL ---&quot;)
+
+db:beginTransaction()
+local ok, err = pcall(function()
+    local sql = &quot;INSERT INTO &quot; .. tableName .. &quot; (name, age, score) VALUES (?, ?, ?)&quot;
+    db:execSQL(sql, _arrays:arrayOf(Object, &quot;Charlie&quot;, 20, 60.0))
+    db:setTransactionSuccessful()
+end)
+db:endTransaction()
+
+if not ok then
+    _console:error(&quot;❌ 事务执行异常: &quot; .. tostring(err))
+else
+    _console:log(&quot;✅ 事务执行完毕 (Committed)&quot;)
+end
+
+-- 验证 Charlie 是否存在
+local rawCharlieRes = db:query(&quot;SELECT * FROM &quot; .. tableName .. &quot; WHERE name = 'Charlie'&quot;, nil)
+local wrappedCharlieRes = _objectWrappers:wrapList(rawCharlieRes)
+assertLog(&quot;事务插入验证&quot;, wrappedCharlieRes:count(), 1)
+
+-- ==========================================
+-- 5. 清理与关闭
+-- ==========================================
+_console:log(&quot;\n--- 测试 清理操作 ---&quot;)
+
+-- dropTable
+assertLog(&quot;dropTable&quot;, db:dropTable(tableName), true)
+assertLog(&quot;hasTable (删除后)&quot;, db:hasTable(tableName), false)
+
+-- close
+db:close()
+assertLog(&quot;isOpen (关闭后)&quot;, db:isOpen(), false)
+
+-- delete
+local deleteDbRes = _sqliteManager:delete(dbName)
+assertLog(&quot;SqliteManager.delete&quot;, deleteDbRes, true)
+assertLog(&quot;exists (最终检查)&quot;, _sqliteManager:exists(dbName), false)
+
+_console:log(&quot;🎉 Sqlite 接口测试完毕。&quot;)
+
+_script:getThreads():getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="tugyy3_24" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\storage\SqliteManager $sqliteManager */
+global $sqliteManager;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+global $script;
+/** @var m8test_java\com\m8test\script\core\api\wrapper\ObjectWrappers $objectWrappers */
+global $objectWrappers;
+/** @var m8test_java\com\m8test\script\core\api\collections\Maps $maps */
+global $maps;
+/** @var m8test_java\com\m8test\script\core\api\collections\Arrays $arrays */
+global $arrays;
+/** @var m8test_java\com\m8test\script\core\api\reflect\Reflectors $reflectors */
+global $reflectors;
+
+
+/**
+ * Sqlite 与 SqliteManager 接口测试脚本
+ * 全局变量: $sqliteManager
+ */
+
+$console-&gt;log(javaString(&quot;🚀 开始测试 Sqlite 数据库模块...&quot;));
+
+// 获取 Java Class 对象，用于创建特定类型的数组
+$stringClass = $reflectors-&gt;reflectClassName(&quot;java.lang.String&quot;)-&gt;getTargetClass();
+$objectClass = $reflectors-&gt;reflectClassName(&quot;java.lang.Object&quot;)-&gt;getTargetClass();
+
+// ==========================================
+// 1. 准备工作 &amp; SqliteManager 测试
+// ==========================================
+$sqliteName = &quot;test_m8_data.db&quot;;
+$tableName = &quot;users&quot;;
+
+// 确保测试前环境干净
+if ($sqliteManager-&gt;exists($sqliteName)) {
+    $sqliteManager-&gt;delete($sqliteName);
+}
+assertLog(javaString(&quot;exists (初始状态)&quot;), $sqliteManager-&gt;exists($sqliteName), false);
+
+// 打开/创建数据库
+// 此时会返回一个 Sqlite 接口对象
+$sqlite = $sqliteManager-&gt;open($sqliteName);
+
+if ($sqlite != null &amp;&amp; $sqlite-&gt;isOpen()) {
+    $console-&gt;log(javaString(&quot;✅ 数据库打开成功: &quot;), $sqliteName);
+} else {
+    $console-&gt;error(javaString(&quot;❌ 数据库打开失败&quot;));
+    return; // 无法继续
+}
+
+// 验证文件现在是否存在
+assertLog(javaString(&quot;exists (打开后)&quot;), $sqliteManager-&gt;exists($sqliteName), true);
+
+// ==========================================
+// 2. 表结构操作 (DDL)
+// ==========================================
+
+// createTable
+// 定义列: id 自增主键, name 文本, age 整数, score 浮点
+// 使用 $maps-&gt;mapOf 和 $maps-&gt;pairOf 创建 Java Map
+$columns = $maps-&gt;mapOf(
+    $maps-&gt;pairOf(&quot;id&quot;, &quot;INTEGER PRIMARY KEY AUTOINCREMENT&quot;),
+    $maps-&gt;pairOf(&quot;name&quot;, &quot;TEXT NOT NULL&quot;),
+    $maps-&gt;pairOf(&quot;age&quot;, &quot;INTEGER&quot;),
+    $maps-&gt;pairOf(&quot;score&quot;, &quot;REAL&quot;)
+);
+
+$createRes = $sqlite-&gt;createTable($tableName, $columns);
+assertLog(javaString(&quot;createTable&quot;), $createRes, true);
+
+// hasTable
+assertLog(javaString(&quot;hasTable&quot;), $sqlite-&gt;hasTable($tableName), true);
+
+// ==========================================
+// 3. 数据操作 (CRUD)
+// ==========================================
+
+// --- Insert ---
+$console-&gt;log(javaString(&quot;\n--- 测试 Insert ---&quot;));
+$user1 = $maps-&gt;mapOf(
+    $maps-&gt;pairOf(&quot;name&quot;, &quot;Alice&quot;),
+    $maps-&gt;pairOf(&quot;age&quot;, 25),
+    $maps-&gt;pairOf(&quot;score&quot;, 88.5)
+);
+$rowId1 = $sqlite-&gt;insert($tableName, null, $user1);
+$console-&gt;log(&quot;插入 Alice, RowID: &quot;, $rowId1);
+
+$user2 = $maps-&gt;mapOf(
+    $maps-&gt;pairOf(&quot;name&quot;, &quot;Bob&quot;),
+    $maps-&gt;pairOf(&quot;age&quot;, 30),
+    $maps-&gt;pairOf(&quot;score&quot;, 92.0)
+);
+$rowId2 = $sqlite-&gt;insert($tableName, null, $user2);
+$console-&gt;log(javaString(&quot;插入 Bob, RowID: &quot;), $rowId2);
+
+if ($rowId1 != -1 &amp;&amp; $rowId2 != -1) {
+    $console-&gt;log(javaString(&quot;✅ Insert 成功&quot;));
+} else {
+    $console-&gt;error(javaString(&quot;❌ Insert 失败&quot;));
+}
+
+// --- Query ---
+$console-&gt;log(javaString(&quot;\n--- 测试 Query ---&quot;));
+// 注意：query 方法的 bindArgs 需要 String 数组, 使用 $arrays-&gt;arrayOf 创建
+$querySql = &quot;SELECT * FROM {$tableName} WHERE name = ?&quot;;
+$bindArgs = $arrays-&gt;arrayOf($stringClass, &quot;Alice&quot;);
+$rawResults = $sqlite-&gt;query(javaString($querySql), $bindArgs);
+$resultsWrapper = $objectWrappers-&gt;wrapList($rawResults);
+
+if ($resultsWrapper-&gt;count() &gt; 0) {
+    $rawUserMap = $resultsWrapper-&gt;getOrNull(0);
+    $userWrapper = $objectWrappers-&gt;wrapMap($rawUserMap);
+
+    $console-&gt;log(javaString(&quot;查询结果: &quot;), $userWrapper);
+    // 验证数据 (注意：接口返回的值统一为 String，所以对比字符串 &quot;25&quot;)
+    if ($userWrapper-&gt;get(javaString(&quot;name&quot;)) == javaString(&quot;Alice&quot;) &amp;&amp; $userWrapper-&gt;get(javaString(&quot;age&quot;)) == &quot;25&quot;) {
+        $console-&gt;log(javaString(&quot;✅ Query 数据验证通过&quot;));
+    } else {
+        $console-&gt;error(javaString(&quot;❌ Query 数据验证失败&quot;));
+    }
+} else {
+    $console-&gt;error(javaString(&quot;❌ Query 未找到数据&quot;));
+}
+
+// --- Update ---
+$console-&gt;log(javaString(&quot;\n--- 测试 Update ---&quot;));
+$updateValues = $maps-&gt;mapOf($maps-&gt;pairOf(&quot;score&quot;, 95.5)); // 修改 Alice 的分数
+$updateBindArgs = $arrays-&gt;arrayOf($stringClass, &quot;Alice&quot;);
+$rowsAffected = $sqlite-&gt;update($tableName, $updateValues, &quot;name = ?&quot;, $updateBindArgs);
+assertLog(&quot;update (受影响行数)&quot;, $rowsAffected, 1);
+
+// 验证更新是否生效
+$rawVerifyUpdate = $sqlite-&gt;query(&quot;SELECT score FROM {$tableName} WHERE name = 'Alice'&quot;, null);
+$verifyUpdateWrapper = $objectWrappers-&gt;wrapList($rawVerifyUpdate);
+$scoreMapWrapper = $objectWrappers-&gt;wrapMap($verifyUpdateWrapper-&gt;getOrNull(0));
+
+if ($scoreMapWrapper-&gt;get(&quot;score&quot;) == &quot;95.5&quot;) {
+    $console-&gt;log(javaString(&quot;✅ Update 生效验证通过&quot;));
+} else {
+    $console-&gt;error(javaString(&quot;❌ Update 生效验证失败, 实际值: &quot;), $scoreMapWrapper-&gt;get(&quot;score&quot;));
+}
+
+// --- Delete ---
+$console-&gt;log(javaString(&quot;\n--- 测试 Delete ---&quot;));
+$deleteBindArgs = $arrays-&gt;arrayOf($stringClass, &quot;Bob&quot;);
+$deleteRows = $sqlite-&gt;delete($tableName, &quot;name = ?&quot;, $deleteBindArgs);
+assertLog(javaString(&quot;delete (受影响行数)&quot;), $deleteRows, 1);
+
+// ==========================================
+// 4. 原生 SQL 与 事务 (Transaction)
+// ==========================================
+$console-&gt;log(javaString(&quot;\n--- 测试 Transaction &amp; execSQL ---&quot;));
+
+$sqlite-&gt;beginTransaction();
+// 使用 execSQL 插入一条数据
+// 注意：bindArgs 是 Array&lt;Any&gt;，可以传 int/string 等
+$sql = &quot;INSERT INTO {$tableName} (name, age, score) VALUES (?, ?, ?)&quot;;
+$execBindArgs = $arrays-&gt;arrayOf($objectClass, &quot;Charlie&quot;, 20, 60.0);
+$sqlite-&gt;execSQL($sql, $execBindArgs);
+
+// 标记事务成功
+$sqlite-&gt;setTransactionSuccessful();
+$console-&gt;log(javaString(&quot;✅ 事务执行完毕 (Committed)&quot;));
+
+// 结束事务（如果之前没调用 setTransactionSuccessful，这里会自动回滚）
+$sqlite-&gt;endTransaction();
+
+// 验证 Charlie 是否存在
+$rawCharlieRes = $sqlite-&gt;query(javaString(&quot;SELECT * FROM {$tableName} WHERE name = 'Charlie'&quot;), null);
+$charlieResWrapper = $objectWrappers-&gt;wrapList($rawCharlieRes);
+assertLog(javaString(&quot;事务插入验证&quot;), $charlieResWrapper-&gt;count(), 1);
+
+// ==========================================
+// 5. 清理与关闭
+// ==========================================
+$console-&gt;log(javaString(&quot;\n--- 测试 清理操作 ---&quot;));
+
+// dropTable
+assertLog(javaString(&quot;dropTable&quot;), $sqlite-&gt;dropTable($tableName), true);
+assertLog(javaString(&quot;hasTable (删除后)&quot;), $sqlite-&gt;hasTable($tableName), false);
+
+// 关闭连接
+// Sqlite 继承自 ScriptCloseable，通常有关闭方法
+$sqlite-&gt;close();
+assertLog(javaString(&quot;isOpen (关闭后)&quot;), $sqlite-&gt;isOpen(), false);
+
+// 删除数据库文件
+$deleteDbRes = $sqliteManager-&gt;delete($sqliteName);
+assertLog(javaString(&quot;SqliteManager.delete&quot;), $deleteDbRes, true);
+assertLog(javaString(&quot;exists (最终检查)&quot;), $sqliteManager-&gt;exists($sqliteName), false);
+
+$console-&gt;log(javaString(&quot;🎉 Sqlite 接口测试完毕。&quot;));
+
+// ==========================================
+// 辅助函数
+// ==========================================
+function assertLog($name, $actual, $expected)
+{
+    global $console;
+    if ($actual == $expected) {
+        $console-&gt;log(&quot;✅ [&quot; . $name . &quot;] Passed. Result: &quot;, $actual);
+    } else {
+        $console-&gt;error(&quot;❌ [&quot; . $name . &quot;] Failed.\n   Expected: &quot;, $expected, &quot;\n   Actual  : &quot;, $actual);
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="tugyy3_27" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _arrays
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _reflectors
+from m8test_java.com.m8test.script.GlobalVariables import _script
+from m8test_java.com.m8test.script.GlobalVariables import _sqliteManager
+
+java_String = _reflectors.reflect(&quot;java.lang.String&quot;).getTargetClass()
+Object = _reflectors.reflect(&quot;java.lang.Object&quot;).getTargetClass()
+
+
+# ==========================================
+# 辅助函数
+# ==========================================
+def assertLog(name, actual, expected):
+    # Java boolean is returned as string True/False
+    actual_str = str(actual).lower() if isinstance(actual, str) and actual.lower() in [True, False] else str(actual)
+    expected_str = str(expected).lower() if isinstance(expected, bool) else str(expected)
+
+    if actual_str == expected_str:
+        _console.log(f&quot;✅ [{name}] Passed. Result: {actual}&quot;)
+    else:
+        _console.error(f&quot;❌ [{name}] Failed.\n   Expected: {expected}\n   Actual  : {actual}&quot;)
+
+
+&quot;&quot;&quot;
+Sqlite 与 SqliteManager 接口测试脚本
+全局变量: $sqliteManager
+&quot;&quot;&quot;
+
+_console.log(&quot;🚀 开始测试 Sqlite 数据库模块...&quot;)
+
+# ==========================================
+# 1. 准备工作 &amp; SqliteManager 测试
+# ==========================================
+dbName = &quot;test_m8_data.db&quot;
+tableName = &quot;users&quot;
+
+# 确保测试前环境干净
+if _sqliteManager.exists(dbName) == True:
+    _sqliteManager.delete(dbName)
+assertLog(&quot;exists (初始状态)&quot;, _sqliteManager.exists(dbName), &quot;False&quot;)
+
+# 打开/创建数据库
+db = _sqliteManager.open(dbName)
+
+if db is not None and db.isOpen() == True:
+    _console.log(f&quot;✅ 数据库打开成功: {dbName}&quot;)
+else:
+    _console.error(&quot;❌ 数据库打开失败&quot;)
+    # In Python, we can exit using a function or just stop execution.
+    # For a direct translation, we'll let it continue but it might fail later.
+    # A cleaner way would be to wrap this in a main function and return.
+    db = None
+
+if db:
+    # 验证文件现在是否存在
+    assertLog(&quot;exists (打开后)&quot;, _sqliteManager.exists(dbName), &quot;True&quot;)
+
+    # ==========================================
+    # 2. 表结构操作 (DDL)
+    # ==========================================
+    # createTable
+    columns = {
+        &quot;id&quot;: &quot;INTEGER PRIMARY KEY AUTOINCREMENT&quot;,
+        &quot;name&quot;: &quot;TEXT NOT NULL&quot;,
+        &quot;age&quot;: &quot;INTEGER&quot;,
+        &quot;score&quot;: &quot;REAL&quot;
+    }
+    createRes = db.createTable(tableName, columns)
+    assertLog(&quot;createTable&quot;, createRes, &quot;True&quot;)
+
+    # hasTable
+    assertLog(&quot;hasTable&quot;, db.hasTable(tableName), &quot;True&quot;)
+
+    # ==========================================
+    # 3. 数据操作 (CRUD)
+    # ==========================================
+    # --- Insert ---
+    _console.log(&quot;\n--- 测试 Insert ---&quot;)
+    user1 = {&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 25, &quot;score&quot;: 88.5}
+    rowId1 = db.insert(tableName, None, user1)
+    _console.log(f&quot;插入 Alice, RowID: {rowId1}&quot;)
+
+    user2 = {&quot;name&quot;: &quot;Bob&quot;, &quot;age&quot;: 30, &quot;score&quot;: 92.0}
+    rowId2 = db.insert(tableName, None, user2)
+    _console.log(f&quot;插入 Bob, RowID: {rowId2}&quot;)
+
+    if rowId1 != -1 and rowId2 != -1:
+        _console.log(&quot;✅ Insert 成功&quot;)
+    else:
+        _console.error(&quot;❌ Insert 失败&quot;)
+
+    # --- Query ---
+    _console.log(&quot;\n--- 测试 Query ---&quot;)
+    querySql = f&quot;SELECT * FROM {tableName} WHERE name = ?&quot;
+    # Pass Python list directly. To be formal, use _arrays.arrayOf.
+    results = db.query(querySql, _arrays.arrayOf(java_String, &quot;Alice&quot;))
+
+    if len(results) &gt; 0:
+        user = results[0]
+        _console.log(f&quot;查询结果: {user}&quot;)
+        if user[&quot;name&quot;] == &quot;Alice&quot; and user[&quot;age&quot;] == &quot;25&quot;:
+            _console.log(&quot;✅ Query 数据验证通过&quot;)
+        else:
+            _console.error(&quot;❌ Query 数据验证失败&quot;)
+    else:
+        _console.error(&quot;❌ Query 未找到数据&quot;)
+
+    # --- Update ---
+    _console.log(&quot;\n--- 测试 Update ---&quot;)
+    updateValues = {&quot;score&quot;: 95.5}
+    rowsAffected = db.update(tableName, updateValues, &quot;name = ?&quot;, _arrays.arrayOf(java_String, &quot;Alice&quot;))
+    assertLog(&quot;update (受影响行数)&quot;, rowsAffected, 1)
+
+    verifyUpdate = db.query(&quot;SELECT score FROM {} WHERE name = 'Alice'&quot;.format(tableName), None)
+    if verifyUpdate[0][&quot;score&quot;] == &quot;95.5&quot;:
+        _console.log(&quot;✅ Update 生效验证通过&quot;)
+    else:
+        _console.error(f&quot;❌ Update 生效验证失败, 实际值: {verifyUpdate[0]['score']}&quot;)
+
+    # --- Delete ---
+    _console.log(&quot;\n--- 测试 Delete ---&quot;)
+    deleteRows = db.delete(tableName, &quot;name = ?&quot;, _arrays.arrayOf(java_String, &quot;Bob&quot;))
+    assertLog(&quot;delete (受影响行数)&quot;, deleteRows, 1)
+
+    # ==========================================
+    # 4. 原生 SQL 与 事务 (Transaction)
+    # ==========================================
+    _console.log(&quot;\n--- 测试 Transaction &amp; execSQL ---&quot;)
+    db.beginTransaction()
+    try:
+        sql = f&quot;INSERT INTO {tableName} (name, age, score) VALUES (?, ?, ?)&quot;
+        db.execSQL(sql, _arrays.arrayOf(Object, &quot;Charlie&quot;, 20, 60.0))
+        db.setTransactionSuccessful()
+        _console.log(&quot;✅ 事务执行完毕 (Committed)&quot;)
+    except Exception as e:
+        _console.error(f&quot;❌ 事务执行异常: {e}&quot;)
+    finally:
+        db.endTransaction()
+
+    charlieRes = db.query(f&quot;SELECT * FROM {tableName} WHERE name = 'Charlie'&quot;, None)
+    assertLog(&quot;事务插入验证&quot;, len(charlieRes), 1)
+
+    # ==========================================
+    # 5. 清理与关闭
+    # ==========================================
+    _console.log(&quot;\n--- 测试 清理操作 ---&quot;)
+    assertLog(&quot;dropTable&quot;, db.dropTable(tableName), &quot;True&quot;)
+    assertLog(&quot;hasTable (删除后)&quot;, db.hasTable(tableName), &quot;False&quot;)
+    db.close()
+    assertLog(&quot;isOpen (关闭后)&quot;, db.isOpen(), &quot;False&quot;)
+
+    deleteDbRes = _sqliteManager.delete(dbName)
+    assertLog(&quot;SqliteManager.delete&quot;, deleteDbRes, &quot;True&quot;)
+    assertLog(&quot;exists (最终检查)&quot;, _sqliteManager.exists(dbName), &quot;False&quot;)
+
+    _console.log(&quot;🎉 Sqlite 接口测试完毕。&quot;)
+
+_script.getThreads().getMain().setBackground(True)
+</div></div><div class="tabs__content" data-gtm="tab" id="tugyy3_30" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# Sqlite 与 SqliteManager 接口测试脚本
+# 全局变量: $sqliteManager
+
+$console.log(&quot;🚀 开始测试 Sqlite 数据库模块...&quot;)
+
+# ==========================================
+# 辅助函数
+# ==========================================
+def assertLog(name, actual, expected)
+  if actual == expected
+    $console.log(&quot;✅ [#{name}] Passed. Result: #{actual}&quot;)
+  else
+    $console.error(&quot;❌ [#{name}] Failed.\n   Expected: #{expected}\n   Actual  : #{actual}&quot;)
+  end
+end
+
+# ==========================================
+# 1. 准备工作 &amp; SqliteManager 测试
+# ==========================================
+dbName = &quot;test_m8_data.db&quot;
+tableName = &quot;users&quot;
+
+# 确保测试前环境干净
+if $sqliteManager.exists(dbName)
+  $sqliteManager.delete(dbName)
+end
+assertLog(&quot;exists (初始状态)&quot;, $sqliteManager.exists(dbName), false)
+
+# 打开/创建数据库
+# 此时会返回一个 Sqlite 接口对象
+db = $sqliteManager.open(dbName)
+
+if db != nil &amp;&amp; db.isOpen()
+  $console.log(&quot;✅ 数据库打开成功: #{dbName}&quot;)
+else
+  $console.error(&quot;❌ 数据库打开失败&quot;)
+  return # 无法继续
+end
+
+# 验证文件现在是否存在
+assertLog(&quot;exists (打开后)&quot;, $sqliteManager.exists(dbName), true)
+
+# ==========================================
+# 2. 表结构操作 (DDL)
+# ==========================================
+
+# createTable
+# 定义列: id 自增主键, name 文本, age 整数, score 浮点
+# Ruby Hash 写法
+columns = {
+  &quot;id&quot; =&gt; &quot;INTEGER PRIMARY KEY AUTOINCREMENT&quot;,
+  &quot;name&quot; =&gt; &quot;TEXT NOT NULL&quot;,
+  &quot;age&quot; =&gt; &quot;INTEGER&quot;,
+  &quot;score&quot; =&gt; &quot;REAL&quot;
+}
+
+createRes = db.createTable(tableName, columns)
+assertLog(&quot;createTable&quot;, createRes, true)
+
+# hasTable
+assertLog(&quot;hasTable&quot;, db.hasTable(tableName), true)
+
+# ==========================================
+# 3. 数据操作 (CRUD)
+# ==========================================
+
+# --- Insert ---
+$console.log(&quot;\n--- 测试 Insert ---&quot;)
+user1 = {&quot;name&quot; =&gt; &quot;Alice&quot;, &quot;age&quot; =&gt; 25, &quot;score&quot; =&gt; 88.5}
+# Ruby 中 nil 代替 null
+rowId1 = db.insert(tableName, nil, user1)
+$console.log(&quot;插入 Alice, RowID: &quot; + rowId1.to_s)
+
+user2 = {&quot;name&quot; =&gt; &quot;Bob&quot;, &quot;age&quot; =&gt; 30, &quot;score&quot; =&gt; 92.0}
+rowId2 = db.insert(tableName, nil, user2)
+$console.log(&quot;插入 Bob, RowID: &quot; + rowId2.to_s)
+
+if rowId1 != -1 &amp;&amp; rowId2 != -1
+  $console.log(&quot;✅ Insert 成功&quot;)
+else
+  $console.error(&quot;❌ Insert 失败&quot;)
+end
+
+# --- Query ---
+$console.log(&quot;\n--- 测试 Query ---&quot;)
+# String 插值使用 #{var}
+querySql = &quot;SELECT * FROM #{tableName} WHERE name = ?&quot;
+# 根据接口定义，返回值 Map 的 Value 都是 String 类型
+# Ruby 数组 [&quot;Alice&quot;]
+results = db.query(querySql, [&quot;Alice&quot;])
+
+if results.size &gt; 0
+  user = results[0]
+  $console.log(&quot;查询结果: &quot; + user.to_s)
+  # 验证数据 (注意：接口返回的值统一为 String，所以对比字符串 &quot;25&quot;)
+  if user[&quot;name&quot;] == &quot;Alice&quot; &amp;&amp; user[&quot;age&quot;] == &quot;25&quot;
+    $console.log(&quot;✅ Query 数据验证通过&quot;)
+  else
+    $console.error(&quot;❌ Query 数据验证失败&quot;)
+  end
+else
+  $console.error(&quot;❌ Query 未找到数据&quot;)
+end
+
+# --- Update ---
+$console.log(&quot;\n--- 测试 Update ---&quot;)
+updateValues = {&quot;score&quot; =&gt; 95.5} # 修改 Alice 的分数
+rowsAffected = db.update(tableName, updateValues, &quot;name = ?&quot;, [&quot;Alice&quot;])
+assertLog(&quot;update (受影响行数)&quot;, rowsAffected, 1)
+
+# 验证更新是否生效
+verifyUpdate = db.query(&quot;SELECT score FROM #{tableName} WHERE name = 'Alice'&quot;, nil)
+if verifyUpdate[0][&quot;score&quot;] == &quot;95.5&quot;
+  $console.log(&quot;✅ Update 生效验证通过&quot;)
+else
+  $console.error(&quot;❌ Update 生效验证失败, 实际值: &quot; + verifyUpdate[0][&quot;score&quot;].to_s)
+end
+
+# --- Delete ---
+$console.log(&quot;\n--- 测试 Delete ---&quot;)
+deleteRows = db.delete(tableName, &quot;name = ?&quot;, [&quot;Bob&quot;])
+assertLog(&quot;delete (受影响行数)&quot;, deleteRows, 1)
+
+# ==========================================
+# 4. 原生 SQL 与 事务 (Transaction)
+# ==========================================
+$console.log(&quot;\n--- 测试 Transaction &amp; execSQL ---&quot;)
+
+db.beginTransaction()
+begin
+  # 使用 execSQL 插入一条数据
+  # 注意：bindArgs 是 Array&lt;Any?&gt;，可以传 int/string 等
+  sql = &quot;INSERT INTO #{tableName} (name, age, score) VALUES (?, ?, ?)&quot;
+  db.execSQL(sql, [&quot;Charlie&quot;, 20, 60.0])
+
+  # 标记事务成功
+  db.setTransactionSuccessful()
+  $console.log(&quot;✅ 事务执行完毕 (Committed)&quot;)
+rescue Exception =&gt; e
+  $console.error(&quot;❌ 事务执行异常: &quot; + e.to_s)
+ensure
+  # 结束事务（如果之前没调用 setTransactionSuccessful，这里会自动回滚）
+  db.endTransaction()
+end
+
+# 验证 Charlie 是否存在
+charlieRes = db.query(&quot;SELECT * FROM #{tableName} WHERE name = 'Charlie'&quot;, nil)
+assertLog(&quot;事务插入验证&quot;, charlieRes.size, 1)
+
+# ==========================================
+# 5. 清理与关闭
+# ==========================================
+$console.log(&quot;\n--- 测试 清理操作 ---&quot;)
+
+# dropTable
+assertLog(&quot;dropTable&quot;, db.dropTable(tableName), true)
+assertLog(&quot;hasTable (删除后)&quot;, db.hasTable(tableName), false)
+
+# 关闭连接
+# Sqlite 继承自 ScriptCloseable，通常有关闭方法
+db.close()
+assertLog(&quot;isOpen (关闭后)&quot;, db.isOpen(), false)
+
+# 删除数据库文件
+deleteDbRes = $sqliteManager.delete(dbName)
+assertLog(&quot;SqliteManager.delete&quot;, deleteDbRes, true)
+assertLog(&quot;exists (最终检查)&quot;, $sqliteManager.exists(dbName), false)
+
+$console.log(&quot;🎉 Sqlite 接口测试完毕。&quot;)
+
+$script.getThreads().getMain().setBackground(true)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="strings.html" class="navigation-links__prev">字符串操作</a><a href="shared-preferences.html" class="navigation-links__next">SharedPreferences</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

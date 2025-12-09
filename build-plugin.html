@@ -1,0 +1,226 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:27.561584462"><title>构建插件 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-x9auor_7","level":0,"title":"项目插件","anchor":"#-x9auor_7"},{"id":"-x9auor_52","level":0,"title":"设置插件","anchor":"#-x9auor_52"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="构建插件 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/build-plugin.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="构建插件 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/build-plugin.html#webpage",
+    "url": "writerside-documentation/build-plugin.html",
+    "name": "构建插件 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="build-plugin" data-main-title="构建插件" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="plugins.md|插件"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="build-plugin" id="build-plugin.md">构建插件</h1><p id="-x9auor_3">构建插件分为项目插件和设置插件两类，可用于 hook 项目的构建过程，扩展构建逻辑。</p><section class="chapter"><h2 id="-x9auor_7" data-toc="-x9auor_7">项目插件</h2></section><figure id="-x9auor_8"><img alt="15" src="/15.png" title="15" width="501" height="627"></figure><p id="-x9auor_9">开发 <code class="code" id="-x9auor_96">项目插件</code> 插件的步骤如下：</p><ol class="list _decimal" id="-x9auor_23" type="1"><li class="list__item" id="-x9auor_97"><p>在 <code class="code" id="-x9auor_98">build.gradle.kts</code> 文件中添加 <code class="code" id="-x9auor_99">m8test sdk</code> 依赖。为减小插件 APK 的体积，如果依赖项已包含在 <a href="https://raw.githubusercontent.com/m8test/maven/refs/heads/0.1.5/com/m8test/version-catalog/0.1.5/version-catalog-0.1.5.toml" id="-x9auor_100" data-external="true" rel="noopener noreferrer" target="_blank">M8Test Version Catalog</a> 中，建议使用 <code class="code" id="-x9auor_101">compileOnly</code> 方式引入依赖。</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">import com.m8test.util.VersionUtils
+
+plugins {
+    alias(m8test.plugins.android.application)
+    alias(m8test.plugins.kotlin.android)
+}
+
+android {
+    namespace = &quot;com.m8test.builder.project&quot;
+    compileSdk = m8test.versions.compileSdk.get().toInt()
+
+    defaultConfig {
+        minSdk = m8test.versions.minSdk.get().toInt()
+        targetSdk = m8test.versions.targetSdk.get().toInt()
+        versionName = libs.versions.versionName.get()
+        versionCode = VersionUtils.getCode(versionName!!)
+
+        testInstrumentationRunner = &quot;androidx.test.runner.AndroidJUnitRunner&quot;
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile(&quot;proguard-android-optimize.txt&quot;),
+                &quot;proguard-rules.pro&quot;
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.toVersion(m8test.versions.sourceCompatibility.get())
+        targetCompatibility = JavaVersion.toVersion(m8test.versions.targetCompatibility.get())
+    }
+    kotlinOptions {
+        jvmTarget = m8test.versions.jvmTarget.get()
+    }
+}
+
+dependencies {
+    compileOnly(m8test.m8test.sdk)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_29"><p id="-x9auor_102"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/build.gradle.kts" id="-x9auor_103" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/build.gradle.kts</a></p></aside><ol class="list _decimal" id="-x9auor_13" type="1" start="2"><li class="list__item" id="-x9auor_104"><p>创建一个类继承 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.builder.impl/-abstract-project-plugin/index.html" id="-x9auor_105" data-external="true" rel="noopener noreferrer" target="_blank">AbstractProjectPlugin</a> ，并重写 <code class="code" id="-x9auor_106">getPlugins</code> 方法</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.builder.project
+
+import com.m8test.plugin.api.ApkPluginProvider
+import com.m8test.script.builder.api.Plugin
+import com.m8test.script.builder.api.Project
+import com.m8test.script.builder.impl.AbstractProjectPlugin
+import com.m8test.script.core.api.engine.ScriptContext
+
+/**
+ * Description TODO
+ *
+ * @date 2025/02/03 12:00:22
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class ProjectPlugin(apkPluginProvider: ApkPluginProvider) :
+    AbstractProjectPlugin(apkPluginProvider) {
+    override fun getPlugins(): Map&lt;String, (ScriptContext) -&gt; Plugin&lt;Project&gt;&gt; {
+        return mapOf(EchoPlugin.ID to { EchoPlugin(it) })
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_34"><p id="-x9auor_107"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/src/main/kotlin/com/m8test/builder/project/ProjectPlugin.kt" id="-x9auor_108" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/src/main/kotlin/com/m8test/builder/project/ProjectPlugin.kt</a></p></aside><ol class="list _decimal" id="-x9auor_17" type="1" start="3"><li class="list__item" id="-x9auor_109"><p>实现 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.builder.api/-plugin/index.html" id="-x9auor_110" data-external="true" rel="noopener noreferrer" target="_blank">Plugin</a> 接口，定义插件功能</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.builder.project
+
+import com.m8test.script.builder.api.Plugin
+import com.m8test.script.builder.api.Project
+import com.m8test.script.core.api.engine.ScriptContext
+
+/**
+ * Description TODO
+ *
+ * @date 2025/02/03 12:01:48
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class EchoPlugin(private val scriptContext: ScriptContext) : Plugin&lt;Project&gt; {
+    override fun apply(target: Project) {
+        scriptContext.getBindings().getConsole().log(&quot;echo project name: ${target.getName()}&quot;)
+    }
+
+    override fun getId(): String {
+        return ID
+    }
+
+    companion object {
+        const val ID = &quot;echo-project&quot;
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_39"><p id="-x9auor_111"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/src/main/kotlin/com/m8test/builder/project/EchoPlugin.kt" id="-x9auor_112" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/src/main/kotlin/com/m8test/builder/project/EchoPlugin.kt</a></p></aside><ol class="list _decimal" id="-x9auor_41" type="1" start="4"><li class="list__item" id="-x9auor_113"><p>在 <code class="code" id="-x9auor_114">AndroidManifest.xml</code> 中配置插件信息</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;application android:icon=&quot;@drawable/ic_launcher&quot;&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.description&quot;
+            android:value=&quot;本插件实现了在控制台输出项目名称的功能&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.url&quot;
+            android:value=&quot;https://github.com/m8test/Plugins&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.type&quot;
+            android:value=&quot;project&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.name&quot;
+            android:value=&quot;Echo Project Plugin&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.className&quot;
+            android:value=&quot;com.m8test.builder.project.ProjectPlugin&quot; /&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_48"><p id="-x9auor_115"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/src/main/AndroidManifest.xml" id="-x9auor_116" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/project/src/main/AndroidManifest.xml</a></p></aside><ul class="list _bullet" id="-x9auor_43"><li class="list__item" id="-x9auor_117"><p><code class="code" id="-x9auor_120">com.m8test.plugin.type</code>: 插件类型，此处为 <code class="code" id="-x9auor_121">project</code></p></li><li class="list__item" id="-x9auor_118"><p><code class="code" id="-x9auor_122">com.m8test.plugin.name</code>: 插件名称，可为任意字符串</p></li><li class="list__item" id="-x9auor_119"><p><code class="code" id="-x9auor_123">com.m8test.plugin.className</code>: 插件实现类的全限定类名</p></li></ul><ol class="list _decimal" id="-x9auor_20" type="1" start="5"><li class="list__item" id="-x9auor_124"><p>在 <code class="code" id="-x9auor_126">init.build</code> 文件中引用插件，使用 <a href="buildscriptconfig-requireplugin.html" id="-x9auor_127" data-tooltip="方法文档 BuildScriptConfig.requirePlugin()">BuildScriptConfig.requirePlugin</a> 方法，其参数为 <code class="code" id="-x9auor_128">com.m8test.plugin.name</code> 指定的名称。</p></li><li class="list__item" id="-x9auor_125"><p>在 <code class="code" id="-x9auor_129">build</code> 文件中使用 <a href="plugincontainer-apply.html" id="-x9auor_130" data-tooltip="方法文档 PluginContainer.apply()">PluginContainer.apply</a> 方法应用插件， 此处需传入插件 ID，即 <code class="code" id="-x9auor_131">getPlugins</code> 方法中定义的插件 ID。</p></li></ol><aside class="prompt" data-type="tip" data-title="" id="-x9auor_50"><p><a href="https://github.com/m8test/Plugins/tree/main/builder/project" id="-x9auor_132" data-external="true" rel="noopener noreferrer" target="_blank">查看示例代码</a></p></aside><section class="chapter"><h2 id="-x9auor_52" data-toc="-x9auor_52">设置插件</h2></section><figure id="-x9auor_53"><img alt="16" src="/16.png" title="16" width="532" height="626"></figure><p id="-x9auor_54">开发 <code class="code" id="-x9auor_133">设置插件</code> 插件的步骤如下：</p><ol class="list _decimal" id="-x9auor_68" type="1"><li class="list__item" id="-x9auor_134"><p>在 <code class="code" id="-x9auor_135">build.gradle.kts</code> 文件中添加 <code class="code" id="-x9auor_136">m8test sdk</code> 依赖。为减小插件 APK 的体积，如果依赖项已包含在 <a href="https://raw.githubusercontent.com/m8test/maven/refs/heads/0.1.5/com/m8test/version-catalog/0.1.5/version-catalog-0.1.5.toml" id="-x9auor_137" data-external="true" rel="noopener noreferrer" target="_blank">M8Test Version Catalog</a> 中，建议使用 <code class="code" id="-x9auor_138">compileOnly</code> 方式引入依赖。</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">import com.m8test.util.VersionUtils
+
+plugins {
+    alias(m8test.plugins.android.application)
+    alias(m8test.plugins.kotlin.android)
+}
+
+android {
+    namespace = &quot;com.m8test.builder.settings&quot;
+    compileSdk = m8test.versions.compileSdk.get().toInt()
+
+    defaultConfig {
+        minSdk = m8test.versions.minSdk.get().toInt()
+        targetSdk = m8test.versions.targetSdk.get().toInt()
+        versionName = libs.versions.versionName.get()
+        versionCode = VersionUtils.getCode(versionName!!)
+
+        testInstrumentationRunner = &quot;androidx.test.runner.AndroidJUnitRunner&quot;
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile(&quot;proguard-android-optimize.txt&quot;),
+                &quot;proguard-rules.pro&quot;
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.toVersion(m8test.versions.sourceCompatibility.get())
+        targetCompatibility = JavaVersion.toVersion(m8test.versions.targetCompatibility.get())
+    }
+    kotlinOptions {
+        jvmTarget = m8test.versions.jvmTarget.get()
+    }
+}
+
+dependencies {
+    compileOnly(m8test.m8test.sdk)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_74"><p id="-x9auor_139"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/build.gradle.kts" id="-x9auor_140" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/build.gradle.kts</a></p></aside><ol class="list _decimal" id="-x9auor_58" type="1" start="2"><li class="list__item" id="-x9auor_141"><p>创建一个类继承 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.builder.impl/-abstract-settings-plugin/index.html" id="-x9auor_142" data-external="true" rel="noopener noreferrer" target="_blank">AbstractSettingsPlugin</a> ，并重写 <code class="code" id="-x9auor_143">getPlugins</code> 方法</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.builder.settings
+
+import com.m8test.plugin.api.ApkPluginProvider
+import com.m8test.script.builder.api.Plugin
+import com.m8test.script.builder.api.Settings
+import com.m8test.script.builder.impl.AbstractSettingsPlugin
+import com.m8test.script.core.api.engine.ScriptContext
+
+/**
+ * Description TODO
+ *
+ * @date 2025/02/03 12:18:20
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class SettingsPlugin(apkPluginProvider: ApkPluginProvider) :
+    AbstractSettingsPlugin(apkPluginProvider) {
+    override fun getPlugins(): Map&lt;String, (ScriptContext) -&gt; Plugin&lt;Settings&gt;&gt; {
+        return mapOf(EchoPlugin.ID to { EchoPlugin(it)})
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_79"><p id="-x9auor_144"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/src/main/kotlin/com/m8test/builder/settings/SettingsPlugin.kt" id="-x9auor_145" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/src/main/kotlin/com/m8test/builder/settings/SettingsPlugin.kt</a></p></aside><ol class="list _decimal" id="-x9auor_62" type="1" start="3"><li class="list__item" id="-x9auor_146"><p>实现 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.builder.api/-plugin/index.html" id="-x9auor_147" data-external="true" rel="noopener noreferrer" target="_blank">Plugin</a> 接口，定义插件功能</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.builder.settings
+
+import com.m8test.script.builder.api.Plugin
+import com.m8test.script.builder.api.Settings
+import com.m8test.script.core.api.engine.ScriptContext
+
+/**
+ * Description TODO
+ *
+ * @date 2025/02/03 12:19:08
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class EchoPlugin(private val scriptContext: ScriptContext) : Plugin&lt;Settings&gt; {
+    override fun apply(target: Settings) {
+        target.onProjectsLoaded {
+            scriptContext.getBindings().getConsole()
+                .log(&quot;echo projects: ${target.getProjects()}&quot;)
+        }
+    }
+
+    override fun getId(): String {
+        return ID
+    }
+
+    companion object {
+        const val ID = &quot;echo-settings&quot;
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_84"><p id="-x9auor_148"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/src/main/kotlin/com/m8test/builder/settings/EchoPlugin.kt" id="-x9auor_149" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/src/main/kotlin/com/m8test/builder/settings/EchoPlugin.kt</a></p></aside><ol class="list _decimal" id="-x9auor_86" type="1" start="4"><li class="list__item" id="-x9auor_150"><p>在 <code class="code" id="-x9auor_151">AndroidManifest.xml</code> 中配置插件信息</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;application android:icon=&quot;@drawable/ic_launcher&quot;&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.description&quot;
+            android:value=&quot;本插件是实现了在所有的项目加载完成后输出所有的项目的功能.&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.url&quot;
+            android:value=&quot;https://github.com/m8test/Plugins&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.type&quot;
+            android:value=&quot;settings&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.name&quot;
+            android:value=&quot;Echo Settings Plugin&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.className&quot;
+            android:value=&quot;com.m8test.builder.settings.SettingsPlugin&quot; /&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-x9auor_93"><p id="-x9auor_152"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/src/main/AndroidManifest.xml" id="-x9auor_153" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/builder/settings/src/main/AndroidManifest.xml</a></p></aside><ul class="list _bullet" id="-x9auor_88"><li class="list__item" id="-x9auor_154"><p><code class="code" id="-x9auor_157">com.m8test.plugin.type</code>: 插件类型，此处为 <code class="code" id="-x9auor_158">settings</code></p></li><li class="list__item" id="-x9auor_155"><p><code class="code" id="-x9auor_159">com.m8test.plugin.name</code>: 插件名称，可为任意字符串</p></li><li class="list__item" id="-x9auor_156"><p><code class="code" id="-x9auor_160">com.m8test.plugin.className</code>: 插件实现类的全限定类名</p></li></ul><ol class="list _decimal" id="-x9auor_65" type="1" start="5"><li class="list__item" id="-x9auor_161"><p>在 <code class="code" id="-x9auor_163">init.settings</code> 文件中引用插件，使用 <a href="buildscriptconfig-requireplugin.html" id="-x9auor_164" data-tooltip="方法文档 BuildScriptConfig.requirePlugin()">BuildScriptConfig.requirePlugin</a> 方法，其参数为 <code class="code" id="-x9auor_165">com.m8test.plugin.name</code> 指定的名称。</p></li><li class="list__item" id="-x9auor_162"><p>在 <code class="code" id="-x9auor_166">settings</code> 文件中使用 <a href="plugincontainer-apply.html" id="-x9auor_167" data-tooltip="方法文档 PluginContainer.apply()">PluginContainer.apply</a> 方法应用插件， 此处需传入插件 ID，即 <code class="code" id="-x9auor_168">getPlugins</code> 方法中定义的插件 ID。</p></li></ol><aside class="prompt" data-type="tip" data-title="" id="-x9auor_95"><p><a href="https://github.com/m8test/Plugins/tree/main/builder/settings" id="-x9auor_169" data-external="true" rel="noopener noreferrer" target="_blank">查看示例代码</a></p></aside><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="component-plugin.html" class="navigation-links__prev">组件插件</a><a href="editor-plugin.html" class="navigation-links__next">编辑器插件</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

@@ -1,0 +1,1203 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:11.930584846"><title>使用 WebViewBridge | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"call-handler-from-script","level":0,"title":"从脚本调用JavaScript","anchor":"#call-handler-from-script"},{"id":"call-handler-from-javascript","level":0,"title":"从JavaScript调用脚本","anchor":"#call-handler-from-javascript"},{"id":"javascript","level":0,"title":"直接执行JavaScript代码","anchor":"#javascript"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="使用 WebViewBridge | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/webview-automation-bridge.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="使用 WebViewBridge | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/webview-automation-bridge.html#webpage",
+    "url": "writerside-documentation/webview-automation-bridge.html",
+    "name": "使用 WebViewBridge | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="webview-automation-bridge" data-main-title="使用 WebViewBridge" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="webview-automation.md|网页自动化"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="webview-automation-bridge" id="webview-automation-bridge.md">使用 WebViewBridge</h1><section class="chapter"><h2 id="call-handler-from-script" data-toc="call-handler-from-script">从脚本调用JavaScript</h2><div class="tabs" id="-vyld7c_9" data-group="languages" data-anchors="[-vyld7c_12,-vyld7c_15,-vyld7c_18,-vyld7c_21,-vyld7c_24,-vyld7c_27,-vyld7c_30,-vyld7c_33]"><div class="tabs__content" data-gtm="tab" id="-vyld7c_12" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// ----------------------------------------------------
+// 示例 3.1: 脚本调用JS (完整代码)
+// ----------------------------------------------------
+_console.info(&quot;\n--- 开始示例 3.1: 脚本调用JS ---&quot;)
+
+// 1. 基础设置
+val scope = _coroutines.newScope { setDispatcher { it.getIO() } }
+val bridge = _webView.getBridge()
+val controller = bridge.getController()
+_activity.start()
+
+// 2. 准备HTML
+val html = &quot;&quot;&quot;
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;message&quot;&gt;...&lt;/div&gt;
+        &lt;script&gt;
+        (function () {
+            function init() {
+                // ${'$'}webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+                ${'$'}webViewBridge.registerHandler(&quot;updateMessage&quot;, function (name, callback) {
+                    // name 为脚本端调用处理器时传递过来的参数
+                    // callback 用于返回处理结果到脚本端
+                    if (callback) {
+                        document.getElementById('message').innerText = '你好, ' + name + '!';
+                        callback('JS已成功更新消息');
+                    }
+                })
+            }
+
+            if (window.${'$'}webViewBridge) {
+                init();
+            } else {
+                document.addEventListener(
+                    'WebViewBridgeReady',
+                    function () {
+                        //do your work here
+                        init();
+                    },
+                    false
+                );
+            }
+        })()
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+&quot;&quot;&quot;
+
+// 3. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+    .then { s, _ -&gt;
+        controller.loadDataWithBaseURL(s, &quot;https://native2js.test&quot;, html, null, null, &quot;https://native2js.test&quot;)
+    }
+    .then { s, _ -&gt;
+        _console.log(&quot;页面加载指令已发出，等待渲染...&quot;)
+        s.delay(1000)
+    }
+    .then { s, _ -&gt;
+        bridge.callHandler(&quot;updateMessage&quot;, &quot;\&quot;M8Test\&quot;&quot;) { result -&gt;
+            _console.log(&quot;来自JS的回调:&quot;, result)
+        }
+        s.delay(500) // 等待JS执行和DOM更新
+    }
+    .then { s, _ -&gt;
+        controller.getTextContent(s, &quot;//*[@id='message']&quot;)
+    }
+    .then { s, message -&gt;
+        _console.assertTrue(message.toString().contains(&quot;M8Test&quot;), &quot;JS函数调用验证失败&quot;)
+        _console.info(&quot;--- 示例 3.1: 成功 ---&quot;)
+        s.resolve(null)
+    }
+    .onError { e -&gt; _console.error(&quot;--- 示例 3.1: 失败 ---&quot;, e.stackTraceToString()) }</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_15" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// ----------------------------------------------------
+// 示例 3.1: 脚本调用JS (完整代码)
+// ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.1: 脚本调用JS ---&quot;)
+
+// 1. 基础设置
+def scope = $coroutines.newScope { it.setDispatcher { it.getIO() } }
+def bridge = $webView.getBridge()
+def controller = bridge.getController()
+$activity.start()
+
+// 2. 准备HTML
+def html = &quot;&quot;&quot;
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;message&quot;&gt;...&lt;/div&gt;
+        &lt;script&gt;
+        (function () {
+            function init() {
+                // \$webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+                \$webViewBridge.registerHandler(&quot;updateMessage&quot;, function (name, callback) {
+                    // name 为脚本端调用处理器时传递过来的参数
+                    // callback 用于返回处理结果到脚本端
+                    if (callback) {
+                        document.getElementById('message').innerText = '你好, ' + name + '!';
+                        callback('JS已成功更新消息');
+                    }
+                })
+            }
+
+            if (window.\$webViewBridge) {
+                init();
+            } else {
+                document.addEventListener(
+                    'WebViewBridgeReady',
+                    function () {
+                        //do your work here
+                        init();
+                    },
+                    false
+                );
+            }
+        })()
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+&quot;&quot;&quot;
+
+// 3. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+        .then { s, _ -&gt;
+            return controller.loadDataWithBaseURL(s, &quot;https://native2js.test&quot;, html, null, null, &quot;https://native2js.test&quot;)
+        }
+        .then { s, _ -&gt;
+            $console.log(&quot;页面加载指令已发出，等待渲染...&quot;)
+            return s.delay(1000)
+        }
+        .then { s, _ -&gt;
+            bridge.callHandler(&quot;updateMessage&quot;, '&quot;M8Test&quot;') { result -&gt;
+                $console.log(&quot;来自JS的回调:&quot;, result)
+            }
+            return s.delay(500) // 等待JS执行和DOM更新
+        }
+        .then { s, _ -&gt;
+            return controller.getTextContent(s, &quot;//*[@id='message']&quot;)
+        }
+        .then { s, message -&gt;
+            $console.assertTrue(message.contains(&quot;M8Test&quot;), &quot;JS函数调用验证失败&quot;)
+            $console.info(&quot;--- 示例 3.1: 成功 ---&quot;)
+            return s.resolve(null)
+        }
+        .onError { e -&gt; $console.error(&quot;--- 示例 3.1: 失败 ---&quot;, e.stackTraceToString()) }</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_18" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// ----------------------------------------------------
+// 示例 3.1: 脚本调用JS (完整代码)
+// ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.1: 脚本调用JS ---&quot;);
+
+// 1. 基础设置
+const scope = $coroutines.newScope(it =&gt; it.setDispatcher(it =&gt; it.getIO()));
+const bridge = $webView.getBridge();
+const controller = bridge.getController();
+$activity.start();
+
+// 2. 准备HTML
+const html = `
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;message&quot;&gt;...&lt;/div&gt;
+        &lt;script&gt;
+        (function () {
+            function init() {
+                // \$webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+                \$webViewBridge.registerHandler(&quot;updateMessage&quot;, function (name, callback) {
+                    // name 为脚本端调用处理器时传递过来的参数
+                    // callback 用于返回处理结果到脚本端
+                    if (callback) {
+                        document.getElementById('message').innerText = '你好, ' + name + '!';
+                        callback('JS已成功更新消息');
+                    }
+                })
+            }
+
+            if (window.\$webViewBridge) {
+                init();
+            } else {
+                document.addEventListener(
+                    'WebViewBridgeReady',
+                    function () {
+                        //do your work here
+                        init();
+                    },
+                    false
+                );
+            }
+        })()
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+`;
+
+// 3. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+    .then((s, _) =&gt; {
+        return controller.loadDataWithBaseURL(s, &quot;https://native2js.test&quot;, html, null, null, &quot;https://native2js.test&quot;);
+    })
+    .then((s, _) =&gt; {
+        $console.log(&quot;页面加载指令已发出，等待渲染...&quot;);
+        return s.delay(1000);
+    })
+    .then((s, _) =&gt; {
+        bridge.callHandler(&quot;updateMessage&quot;, '&quot;M8Test&quot;', result =&gt; {
+            $console.log(&quot;来自JS的回调:&quot;, result);
+        });
+        return s.delay(500); // 等待JS执行和DOM更新
+    })
+    .then((s, _) =&gt; {
+        return controller.getTextContent(s, &quot;//*[@id='message']&quot;);
+    })
+    .then((s, message) =&gt; {
+        $console.assertTrue(message.includes(&quot;M8Test&quot;), &quot;JS函数调用验证失败&quot;);
+        $console.info(&quot;--- 示例 3.1: 成功 ---&quot;);
+        return s.resolve(null);
+    })
+    .onError(e =&gt; $console.error(&quot;--- 示例 3.1: 失败 ---&quot;, e.stackTraceToString()));</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- ----------------------------------------------------
+-- 示例 3.1: 脚本调用JS (完整代码)
+-- ----------------------------------------------------
+_console:info(&quot;\n--- 开始示例 3.1: 脚本调用JS ---&quot;)
+
+-- 1. 基础设置
+local scope = _coroutines:newScope(function(it) it:setDispatcher(function(it) return it:getIO() end) end)
+local bridge = _webView:getBridge()
+local controller = bridge:getController()
+_activity:start()
+
+-- 2. 准备HTML
+local html = [[
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;message&quot;&gt;...&lt;/div&gt;
+        &lt;script&gt;
+        (function () {
+            function init() {
+                // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+                $webViewBridge.registerHandler(&quot;updateMessage&quot;, function (name, callback) {
+                    // name 为脚本端调用处理器时传递过来的参数
+                    // callback 用于返回处理结果到脚本端
+                    if (callback) {
+                        document.getElementById('message').innerText = '你好, ' + name + '!';
+                        callback('JS已成功更新消息');
+                    }
+                })
+            }
+
+            if (window.$webViewBridge) {
+                init();
+            } else {
+                document.addEventListener(
+                    'WebViewBridgeReady',
+                    function () {
+                        //do your work here
+                        init();
+                    },
+                    false
+                );
+            }
+        })()
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+]]
+
+-- 3. 开始异步操作链
+scope:delay(1000) -- 关键延时：等待Activity和WebView初始化完成
+        :_then(function(s, _)
+            return controller:loadDataWithBaseURL(s, &quot;https://native2js.test&quot;, html, nil, nil, &quot;https://native2js.test&quot;)
+        end)
+        :_then(function(s, _)
+            _console:log(&quot;页面加载指令已发出，等待渲染...&quot;)
+            return s:delay(1000)
+        end)
+        :_then(function(s, _)
+            bridge:callHandler(&quot;updateMessage&quot;, '&quot;M8Test&quot;', function(result)
+                _console:log(&quot;来自JS的回调:&quot;, result)
+            end)
+            return s:delay(500) -- 等待JS执行和DOM更新
+        end)
+        :_then(function(s, _)
+            return controller:getTextContent(s, &quot;//*[@id='message']&quot;)
+        end)
+        :_then(function(s, message)
+            -- 修复: 1. 检查 message 是否为 nil. 2. 使用 string.find 替代 :contains
+            _console:assertTrue(message and string.find(message, &quot;M8Test&quot;), &quot;JS函数调用验证失败&quot;)
+            _console:info(&quot;--- 示例 3.1: 成功 ---&quot;)
+            return s:resolve(nil)
+        end)
+        :onError(function(e) _console:error(&quot;--- 示例 3.1: 失败 ---&quot;, e:stackTraceToString()) end)</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\ui\webview\WebView $webView */
+global $webView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\resource\StringResources $strings */
+global $strings;
+
+// ----------------------------------------------------
+// 示例 3.1: 脚本调用JS (完整代码)
+// ----------------------------------------------------
+$console-&gt;info(javaString(&quot;\n--- 开始示例 3.1: 脚本调用JS ---&quot;));
+
+// 1. 基础设置
+$scope = $coroutines-&gt;newScope(function ($it) {
+    $it-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$bridge = $webView-&gt;getBridge();
+$controller = $bridge-&gt;getController();
+$activity-&gt;start();
+
+// 2. 准备HTML
+$html = &lt;&lt;&lt;HTML
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;message&quot;&gt;...&lt;/div&gt;
+        &lt;script&gt;
+        (function () {
+            function init() {
+                // \$webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+                \$webViewBridge.registerHandler(&quot;updateMessage&quot;, function (name, callback) {
+                    // name 为脚本端调用处理器时传递过来的参数
+                    // callback 用于返回处理结果到脚本端
+                    if (callback) {
+                        document.getElementById('message').innerText = '你好, ' + name + '!';
+                        callback('JS已成功更新消息');
+                    }
+                })
+            }
+
+            if (window.\$webViewBridge) {
+                init();
+            } else {
+                document.addEventListener(
+                    'WebViewBridgeReady',
+                    function () {
+                        //do your work here
+                        init();
+                    },
+                    false
+                );
+            }
+        })()
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+HTML;
+
+// 3. 开始异步操作链
+$scope-&gt;delay(1000) // 关键延时：等待Activity和WebView初始化完成
+-&gt;then(function ($s, $unused) use ($controller, $html) {
+    return $controller-&gt;loadDataWithBaseURL($s, javaString(&quot;https://native2js.test&quot;), javaString($html), null, null, javaString(&quot;https://native2js.test&quot;));
+})
+    -&gt;then(function ($s, $unused) {
+        global $console;
+        $console-&gt;log(javaString(&quot;页面加载指令已发出，等待渲染...&quot;));
+        return $s-&gt;delay(1000);
+    })
+    -&gt;then(function ($s, $unused) use ($bridge) {
+        $bridge-&gt;callHandler(javaString(&quot;updateMessage&quot;), javaString('&quot;M8Test&quot;'), function ($result) {
+            global $console;
+            $console-&gt;log(javaString(&quot;来自JS的回调:&quot;), $result);
+        });
+        return $s-&gt;delay(500); // 等待JS执行和DOM更新
+    })
+    -&gt;then(function ($s, $unused) use ($controller) {
+        return $controller-&gt;getTextContent($s, javaString(&quot;//*[@id='message']&quot;));
+    })
+    -&gt;then(function ($s, $message) {
+        global $console, $strings;
+        $console-&gt;assertTrue($strings-&gt;contains($message, javaString(&quot;M8Test&quot;)), javaString(&quot;JS函数调用验证失败&quot;));
+        $console-&gt;info(javaString(&quot;--- 示例 3.1: 成功 ---&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($e) {
+        global $console;
+        $console-&gt;error(javaString(&quot;--- 示例 3.1: 失败 ---&quot;), $e-&gt;stackTraceToString());
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># ----------------------------------------------------
+# 示例 3.1: 脚本调用JS (完整代码)
+# ----------------------------------------------------
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _webView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+_console.info(&quot;\n--- 开始示例 3.1: 脚本调用JS ---&quot;)
+
+# 1. 基础设置
+# 【已修正】: 使用 getScriptMain()
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+bridge = _webView.getBridge()
+controller = bridge.getController()
+_activity.start()
+
+# 2. 准备HTML
+html = &quot;&quot;&quot;
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;message&quot;&gt;...&lt;/div&gt;
+        &lt;script&gt;
+        (function () {
+            function init() {
+                // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+                $webViewBridge.registerHandler(&quot;updateMessage&quot;, function (name, callback) {
+                    // name 为脚本端调用处理器时传递过来的参数
+                    // callback 用于返回处理结果到脚本端
+                    if (callback) {
+                        document.getElementById('message').innerText = '你好, ' + name + '!';
+                        callback('JS已成功更新消息');
+                    }
+                })
+            }
+
+            if (window.$webViewBridge) {
+                init();
+            } else {
+                document.addEventListener(
+                    'WebViewBridgeReady',
+                    function () {
+                        //do your work here
+                        init();
+                    },
+                    false
+                );
+            }
+        })()
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+&quot;&quot;&quot;
+
+# 3. 开始异步操作链
+scope.delay(1000).then(lambda s, _:
+                       controller.loadDataWithBaseURL(s, &quot;https://native2js.test&quot;, html, None, None, &quot;https://native2js.test&quot;)
+                       ).then(lambda s, _: (
+    _console.log(&quot;页面加载指令已发出，等待渲染...&quot;),
+    s.delay(1000)
+)[-1]).then(lambda s, _: (
+    # Groovy's trailing closure is converted to a positional lambda argument
+    bridge.callHandler(&quot;updateMessage&quot;, '&quot;M8Test&quot;', lambda result:
+    _console.log(&quot;来自JS的回调:&quot;, str(result))
+                       ),
+    s.delay(500) # 等待JS执行和DOM更新
+)[-1]).then(lambda s, _:
+            controller.getTextContent(s, &quot;//*[@id='message']&quot;)
+            ).then(lambda s, message: (
+    _console.assertTrue(&quot;M8Test&quot; in str(message), &quot;JS函数调用验证失败&quot;),
+    _console.info(&quot;--- 示例 3.1: 成功 ---&quot;),
+    s.resolve(None)
+)[-1]).onError(lambda e:
+               _console.error(&quot;--- 示例 3.1: 失败 ---&quot;, e.stackTraceToString())
+               )</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# ----------------------------------------------------
+# 示例 3.1: 脚本调用JS (完整代码)
+# ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.1: 脚本调用JS ---&quot;)
+
+# 1. 基础设置
+scope = $coroutines.newScope { |it| it.setDispatcher { |d| d.getIO() } }
+bridge = $webView.getBridge()
+controller = bridge.getController()
+$activity.start()
+
+# 2. 准备HTML
+html = &lt;&lt;-HTML
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;message&quot;&gt;...&lt;/div&gt;
+        &lt;script&gt;
+        (function () {
+            function init() {
+                // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+                $webViewBridge.registerHandler(&quot;updateMessage&quot;, function (name, callback) {
+                    // name 为脚本端调用处理器时传递过来的参数
+                    // callback 用于返回处理结果到脚本端
+                    if (callback) {
+                        document.getElementById('message').innerText = '你好, ' + name + '!';
+                        callback('JS已成功更新消息');
+                    }
+                })
+            }
+
+            if (window.$webViewBridge) {
+                init();
+            } else {
+                document.addEventListener(
+                    'WebViewBridgeReady',
+                    function () {
+                        //do your work here
+                        init();
+                    },
+                    false
+                );
+            }
+        })()
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+HTML
+
+# 3. 开始异步操作链
+scope.delay(1000). # 关键延时：等待Activity和WebView初始化完成
+then { |s, _|
+  controller.loadDataWithBaseURL(s, &quot;https://native2js.test&quot;, html, nil, nil, &quot;https://native2js.test&quot;)
+}.
+  then { |s, _|
+    $console.log(&quot;页面加载指令已发出，等待渲染...&quot;)
+    s.delay(1000)
+  }.
+  then { |s, _|
+    bridge.callHandler(&quot;updateMessage&quot;, '&quot;M8Test&quot;') { |result|
+      $console.log(&quot;来自JS的回调:&quot;, result)
+    }
+    s.delay(500) # 等待JS执行和DOM更新
+  }.
+  then { |s, _|
+    controller.getTextContent(s, &quot;//*[@id='message']&quot;)
+  }.
+  then { |s, message|
+    $console.assertTrue(message.include?(&quot;M8Test&quot;), &quot;JS函数调用验证失败&quot;)
+    $console.info(&quot;--- 示例 3.1: 成功 ---&quot;)
+    s.resolve(nil)
+  }.
+  onError { |e| $console.error(&quot;--- 示例 3.1: 失败 ---&quot;, e.to_s) }</div></div></div></section><section class="chapter"><h2 id="call-handler-from-javascript" data-toc="call-handler-from-javascript">从JavaScript调用脚本</h2><div class="tabs" id="-vyld7c_85" data-group="languages" data-anchors="[-vyld7c_100,-vyld7c_103,-vyld7c_106,-vyld7c_109,-vyld7c_88,-vyld7c_91,-vyld7c_94,-vyld7c_97]"><div class="tabs__content" data-gtm="tab" id="-vyld7c_88" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// ----------------------------------------------------
+// 示例 3.2: JS调用脚本 (完整代码)
+// ----------------------------------------------------
+_console.info(&quot;\n--- 开始示例 3.2: JS调用脚本 ---&quot;)
+
+// 1. 基础设置
+val scope = _coroutines.newScope { setDispatcher { it.getIO() } }
+val bridge = _webView.getBridge()
+val controller = bridge.getController()
+_activity.start()
+
+// 2. 同步注册处理器
+bridge.registerHandler(&quot;getDeviceInfo&quot;) { params -&gt;
+    _console.log(&quot;JS调用了 getDeviceInfo, 参数:&quot;, params)
+    &quot;{\&quot;platform\&quot;: \&quot;Android\&quot;}&quot;
+}
+
+// 3. 准备HTML
+val html = &quot;&quot;&quot;
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;device-info&quot;&gt;&lt;/div&gt;
+        &lt;script&gt;
+            setTimeout(function() {
+                window.WebViewJavascriptBridge.callHandler('getDeviceInfo', null, function(info) {
+                    var data = JSON.parse(info);
+                    document.getElementById('device-info').innerText = '平台: ' + data.platform;
+                });
+            }, 1000);
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+&quot;&quot;&quot;
+
+// 4. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+    .then { s, _ -&gt;
+        controller.loadDataWithBaseURL(s, &quot;https://js2native.test&quot;, html, null, null, &quot;https://js2native.test&quot;)
+    }
+    .then { s, _ -&gt;
+        // 等待页面加载和JS中的setTimeout执行
+        s.delay(2000)
+    }
+    .then { s, _ -&gt;
+        controller.getTextContent(s, &quot;//*[@id='device-info']&quot;)
+    }
+    .then { s, infoText -&gt;
+        _console.log(&quot;页面显示的设备信息:&quot;, infoText)
+        _console.assertTrue(infoText.toString().contains(&quot;Android&quot;), &quot;JS调用脚本验证失败&quot;)
+        _console.info(&quot;--- 示例 3.2: 成功 ---&quot;)
+        s.resolve(null)
+    }
+    .onComplete { bridge.unregisterHandler(&quot;getDeviceInfo&quot;) }
+    .onError { e -&gt; _console.error(&quot;--- 示例 3.2: 失败 ---&quot;, e.stackTraceToString()) }</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_91" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// ----------------------------------------------------
+// 示例 3.2: JS调用脚本 (完整代码)
+// ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.2: JS调用脚本 ---&quot;)
+
+// 1. 基础设置
+def scope = $coroutines.newScope { it.setDispatcher { it.getIO() } }
+def bridge = $webView.getBridge()
+def controller = bridge.getController()
+$activity.start()
+
+// 2. 同步注册处理器
+bridge.registerHandler(&quot;getDeviceInfo&quot;) { params -&gt;
+    $console.log(&quot;JS调用了 getDeviceInfo, 参数:&quot;, params)
+    return '{&quot;platform&quot;: &quot;Android&quot;}'
+}
+
+// 3. 准备HTML
+def html = &quot;&quot;&quot;
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;device-info&quot;&gt;&lt;/div&gt;
+        &lt;script&gt;
+            setTimeout(function() {
+                window.WebViewJavascriptBridge.callHandler('getDeviceInfo', null, function(info) {
+                    var data = JSON.parse(info);
+                    document.getElementById('device-info').innerText = '平台: ' + data.platform;
+                });
+            }, 1000);
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+&quot;&quot;&quot;
+
+// 4. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+        .then { s, _ -&gt;
+            return controller.loadDataWithBaseURL(s, &quot;https://js2native.test&quot;, html, null, null, &quot;https://js2native.test&quot;)
+        }
+        .then { s, _ -&gt;
+            // 等待页面加载和JS中的setTimeout执行
+            return s.delay(2000)
+        }
+        .then { s, _ -&gt;
+            return controller.getTextContent(s, &quot;//*[@id='device-info']&quot;)
+        }
+        .then { s, infoText -&gt;
+            $console.log(&quot;页面显示的设备信息:&quot;, infoText)
+            $console.assertTrue(infoText.contains(&quot;Android&quot;), &quot;JS调用脚本验证失败&quot;)
+            $console.info(&quot;--- 示例 3.2: 成功 ---&quot;)
+            return s.resolve(null)
+        }
+        .onComplete { bridge.unregisterHandler(&quot;getDeviceInfo&quot;) }
+        .onError { e -&gt; $console.error(&quot;--- 示例 3.2: 失败 ---&quot;, e.stackTraceToString()) }</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_94" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_97" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// ----------------------------------------------------
+// 示例 3.2: JS调用脚本 (完整代码)
+// ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.2: JS调用脚本 ---&quot;);
+
+// 1. 基础设置
+const scope = $coroutines.newScope(it =&gt; it.setDispatcher(it =&gt; it.getIO()));
+const bridge = $webView.getBridge();
+const controller = bridge.getController();
+$activity.start();
+
+// 2. 同步注册处理器
+bridge.registerHandler(&quot;getDeviceInfo&quot;, params =&gt; {
+    $console.log(&quot;JS调用了 getDeviceInfo, 参数:&quot;, params);
+    return '{&quot;platform&quot;: &quot;Android&quot;}';
+});
+
+// 3. 准备HTML
+const html = `
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;device-info&quot;&gt;&lt;/div&gt;
+        &lt;script&gt;
+            setTimeout(function() {
+                window.WebViewJavascriptBridge.callHandler('getDeviceInfo', null, function(info) {
+                    var data = JSON.parse(info);
+                    document.getElementById('device-info').innerText = '平台: ' + data.platform;
+                });
+            }, 1000);
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+`;
+
+// 4. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+    .then((s, _) =&gt; {
+        return controller.loadDataWithBaseURL(s, &quot;https://js2native.test&quot;, html, null, null, &quot;https://js2native.test&quot;);
+    })
+    .then((s, _) =&gt; {
+        // 等待页面加载和JS中的setTimeout执行
+        return s.delay(2000);
+    })
+    .then((s, _) =&gt; {
+        return controller.getTextContent(s, &quot;//*[@id='device-info']&quot;);
+    })
+    .then((s, infoText) =&gt; {
+        $console.log(&quot;页面显示的设备信息:&quot;, infoText);
+        $console.assertTrue(infoText.includes(&quot;Android&quot;), &quot;JS调用脚本验证失败&quot;);
+        $console.info(&quot;--- 示例 3.2: 成功 ---&quot;);
+        return s.resolve(null);
+    })
+    .onComplete(() =&gt; bridge.unregisterHandler(&quot;getDeviceInfo&quot;))
+    .onError(e =&gt; $console.error(&quot;--- 示例 3.2: 失败 ---&quot;, e.stackTraceToString()));</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_100" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- ----------------------------------------------------
+-- 示例 3.2: JS调用脚本 (完整代码)
+-- ----------------------------------------------------
+_console:info(&quot;\n--- 开始示例 3.2: JS调用脚本 ---&quot;)
+
+-- 1. 基础设置
+local scope = _coroutines:newScope(function(it) it:setDispatcher(function(it) return it:getIO() end) end)
+local bridge = _webView:getBridge()
+local controller = bridge:getController()
+_activity:start()
+
+-- 2. 同步注册处理器
+bridge:registerHandler(&quot;getDeviceInfo&quot;, function(params)
+    _console:log(&quot;JS调用了 getDeviceInfo, 参数:&quot;, params)
+    return '{&quot;platform&quot;: &quot;Android&quot;}'
+end)
+
+-- 3. 准备HTML
+local html = [[
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;device-info&quot;&gt;&lt;/div&gt;
+        &lt;script&gt;
+            setTimeout(function() {
+                window.WebViewJavascriptBridge.callHandler('getDeviceInfo', null, function(info) {
+                    var data = JSON.parse(info);
+                    document.getElementById('device-info').innerText = '平台: ' + data.platform;
+                });
+            }, 1000);
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+]]
+
+-- 4. 开始异步操作链
+scope:delay(1000) -- 关键延时：等待Activity和WebView初始化完成
+        :_then(function(s, _)
+            return controller:loadDataWithBaseURL(s, &quot;https://js2native.test&quot;, html, nil, nil, &quot;https://js2native.test&quot;)
+        end)
+        :_then(function(s, _)
+            -- 等待页面加载和JS中的setTimeout执行
+            return s:delay(2000)
+        end)
+        :_then(function(s, _)
+            return controller:getTextContent(s, &quot;//*[@id='device-info']&quot;)
+        end)
+        :_then(function(s, infoText)
+            _console:log(&quot;页面显示的设备信息:&quot;, infoText)
+            -- [修正]
+            _console:assertTrue(_strings:contains(infoText, &quot;Android&quot;), &quot;JS调用脚本验证失败&quot;)
+            _console:info(&quot;--- 示例 3.2: 成功 ---&quot;)
+            return s:resolve(nil)
+        end)
+        :onComplete(function() bridge:unregisterHandler(&quot;getDeviceInfo&quot;) end)
+        :onError(function(e) _console:error(&quot;--- 示例 3.2: 失败 ---&quot;, e:stackTraceToString()) end)</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_103" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\ui\webview\WebView $webView */
+global $webView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\resource\StringResources $strings */
+global $strings;
+
+// ----------------------------------------------------
+// 示例 3.2: JS调用脚本 (完整代码)
+// ----------------------------------------------------
+$console-&gt;info(javaString(&quot;\n--- 开始示例 3.2: JS调用脚本 ---&quot;));
+
+// 1. 基础设置
+$scope = $coroutines-&gt;newScope(function ($it) {
+    $it-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$bridge = $webView-&gt;getBridge();
+$controller = $bridge-&gt;getController();
+$activity-&gt;start();
+
+// 2. 同步注册处理器
+$bridge-&gt;registerHandler(javaString(&quot;getDeviceInfo&quot;), function ($params) {
+    global $console;
+    $console-&gt;log(javaString(&quot;JS调用了 getDeviceInfo, 参数:&quot;), $params);
+    return javaString('{&quot;platform&quot;: &quot;Android&quot;}');
+});
+
+// 3. 准备HTML
+$html = &lt;&lt;&lt;HTML
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;device-info&quot;&gt;&lt;/div&gt;
+        &lt;script&gt;
+            setTimeout(function() {
+                window.WebViewJavascriptBridge.callHandler('getDeviceInfo', null, function(info) {
+                    var data = JSON.parse(info);
+                    document.getElementById('device-info').innerText = '平台: ' + data.platform;
+                });
+            }, 1000);
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+HTML;
+
+// 4. 开始异步操作链
+$scope-&gt;delay(1000) // 关键延时：等待Activity和WebView初始化完成
+-&gt;then(function ($s, $unused) use ($controller, $html) {
+    return $controller-&gt;loadDataWithBaseURL($s, javaString(&quot;https://js2native.test&quot;), javaString($html), null, null, javaString(&quot;https://js2native.test&quot;));
+})
+    -&gt;then(function ($s, $unused) {
+        // 等待页面加载和JS中的setTimeout执行
+        return $s-&gt;delay(2000);
+    })
+    -&gt;then(function ($s, $unused) use ($controller) {
+        return $controller-&gt;getTextContent($s, javaString(&quot;//*[@id='device-info']&quot;));
+    })
+    -&gt;then(function ($s, $infoText) {
+        global $console, $strings;
+        $console-&gt;log(javaString(&quot;页面显示的设备信息:&quot;), $infoText);
+        $console-&gt;assertTrue($strings-&gt;contains($infoText, javaString(&quot;Android&quot;)), javaString(&quot;JS调用脚本验证失败&quot;));
+        $console-&gt;info(javaString(&quot;--- 示例 3.2: 成功 ---&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onComplete(function () use ($bridge) {
+        $bridge-&gt;unregisterHandler(javaString(&quot;getDeviceInfo&quot;));
+    })
+    -&gt;onError(function ($e) {
+        global $console;
+        $console-&gt;error(javaString(&quot;--- 示例 3.2: 失败 ---&quot;), $e-&gt;stackTraceToString());
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_106" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># ----------------------------------------------------
+# 示例 3.2: JS调用脚本 (完整代码)
+# ----------------------------------------------------
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _webView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+_console.info(&quot;\n--- 开始示例 3.2: JS调用脚本 ---&quot;)
+
+# 1. 基础设置
+# 【已修正】: 使用 getScriptMain()
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+bridge = _webView.getBridge()
+controller = bridge.getController()
+_activity.start()
+
+# 2. 同步注册处理器
+bridge.registerHandler(&quot;getDeviceInfo&quot;, lambda params: (
+    _console.log(&quot;JS调用了 getDeviceInfo, 参数:&quot;, str(params)),
+    '{&quot;platform&quot;: &quot;Android&quot;}'
+)[-1])
+
+# 3. 准备HTML
+html = &quot;&quot;&quot;
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;device-info&quot;&gt;&lt;/div&gt;
+        &lt;script&gt;
+            setTimeout(function() {
+                window.WebViewJavascriptBridge.callHandler('getDeviceInfo', null, function(info) {
+                    var data = JSON.parse(info);
+                    document.getElementById('device-info').innerText = '平台: ' + data.platform;
+                });
+            }, 1000);
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+&quot;&quot;&quot;
+
+# 4. 开始异步操作链
+scope.delay(1000).then(lambda s, _:
+                       controller.loadDataWithBaseURL(s, &quot;https://js2native.test&quot;, html, None, None, &quot;https://js2native.test&quot;)
+                       ).then(lambda s, _:
+                              # 等待页面加载和JS中的setTimeout执行
+                              s.delay(2000)
+                              ).then(lambda s, _:
+                                     controller.getTextContent(s, &quot;//*[@id='device-info']&quot;)
+                                     ).then(lambda s, infoText: (
+    _console.log(&quot;页面显示的设备信息:&quot;, str(infoText)),
+    _console.assertTrue(&quot;Android&quot; in str(infoText), &quot;JS调用脚本验证失败&quot;),
+    _console.info(&quot;--- 示例 3.2: 成功 ---&quot;),
+    s.resolve(None)
+)[-1]).onComplete(lambda:
+                  bridge.unregisterHandler(&quot;getDeviceInfo&quot;)
+                  ).onError(lambda e:
+                            _console.error(&quot;--- 示例 3.2: 失败 ---&quot;, e.stackTraceToString())
+                            )</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_109" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# ----------------------------------------------------
+# 示例 3.2: JS调用脚本 (完整代码)
+# ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.2: JS调用脚本 ---&quot;)
+
+# 1. 基础设置
+scope = $coroutines.newScope { |it| it.setDispatcher { |d| d.getIO() } }
+bridge = $webView.getBridge()
+controller = bridge.getController()
+$activity.start()
+
+# 2. 同步注册处理器
+bridge.registerHandler(&quot;getDeviceInfo&quot;) { |params|
+  $console.log(&quot;JS调用了 getDeviceInfo, 参数:&quot;, params)
+  '{&quot;platform&quot;: &quot;Android&quot;}'
+}
+
+# 3. 准备HTML
+html = &lt;&lt;-HTML
+    &lt;html&gt;&lt;body&gt;
+        &lt;div id=&quot;device-info&quot;&gt;&lt;/div&gt;
+        &lt;script&gt;
+            setTimeout(function() {
+                window.WebViewJavascriptBridge.callHandler('getDeviceInfo', null, function(info) {
+                    var data = JSON.parse(info);
+                    document.getElementById('device-info').innerText = '平台: ' + data.platform;
+                });
+            }, 1000);
+        &lt;/script&gt;
+    &lt;/body&gt;&lt;/html&gt;
+HTML
+
+# 4. 开始异步操作链
+scope.delay(1000). # 关键延时：等待Activity和WebView初始化完成
+then { |s, _|
+  controller.loadDataWithBaseURL(s, &quot;https://js2native.test&quot;, html, nil, nil, &quot;https://js2native.test&quot;)
+}.
+  then { |s, _|
+    # 等待页面加载和JS中的setTimeout执行
+    s.delay(2000)
+  }.
+  then { |s, _|
+    controller.getTextContent(s, &quot;//*[@id='device-info']&quot;)
+  }.
+  then { |s, info_text|
+    $console.log(&quot;页面显示的设备信息:&quot;, info_text)
+    $console.assertTrue(info_text.include?(&quot;Android&quot;), &quot;JS调用脚本验证失败&quot;)
+    $console.info(&quot;--- 示例 3.2: 成功 ---&quot;)
+    s.resolve(nil)
+  }.
+  onComplete { bridge.unregisterHandler(&quot;getDeviceInfo&quot;) }.
+  onError { |e| $console.error(&quot;--- 示例 3.2: 失败 ---&quot;, e.to_s) }</div></div></div></section><section class="chapter"><h2 id="javascript" data-toc="javascript">直接执行JavaScript代码</h2><div class="tabs" id="-vyld7c_161" data-group="languages" data-anchors="[-vyld7c_164,-vyld7c_167,-vyld7c_170,-vyld7c_173,-vyld7c_176,-vyld7c_179,-vyld7c_182,-vyld7c_185]"><div class="tabs__content" data-gtm="tab" id="-vyld7c_164" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// ----------------------------------------------------
+// 示例 3.3: 直接执行JS (完整代码)
+// ----------------------------------------------------
+_console.info(&quot;\n--- 开始示例 3.3: 直接执行JS ---&quot;)
+
+// 1. 基础设置
+val scope = _coroutines.newScope { setDispatcher { it.getIO() } }
+val bridge = _webView.getBridge()
+val controller = bridge.getController()
+_activity.start()
+
+// 2. 准备HTML和JS脚本
+val html = &quot;&quot;&quot;&lt;html&gt;&lt;body&gt;&lt;h1 id=&quot;title&quot;&gt;旧标题&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;&quot;&quot;
+val script = &quot;document.getElementById('title').innerText = '新标题';&quot;
+
+// 3. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+    .then { s, _ -&gt;
+        controller.loadDataWithBaseURL(s, &quot;https://eval.test&quot;, html, null, null, &quot;https://eval.test&quot;)
+    }
+    .then { s, _ -&gt;
+        _console.log(&quot;页面加载指令已发出，等待渲染完成...&quot;)
+        s.delay(1000)
+    }
+    .then { s, _ -&gt;
+        bridge.evaluateJsString(script, true, null)
+        s.delay(500) // 等待JS执行完毕
+    }
+    .then { s, _ -&gt;
+        controller.getTextContent(s, &quot;//*[@id='title']&quot;)
+    }
+    .then { s, newTitle -&gt;
+        _console.log(&quot;执行JS后的标题:&quot;, newTitle)
+        _console.assertTrue(newTitle == &quot;新标题&quot;, &quot;evaluateJsString 验证失败&quot;)
+        _console.info(&quot;--- 示例 3.3: 成功 ---&quot;)
+        s.resolve(null)
+    }
+    .onError { e -&gt; _console.error(&quot;--- 示例 3.3: 失败 ---&quot;, e.stackTraceToString()) }</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_167" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// ----------------------------------------------------
+// 示例 3.3: 直接执行JS (完整代码)
+// ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.3: 直接执行JS ---&quot;)
+
+// 1. 基础设置
+def scope = $coroutines.newScope { it.setDispatcher { it.getIO() } }
+def bridge = $webView.getBridge()
+def controller = bridge.getController()
+$activity.start()
+
+// 2. 准备HTML和JS脚本
+def html = &quot;&quot;&quot;&lt;html&gt;&lt;body&gt;&lt;h1 id=&quot;title&quot;&gt;旧标题&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;&quot;&quot;
+def script = &quot;document.getElementById('title').innerText = '新标题';&quot;
+
+// 3. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+        .then { s, _ -&gt;
+            return controller.loadDataWithBaseURL(s, &quot;https://eval.test&quot;, html, null, null, &quot;https://eval.test&quot;)
+        }
+        .then { s, _ -&gt;
+            $console.log(&quot;页面加载指令已发出，等待渲染完成...&quot;)
+            return s.delay(1000)
+        }
+        .then { s, _ -&gt;
+            bridge.evaluateJsString(script, true, null)
+            return s.delay(500) // 等待JS执行完毕
+        }
+        .then { s, _ -&gt;
+            return controller.getTextContent(s, &quot;//*[@id='title']&quot;)
+        }
+        .then { s, newTitle -&gt;
+            $console.log(&quot;执行JS后的标题:&quot;, newTitle)
+            $console.assertTrue(newTitle == &quot;新标题&quot;, &quot;evaluateJsString 验证失败&quot;)
+            $console.info(&quot;--- 示例 3.3: 成功 ---&quot;)
+            return s.resolve(null)
+        }
+        .onError { e -&gt; $console.error(&quot;--- 示例 3.3: 失败 ---&quot;, e.stackTraceToString()) }</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_170" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_173" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// ----------------------------------------------------
+// 示例 3.3: 直接执行JS (完整代码)
+// ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.3: 直接执行JS ---&quot;);
+
+// 1. 基础设置
+const scope = $coroutines.newScope(it =&gt; it.setDispatcher(it =&gt; it.getIO()));
+const bridge = $webView.getBridge();
+const controller = bridge.getController();
+$activity.start();
+
+// 2. 准备HTML和JS脚本
+const html = `&lt;html&gt;&lt;body&gt;&lt;h1 id=&quot;title&quot;&gt;旧标题&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;`;
+const script = &quot;document.getElementById('title').innerText = '新标题';&quot;;
+
+// 3. 开始异步操作链
+scope.delay(1000) // 关键延时：等待Activity和WebView初始化完成
+    .then((s, _) =&gt; {
+        return controller.loadDataWithBaseURL(s, &quot;https://eval.test&quot;, html, null, null, &quot;https://eval.test&quot;);
+    })
+    .then((s, _) =&gt; {
+        $console.log(&quot;页面加载指令已发出，等待渲染完成...&quot;);
+        return s.delay(1000);
+    })
+    .then((s, _) =&gt; {
+        bridge.evaluateJsString(script, true, null);
+        return s.delay(500); // 等待JS执行完毕
+    })
+    .then((s, _) =&gt; {
+        return controller.getTextContent(s, &quot;//*[@id='title']&quot;);
+    })
+    .then((s, newTitle) =&gt; {
+        $console.log(&quot;执行JS后的标题:&quot;, newTitle);
+        $console.assertTrue(newTitle == &quot;新标题&quot;, &quot;evaluateJsString 验证失败&quot;);
+        $console.info(&quot;--- 示例 3.3: 成功 ---&quot;);
+        return s.resolve(null);
+    })
+    .onError(e =&gt; $console.error(&quot;--- 示例 3.3: 失败 ---&quot;, e.stackTraceToString()));</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_176" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- ----------------------------------------------------
+-- 示例 3.3: 直接执行JS (完整代码)
+-- ----------------------------------------------------
+_console:info(&quot;\n--- 开始示例 3.3: 直接执行JS ---&quot;)
+
+-- 1. 基础设置
+local scope = _coroutines:newScope(function(it) it:setDispatcher(function(it) return it:getIO() end) end)
+local bridge = _webView:getBridge()
+local controller = bridge:getController()
+_activity:start()
+
+-- 2. 准备HTML和JS脚本
+local html = [[&lt;html&gt;&lt;body&gt;&lt;h1 id=&quot;title&quot;&gt;旧标题&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;]]
+local script = &quot;document.getElementById('title').innerText = '新标题';&quot;
+
+-- 3. 开始异步操作链
+scope:delay(1000) -- 关键延时：等待Activity和WebView初始化完成
+        :_then(function(s, _)
+            return controller:loadDataWithBaseURL(s, &quot;https://eval.test&quot;, html, nil, nil, &quot;https://eval.test&quot;)
+        end)
+        :_then(function(s, _)
+            _console:log(&quot;页面加载指令已发出，等待渲染完成...&quot;)
+            return s:delay(1000)
+        end)
+        :_then(function(s, _)
+            bridge:evaluateJsString(script, true, nil)
+            return s:delay(500) -- 等待JS执行完毕
+        end)
+        :_then(function(s, _)
+            return controller:getTextContent(s, &quot;//*[@id='title']&quot;)
+        end)
+        :_then(function(s, newTitle)
+            _console:log(&quot;执行JS后的标题:&quot;, newTitle)
+            _console:assertTrue(newTitle == &quot;新标题&quot;, &quot;evaluateJsString 验证失败&quot;)
+            _console:info(&quot;--- 示例 3.3: 成功 ---&quot;)
+            return s:resolve(nil)
+        end)
+        :onError(function(e) _console:error(&quot;--- 示例 3.3: 失败 ---&quot;, e:stackTraceToString()) end)</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_179" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\ui\webview\WebView $webView */
+global $webView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+// ----------------------------------------------------
+// 示例 3.3: 直接执行JS (完整代码)
+// ----------------------------------------------------
+$console-&gt;info(javaString(&quot;\n--- 开始示例 3.3: 直接执行JS ---&quot;));
+
+// 1. 基础设置
+$scope = $coroutines-&gt;newScope(function ($it) {
+    $it-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$bridge = $webView-&gt;getBridge();
+$controller = $bridge-&gt;getController();
+$activity-&gt;start();
+
+// 2. 准备HTML和JS脚本
+$html = &quot;&lt;html&gt;&lt;body&gt;&lt;h1 id=\&quot;title\&quot;&gt;旧标题&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;;
+$script = &quot;document.getElementById('title').innerText = '新标题';&quot;;
+
+// 3. 开始异步操作链
+$scope-&gt;delay(1000) // 关键延时：等待Activity和WebView初始化完成
+-&gt;then(function ($s, $unused) use ($controller, $html) {
+    return $controller-&gt;loadDataWithBaseURL($s, javaString(&quot;https://eval.test&quot;), javaString($html), null, null, javaString(&quot;https://eval.test&quot;));
+})
+    -&gt;then(function ($s, $unused) {
+        global $console;
+        $console-&gt;log(javaString(&quot;页面加载指令已发出，等待渲染完成...&quot;));
+        return $s-&gt;delay(1000);
+    })
+    -&gt;then(function ($s, $unused) use ($bridge, $script) {
+        $bridge-&gt;evaluateJsString(javaString($script), true, null);
+        return $s-&gt;delay(500); // 等待JS执行完毕
+    })
+    -&gt;then(function ($s, $unused) use ($controller) {
+        return $controller-&gt;getTextContent($s, javaString(&quot;//*[@id='title']&quot;));
+    })
+    -&gt;then(function ($s, $newTitle) {
+        global $console;
+        $console-&gt;log(javaString(&quot;执行JS后的标题:&quot;), $newTitle);
+        $console-&gt;assertTrue($newTitle == javaString(&quot;新标题&quot;), javaString(&quot;evaluateJsString 验证失败&quot;));
+        $console-&gt;info(javaString(&quot;--- 示例 3.3: 成功 ---&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($e) {
+        global $console;
+        $console-&gt;error(javaString(&quot;--- 示例 3.3: 失败 ---&quot;), $e-&gt;stackTraceToString());
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_182" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># ----------------------------------------------------
+# 示例 3.3: 直接执行JS (完整代码)
+# ----------------------------------------------------
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _webView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+_console.info(&quot;\n--- 开始示例 3.3: 直接执行JS ---&quot;)
+
+# 1. 基础设置
+# 【已修正】: 使用 getScriptMain()
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+bridge = _webView.getBridge()
+controller = bridge.getController()
+_activity.start()
+
+# 2. 准备HTML和JS脚本
+html = &quot;&quot;&quot;&lt;html&gt;&lt;body&gt;&lt;h1 id=&quot;title&quot;&gt;旧标题&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;&quot;&quot;
+script = &quot;document.getElementById('title').innerText = '新标题';&quot;
+
+# 3. 开始异步操作链
+scope.delay(1000).then(lambda s, _:
+                       controller.loadDataWithBaseURL(s, &quot;https://eval.test&quot;, html, None, None, &quot;https://eval.test&quot;)
+                       ).then(lambda s, _: (
+    _console.log(&quot;页面加载指令已发出，等待渲染完成...&quot;),
+    s.delay(1000)
+)[-1]).then(lambda s, _: (
+    bridge.evaluateJsString(script, True, None),
+    s.delay(500) # 等待JS执行完毕
+)[-1]).then(lambda s, _:
+            controller.getTextContent(s, &quot;//*[@id='title']&quot;)
+            ).then(lambda s, newTitle: (
+    _console.log(&quot;执行JS后的标题:&quot;, str(newTitle)),
+    _console.assertTrue(newTitle == &quot;新标题&quot;, &quot;evaluateJsString 验证失败&quot;),
+    _console.info(&quot;--- 示例 3.3: 成功 ---&quot;),
+    s.resolve(None)
+)[-1]).onError(lambda e:
+               _console.error(&quot;--- 示例 3.3: 失败 ---&quot;, e.stackTraceToString())
+               )</div></div><div class="tabs__content" data-gtm="tab" id="-vyld7c_185" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# ----------------------------------------------------
+# 示例 3.3: 直接执行JS (完整代码)
+# ----------------------------------------------------
+$console.info(&quot;\n--- 开始示例 3.3: 直接执行JS ---&quot;)
+
+# 1. 基础设置
+scope = $coroutines.newScope { |it| it.setDispatcher { |d| d.getIO() } }
+bridge = $webView.getBridge()
+controller = bridge.getController()
+$activity.start()
+
+# 2. 准备HTML和JS脚本
+html = %Q{&lt;html&gt;&lt;body&gt;&lt;h1 id=&quot;title&quot;&gt;旧标题&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;}
+script = &quot;document.getElementById('title').innerText = '新标题';&quot;
+
+# 3. 开始异步操作链
+scope.delay(1000). # 关键延时：等待Activity和WebView初始化完成
+then { |s, _|
+  controller.loadDataWithBaseURL(s, &quot;https://eval.test&quot;, html, nil, nil, &quot;https://eval.test&quot;)
+}.
+  then { |s, _|
+    $console.log(&quot;页面加载指令已发出，等待渲染完成...&quot;)
+    s.delay(1000)
+  }.
+  then { |s, _|
+    bridge.evaluateJsString(script, true, nil)
+    s.delay(500) # 等待JS执行完毕
+  }.
+  then { |s, _|
+    controller.getTextContent(s, &quot;//*[@id='title']&quot;)
+  }.
+  then { |s, new_title|
+    $console.log(&quot;执行JS后的标题:&quot;, new_title)
+    $console.assertTrue(new_title == &quot;新标题&quot;, &quot;evaluateJsString 验证失败&quot;)
+    $console.info(&quot;--- 示例 3.3: 成功 ---&quot;)
+    s.resolve(nil)
+  }.
+  onError { |e| $console.error(&quot;--- 示例 3.3: 失败 ---&quot;, e.to_s) }</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="webview-automation-controller.html" class="navigation-links__prev">使用 Controller</a><a href="automation.html" class="navigation-links__next">自动化</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

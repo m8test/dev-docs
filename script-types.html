@@ -1,0 +1,744 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:11.128571421"><title>脚本类型 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-21yyyo_5","level":0,"title":"启动字符串脚本","anchor":"#-21yyyo_5"},{"id":"-21yyyo_6","level":0,"title":"启动文件脚本","anchor":"#-21yyyo_6"},{"id":"-21yyyo_7","level":0,"title":"启动项目脚本","anchor":"#-21yyyo_7"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="脚本类型 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/script-types.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="脚本类型 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/script-types.html#webpage",
+    "url": "writerside-documentation/script-types.html",
+    "name": "脚本类型 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="script-types" data-main-title="脚本类型" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="script-introduction.md|脚本介绍"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="script-types" id="script-types.md">脚本类型</h1><p id="-21yyyo_3">在 M8Test 中，脚本类型有三种：</p><ul class="list _bullet" id="-21yyyo_4"><li class="list__item" id="-21yyyo_8"><p id="-21yyyo_11">字符串脚本</p></li><li class="list__item" id="-21yyyo_9"><p id="-21yyyo_12">文件脚本</p></li><li class="list__item" id="-21yyyo_10"><p id="-21yyyo_13">项目脚本</p></li></ul><section class="chapter"><h2 id="-21yyyo_5" data-toc="-21yyyo_5">启动字符串脚本</h2><div class="tabs" id="-21yyyo_17" data-group="languages" data-anchors="[-21yyyo_20,-21yyyo_23,-21yyyo_26,-21yyyo_29,-21yyyo_32,-21yyyo_35,-21yyyo_38,-21yyyo_41]"><div class="tabs__content" data-gtm="tab" id="-21yyyo_20" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._script
+
+// 获取脚本引擎
+val engine = _script.getEngine()
+// 启动脚本字符串
+engine.startString {
+    // 设置需要执行的脚本内容
+    setContent(&quot;import com.m8test.script.GlobalVariables.*\n_console.log(\&quot;test-kotlin-from-start-file\&quot;)&quot;)
+    // 设置脚本名称
+    setName(&quot;test-kotlin-start-string&quot;)
+    // 设置脚本语言
+    setLanguage {
+        // 设置脚本语言名称
+        setName(&quot;Kotlin&quot;)
+    }
+}
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_23" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 获取脚本引擎
+def engine = $script.getEngine()
+// 启动脚本字符串
+engine.startString {
+    // 设置需要执行的脚本内容
+    it.setContent(&quot;\$console.log('test-groovy-from-start-string')&quot;)
+    // 设置脚本名称
+    it.setName(&quot;test-groovy-start-string&quot;)
+    // 设置脚本语言
+    it.setLanguage { l -&gt;
+        // 设置脚本语言名称
+        l.setName(&quot;Groovy&quot;)
+    }
+}
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_26" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.config.ScriptStringConfig;
+import com.m8test.script.core.api.engine.ScriptEngine;
+import com.m8test.script.core.api.resource.WebResource;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$script;
+
+// 获取脚本引擎
+ScriptEngine engine = $script.getEngine();
+// 启动脚本字符串
+engine.startString(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        ScriptStringConfig it = (ScriptStringConfig) o;
+        // 设置需要执行的脚本内容
+        it.setContent(&quot;import static com.m8test.script.GlobalVariables.*;\n$console.log(\&quot;test-java-from-start-file\&quot;);&quot;);
+        // 设置脚本名称
+        it.setName(&quot;test-java-start-string&quot;);
+        // 设置脚本语言
+        it.setLanguage(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                WebResource l = (WebResource) o;
+                // 设置脚本语言名称
+                l.setName(&quot;Java&quot;);
+                return null;
+            }
+        });
+        return null;
+    }
+});
+$console.log(&quot;主脚本运行&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_29" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 获取脚本引擎
+let engine = $script.getEngine()
+// 启动脚本字符串
+engine.startString(function (it) {
+    // 设置需要执行的脚本内容
+    it.setContent(&quot;$console.log('test-javascript-from-start-string')&quot;)
+    // 设置脚本名称
+    it.setName(&quot;test-javascript-start-string&quot;)
+    // 设置脚本语言
+    it.setLanguage(function (l) {
+        // 设置脚本语言名称
+        l.setName(&quot;Javascript&quot;)
+    })
+})
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_32" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取脚本引擎
+local engine = _script:getEngine()
+-- 启动脚本字符串
+engine:startString(function(it)
+    -- 设置需要执行的脚本内容
+    it:setContent(&quot;\_console:log('test-lua-from-start-string')&quot;)
+    -- 设置脚本名称
+    it:setName(&quot;test-lua-start-string&quot;)
+    -- 设置脚本语言
+    it:setLanguage(function(l)
+        -- 设置脚本语言名称
+        l:setName(&quot;Lua&quot;)
+    end)
+end)
+_console:log(&quot;主脚本运行&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_35" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+// 获取脚本引擎
+$engine = $script-&gt;getEngine();
+// 启动脚本字符串
+$engine-&gt;startString(function ($it) {
+    // 设置需要执行的脚本内容
+    $it-&gt;setContent(&quot;&lt;?php\n\$console-&gt;log('test-php-from-start-file');&quot;);
+    // 设置脚本名称
+    $it-&gt;setName(&quot;test-php-start-string&quot;);
+    // 设置脚本语言
+    $it-&gt;setLanguage(function ($l) {
+        // 设置脚本语言名称
+        $l-&gt;setName(&quot;Php&quot;);
+    });
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+$console-&gt;log(javaString(&quot;主脚本运行&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_38" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+# 获取脚本引擎
+engine = _script.getEngine()
+# 启动脚本字符串
+engine.startString(lambda it:
+                   # 设置需要执行的脚本内容
+                   (it.setContent(&quot;_console.log('test-python-from-start-string')&quot;),
+                    # 设置脚本名称
+                    it.setName(&quot;test-python-start-string&quot;),
+                    # 设置脚本语言
+                    it.setLanguage(lambda l:
+                                   # 设置脚本语言名称
+                                   l.setName(&quot;Python&quot;)
+                                   )
+                    ))
+_console.log(&quot;主脚本运行&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_41" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 获取脚本引擎
+engine = $script.getEngine()
+java_import &quot;com.m8test.script.core.api.config.ScriptStringConfig&quot;
+# 启动脚本字符串
+engine.startString {
+  # @type it [ScriptStringConfig]
+  |it|
+  # 设置需要执行的脚本内容
+  it.setContent(&quot;$console.log('test-ruby-from-start-string')&quot;)
+  # 设置脚本名称
+  it.setName(&quot;test-ruby-start-string&quot;)
+  java_import &quot;com.m8test.script.core.api.resource.WebResource&quot;
+  # 设置脚本语言
+  it.setLanguage {
+    # @type l [WebResource]
+    |l|
+    # 设置脚本语言名称
+    l.setName(&quot;Ruby&quot;)
+  }
+}
+$console.log(&quot;主脚本运行&quot;)</div></div></div></section><section class="chapter"><h2 id="-21yyyo_6" data-toc="-21yyyo_6">启动文件脚本</h2><section class="chapter"><h3 id="-21yyyo_90" data-toc="-21yyyo_90">启动本地的脚本文件</h3><div class="tabs" id="-21yyyo_95" data-group="languages" data-anchors="[-21yyyo_101,-21yyyo_104,-21yyyo_107,-21yyyo_110,-21yyyo_113,-21yyyo_116,-21yyyo_119,-21yyyo_98]"><div class="tabs__content" data-gtm="tab" id="-21yyyo_98" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+val scriptFile = _files.buildFile {
+    // 设置文件路径
+    setPath(&quot;/sdcard/M8Test&quot;, &quot;start-groovy-file.kts&quot;)
+}
+// 在子脚本中简单打印日志表示子脚本已经成功运行
+scriptFile.writeText(&quot;import com.m8test.script.GlobalVariables.*\n_console.log(\&quot;test-kotlin-from-start-file\&quot;)&quot;, &quot;utf-8&quot;)
+// 获取脚本引擎
+val engine = _script.getEngine()
+// 启动脚本文件，这里我们使用上面动态生成的脚本文件
+engine.startFile {
+    // 设置需要启动的脚本文件路径
+    setFile(scriptFile)
+}
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_101" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+def scriptFile = $files.buildFile {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-groovy-file.groovy&quot;)
+}
+// 在子脚本中简单打印日志表示子脚本已经成功运行
+scriptFile.writeText(&quot;\$console.log('test-groovy-from-start-file')&quot;, &quot;utf-8&quot;)
+// 获取脚本引擎
+def engine = $script.getEngine()
+// 启动脚本文件，这里我们使用上面动态生成的脚本文件
+engine.startFile {
+    // 设置需要启动的脚本文件路径
+    it.setFile(scriptFile)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_104" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.config.ScriptFileConfig;
+import com.m8test.script.core.api.engine.ScriptEngine;
+import com.m8test.script.core.api.file.FileBuilder;
+import com.m8test.script.core.api.file.ScriptFile;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.*;
+
+// 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+final ScriptFile scriptFile = $files.buildFile(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        FileBuilder fileBuilder = (FileBuilder) o;
+        // 设置文件路径
+        fileBuilder.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-java-file.javas&quot;);
+        return null;
+    }
+});
+// 在子脚本中简单打印日志表示子脚本已经成功运行
+scriptFile.writeText(&quot;import static com.m8test.script.GlobalVariables.*;\n$console.log(\&quot;test-java-from-start-file\&quot;);&quot;, &quot;utf-8&quot;);
+// 获取脚本引擎
+ScriptEngine engine = $script.getEngine();
+// 启动脚本文件，这里我们使用上面动态生成的脚本文件
+engine.startFile(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        ScriptFileConfig it = (ScriptFileConfig) o;
+        // 设置需要启动的脚本文件路径
+        it.setFile(scriptFile);
+        return null;
+    }
+});
+$console.log(&quot;主脚本运行&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_107" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+let scriptFile = $files.buildFile(function (it) {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-javascript-file.js&quot;)
+})
+// 在子脚本中简单打印日志表示子脚本已经成功运行
+scriptFile.writeText(&quot;$console.log('test-javascript-from-start-file')&quot;, &quot;utf-8&quot;)
+// 获取脚本引擎
+let engine = $script.getEngine()
+// 启动脚本文件，这里我们使用上面动态生成的脚本文件
+engine.startFile(function (it) {
+    // 设置需要启动的脚本文件路径
+    it.setFile(scriptFile)
+})
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_110" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+local scriptFile = _files:buildFile(function(it)
+    -- 设置文件路径
+    it:setPath(&quot;/sdcard/M8Test&quot;, &quot;start-lua-file.lua&quot;)
+end)
+-- 在子脚本中简单打印日志表示子脚本已经成功运行
+scriptFile:writeText(&quot;\_console:log('test-lua-from-start-file')&quot;, &quot;utf-8&quot;)
+-- 获取脚本引擎
+local engine = _script:getEngine()
+-- 启动脚本文件，这里我们使用上面动态生成的脚本文件
+engine:startFile(function(it)
+    -- 设置需要启动的脚本文件路径
+    it:setFile(scriptFile)
+end)
+_console:log(&quot;主脚本运行&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_113" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+// 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+$scriptFile = $files-&gt;buildFile(function ($it) {
+    // 设置文件路径
+    $it-&gt;setPath(&quot;/sdcard/M8Test&quot;, &quot;start-php-file.php&quot;);
+});
+// 在子脚本中简单打印日志表示子脚本已经成功运行
+$scriptFile-&gt;writeText(&quot;&lt;?php\n\$console-&gt;log('test-php-from-start-file')&quot;, &quot;utf-8&quot;);
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+// 获取脚本引擎
+$engine = $script-&gt;getEngine();
+// 启动脚本文件，这里我们使用上面动态生成的脚本文件
+$engine-&gt;startFile(function ($it) use ($scriptFile) {
+    // 设置需要启动的脚本文件路径
+    $it-&gt;setFile($scriptFile);
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+$console-&gt;log(javaString(&quot;主脚本运行&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_116" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+# 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+scriptFile = _files.buildFile(lambda it:
+                              # 设置文件路径
+                              it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-python-file.py&quot;)
+                              )
+# 在子脚本中简单打印日志表示子脚本已经成功运行
+scriptFile.writeText(&quot;_console.log('test-python-from-start-file')&quot;, &quot;utf-8&quot;)
+# 获取脚本引擎
+engine = _script.getEngine()
+# 启动脚本文件，这里我们使用上面动态生成的脚本文件
+engine.startFile(lambda it:
+                 # 设置需要启动的脚本文件路径
+                 it.setFile(scriptFile)
+                 )
+_console.log(&quot;主脚本运行&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_119" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import &quot;com.m8test.script.core.api.file.FileBuilder&quot;
+# 简单的创建一个本地脚本文件, 如果实际开发的话，可以使用预编写的脚本文件
+scriptFile = $files.buildFile {
+  # @type it [FileBuilder]
+  |it|
+  # 设置文件路径
+  it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-ruby-file.rb&quot;)
+}
+# 在子脚本中简单打印日志表示子脚本已经成功运行
+scriptFile.writeText(&quot;$console.log('test-ruby-from-start-file')&quot;, &quot;utf-8&quot;)
+# 获取脚本引擎
+engine = $script.getEngine()
+java_import &quot;com.m8test.script.core.api.config.ScriptFileConfig&quot;
+# 启动脚本文件，这里我们使用上面动态生成的脚本文件
+engine.startFile {
+  # @type it [ScriptFileConfig]
+  |it|
+  # 设置需要启动的脚本文件路径
+  it.setFile(scriptFile)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div></div></section><section class="chapter"><h3 id="-21yyyo_91" data-toc="-21yyyo_91">启动网络脚本文件</h3><div class="tabs" id="-21yyyo_171" data-group="languages" data-anchors="[-21yyyo_174,-21yyyo_177,-21yyyo_180,-21yyyo_183,-21yyyo_186,-21yyyo_189,-21yyyo_192,-21yyyo_195]"><div class="tabs__content" data-gtm="tab" id="-21yyyo_174" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+val scriptFile = _files.buildFile {
+    // 设置文件路径
+    setPath(&quot;/sdcard/M8Test&quot;, &quot;start-kotlin-file-with-url.kts&quot;)
+}
+// 获取脚本引擎
+val engine = _script.getEngine()
+// 启动脚本文件
+engine.startFile {
+    // 设置需要启动脚本的下载地址、保存路径以及超时时间
+    setUrl(
+        &quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/Console/log.kts&quot;,
+        scriptFile,
+        10000
+    )
+}
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_177" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def scriptFile = $files.buildFile {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-groovy-file-with-url.groovy&quot;)
+}
+// 获取脚本引擎
+def engine = $script.getEngine()
+// 启动脚本文件
+engine.startFile {
+    // 设置需要启动脚本的下载地址、保存路径以及超时时间
+    it.setUrl(&quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/Console/log.groovy&quot;, scriptFile, 10000)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_180" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.config.ScriptFileConfig;
+import com.m8test.script.core.api.engine.ScriptEngine;
+import com.m8test.script.core.api.file.FileBuilder;
+import com.m8test.script.core.api.file.ScriptFile;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.*;
+
+final ScriptFile scriptFile = $files.buildFile(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        FileBuilder fileBuilder = (FileBuilder) o;
+        // 设置文件路径
+        fileBuilder.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-java-file-with-url.javas&quot;);
+        return null;
+    }
+});
+// 获取脚本引擎
+ScriptEngine engine = $script.getEngine();
+// 启动脚本文件
+engine.startFile(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        ScriptFileConfig it = (ScriptFileConfig) o;
+        // 设置需要启动脚本的下载地址、保存路径以及超时时间
+        it.setUrl(&quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/java/api/Console/log.javas&quot;, scriptFile, 10000);
+        return null;
+    }
+});
+$console.log(&quot;主脚本运行&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_183" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let scriptFile = $files.buildFile(function (it) {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-javascript-file-with-url.js&quot;)
+})
+// 获取脚本引擎
+let engine = $script.getEngine()
+// 启动脚本文件
+engine.startFile(function (it) {
+    // 设置需要启动脚本的下载地址、保存路径以及超时时间
+    it.setUrl(&quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/Console/log.js&quot;, scriptFile, 10000)
+})
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_186" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local scriptFile = _files:buildFile(function(it)
+    -- 设置文件路径
+    it:setPath(&quot;/sdcard/M8Test&quot;, &quot;start-lua-file-with-url.lua&quot;)
+end)
+-- 获取脚本引擎
+local engine = _script:getEngine()
+-- 启动脚本文件
+engine:startFile(function(it)
+    -- 设置需要启动脚本的下载地址、保存路径以及超时时间
+    it:setUrl(&quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/Console/log.lua&quot;,
+        scriptFile, 10000)
+end)
+_console:log(&quot;主脚本运行&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_189" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+$scriptFile = $files-&gt;buildFile(function ($it) {
+    // 设置文件路径
+    $it-&gt;setPath(&quot;/sdcard/M8Test&quot;, &quot;start-php-file-with-url.php&quot;);
+});
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+// 获取脚本引擎
+$engine = $script-&gt;getEngine();
+// 启动脚本文件
+$engine-&gt;startFile(function ($it) use ($scriptFile) {
+    // 设置需要启动脚本的下载地址、保存路径以及超时时间
+    $it-&gt;setUrl(&quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/Console/log.php&quot;, $scriptFile, 10000);
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+$console-&gt;log(javaString(&quot;主脚本运行&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_192" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+scriptFile = _files.buildFile(lambda it:
+                              # 设置文件路径
+                              it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-python-file-with-url.py&quot;)
+                              )
+# 获取脚本引擎
+engine = _script.getEngine()
+# 启动脚本文件
+engine.startFile(lambda it:
+                 # 设置需要启动脚本的下载地址、保存路径以及超时时间
+                 it.setUrl(
+                     &quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/Console/log.py&quot;,
+                     scriptFile, 10000)
+                 )
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_195" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import &quot;com.m8test.script.core.api.file.FileBuilder&quot;
+scriptFile = $files.buildFile {
+  # @type it [FileBuilder]
+  |it|
+  # 设置文件路径
+  it.setPath(&quot;/sdcard/M8Test&quot;, &quot;start-ruby-file-with-url.rb&quot;)
+}
+# 获取脚本引擎
+engine = $script.getEngine()
+java_import &quot;com.m8test.script.core.api.config.ScriptFileConfig&quot;
+# 启动脚本文件
+engine.startFile {
+  # @type it [ScriptFileConfig]
+  |it|
+  # 设置需要启动脚本的下载地址、保存路径以及超时时间
+  it.setUrl(&quot;https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/Console/log.rb&quot;, scriptFile, 10000)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div></div></section></section><section class="chapter"><h2 id="-21yyyo_7" data-toc="-21yyyo_7">启动项目脚本</h2><section class="chapter"><h3 id="-21yyyo_244" data-toc="-21yyyo_244">启动本地的脚本项目</h3><div class="tabs" id="-21yyyo_249" data-group="languages" data-anchors="[-21yyyo_252,-21yyyo_255,-21yyyo_258,-21yyyo_261,-21yyyo_264,-21yyyo_267,-21yyyo_270,-21yyyo_273]"><div class="tabs__content" data-gtm="tab" id="-21yyyo_252" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 在本地保存的spa文件路径
+val scriptFile = _files.buildFile {
+    // 设置文件路径
+    setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.kotlin-1.0.1.spa&quot;)
+}
+// 获取脚本引擎
+val engine = _script.getEngine()
+// 启动脚本项目
+engine.startProject {
+    // 设置需要启动的脚本项目路径
+    setPath(scriptFile)
+    // 让脚本独立运行到一个脚本引擎中
+    setStandalone(true)
+}
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_255" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 在本地保存的spa文件路径
+def scriptFile = $files.buildFile {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.groovy-1.0.1.spa&quot;)
+}
+// 获取脚本引擎
+def engine = $script.getEngine()
+// 启动脚本项目
+engine.startProject {
+    // 设置需要启动的脚本项目路径
+    it.setPath(scriptFile)
+    // 让脚本独立运行到一个脚本引擎中
+    it.setStandalone(true)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_258" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.config.ScriptProjectConfig;
+import com.m8test.script.core.api.engine.ScriptEngine;
+import com.m8test.script.core.api.file.FileBuilder;
+import com.m8test.script.core.api.file.ScriptFile;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.*;
+
+// 在本地保存的spa文件路径
+final ScriptFile scriptFile = $files.buildFile(new Function1() {
+    @Override
+    public Object invoke(Object fileBuilder) {
+        FileBuilder it = (FileBuilder) fileBuilder;
+        // 设置文件路径
+        it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.java-1.0.1.spa&quot;);
+        return null;
+    }
+});
+// 获取脚本引擎
+ScriptEngine engine = $script.getEngine();
+// 启动脚本项目
+engine.startProject(new Function1() {
+    @Override
+    public Object invoke(Object scriptProjectConfig) {
+        ScriptProjectConfig it = (ScriptProjectConfig) scriptProjectConfig;
+        // 设置需要启动的脚本项目路径
+        it.setPath(scriptFile);
+        // 让脚本独立运行到一个脚本引擎中
+        it.setStandalone(true);
+        return null;
+    }
+});
+$console.log(&quot;主脚本运行&quot;);
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_261" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 在本地保存的spa文件路径
+let scriptFile = $files.buildFile(function (it) {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.javascript-1.0.1.spa&quot;)
+})
+// 获取脚本引擎
+let engine = $script.getEngine()
+// 启动脚本项目
+engine.startProject(function (it) {
+    // 设置需要启动的脚本项目路径
+    it.setPath(scriptFile)
+    // 让脚本独立运行到一个脚本引擎中
+    it.setStandalone(true)
+})
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_264" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 在本地保存的spa文件路径
+local scriptFile = _files:buildFile(function(it)
+    -- 设置文件路径
+    it:setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.lua-1.0.1.spa&quot;)
+end)
+-- 获取脚本引擎
+local engine = _script:getEngine()
+-- 启动脚本项目
+engine:startProject(function(it)
+    -- 设置需要启动的脚本项目路径
+    it:setPath(scriptFile)
+    -- 让脚本独立运行到一个脚本引擎中
+    it:setStandalone(true)
+end)
+_console:log(&quot;主脚本运行&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_267" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+// 在本地保存的spa文件路径
+$scriptFile = $files-&gt;buildFile(function ($it) {
+    // 设置文件路径
+    $it-&gt;setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.php-1.0.1.spa&quot;);
+});
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+// 获取脚本引擎
+$engine = $script-&gt;getEngine();
+// 启动脚本项目
+$engine-&gt;startProject(function ($it) use ($scriptFile) {
+    // 设置需要启动的脚本项目路径
+    $it-&gt;setPath($scriptFile);
+    // 让脚本独立运行到一个脚本引擎中
+    $it-&gt;setStandalone(true);
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+$console-&gt;log(javaString(&quot;主脚本运行&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_270" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+# 在本地保存的spa文件路径
+scriptFile = _files.buildFile(lambda it:
+                              # 设置文件路径
+                              it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.python-1.0.1.spa&quot;)
+                              )
+# 获取脚本引擎
+engine = _script.getEngine()
+# 启动脚本项目
+engine.startProject(lambda it:
+                    # 设置需要启动的脚本项目路径
+                    (it.setPath(scriptFile),
+                     # 让脚本独立运行到一个脚本引擎中
+                     it.setStandalone(True)
+                     ))
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_273" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import &quot;com.m8test.script.core.api.file.FileBuilder&quot;
+# 在本地保存的spa文件路径
+scriptFile = $files.buildFile {
+  # @type it [FileBuilder]
+  |it|
+  # 设置文件路径
+  it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.ruby-1.0.1.spa&quot;)
+}
+# 获取脚本引擎
+engine = $script.getEngine()
+java_import &quot;com.m8test.script.core.api.config.ScriptProjectConfig&quot;
+# 启动脚本项目
+engine.startProject {
+  # @type it [ScriptProjectConfig]
+  |it|
+  # 设置需要启动的脚本项目路径
+  it.setPath(scriptFile)
+  # 让脚本独立运行到一个脚本引擎中
+  it.setStandalone(true)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div></div></section><section class="chapter"><h3 id="-21yyyo_245" data-toc="-21yyyo_245">启动网络脚本项目</h3><div class="tabs" id="-21yyyo_325" data-group="languages" data-anchors="[-21yyyo_328,-21yyyo_331,-21yyyo_334,-21yyyo_337,-21yyyo_340,-21yyyo_343,-21yyyo_346,-21yyyo_349]"><div class="tabs__content" data-gtm="tab" id="-21yyyo_328" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 在本地保存的spa文件路径
+val scriptFile = _files.buildFile {
+    // 设置文件路径
+    setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.kotlin-1.0.1.spa&quot;)
+}
+// 获取脚本引擎
+val engine = _script.getEngine()
+// 启动脚本项目
+engine.startProject {
+    // 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+    setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.kotlin-1.0.1.spa&quot;, scriptFile, 10000)
+    // 让脚本独立运行到一个脚本引擎中
+    setStandalone(true)
+}
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_331" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 在本地保存的spa文件路径
+def scriptFile = $files.buildFile {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.groovy-1.0.1.spa&quot;)
+}
+// 获取脚本引擎
+def engine = $script.getEngine()
+// 启动脚本项目
+engine.startProject {
+    // 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+    it.setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.groovy-1.0.1.spa&quot;, scriptFile, 10000)
+    // 让脚本独立运行到一个脚本引擎中
+    it.setStandalone(true)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_334" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.config.ScriptProjectConfig;
+import com.m8test.script.core.api.engine.ScriptEngine;
+import com.m8test.script.core.api.file.FileBuilder;
+import com.m8test.script.core.api.file.ScriptFile;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.*;
+
+// 在本地保存的spa文件路径
+final ScriptFile scriptFile = $files.buildFile(new Function1() {
+    @Override
+    public Object invoke(Object fileBuilder) {
+        FileBuilder it = (FileBuilder) fileBuilder;
+        // 设置文件路径
+        it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.java-1.0.1.spa&quot;);
+        return null;
+    }
+});
+// 获取脚本引擎
+ScriptEngine engine = $script.getEngine();
+// 启动脚本项目
+engine.startProject(new Function1() {
+    @Override
+    public Object invoke(Object scriptProjectConfig) {
+        ScriptProjectConfig it = (ScriptProjectConfig) scriptProjectConfig;
+        // 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+        it.setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.java-1.0.1.spa&quot;, scriptFile, 10000);
+        // 让脚本独立运行到一个脚本引擎中
+        it.setStandalone(true);
+        return null;
+    }
+});
+$console.log(&quot;主脚本运行&quot;);
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_337" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 在本地保存的spa文件路径
+let scriptFile = $files.buildFile(function (it) {
+    // 设置文件路径
+    it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.javascript-1.0.1.spa&quot;)
+})
+// 获取脚本引擎
+let engine = $script.getEngine()
+// 启动脚本项目
+engine.startProject(function (it) {
+    // 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+    it.setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.javascript-1.0.1.spa&quot;, scriptFile, 10000)
+    // 让脚本独立运行到一个脚本引擎中
+    it.setStandalone(true)
+})
+$console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_340" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 在本地保存的spa文件路径
+local scriptFile = _files:buildFile(function(it)
+    -- 设置文件路径
+    it:setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.lua-1.0.1.spa&quot;)
+end)
+-- 获取脚本引擎
+local engine = _script:getEngine()
+-- 启动脚本项目
+engine:startProject(function(it)
+    -- 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+    it:setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.lua-1.0.1.spa&quot;, scriptFile,
+        10000)
+    -- 让脚本独立运行到一个脚本引擎中
+    it:setStandalone(true)
+end)
+_console:log(&quot;主脚本运行&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_343" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+// 在本地保存的spa文件路径
+$scriptFile = $files-&gt;buildFile(function ($it) {
+    // 设置文件路径
+    $it-&gt;setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.php-1.0.1.spa&quot;);
+});
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+// 获取脚本引擎
+$engine = $script-&gt;getEngine();
+// 启动脚本项目
+$engine-&gt;startProject(function ($it) use ($scriptFile) {
+    // 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+    $it-&gt;setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.php-1.0.1.spa&quot;, $scriptFile, 10000);
+    // 让脚本独立运行到一个脚本引擎中
+    $it-&gt;setStandalone(true);
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+$console-&gt;log(javaString(&quot;主脚本运行&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_346" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+# 在本地保存的spa文件路径
+scriptFile = _files.buildFile(lambda it:
+                              # 设置文件路径
+                              it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.python-1.0.1.spa&quot;)
+                              )
+# 获取脚本引擎
+engine = _script.getEngine()
+# 启动脚本项目
+engine.startProject(lambda it:
+                    # 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+                    (it.setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.python-1.0.1.spa&quot;, scriptFile, 10000),
+                     # 让脚本独立运行到一个脚本引擎中
+                     it.setStandalone(True)
+                     ))
+_console.log(&quot;主脚本运行&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-21yyyo_349" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import &quot;com.m8test.script.core.api.file.FileBuilder&quot;
+# 在本地保存的spa文件路径
+scriptFile = $files.buildFile {
+  # @type it [FileBuilder]
+  |it|
+  # 设置文件路径
+  it.setPath(&quot;/sdcard/M8Test/spa&quot;, &quot;com.example.script.ruby-1.0.1.spa&quot;)
+}
+# 获取脚本引擎
+engine = $script.getEngine()
+java_import &quot;com.m8test.script.core.api.config.ScriptProjectConfig&quot;
+# 启动脚本项目
+engine.startProject {
+  # @type it [ScriptProjectConfig]
+  |it|
+  # 设置需要启动的脚本项目的下载地址、本地保存的路径以及超时时间
+  it.setUrl(&quot;https://github.com/m8test/dev-docs/raw/refs/heads/master/com.example.script.ruby-1.0.1.spa&quot;, scriptFile, 10000)
+  # 让脚本独立运行到一个脚本引擎中
+  it.setStandalone(true)
+}
+$console.log(&quot;主脚本运行&quot;)</div></div></div></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="script-engine.html" class="navigation-links__prev">脚本引擎</a><a href="script-communication.html" class="navigation-links__next">脚本通信</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

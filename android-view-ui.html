@@ -1,0 +1,146 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:15.056065155"><title>视图界面(View) | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="视图界面(View) | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/android-view-ui.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="视图界面(View) | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/android-view-ui.html#webpage",
+    "url": "writerside-documentation/android-view-ui.html",
+    "name": "视图界面(View) | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="android-view-ui" data-main-title="视图界面(View)" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="script-ui.md|脚本界面"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="android-view-ui" id="android-view-ui.md">视图界面(View)</h1><p id="-d62qi3_3">M8Test支持直接使用Android API创建界面，即采用Android的View系统。由于M8Test所支持的脚本语言均能访问Android API，这意味着只要您会用Java编写安卓界面，就能用脚本编写界面&mdash;&mdash;前提是您具备安卓开发基础。若您不了解安卓开发或了解甚少，可通过<a href="web-ui.html" id="-d62qi3_8" data-tooltip="M8Test 支持使用静态网站作为脚本界面，你也可以采用 Vue、Angular 或 React 等框架进行开发。只需将框架生成的静态网站文件放置在 webview 目录下，且静态网站的首页必须命名为 index.html。当然，我们更推荐使用 AI 直接生成静态网站，AI 完全有能力高效创建美观的界面。">网站</a> 创建界面，而非使用安卓View系统。</p><div class="tabs" id="-d62qi3_7" data-group="languages" data-anchors="[-d62qi3_11,-d62qi3_14,-d62qi3_17,-d62qi3_20,-d62qi3_23,-d62qi3_26,-d62qi3_29,-d62qi3_32]"><div class="tabs__content" data-gtm="tab" id="-d62qi3_11" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.script
+
+import android.widget.TextView
+import com.m8test.script.GlobalVariables._activity
+import com.m8test.script.GlobalVariables._androidView
+
+// 创建需要在界面显示的视图
+_androidView.create(true) {
+    // 创建一个简单的 TextView
+    val textView = TextView(context)
+    // 设置 TextView 的文本
+    textView.text = &quot;悬浮窗视图&quot;
+    // 将 TextView 添加到 FrameLayout 中
+    addView(textView)
+}
+// 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-d62qi3_14" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import android.widget.TextView
+
+// 创建需要在界面显示的视图
+$androidView.create(true) { frameLayout -&gt;
+    // 创建一个简单的 TextView
+    def textView = new TextView(frameLayout.getContext())
+    // 设置 TextView 的文本
+    textView.setText(&quot;悬浮窗视图&quot;)
+    // 将 TextView 添加到 FrameLayout 中
+    frameLayout.addView(textView)
+}
+// 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-d62qi3_17" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import android.widget.FrameLayout;
+import android.widget.TextView;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$activity;
+import static com.m8test.script.GlobalVariables.$androidView;
+
+// 创建需要在界面显示的视图
+$androidView.create(true, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        FrameLayout frameLayout = (FrameLayout) o;
+        // 创建一个简单的 TextView
+        TextView textView = new TextView(frameLayout.getContext());
+        // 设置 TextView 的文本
+        textView.setText(&quot;悬浮窗视图&quot;);
+        // 将 TextView 添加到 FrameLayout 中
+        frameLayout.addView(textView);
+        return null;
+    }
+});
+// 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="-d62qi3_20" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建需要在界面显示的视图
+$androidView.create(true, function (frameLayout) {
+    // 创建一个简单的 TextView
+    let textView = new Packages.android.widget.TextView(frameLayout.getContext())
+    // 设置 TextView 的文本
+    textView.setText(&quot;悬浮窗视图&quot;)
+    // 将 TextView 添加到 FrameLayout 中
+    frameLayout.addView(textView)
+})
+// 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-d62qi3_23" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入 TextView 类, 必须以 m8test_java 开头, 后面跟 java 类名
+local TextView = require(&quot;m8test_java.android.widget.TextView&quot;)
+
+-- 创建需要在界面显示的视图
+_androidView:create(true, function(frameLayout)
+    -- 创建一个简单的 TextView
+    local textView = TextView:newJavaObject(frameLayout:getContext())
+    -- 设置 TextView 的文本
+    textView:setText(&quot;悬浮窗视图&quot;)
+    -- 将 TextView 添加到 FrameLayout 中
+    frameLayout:addView(textView)
+end)
+-- 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+_activity:start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-d62qi3_26" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\android\widget\TextView;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\view\AndroidView $androidView */
+global $androidView;
+// 创建需要在界面显示的视图
+$androidView-&gt;create(true, function ($frameLayout) {
+    // 创建一个简单的 TextView
+    /** @var \m8test_java\android\widget\FrameLayout $frameLayout */
+    $textView = new TextView($frameLayout-&gt;getContext());
+    // 设置 TextView 的文本
+    $textView-&gt;setText(javaString(&quot;悬浮窗视图&quot;));
+    // 将 TextView 添加到 FrameLayout 中
+    $frameLayout-&gt;addView($textView);
+});
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+// 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="-d62qi3_29" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.android.widget.FrameLayout import FrameLayout
+from m8test_java.android.widget.TextView import TextView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _androidView
+
+
+def view_content(frameLayout: FrameLayout):
+    # 创建一个简单的 TextView
+    textView = TextView(frameLayout.getContext())
+    # 设置 TextView 的文本
+    textView.setText(&quot;悬浮窗视图&quot;)
+    # 将 TextView 添加到 FrameLayout 中
+    frameLayout.addView(textView)
+
+
+# 创建需要在界面显示的视图
+_androidView.create(True, view_content)
+# 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-d62qi3_32" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'android.widget.TextView'
+java_import &quot;android.widget.FrameLayout&quot;
+
+# 创建需要在界面显示的视图
+$androidView.create(true) {
+  # @type frameLayout [FrameLayout]
+  |frameLayout|
+  # 创建一个简单的 TextView
+  textView = TextView.new(frameLayout.getContext())
+  # 设置 TextView 的文本
+  textView.setText(&quot;悬浮窗视图&quot;)
+  # 将 TextView 添加到 FrameLayout 中
+  frameLayout.addView(textView)
+}
+# 启动一个 Activity 用于显示界面, 这样脚本就会以界面方式运行，除非手动停止或者在脚本中通过代码停止，否则脚本会一直运行在后台
+$activity.start()</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="script-ui.html" class="navigation-links__prev">脚本界面</a><a href="web-ui.html" class="navigation-links__next">网页界面</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

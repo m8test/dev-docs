@@ -1,0 +1,1400 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.391684347"><title>入门 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"fo5yoh_3","level":0,"title":"异步编程模式","anchor":"#fo5yoh_3"},{"id":"fo5yoh_4","level":0,"title":"“即发即忘”的异步任务","anchor":"#fo5yoh_4"},{"id":"async-deferred","level":0,"title":"获取结果：async 与 Deferred","anchor":"#async-deferred"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="入门 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/coroutines-getting-started.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="入门 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/coroutines-getting-started.html#webpage",
+    "url": "writerside-documentation/coroutines-getting-started.html",
+    "name": "入门 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="coroutines-getting-started" data-main-title="入门" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="coroutines.md|协程"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="coroutines-getting-started" id="coroutines-getting-started.md">入门</h1><section class="chapter"><h2 id="fo5yoh_3" data-toc="fo5yoh_3">异步编程模式</h2><p id="fo5yoh_6">这是本库最最重要的概念。所有异步操作（如 delay, async）都会立即返回一个 Deferred 对象，而不会暂停代码执行。任何需要在该异步操作完成后执行的逻辑，都必须通过 .then() 方法链接到 Deferred 对象上。</p><div class="tabs" id="fo5yoh_10" data-group="languages" data-anchors="[fo5yoh_13,fo5yoh_16,fo5yoh_19,fo5yoh_22,fo5yoh_25,fo5yoh_28,fo5yoh_31,fo5yoh_34]"><div class="tabs__content" data-gtm="tab" id="fo5yoh_13" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+// ----------------- ❌ 错误示范：同步思维 -----------------
+// 这种写法是无效的，因为 delay 不会阻塞代码
+// 修复：移除 lambda 参数 aScope，直接使用 implicit this 调用 delay
+scope.launch(null, null) {
+    delay(1000)
+    _console.log(&quot;这行日志会立刻打印，而不是在1秒后！&quot;)
+}
+
+// ----------------- ✅ 正确示范：异步链式思维 -----------------
+// 所有依赖于前一个异步操作结果的代码，都必须放入 .then() 闭包中
+// .then 的回调是 (CoroutineScope, T) -&gt; Deferred&lt;R&gt;，需要参数，所以这里是对的
+scope.delay(1000).then { aScope, result -&gt;
+    _console.log(&quot;这行日志会在1秒后正确打印。&quot;)
+
+    // then 闭包必须返回一个新的 Deferred，即使没有有意义的结果
+    aScope.resolve(null)
+}</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_16" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+// ----------------- ❌ 错误示范：同步思维 -----------------
+// 这种写法是无效的，因为 delay 不会阻塞代码
+scope.launch(null, null, { aScope -&gt;
+    aScope.delay(1000)
+    $console.log(&quot;这行日志会立刻打印，而不是在1秒后！&quot;)
+})
+
+// ----------------- ✅ 正确示范：异步链式思维 -----------------
+// 所有依赖于前一个异步操作结果的代码，都必须放入 .then() 闭包中
+scope.delay(1000).then({ aScope, result -&gt;
+    $console.log(&quot;这行日志会在1秒后正确打印。&quot;)
+
+    // then 闭包必须返回一个新的 Deferred，即使没有有意义的结果
+    aScope.resolve(null)
+})</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_19" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_22" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+// ----------------- ❌ 错误示范：同步思维 -----------------
+// 这种写法是无效的，因为 delay 不会阻塞代码
+scope.launch(null, null, aScope =&gt; {
+    aScope.delay(1000);
+    $console.log(&quot;这行日志会立刻打印，而不是在1秒后！&quot;);
+});
+
+// ----------------- ✅ 正确示范：异步链式思维 -----------------
+// 所有依赖于前一个异步操作结果的代码，都必须放入 .then() 闭包中
+scope.delay(1000).then((aScope, result) =&gt; {
+    $console.log(&quot;这行日志会在1秒后正确打印。&quot;);
+
+    // then 闭包必须返回一个新的 Deferred，即使没有有意义的结果
+    return aScope.resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_25" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+-- ----------------- ❌ 错误示范：同步思维 -----------------
+-- 这种写法是无效的，因为 delay 不会阻塞代码
+scope:launch(nil, nil, function(aScope)
+    aScope:delay(1000)
+    _console:log(&quot;这行日志会立刻打印，而不是在1秒后！&quot;)
+end)
+
+-- ----------------- ✅ 正确示范：异步链式思维 -----------------
+-- 所有依赖于前一个异步操作结果的代码，都必须放入 ._then() 闭包中
+scope:delay(1000):_then(function(aScope, result)
+    _console:log(&quot;这行日志会在1秒后正确打印。&quot;)
+
+    -- _then 闭包必须返回一个新的 Deferred，即使没有有意义的结果
+    return aScope:resolve(nil)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_28" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// ----------------- ❌ 错误示范：同步思维 -----------------
+// 这种写法是无效的，因为 delay 不会阻塞代码
+$scope-&gt;launch(null, null, function ($aScope) {
+    global $console;
+    $aScope-&gt;delay(1000);
+    $console-&gt;log(javaString(&quot;这行日志会立刻打印，而不是在1秒后！&quot;));
+});
+
+// ----------------- ✅ 正确示范：异步链式思维 -----------------
+// 所有依赖于前一个异步操作结果的代码，都必须放入 .then() 闭包中
+$scope-&gt;delay(1000)-&gt;then(function ($aScope, $result) {
+    global $console;
+    $console-&gt;log(javaString(&quot;这行日志会在1秒后正确打印。&quot;));
+
+    // then 闭包必须返回一个新的 Deferred，即使没有有意义的结果
+    return $aScope-&gt;resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_31" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+
+# 被转换为 Python 的嵌套 lambda 表达式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+
+# ----------------- ❌ 错误示范：同步思维 -----------------
+# 这种写法是无效的，因为 delay 不会阻塞代码
+scope.launch(None, None, lambda aScope: (
+    aScope.delay(1000),
+    _console.log(&quot;这行日志会立刻打印，而不是在1秒后！&quot;)
+))
+
+# ----------------- ✅ 正确示范：异步链式思维 -----------------
+# 所有依赖于前一个异步操作结果的代码，都必须放入 .then() 闭包中
+scope.delay(1000).then(lambda aScope, result: (
+    _console.log(&quot;这行日志会在1秒后正确打印。&quot;),
+
+    # then 闭包必须返回一个新的 Deferred，即使没有有意义的结果
+    aScope.resolve(None)
+)[-1])
+</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_34" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+# ----------------- ❌ 错误示范：同步思维 -----------------
+# 这种写法是无效的，因为 delay 不会阻塞代码
+scope.launch(nil, nil) do |aScope|
+  aScope.delay(1000)
+  $console.log(&quot;这行日志会立刻打印，而不是在1秒后！&quot;)
+end
+
+# ----------------- ✅ 正确示范：异步链式思维 -----------------
+# 所有依赖于前一个异步操作结果的代码，都必须放入 .then() 闭包中
+scope.delay(1000).then do |aScope, result|
+  $console.log(&quot;这行日志会在1秒后正确打印。&quot;)
+
+  # then 闭包必须返回一个新的 Deferred，即使没有有意义的结果
+  aScope.resolve(nil)
+end</div></div></div></section><section class="chapter"><h2 id="fo5yoh_4" data-toc="fo5yoh_4">&ldquo;即发即忘&rdquo;的异步任务</h2><p id="fo5yoh_83">当你需要执行一个后台任务，但又不关心它的返回值时（例如，发送一条日志、更新一个文件），scope.launch() 是最佳选择。</p><div class="tabs" id="fo5yoh_87" data-group="languages" data-anchors="[fo5yoh_102,fo5yoh_105,fo5yoh_108,fo5yoh_111,fo5yoh_90,fo5yoh_93,fo5yoh_96,fo5yoh_99]"><div class="tabs__content" data-gtm="tab" id="fo5yoh_90" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 2.1: 使用 launch 执行一个简单的后台延时任务
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.log(&quot;在 launch 调用之前。&quot;)
+
+// 使用 scope.launch() 启动一个“即发即忘”的协程
+// 修复：移除 lambda 参数，直接调用 delay
+scope.launch(null, null) {
+    _console.log(&quot;协程已经开始执行...&quot;)
+
+    // 调用作用域提供的非阻塞 delay 函数，它会立即返回一个 Deferred&lt;Unit&gt;
+    delay(1500).then { innerScope, _ -&gt;
+        // 这个闭包内的代码，将在1.5秒延迟结束后被调度执行
+        _console.log(&quot;延时结束，协程任务完成！&quot;)
+
+        // 最佳实践：then 闭包必须返回一个 Deferred。
+        // 对于没有实际返回值的操作，使用 innerScope.resolve(null) 来创建一个已完成的 Deferred。
+        innerScope.resolve(null)
+    }
+}
+
+_console.log(&quot;在 launch 调用之后。注意这行日志会立刻打印，脚本不会在此处等待。&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_93" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 2.1: 使用 launch 执行一个简单的后台延时任务
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.log(&quot;在 launch 调用之前。&quot;)
+
+// 使用 scope.launch() 启动一个“即发即忘”的协程
+scope.launch(null, null, { coroutineScope -&gt;
+    $console.log(&quot;协程已经开始执行...&quot;)
+
+    // 调用作用域提供的非阻塞 delay 函数，它会立即返回一个 Deferred&lt;Unit&gt;
+    coroutineScope.delay(1500).then({ innerScope, _ -&gt;
+        // 这个闭包内的代码，将在1.5秒延迟结束后被调度执行
+        $console.log(&quot;延时结束，协程任务完成！&quot;)
+
+        // 最佳实践：then 闭包必须返回一个 Deferred。
+        // 对于没有实际返回值的操作，使用 innerScope.resolve(null) 来创建一个已完成的 Deferred。
+        innerScope.resolve(null)
+    })
+})
+
+$console.log(&quot;在 launch 调用之后。注意这行日志会立刻打印，脚本不会在此处等待。&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_96" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_99" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 2.1: 使用 launch 执行一个简单的后台延时任务
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.log(&quot;在 launch 调用之前。&quot;);
+
+// 使用 scope.launch() 启动一个“即发即忘”的协程
+scope.launch(null, null, coroutineScope =&gt; {
+    $console.log(&quot;协程已经开始执行...&quot;);
+
+    // 调用作用域提供的非阻塞 delay 函数，它会立即返回一个 Deferred&lt;Unit&gt;
+    coroutineScope.delay(1500).then((innerScope, _) =&gt; {
+        // 这个闭包内的代码，将在1.5秒延迟结束后被调度执行
+        $console.log(&quot;延时结束，协程任务完成！&quot;);
+
+        // 最佳实践：then 闭包必须返回一个 Deferred。
+        // 对于没有实际返回值的操作，使用 innerScope.resolve(null) 来创建一个已完成的 Deferred。
+        return innerScope.resolve(null);
+    });
+});
+
+$console.log(&quot;在 launch 调用之后。注意这行日志会立刻打印，脚本不会在此处等待。&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_102" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 2.1: 使用 launch 执行一个简单的后台延时任务
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:log(&quot;在 launch 调用之前。&quot;)
+
+-- 使用 scope:launch() 启动一个“即发即忘”的协程
+scope:launch(nil, nil, function(coroutineScope)
+    _console:log(&quot;协程已经开始执行...&quot;)
+
+    -- 调用作用域提供的非阻塞 delay 函数，它会立即返回一个 Deferred&lt;Unit&gt;
+    coroutineScope:delay(1500):_then(function(innerScope, _)
+        -- 这个闭包内的代码，将在1.5秒延迟结束后被调度执行
+        _console:log(&quot;延时结束，协程任务完成！&quot;)
+
+        -- 最佳实践：_then 闭包必须返回一个 Deferred。
+        -- 对于没有实际返回值的操作，使用 innerScope:resolve(nil) 来创建一个已完成的 Deferred。
+        return innerScope:resolve(nil)
+    end)
+end)
+
+_console:log(&quot;在 launch 调用之后。注意这行日志会立刻打印，脚本不会在此处等待。&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_105" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 2.1: 使用 launch 执行一个简单的后台延时任务
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;log(javaString(&quot;在 launch 调用之前。&quot;));
+
+// 使用 scope.launch() 启动一个“即发即忘”的协程
+$scope-&gt;launch(null, null, function ($coroutineScope) {
+    global $console;
+    $console-&gt;log(javaString(&quot;协程已经开始执行...&quot;));
+
+    // 调用作用域提供的非阻塞 delay 函数，它会立即返回一个 Deferred&lt;Unit&gt;
+    $coroutineScope-&gt;delay(1500)-&gt;then(function ($innerScope, $_) {
+        global $console;
+        // 这个闭包内的代码，将在1.5秒延迟结束后被调度执行
+        $console-&gt;log(javaString(&quot;延时结束，协程任务完成！&quot;));
+
+        // 最佳实践：then 闭包必须返回一个 Deferred。
+        // 对于没有实际返回值的操作，使用 innerScope.resolve(null) 来创建一个已完成的 Deferred。
+        return $innerScope-&gt;resolve(null);
+    });
+});
+
+$console-&gt;log(javaString(&quot;在 launch 调用之后。注意这行日志会立刻打印，脚本不会在此处等待。&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_108" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 2.1: 使用 launch 执行一个简单的后台延时任务
+#
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+
+_console.log(&quot;在 launch 调用之前。&quot;)
+
+# 使用 scope.launch() 启动一个“即发即忘”的协程
+scope.launch(None, None, lambda coroutineScope: (
+    _console.log(&quot;协程已经开始执行...&quot;),
+
+    # 调用作用域提供的非阻塞 delay 函数，它会立即返回一个 Deferred&lt;Unit&gt;
+    coroutineScope.delay(1500).then(lambda innerScope, _: (
+        # 这个闭包内的代码，将在1.5秒延迟结束后被调度执行
+        _console.log(&quot;延时结束，协程任务完成！&quot;),
+
+        # 最佳实践：then 闭包必须返回一个 Deferred。
+        # 对于没有实际返回值的操作，使用 innerScope.resolve(null) 来创建一个已完成的 Deferred。
+        innerScope.resolve(None)
+    )[-1])
+))
+
+_console.log(&quot;在 launch 调用之后。注意这行日志会立刻打印，脚本不会在此处等待。&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_111" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 2.1: 使用 launch 执行一个简单的后台延时任务
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.log(&quot;在 launch 调用之前。&quot;)
+
+# 使用 scope.launch() 启动一个“即发即忘”的协程
+scope.launch(nil, nil) do |coroutineScope|
+  $console.log(&quot;协程已经开始执行...&quot;)
+
+  # 调用作用域提供的非阻塞 delay 函数，它会立即返回一个 Deferred&lt;Unit&gt;
+  # Ruby 中 _ 也是有效的参数名，表示不关心该参数
+  coroutineScope.delay(1500).then do |innerScope, _|
+    # 这个闭包内的代码，将在1.5秒延迟结束后被调度执行
+    $console.log(&quot;延时结束，协程任务完成！&quot;)
+
+    # 最佳实践：then 闭包必须返回一个 Deferred。
+    # 对于没有实际返回值的操作，使用 innerScope.resolve(nil) 来创建一个已完成的 Deferred。
+    innerScope.resolve(nil)
+  end
+end
+
+$console.log(&quot;在 launch 调用之后。注意这行日志会立刻打印，脚本不会在此处等待。&quot;)</div></div></div></section><section class="chapter"><h2 id="async-deferred" data-toc="async-deferred">获取结果：async 与 Deferred</h2><p id="fo5yoh_160">当你的异步任务需要计算并返回一个结果时，使用 scope.async()。它会返回一个 Deferred 对象，T 是你期望的结果类型。Deferred 是一个对未来结果的承诺。</p><section class="chapter"><h3 id="deferred-api" data-toc="deferred-api">Deferred 的核心 API</h3><ul class="list _bullet" id="fo5yoh_166"><li class="list__item" id="fo5yoh_167"><p id="fo5yoh_170">.then({ scope, result -&gt; ... }): 当 Deferred 成功完成时调用。result 是上一个异步任务的返回值。此闭包必须返回一个新的 Deferred 对象。</p></li><li class="list__item" id="fo5yoh_168"><p id="fo5yoh_171">.onError({ error -&gt; ... }): 当 Deferred 失败时调用。error 是导致失败的异常对象。</p></li><li class="list__item" id="fo5yoh_169"><p id="fo5yoh_172">.onComplete(): 无论成功还是失败，在 Deferred 完成时总会调用。常用于资源清理。</p></li></ul></section><section class="chapter"><h3 id="fo5yoh_162" data-toc="fo5yoh_162">获取简单的异步结果</h3><div class="tabs" id="fo5yoh_176" data-group="languages" data-anchors="[fo5yoh_179,fo5yoh_182,fo5yoh_185,fo5yoh_188,fo5yoh_191,fo5yoh_194,fo5yoh_197,fo5yoh_200]"><div class="tabs__content" data-gtm="tab" id="fo5yoh_179" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 3.2: 使用 async 获取一个模拟的用户数据
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.log(&quot;准备开始异步获取用户数据...&quot;)
+
+// scope.async 启动一个会返回结果的协程
+// 修复：移除 lambda 参数
+val userDeferred = scope.async(null, null) {
+    // async 的闭包会隐式返回最后一行的结果，这里是一个 Map 对象
+    // 这个 Map 将成为 userDeferred 的未来结果
+    mapOf(&quot;id&quot; to &quot;user-001&quot;, &quot;name&quot; to &quot;张三&quot;)
+}
+
+// 链接 .then 来处理成功的结果
+userDeferred.then { innerScope, user -&gt;
+    // Kotlin 中 Map 取值需要用 [] 或 get
+    _console.log(&quot;成功获取到用户数据！用户名: &quot; + user[&quot;name&quot;])
+
+    // 我们可以对数据进行转换，并用 resolve 包装成新的 Deferred 传递给下一个 then
+    val welcomeMessage = &quot;欢迎您，&quot; + user[&quot;name&quot;]
+    innerScope.resolve(welcomeMessage)
+
+}.then { innerScope, message -&gt;
+    _console.log(&quot;处理后的消息: &quot; + message)
+
+    // 链条的末端也需要返回一个 Deferred
+    innerScope.resolve(null)
+
+}.onError { error -&gt;
+    // 如果 async 内部或任何一个 then 环节抛出异常，这里会捕获到
+    _console.error(&quot;获取用户数据时发生错误: &quot; + error.getMessage())
+}</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_182" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 3.2: 使用 async 获取一个模拟的用户数据
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.log(&quot;准备开始异步获取用户数据...&quot;)
+
+// scope.async 启动一个会返回结果的协程
+def userDeferred = scope.async(null, null, { coroutineScope -&gt;
+    // async 的闭包会隐式返回最后一行的结果，这里是一个 Map 对象
+    // 这个 Map 将成为 userDeferred 的未来结果
+    [id: &quot;user-001&quot;, name: &quot;张三&quot;]
+})
+
+// 链接 .then 来处理成功的结果
+userDeferred.then({ innerScope, user -&gt;
+    $console.log(&quot;成功获取到用户数据！用户名: &quot; + user.name)
+
+    // 我们可以对数据进行转换，并用 resolve 包装成新的 Deferred 传递给下一个 then
+    def welcomeMessage = &quot;欢迎您，&quot; + user.name
+    innerScope.resolve(welcomeMessage)
+
+}).then({ innerScope, message -&gt;
+    $console.log(&quot;处理后的消息: &quot; + message)
+
+    // 链条的末端也需要返回一个 Deferred
+    innerScope.resolve(null)
+
+}).onError({ error -&gt;
+    // 如果 async 内部或任何一个 then 环节抛出异常，这里会捕获到
+    $console.error(&quot;获取用户数据时发生错误: &quot; + error.getMessage())
+})</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_185" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_188" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 3.2: 使用 async 获取一个模拟的用户数据
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.log(&quot;准备开始异步获取用户数据...&quot;);
+
+// scope.async 启动一个会返回结果的协程
+const userDeferred = scope.async(null, null, coroutineScope =&gt; {
+    // async 的闭包会隐式返回最后一行的结果，这里是一个 Map 对象
+    // 这个 Map 将成为 userDeferred 的未来结果
+    return {id: &quot;user-001&quot;, name: &quot;张三&quot;};
+});
+
+// 链接 .then 来处理成功的结果
+userDeferred.then((innerScope, user) =&gt; {
+    $console.log(&quot;成功获取到用户数据！用户名: &quot; + user.name);
+
+    // 我们可以对数据进行转换，并用 resolve 包装成新的 Deferred 传递给下一个 then
+    const welcomeMessage = &quot;欢迎您，&quot; + user.name;
+    return innerScope.resolve(welcomeMessage);
+
+}).then((innerScope, message) =&gt; {
+    $console.log(&quot;处理后的消息: &quot; + message);
+
+    // 链条的末端也需要返回一个 Deferred
+    return innerScope.resolve(null);
+
+}).onError(error =&gt; {
+    // 如果 async 内部或任何一个 then 环节抛出异常，这里会捕获到
+    $console.error(&quot;获取用户数据时发生错误: &quot; + error.getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_191" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 3.2: 使用 async 获取一个模拟的用户数据
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:log(&quot;准备开始异步获取用户数据...&quot;)
+
+-- scope:async 启动一个会返回结果的协程
+local userDeferred = scope:async(nil, nil, function(coroutineScope)
+    -- async 的闭包会隐式返回最后一行的结果，这里是一个 Lua table 对象
+    -- Lua-Java 桥接器会自动将其转为 Map, 这个 table 将成为 userDeferred 的未来结果
+    return { id = &quot;user-001&quot;, name = &quot;张三&quot; }
+end)
+
+-- 链接 ._then 来处理成功的结果
+userDeferred:_then(function(innerScope, user)
+    _console:log(&quot;成功获取到用户数据！用户名: &quot; .. user.name)
+
+    -- 我们可以对数据进行转换，并用 resolve 包装成新的 Deferred 传递给下一个 _then
+    local welcomeMessage = &quot;欢迎您，&quot; .. user.name
+    return innerScope:resolve(welcomeMessage)
+
+end):_then(function(innerScope, message)
+    _console:log(&quot;处理后的消息: &quot; .. message)
+
+    -- 链条的末端也需要返回一个 Deferred
+    return innerScope:resolve(nil)
+
+end):onError(function(error)
+    -- 如果 async 内部或任何一个 _then 环节抛出异常，这里会捕获到
+    _console:error(&quot;获取用户数据时发生错误: &quot; .. error:getMessage())
+end)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_194" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 3.2: 使用 async 获取一个模拟的用户数据
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;log(javaString(&quot;准备开始异步获取用户数据...&quot;));
+
+// scope.async 启动一个会返回结果的协程
+$userDeferred = $scope-&gt;async(null, null, function ($coroutineScope) {
+    // async 的闭包会隐式返回最后一行的结果，这里是一个 Map 对象
+    // 这个 Map 将成为 userDeferred 的未来结果
+    return ['id' =&gt; javaString(&quot;user-001&quot;), 'name' =&gt; javaString(&quot;张三&quot;)];
+});
+
+// 链接 .then 来处理成功的结果
+$userDeferred-&gt;then(function ($innerScope, $user) {
+    global $console;
+    $console-&gt;log(javaString(&quot;成功获取到用户数据！用户名: &quot;) . $user['name']);
+
+    // 我们可以对数据进行转换，并用 resolve 包装成新的 Deferred 传递给下一个 then
+    $welcomeMessage = javaString(&quot;欢迎您，&quot;) . $user['name'];
+    return $innerScope-&gt;resolve($welcomeMessage);
+
+})-&gt;then(function ($innerScope, $message) {
+    global $console;
+    $console-&gt;log(javaString(&quot;处理后的消息: &quot;) . $message);
+
+    // 链条的末端也需要返回一个 Deferred
+    return $innerScope-&gt;resolve(null);
+
+})-&gt;onError(function ($error) {
+    global $console;
+    // 如果 async 内部或任何一个 then 环节抛出异常，这里会捕获到
+    $console-&gt;error(javaString(&quot;获取用户数据时发生错误: &quot;) . $error-&gt;getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_197" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 3.2: 使用 async 获取一个模拟的用户数据
+#
+
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+_threads.getMain().setBackground(True)
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+
+_console.log(&quot;准备开始异步获取用户数据...&quot;)
+
+# scope.async 启动一个会返回结果的协程
+userDeferred = scope._async(None, None, lambda coroutineScope: (
+    # async 的闭包会隐式返回最后一行的结果，这里是一个 Map 对象
+    # 这个 Map 将成为 userDeferred 的未来结果
+    # Groovy 的 [key: value] 映射转换为 Python 的 {'key': value} 字典
+    {'id': &quot;user-001&quot;, 'name': &quot;张三&quot;}
+))
+
+# 链接 .then 来处理成功的结果
+userDeferred.then(lambda innerScope, user: (
+    # Groovy 的 user.name 是对 Map 的便捷访问，Python 中使用 user['name']
+    _console.log(&quot;成功获取到用户数据！用户名: &quot; + user['name']),
+
+    # 我们可以对数据进行转换，并用 resolve 包装成新的 Deferred 传递给下一个 then
+    (welcomeMessage := &quot;欢迎您，&quot; + user['name']),
+    innerScope.resolve(welcomeMessage)
+
+    # 记住并应用新规则：返回元组的最后一个元素，确保 then 链的返回值正确
+)[-1]).then(lambda innerScope, message: (
+    # 为了安全，对 message 使用 str() 转换
+    _console.log(&quot;处理后的消息: &quot; + str(message)),
+
+    # 链条的末端也需要返回一个 Deferred
+    innerScope.resolve(None)
+
+    # 记住并应用新规则：返回元组的最后一个元素
+)[-1]).onError(lambda error: (
+    # 如果 async 内部或任何一个 then 环节抛出异常，这里会捕获到
+    _console.error(&quot;获取用户数据时发生错误: &quot; + str(error.getMessage()))
+))</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_200" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 3.2: 使用 async 获取一个模拟的用户数据
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.log(&quot;准备开始异步获取用户数据...&quot;)
+
+# scope.async 启动一个会返回结果的协程
+userDeferred = scope.async(nil, nil) do |coroutineScope|
+  # async 的闭包会隐式返回最后一行的结果，这里是一个 Map 对象
+  # 这个 Map 将成为 userDeferred 的未来结果
+  # Ruby 中 Hash 使用 {}
+  {id: &quot;user-001&quot;, name: &quot;张三&quot;}
+end
+
+# 链接 .then 来处理成功的结果
+userDeferred.then do |innerScope, user|
+  $console.log(&quot;成功获取到用户数据！用户名: &quot; + user[:name])
+
+  # 我们可以对数据进行转换，并用 resolve 包装成新的 Deferred 传递给下一个 then
+  welcomeMessage = &quot;欢迎您，&quot; + user[:name]
+  innerScope.resolve(welcomeMessage)
+
+end.then do |innerScope, message|
+  $console.log(&quot;处理后的消息: &quot; + message)
+
+  # 链条的末端也需要返回一个 Deferred
+  innerScope.resolve(nil)
+
+end.onError do |error|
+  # 如果 async 内部或任何一个 then 环节抛出异常，这里会捕获到
+  $console.error(&quot;获取用户数据时发生错误: &quot; + error.getMessage())
+end</div></div></div></section><section class="chapter"><h3 id="fo5yoh_163" data-toc="fo5yoh_163">链式异步操作</h3><p id="fo5yoh_249">.then 的真正威力在于，当它返回另一个由异步操作（如 async 或 delay）创建的 Deferred 时，整个链条会自动等待这个新的 Deferred 完成。这使得组织复杂的、有依赖关系的异步流程变得异常清晰。</p><div class="tabs" id="fo5yoh_253" data-group="languages" data-anchors="[fo5yoh_256,fo5yoh_259,fo5yoh_262,fo5yoh_265,fo5yoh_268,fo5yoh_271,fo5yoh_274,fo5yoh_277]"><div class="tabs__content" data-gtm="tab" id="fo5yoh_256" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 3.3 (已修正为完全非阻塞的链式实现):
+ * 先获取用户信息，再根据用户信息获取其帖子列表
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+// --- 核心修正点 ---
+// 我们不再在 async 内部创建链条，而是让函数本身就是链条的起点。
+
+// 模拟的 API 函数 1: 获取用户 (已修正)
+// 这个函数现在直接返回一个从 delay 开始的 Deferred 链。
+val fetchUser = { userId: String -&gt;
+    _console.log(&quot;正在准备获取用户 &quot; + userId + &quot; 的信息 (延时500ms)...&quot;)
+
+    // 1. 以 scope.delay(500) 作为链条的起点。它返回一个 Deferred&lt;Unit&gt;。
+    scope.delay(500).then { s, _ -&gt;
+        // 2. 在延迟结束后，这个 .then 闭包被执行。
+        // 3. 我们在这里创建用户数据，并用 s.resolve() 将其包装成一个新的、
+        //    立即成功的 Deferred&lt;Map&gt; 并返回。
+        _console.log(&quot; -&gt; 用户信息延时获取完成。&quot;)
+        s.resolve(mapOf(&quot;id&quot; to userId, &quot;name&quot; to &quot;用户&quot; + userId))
+    }
+}
+
+// 模拟的 API 函数 2: 获取帖子 (已修正)
+// 同样，这个函数也直接返回一个 Deferred 链。
+val fetchPosts = { user: Map&lt;String, String&gt; -&gt;
+    _console.log(&quot;正在准备获取 &quot; + user[&quot;name&quot;] + &quot; 的帖子 (延时800ms)...&quot;)
+    scope.delay(800).then { s, _ -&gt;
+        _console.log(&quot; -&gt; 帖子列表延时获取完成。&quot;)
+        // 模拟一个可能发生的错误
+        if (user[&quot;id&quot;] == &quot;002&quot;) {
+            // 修复：去掉 'builder -&gt;'，直接在 Lambda 中调用方法，此时 this 即为 builder
+            val error = _exceptions.newThrowable {
+                setMessageAndClassName(&quot;用户 &quot; + user[&quot;name&quot;] + &quot; 的帖子列表为空或无权访问。&quot;, &quot;java.io.IOException&quot;)
+            }
+            // 使用 s.reject() 创建并返回一个立即失败的 Deferred。
+            s.reject(error)
+        } else {
+            // 使用 s.resolve() 创建并返回一个立即成功的 Deferred。
+            s.resolve(listOf(&quot;帖子一：协程入门&quot;, &quot;帖子二：高级技巧&quot;))
+        }
+    }
+}
+
+// --- 外部的异步链调用现在不仅能工作，而且其结构与内部实现完全一致！ ---
+
+_console.log(&quot;准备开始执行主异步链...&quot;)
+
+fetchUser(&quot;001&quot;).then { innerScope, user -&gt;
+    // 此处 `user` 是正确的 Map 对象！
+    _console.log(&quot;主链第一步：成功获取到用户 -&gt; &quot; + user[&quot;name&quot;])
+
+    // 直接返回 fetchPosts 返回的 Deferred 对象。
+    // .then 会自动处理这个返回的 &quot;Promise&quot;，等待它完成后再继续。
+    fetchPosts(user)
+
+}.then { innerScope, posts -&gt;
+    // 此处 `posts` 是正确的 List 对象！
+    _console.log(&quot;主链第二步：成功获取到帖子列表 -&gt; &quot; + posts)
+    innerScope.resolve(null)
+
+}.onError { error -&gt;
+    // 这个 onError 可以捕获 fetchUser 或 fetchPosts 中任何一个环节的错误
+    _console.error(&quot;错误：在主链处理中发生异常 -&gt; &quot; + error.getMessage())
+}
+
+
+// 同时测试一下失败路径
+scope.delay(3000).then { s, _ -&gt;
+    _console.log(&quot;\n准备测试失败路径...&quot;)
+    fetchUser(&quot;002&quot;).then { innerScope, user -&gt;
+        fetchPosts(user)
+    }.onError { error -&gt;
+        _console.error(&quot;错误（失败路径测试）：成功捕获到预期的异常 -&gt; &quot; + error.getMessage())
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_259" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 3.3 (已修正为完全非阻塞的链式实现):
+ * 先获取用户信息，再根据用户信息获取其帖子列表
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+// --- 核心修正点 ---
+// 我们不再在 async 内部创建链条，而是让函数本身就是链条的起点。
+
+// 模拟的 API 函数 1: 获取用户 (已修正)
+// 这个函数现在直接返回一个从 delay 开始的 Deferred 链。
+def fetchUser = { userId -&gt;
+    $console.log(&quot;正在准备获取用户 &quot; + userId + &quot; 的信息 (延时500ms)...&quot;)
+
+    // 1. 以 scope.delay(500) 作为链条的起点。它返回一个 Deferred&lt;Unit&gt;。
+    scope.delay(500).then({ s, _ -&gt;
+        // 2. 在延迟结束后，这个 .then 闭包被执行。
+        // 3. 我们在这里创建用户数据，并用 s.resolve() 将其包装成一个新的、
+        //    立即成功的 Deferred&lt;Map&gt; 并返回。
+        $console.log(&quot; -&gt; 用户信息延时获取完成。&quot;)
+        s.resolve([id: userId, name: &quot;用户&quot; + userId])
+    })
+}
+
+// 模拟的 API 函数 2: 获取帖子 (已修正)
+// 同样，这个函数也直接返回一个 Deferred 链。
+def fetchPosts = { user -&gt;
+    $console.log(&quot;正在准备获取 &quot; + user.name + &quot; 的帖子 (延时800ms)...&quot;)
+    scope.delay(800).then({ s, _ -&gt;
+        $console.log(&quot; -&gt; 帖子列表延时获取完成。&quot;)
+        // 模拟一个可能发生的错误
+        if (user.id == &quot;002&quot;) {
+            def error = $exceptions.newThrowable({ builder -&gt;
+                builder.setMessageAndClassName(&quot;用户 &quot; + user.name + &quot; 的帖子列表为空或无权访问。&quot;, &quot;java.io.IOException&quot;)
+            })
+            // 使用 s.reject() 创建并返回一个立即失败的 Deferred。
+            s.reject(error)
+        } else {
+            // 使用 s.resolve() 创建并返回一个立即成功的 Deferred。
+            s.resolve([&quot;帖子一：协程入门&quot;, &quot;帖子二：高级技巧&quot;])
+        }
+    })
+}
+
+// --- 外部的异步链调用现在不仅能工作，而且其结构与内部实现完全一致！ ---
+
+$console.log(&quot;准备开始执行主异步链...&quot;)
+
+fetchUser(&quot;001&quot;).then({ innerScope, user -&gt;
+    // 此处 `user` 是正确的 Map 对象！
+    $console.log(&quot;主链第一步：成功获取到用户 -&gt; &quot; + user.name)
+
+    // 直接返回 fetchPosts 返回的 Deferred 对象。
+    // .then 会自动处理这个返回的 &quot;Promise&quot;，等待它完成后再继续。
+    fetchPosts(user)
+
+}).then({ innerScope, posts -&gt;
+    // 此处 `posts` 是正确的 List 对象！
+    $console.log(&quot;主链第二步：成功获取到帖子列表 -&gt; &quot; + posts)
+    innerScope.resolve(null)
+
+}).onError({ error -&gt;
+    // 这个 onError 可以捕获 fetchUser 或 fetchPosts 中任何一个环节的错误
+    $console.error(&quot;错误：在主链处理中发生异常 -&gt; &quot; + error.getMessage())
+})
+
+
+// 同时测试一下失败路径
+scope.delay(3000).then({s, _ -&gt;
+    $console.log(&quot;\n准备测试失败路径...&quot;)
+    fetchUser(&quot;002&quot;).then({ innerScope, user -&gt;
+        fetchPosts(user)
+    }).onError({ error -&gt;
+        $console.error(&quot;错误（失败路径测试）：成功捕获到预期的异常 -&gt; &quot; + error.getMessage())
+    })
+})</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_262" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_265" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 3.3 (已修正为完全非阻塞的链式实现):
+ * 先获取用户信息，再根据用户信息获取其帖子列表
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+// --- 核心修正点 ---
+// 我们不再在 async 内部创建链条，而是让函数本身就是链条的起点。
+
+/**
+ * 模拟的 API 函数 1: 获取用户 (已修正)
+ * 这个函数现在直接返回一个从 delay 开始的 Deferred 链。
+ * @param {string} userId
+ * @returns {Deferred&lt;{id: string, name: string}&gt;}
+ */
+const fetchUser = userId =&gt; {
+    $console.log(&quot;正在准备获取用户 &quot; + userId + &quot; 的信息 (延时500ms)...&quot;);
+
+    // 1. 以 scope.delay(500) 作为链条的起点。它返回一个 Deferred&lt;Unit&gt;。
+    return scope.delay(500).then((s, _) =&gt; {
+        // 2. 在延迟结束后，这个 .then 闭包被执行。
+        // 3. 我们在这里创建用户数据，并用 s.resolve() 将其包装成一个新的、
+        //    立即成功的 Deferred&lt;Map&gt; 并返回。
+        $console.log(&quot; -&gt; 用户信息延时获取完成。&quot;);
+        return s.resolve({id: userId, name: &quot;用户&quot; + userId});
+    });
+};
+
+/**
+ * 模拟的 API 函数 2: 获取帖子 (已修正)
+ * 同样，这个函数也直接返回一个 Deferred 链。
+ * @param {{id: string, name: string}} user
+ * @returns {Deferred&lt;string[]&gt;}
+ */
+const fetchPosts = user =&gt; {
+    $console.log(&quot;正在准备获取 &quot; + user.name + &quot; 的帖子 (延时800ms)...&quot;);
+    return scope.delay(800).then((s, _) =&gt; {
+        $console.log(&quot; -&gt; 帖子列表延时获取完成。&quot;);
+        // 模拟一个可能发生的错误
+        if (user.id == &quot;002&quot;) {
+            const error = $exceptions.newThrowable(builder =&gt; {
+                builder.setMessageAndClassName(&quot;用户 &quot; + user.name + &quot; 的帖子列表为空或无权访问。&quot;, &quot;java.io.IOException&quot;);
+            });
+            // 使用 s.reject() 创建并返回一个立即失败的 Deferred。
+            return s.reject(error);
+        } else {
+            // 使用 s.resolve() 创建并返回一个立即成功的 Deferred。
+            return s.resolve([&quot;帖子一：协程入门&quot;, &quot;帖子二：高级技巧&quot;]);
+        }
+    });
+};
+
+// --- 外部的异步链调用现在不仅能工作，而且其结构与内部实现完全一致！ ---
+
+$console.log(&quot;准备开始执行主异步链...&quot;);
+
+fetchUser(&quot;001&quot;).then((innerScope, user) =&gt; {
+    // 此处 `user` 是正确的 Map 对象！
+    $console.log(&quot;主链第一步：成功获取到用户 -&gt; &quot; + user.name);
+
+    // 直接返回 fetchPosts 返回的 Deferred 对象。
+    // .then 会自动处理这个返回的 &quot;Promise&quot;，等待它完成后再继续。
+    return fetchPosts(user);
+
+}).then((innerScope, posts) =&gt; {
+    // 此处 `posts` 是正确的 List 对象！
+    $console.log(&quot;主链第二步：成功获取到帖子列表 -&gt; &quot; + posts);
+    return innerScope.resolve(null);
+
+}).onError(error =&gt; {
+    // 这个 onError 可以捕获 fetchUser 或 fetchPosts 中任何一个环节的错误
+    $console.error(&quot;错误：在主链处理中发生异常 -&gt; &quot; + error.getMessage());
+});
+
+
+// 同时测试一下失败路径
+scope.delay(3000).then((s, _) =&gt; {
+    $console.log(&quot;\n准备测试失败路径...&quot;);
+    fetchUser(&quot;002&quot;).then((innerScope, user) =&gt; {
+        return fetchPosts(user);
+    }).onError(error =&gt; {
+        $console.error(&quot;错误（失败路径测试）：成功捕获到预期的异常 -&gt; &quot; + error.getMessage());
+    });
+});</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_268" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 3.3 (已修正为完全非阻塞的链式实现):
+ * 先获取用户信息，再根据用户信息获取其帖子列表
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+-- --- 核心修正点 ---
+-- 我们不再在 async 内部创建链条，而是让函数本身就是链条的起点。
+
+-- 模拟的 API 函数 1: 获取用户 (已修正)
+-- 这个函数现在直接返回一个从 delay 开始的 Deferred 链。
+local fetchUser = function(userId)
+    _console:log(&quot;正在准备获取用户 &quot; .. userId .. &quot; 的信息 (延时500ms)...&quot;)
+
+    -- 1. 以 scope:delay(500) 作为链条的起点。它返回一个 Deferred&lt;Unit&gt;。
+    return scope:delay(500):_then(function(s, _)
+        -- 2. 在延迟结束后，这个 ._then 闭包被执行。
+        -- 3. 我们在这里创建用户数据，并用 s:resolve() 将其包装成一个新的、
+        --    立即成功的 Deferred&lt;Map&gt; 并返回。
+        _console:log(&quot; -&gt; 用户信息延时获取完成。&quot;)
+        return s:resolve({ id = userId, name = &quot;用户&quot; .. userId })
+    end)
+end
+
+-- 模拟的 API 函数 2: 获取帖子 (已修正)
+-- 同样，这个函数也直接返回一个 Deferred 链。
+local fetchPosts = function(user)
+    _console:log(&quot;正在准备获取 &quot; .. user.name .. &quot; 的帖子 (延时800ms)...&quot;)
+    return scope:delay(800):_then(function(s, _)
+        _console:log(&quot; -&gt; 帖子列表延时获取完成。&quot;)
+        -- 模拟一个可能发生的错误
+        if user.id == &quot;002&quot; then
+            local errorObj = _exceptions:newThrowable(function(builder)
+                builder:setMessageAndClassName(&quot;用户 &quot; .. user.name .. &quot; 的帖子列表为空或无权访问。&quot;, &quot;java.io.IOException&quot;)
+            end)
+            -- 使用 s:reject() 创建并返回一个立即失败的 Deferred。
+            return s:reject(errorObj)
+        else
+            -- 使用 s:resolve() 创建并返回一个立即成功的 Deferred。
+            return s:resolve(_iterables:listOf(&quot;帖子一：协程入门&quot;, &quot;帖子二：高级技巧&quot;))
+        end
+    end)
+end
+
+-- --- 外部的异步链调用现在不仅能工作，而且其结构与内部实现完全一致！ ---
+
+_console:log(&quot;准备开始执行主异步链...&quot;)
+
+fetchUser(&quot;001&quot;):_then(function(innerScope, user)
+    -- 此处 `user` 是正确的 table 对象！
+    _console:log(&quot;主链第一步：成功获取到用户 -&gt; &quot; .. user.name)
+
+    -- 直接返回 fetchPosts 返回的 Deferred 对象。
+    -- ._then 会自动处理这个返回的 &quot;Promise&quot;，等待它完成后再继续。
+    return fetchPosts(user)
+
+end):_then(function(innerScope, posts)
+    -- 此处 `posts` 是正确的 List 对象！
+    _console:log(&quot;主链第二步：成功获取到帖子列表 -&gt; &quot; .. tostring(posts))
+    return innerScope:resolve(nil)
+
+end):onError(function(error)
+    -- 这个 onError 可以捕获 fetchUser 或 fetchPosts 中任何一个环节的错误
+    _console:error(&quot;错误：在主链处理中发生异常 -&gt; &quot; .. error:getMessage())
+end)
+
+
+-- 同时测试一下失败路径
+scope:delay(3000):_then(function(s, _)
+    _console:log(&quot;\n准备测试失败路径...&quot;)
+    fetchUser(&quot;002&quot;):_then(function(innerScope, user)
+        return fetchPosts(user)
+    end):onError(function(error)
+        _console:error(&quot;错误（失败路径测试）：成功捕获到预期的异常 -&gt; &quot; .. error:getMessage())
+    end)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_271" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\exception\Exceptions $exceptions */
+global $exceptions;
+
+/*
+ * 完整示例 3.3 (已修正为完全非阻塞的链式实现):
+ * 先获取用户信息，再根据用户信息获取其帖子列表
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// --- 核心修正点 ---
+// 我们不再在 async 内部创建链条，而是让函数本身就是链条的起点。
+
+// 模拟的 API 函数 1: 获取用户 (已修正)
+// 这个函数现在直接返回一个从 delay 开始的 Deferred 链。
+$fetchUser = function ($userId) use ($scope) {
+    global $console;
+    $console-&gt;log(javaString(&quot;正在准备获取用户 &quot;) . $userId . javaString(&quot; 的信息 (延时500ms)...&quot;));
+
+    // 1. 以 scope.delay(500) 作为链条的起点。它返回一个 Deferred&lt;Unit&gt;。
+    return $scope-&gt;delay(500)-&gt;then(function ($s, $_) use ($userId) {
+        global $console;
+        // 2. 在延迟结束后，这个 .then 闭包被执行。
+        // 3. 我们在这里创建用户数据，并用 s.resolve() 将其包装成一个新的、
+        //    立即成功的 Deferred&lt;Map&gt; 并返回。
+        $console-&gt;log(javaString(&quot; -&gt; 用户信息延时获取完成。&quot;));
+        return $s-&gt;resolve(['id' =&gt; $userId, 'name' =&gt; javaString(&quot;用户&quot;) . $userId]);
+    });
+};
+
+// 模拟的 API 函数 2: 获取帖子 (已修正)
+// 同样，这个函数也直接返回一个 Deferred 链。
+$fetchPosts = function ($user) use ($scope) {
+    global $console, $exceptions;
+    $console-&gt;log(javaString(&quot;正在准备获取 &quot;) . $user['name'] . javaString(&quot; 的帖子 (延时800ms)...&quot;));
+    return $scope-&gt;delay(800)-&gt;then(function ($s, $_) use ($user) {
+        global $console, $exceptions;
+        $console-&gt;log(javaString(&quot; -&gt; 帖子列表延时获取完成。&quot;));
+        // 模拟一个可能发生的错误
+        if ($user['id'] == &quot;002&quot;) {
+            $error = $exceptions-&gt;newThrowable(function ($builder) use ($user) {
+                $builder-&gt;setMessageAndClassName(javaString(&quot;用户 &quot;) . $user['name'] . javaString(&quot; 的帖子列表为空或无权访问。&quot;), javaString(&quot;java.io.IOException&quot;));
+            });
+            // 使用 s.reject() 创建并返回一个立即失败的 Deferred。
+            return $s-&gt;reject($error);
+        } else {
+            // 使用 s.resolve() 创建并返回一个立即成功的 Deferred。
+            return $s-&gt;resolve([javaString(&quot;帖子一：协程入门&quot;), javaString(&quot;帖子二：高级技巧&quot;)]);
+        }
+    });
+};
+
+// --- 外部的异步链调用现在不仅能工作，而且其结构与内部实现完全一致！ ---
+
+$console-&gt;log(javaString(&quot;准备开始执行主异步链...&quot;));
+
+$fetchUser(&quot;001&quot;)-&gt;then(function ($innerScope, $user) use ($fetchPosts) {
+    global $console;
+    // 此处 `user` 是正确的 Map 对象！
+    $console-&gt;log(javaString(&quot;主链第一步：成功获取到用户 -&gt; &quot;) . $user['name']);
+
+    // 直接返回 fetchPosts 返回的 Deferred 对象。
+    // .then 会自动处理这个返回的 &quot;Promise&quot;，等待它完成后再继续。
+    return $fetchPosts($user);
+
+})-&gt;then(function ($innerScope, $posts) {
+    global $console;
+    // 此处 `posts` 是正确的 List 对象！
+    $console-&gt;log(javaString(&quot;主链第二步：成功获取到帖子列表 -&gt; &quot;), $posts); // Assuming PHP array to string
+    return $innerScope-&gt;resolve(null);
+
+})-&gt;onError(function ($error) {
+    global $console;
+    // 这个 onError 可以捕获 fetchUser 或 fetchPosts 中任何一个环节的错误
+    $console-&gt;error(javaString(&quot;错误：在主链处理中发生异常 -&gt; &quot;) . $error-&gt;getMessage());
+});
+
+
+// 同时测试一下失败路径
+$scope-&gt;delay(3000)-&gt;then(function ($s, $_) use ($fetchUser, $fetchPosts) {
+    global $console;
+    $console-&gt;log(javaString(&quot;\n准备测试失败路径...&quot;));
+    $fetchUser(&quot;002&quot;)-&gt;then(function ($innerScope, $user) use ($fetchPosts) {
+        return $fetchPosts($user);
+    })-&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;错误（失败路径测试）：成功捕获到预期的异常 -&gt; &quot;) . $error-&gt;getMessage());
+    });
+    return $s-&gt;resolve(null); // The outer then needs to return a deferred.
+});</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_274" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 3.3 (已修正为完全非阻塞的链式实现):
+# 先获取用户信息，再根据用户信息获取其帖子列表
+#
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _exceptions
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+
+
+# --- 核心修正点 ---
+# 我们不再在 async 内部创建链条，而是让函数本身就是链条的起点。
+
+# 模拟的 API 函数 1: 获取用户 (已修正)
+# 这个函数现在直接返回一个从 delay 开始的 Deferred 链。
+def fetchUser(userId):
+    _console.log(&quot;正在准备获取用户 &quot; + str(userId) + &quot; 的信息 (延时500ms)...&quot;)
+
+    # 1. 以 scope.delay(500) 作为链条的起点。它返回一个 Deferred&lt;Unit&gt;。
+    return scope.delay(500).then(lambda s, _: (
+        # 2. 在延迟结束后，这个 .then 闭包被执行。
+        # 3. 我们在这里创建用户数据，并用 s.resolve() 将其包装成一个新的、
+        #    立即成功的 Deferred&lt;Map&gt; 并返回。
+        _console.log(&quot; -&gt; 用户信息延时获取完成。&quot;),
+        s.resolve({'id': userId, 'name': &quot;用户&quot; + str(userId)})
+    )[-1])
+
+
+# 模拟的 API 函数 2: 获取帖子 (已修正)
+# 同样，这个函数也直接返回一个 Deferred 链。
+def fetchPosts(user):
+    _console.log(&quot;正在准备获取 &quot; + user['name'] + &quot; 的帖子 (延时800ms)...&quot;)
+    return scope.delay(800).then(lambda s, _: (
+        _console.log(&quot; -&gt; 帖子列表延时获取完成。&quot;),
+        # 模拟一个可能发生的错误
+        # 使用 Python 的条件表达式 (三元运算符) 来处理 if/else 逻辑
+        (s.reject(
+            _exceptions.newThrowable(lambda builder:
+                                     builder.setMessageAndClassName(
+                                         &quot;用户 &quot; + user['name'] + &quot; 的帖子列表为空或无权访问。&quot;, &quot;java.io.IOException&quot;)
+                                     )
+        ) if user['id'] == &quot;002&quot; else
+         # 使用 s.resolve() 创建并返回一个立即成功的 Deferred。
+         s.resolve([&quot;帖子一：协程入门&quot;, &quot;帖子二：高级技巧&quot;]))
+    )[-1])
+
+
+# --- 外部的异步链调用现在不仅能工作，而且其结构与内部实现完全一致！ ---
+
+_console.log(&quot;准备开始执行主异步链...&quot;)
+
+fetchUser(&quot;001&quot;).then(lambda innerScope, user: (
+    # 此处 `user` 是正确的 Map 对象！
+    # Groovy 的 user.name 变为 Python 的 user['name']
+    _console.log(&quot;主链第一步：成功获取到用户 -&gt; &quot; + user['name']),
+
+    # 直接返回 fetchPosts 返回的 Deferred 对象。
+    # .then 会自动处理这个返回的 &quot;Promise&quot;，等待它完成后再继续。
+    fetchPosts(user)
+
+)[-1]).then(lambda innerScope, posts: (
+    # 此处 `posts` 是正确的 List 对象！
+    # 使用 str() 确保 posts 可以被安全地打印
+    _console.log(&quot;主链第二步：成功获取到帖子列表 -&gt; &quot; + str(posts)),
+    innerScope.resolve(None)
+
+)[-1]).onError(lambda error: (
+    # 这个 onError 可以捕获 fetchUser 或 fetchPosts 中任何一个环节的错误
+    _console.error(&quot;错误：在主链处理中发生异常 -&gt; &quot; + str(error.getMessage()))
+))
+
+# 同时测试一下失败路径
+scope.delay(3000).then(lambda s, _: (
+    _console.log(&quot;\n准备测试失败路径...&quot;),
+    fetchUser(&quot;002&quot;).then(
+        # 这里的 lambda 是单行表达式，可以直接返回 fetchPosts 的结果，无需元组
+        lambda innerScope, user: fetchPosts(user)
+    ).onError(
+        # 这里的 lambda 也是单行表达式
+        lambda error: _console.error(&quot;错误（失败路径测试）：成功捕获到预期的异常 -&gt; &quot; + str(error.getMessage()))
+    )
+    # 外层 then 只是为了触发任务，不需要返回链条，所以不需要 [-1]
+)[-1])</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_277" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 3.3 (已修正为完全非阻塞的链式实现):
+# 先获取用户信息，再根据用户信息获取其帖子列表
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+# --- 核心修正点 ---
+# 我们不再在 async 内部创建链条，而是让函数本身就是链条的起点。
+
+# 模拟的 API 函数 1: 获取用户 (已修正)
+# 这个函数现在直接返回一个从 delay 开始的 Deferred 链。
+# Ruby 中使用 lambda 或 proc 定义可调用的闭包
+fetchUser = lambda do |userId|
+  $console.log(&quot;正在准备获取用户 &quot; + userId + &quot; 的信息 (延时500ms)...&quot;)
+
+  # 1. 以 scope.delay(500) 作为链条的起点。它返回一个 Deferred&lt;Unit&gt;。
+  scope.delay(500).then do |s, _|
+    # 2. 在延迟结束后，这个 .then 闭包被执行。
+    # 3. 我们在这里创建用户数据，并用 s.resolve() 将其包装成一个新的、
+    #    立即成功的 Deferred&lt;Map&gt; 并返回。
+    $console.log(&quot; -&gt; 用户信息延时获取完成。&quot;)
+    s.resolve({id: userId, name: &quot;用户&quot; + userId})
+  end
+end
+
+# 模拟的 API 函数 2: 获取帖子 (已修正)
+# 同样，这个函数也直接返回一个 Deferred 链。
+fetchPosts = lambda do |user|
+  $console.log(&quot;正在准备获取 &quot; + user[:name] + &quot; 的帖子 (延时800ms)...&quot;)
+  scope.delay(800).then do |s, _|
+    $console.log(&quot; -&gt; 帖子列表延时获取完成。&quot;)
+    # 模拟一个可能发生的错误
+    if user[:id] == &quot;002&quot;
+      error = $exceptions.newThrowable do |builder|
+        builder.setMessageAndClassName(&quot;用户 &quot; + user[:name] + &quot; 的帖子列表为空或无权访问。&quot;, &quot;java.io.IOException&quot;)
+      end
+      # 使用 s.reject() 创建并返回一个立即失败的 Deferred。
+      s.reject(error)
+    else
+      # 使用 s.resolve() 创建并返回一个立即成功的 Deferred。
+      s.resolve([&quot;帖子一：协程入门&quot;, &quot;帖子二：高级技巧&quot;])
+    end
+  end
+end
+
+# --- 外部的异步链调用现在不仅能工作，而且其结构与内部实现完全一致！ ---
+
+$console.log(&quot;准备开始执行主异步链...&quot;)
+
+# Ruby 中调用 lambda 需要使用 .call()
+fetchUser.call(&quot;001&quot;).then do |innerScope, user|
+  # 此处 `user` 是正确的 Map 对象！
+  $console.log(&quot;主链第一步：成功获取到用户 -&gt; &quot; + user[:name])
+
+  # 直接返回 fetchPosts 返回的 Deferred 对象。
+  # .then 会自动处理这个返回的 &quot;Promise&quot;，等待它完成后再继续。
+  fetchPosts.call(user)
+
+end.then do |innerScope, posts|
+  # 此处 `posts` 是正确的 List 对象！
+  # Ruby 数组转字符串直接使用 to_s
+  $console.log(&quot;主链第二步：成功获取到帖子列表 -&gt; &quot; + posts.to_s)
+  innerScope.resolve(nil)
+
+end.onError do |error|
+  # 这个 onError 可以捕获 fetchUser 或 fetchPosts 中任何一个环节的错误
+  $console.error(&quot;错误：在主链处理中发生异常 -&gt; &quot; + error.getMessage())
+end
+
+
+# 同时测试一下失败路径
+scope.delay(3000).then do |s, _|
+  $console.log(&quot;\n准备测试失败路径...&quot;)
+  fetchUser.call(&quot;002&quot;).then do |innerScope, user|
+    fetchPosts.call(user)
+  end.onError do |error|
+    $console.error(&quot;错误（失败路径测试）：成功捕获到预期的异常 -&gt; &quot; + error.getMessage())
+  end
+end</div></div></div></section><section class="chapter"><h3 id="resolve-reject" data-toc="resolve-reject">resolve 和 reject: 融入同步逻辑</h3><p id="fo5yoh_326">scope.resolve(value) 和 scope.reject(error) 是将同步代码无缝融入异步链的关键工具。</p><ul class="list _bullet" id="fo5yoh_327"><li class="list__item" id="fo5yoh_332"><p id="fo5yoh_334">scope.resolve(value): 将一个已知的值包装成一个立即成功的 Deferred。</p></li><li class="list__item" id="fo5yoh_333"><p id="fo5yoh_335">scope.reject(error): 将一个已知错误包装成一个立即失败的 Deferred。</p></li></ul><div class="tabs" id="fo5yoh_331" data-group="languages" data-anchors="[fo5yoh_338,fo5yoh_341,fo5yoh_344,fo5yoh_347,fo5yoh_350,fo5yoh_353,fo5yoh_356,fo5yoh_359]"><div class="tabs__content" data-gtm="tab" id="fo5yoh_338" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.coroutines.Deferred
+
+val scope = _coroutines.newScope(null)
+// 示例：从缓存或网络获取数据
+val cachedData: String? = null // or &quot;缓存数据&quot;
+val dataDeferred: Deferred&lt;String?&gt; = if (cachedData != null) {
+    _console.log(&quot;命中了缓存！&quot;)
+    scope.resolve(cachedData) // 直接使用缓存
+} else {
+    _console.log(&quot;缓存未命中，从网络获取...&quot;)
+    // 修复：async 块移除显式参数 ss -&gt;
+    scope.delay(5000).then { s, _ -&gt;
+        s.async(null, null) { &quot;从网络获取的数据&quot; }
+    }
+}
+
+dataDeferred.then { s, data -&gt;
+    _console.log(&quot;最终获取到的数据: &quot; + data)
+    s.resolve(null)
+}
+
+_threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_341" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.coroutines.Deferred
+
+def scope = $coroutines.newScope(null)
+// 示例：从缓存或网络获取数据
+def cachedData = null // or &quot;缓存数据&quot;
+Deferred&lt;String&gt; dataDeferred = null
+if (cachedData != null) {
+    $console.log(&quot;命中了缓存！&quot;)
+    dataDeferred = scope.resolve(cachedData) // 直接使用缓存
+} else {
+    $console.log(&quot;缓存未命中，从网络获取...&quot;)
+    dataDeferred = scope.delay(5000).then({ s, _ -&gt; s.async(null, null) { ss -&gt; &quot;从网络获取的数据&quot; } })
+}
+
+dataDeferred.then({ s, data -&gt;
+    $console.log(&quot;最终获取到的数据: &quot; + data)
+    s.resolve(null)
+})
+
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_344" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_347" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">const scope = $coroutines.newScope(null);
+// 示例：从缓存或网络获取数据
+let cachedData = null; // or &quot;缓存数据&quot;
+/** @type {Deferred&lt;string&gt;} */
+let dataDeferred = null;
+if (cachedData != null) {
+    $console.log(&quot;命中了缓存！&quot;);
+    dataDeferred = scope.resolve(cachedData); // 直接使用缓存
+} else {
+    $console.log(&quot;缓存未命中，从网络获取...&quot;);
+    dataDeferred = scope.delay(5000).then((s, _) =&gt; s.async(null, null, ss =&gt; &quot;从网络获取的数据&quot;));
+}
+
+dataDeferred.then((s, data) =&gt; {
+    $console.log(&quot;最终获取到的数据: &quot; + data);
+    return s.resolve(null);
+});
+
+$threads.getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_350" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local scope = _coroutines:newScope(nil)
+-- 示例：从缓存或网络获取数据
+local cachedData = nil -- or &quot;缓存数据&quot;
+local dataDeferred = nil
+if cachedData ~= nil then
+    _console:log(&quot;命中了缓存！&quot;)
+    dataDeferred = scope:resolve(cachedData) -- 直接使用缓存
+else
+    _console:log(&quot;缓存未命中，从网络获取...&quot;)
+    dataDeferred = scope:delay(5000):_then(function(s, _) return s:async(nil, nil, function(ss) return &quot;从网络获取的数据&quot; end) end)
+end
+
+dataDeferred:_then(function(s, data)
+    _console:log(&quot;最终获取到的数据: &quot; .. data)
+    return s:resolve(nil)
+end)
+
+_threads:getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_353" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Deferred $dataDeferred */
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 示例：从缓存或网络获取数据
+$cachedData = null; // or javaString(&quot;缓存数据&quot;)
+$dataDeferred = null;
+if ($cachedData != null) {
+    $console-&gt;log(javaString(&quot;命中了缓存！&quot;));
+    $dataDeferred = $scope-&gt;resolve($cachedData); // 直接使用缓存
+} else {
+    $console-&gt;log(javaString(&quot;缓存未命中，从网络获取...&quot;));
+    $dataDeferred = $scope-&gt;delay(5000)-&gt;then(function ($s, $_) {
+        return $s-&gt;async(null, null, function ($ss) {
+            return javaString(&quot;从网络获取的数据&quot;);
+        });
+    });
+}
+
+$dataDeferred-&gt;then(function ($s, $data) {
+    global $console;
+    $console-&gt;log(javaString(&quot;最终获取到的数据: &quot;) . $data);
+    return $s-&gt;resolve(null);
+});
+
+$threads-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_356" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 导入所需的Java类
+
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+# 示例：从缓存或网络获取数据
+cachedData = None  # or &quot;缓存数据&quot;
+dataDeferred = None
+
+# Use Python's conditional expression for if/else
+if cachedData is not None:
+    _console.log(&quot;命中了缓存！&quot;)
+    dataDeferred = scope.resolve(cachedData)  # 直接使用缓存
+else:
+    _console.log(&quot;缓存未命中，从网络获取...&quot;)
+    # Remember to use _async for scope.async
+    dataDeferred = scope.delay(5000).then(lambda s, _:
+                                          s._async(None, None, lambda ss: &quot;从网络获取的数据&quot;)
+                                          )
+
+dataDeferred.then(lambda s, data: (
+    _console.log(&quot;最终获取到的数据: &quot; + str(data)),
+    s.resolve(None)
+)[-1])
+
+_threads.getMain().setBackground(True)
+</div></div><div class="tabs__content" data-gtm="tab" id="fo5yoh_359" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# import com.m8test.script.core.api.coroutines.Deferred # Ruby不需要显式import泛型类型
+
+scope = $coroutines.newScope(nil)
+# 示例：从缓存或网络获取数据
+cachedData = nil # or &quot;缓存数据&quot;
+dataDeferred = nil
+if cachedData != nil
+  $console.log(&quot;命中了缓存！&quot;)
+  dataDeferred = scope.resolve(cachedData) # 直接使用缓存
+else
+  $console.log(&quot;缓存未命中，从网络获取...&quot;)
+  dataDeferred = scope.delay(5000).then { |s, _| s.async(nil, nil) { |ss| &quot;从网络获取的数据&quot; } }
+end
+
+dataDeferred.then do |s, data|
+  $console.log(&quot;最终获取到的数据: &quot; + data)
+  s.resolve(nil)
+end
+
+$threads.getMain().setBackground(true)</div></div></div></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="coroutines.html" class="navigation-links__prev">协程</a><a href="coroutines-concurrent-programming.html" class="navigation-links__next">并发编程</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

@@ -1,0 +1,2139 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:13.240322308"><title>在脚本中使用 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-s51fft_5","level":0,"title":"创建虚拟屏幕","anchor":"#-s51fft_5"},{"id":"-s51fft_6","level":0,"title":"销毁虚拟屏幕","anchor":"#-s51fft_6"},{"id":"-s51fft_7","level":0,"title":"虚拟屏幕启动应用","anchor":"#-s51fft_7"},{"id":"-s51fft_8","level":0,"title":"虚拟屏幕属性","anchor":"#-s51fft_8"},{"id":"-s51fft_9","level":0,"title":"截取虚拟屏幕内容","anchor":"#-s51fft_9"},{"id":"-s51fft_10","level":0,"title":"操控虚拟屏幕","anchor":"#-s51fft_10"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="在脚本中使用 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/using-virtual-display-via-script.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="在脚本中使用 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/using-virtual-display-via-script.html#webpage",
+    "url": "writerside-documentation/using-virtual-display-via-script.html",
+    "name": "在脚本中使用 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="using-virtual-display-via-script" data-main-title="在脚本中使用" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="virtual-display.md|虚拟屏幕"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="using-virtual-display-via-script" id="using-virtual-display-via-script.md">在脚本中使用</h1><p id="-s51fft_3">在脚本中运用虚拟屏幕，能够让脚本在后台自动执行测试任务，且不会对前台应用造成干扰。</p><aside class="prompt" data-type="tip" data-title="" id="-s51fft_4"><p id="-s51fft_11">关于无障碍相关的 API, 可参考 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.display/index.html" id="-s51fft_12" data-external="true" rel="noopener noreferrer" target="_blank">虚拟屏幕 API</a></p></aside><section class="chapter"><h2 id="-s51fft_5" data-toc="-s51fft_5">创建虚拟屏幕</h2><div class="tabs" id="-s51fft_16" data-group="languages" data-anchors="[-s51fft_19,-s51fft_22,-s51fft_25,-s51fft_28,-s51fft_31,-s51fft_34,-s51fft_37,-s51fft_40]"><div class="tabs__content" data-gtm="tab" id="-s51fft_19" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+
+// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+val display = _displays.create {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+}
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_22" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+def display = $displays.create {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_25" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+Display display = $displays.create(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        return null;
+    }
+});</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_28" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+let display = $displays.create(function(config) {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+})</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_31" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建虚拟屏幕, create 方法会返回一个 Display 对象
+local display = _displays:create(function(config)
+    -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+end)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_34" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+$display = $displays-&gt;create(function ($config) {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+});
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_37" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+
+# 创建虚拟屏幕, create 方法会返回一个 Display 对象
+display = _displays.create(lambda config:
+                           # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                           config)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_40" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># 创建虚拟屏幕, create 方法会返回一个 Display 对象
+display = $displays.create { |config|
+  # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+}</div></div></div></section><section class="chapter"><h2 id="-s51fft_6" data-toc="-s51fft_6">销毁虚拟屏幕</h2><div class="tabs" id="-s51fft_93" data-group="languages" data-anchors="[-s51fft_102,-s51fft_105,-s51fft_108,-s51fft_111,-s51fft_114,-s51fft_117,-s51fft_96,-s51fft_99]"><div class="tabs__content" data-gtm="tab" id="-s51fft_96" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+
+// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+val display = _displays.create {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+}
+// 判断虚拟屏幕是否被销毁
+if (!display.isDestroyed()) {
+    // 销毁虚拟屏幕
+    display.destroy()
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_99" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+def display = $displays.create {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+}
+// 判断虚拟屏幕是否被销毁
+if (!display.isDestroyed()) {
+    // 销毁虚拟屏幕
+    display.destroy()
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_102" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+Display display = $displays.create(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        return null;
+    }
+});
+// 判断虚拟屏幕是否被销毁
+if (!display.isDestroyed()) {
+    // 销毁虚拟屏幕
+    display.destroy();
+}
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_105" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+let display = $displays.create(function (config) {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+})
+// 判断虚拟屏幕是否被销毁
+if (!display.isDestroyed()) {
+    // 销毁虚拟屏幕
+    display.destroy()
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_108" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建虚拟屏幕, create 方法会返回一个 Display 对象
+local display = _displays:create(function(config)
+    -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+end)
+-- 判断虚拟屏幕是否被销毁
+if not display:isDestroyed() then
+    -- 销毁虚拟屏幕
+    display:destroy()
+end
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_111" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+// 创建虚拟屏幕, create 方法会返回一个 Display 对象
+$display = $displays-&gt;create(function ($config) {
+    // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+});
+// 判断虚拟屏幕是否被销毁
+if (!$display-&gt;isDestroyed()) {
+    // 销毁虚拟屏幕
+    $display-&gt;destroy();
+}
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_114" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+
+# 创建虚拟屏幕, create 方法会返回一个 Display 对象
+display = _displays.create(lambda config:
+                           # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                           config)
+# 判断虚拟屏幕是否被销毁
+if not display.isDestroyed():
+    # 销毁虚拟屏幕
+    display.destroy()
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_117" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># 创建虚拟屏幕, create 方法会返回一个 Display 对象
+display = $displays.create { |config|
+  # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+}
+# 判断虚拟屏幕是否被销毁
+unless display.isDestroyed
+  # 销毁虚拟屏幕
+  display.destroy
+end</div></div></div><aside class="prompt" data-type="tip" data-title="" id="-s51fft_90"><p id="-s51fft_166">销毁虚拟屏幕不是必须的，因为你可以通过 <a href="using-virtual-display-via-ui.html" id="-s51fft_167" data-tooltip="M8Test通过虚拟屏幕实现了投屏（包含控制）及UI自动化测试功能。其中，控制和UI自动化测试需要在Android 10及以上版本中，通过虚拟屏幕实现自动化操作；而Android 11及以上版本，还可在虚拟屏幕中使用无障碍服务，对虚拟屏幕中的节点进行定位后执行特定操作。">UI</a> 来管理虚拟屏幕。</p></aside></section><section class="chapter"><h2 id="-s51fft_7" data-toc="-s51fft_7">虚拟屏幕启动应用</h2><div class="tabs" id="-s51fft_171" data-group="languages" data-anchors="[-s51fft_174,-s51fft_177,-s51fft_180,-s51fft_183,-s51fft_186,-s51fft_189,-s51fft_192,-s51fft_195]"><div class="tabs__content" data-gtm="tab" id="-s51fft_174" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+val shell = _shells.newAdbShell(_maps.mapOf())
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+val startAppCommand = _shellCommands.launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, display.getId().toString())
+// 通过shell执行启动app的命令
+val result = shell.exec(startAppCommand!!) {}
+// 将启动结果打印出来
+if (result.isSuccess()) {
+    _console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信成功&quot;)
+} else {
+    _console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信失败&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_177" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+def shell = $shells.newAdbShell($maps.mapOf())
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+def startAppCommand = $shellCommands.launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, display.getId().toString())
+// 通过shell执行启动app的命令
+def result = shell.exec(startAppCommand) {}
+// 将启动结果打印出来
+if (result.isSuccess()) {
+    $console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信成功&quot;)
+} else {
+    $console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信失败&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_180" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.shell.Result;
+import com.m8test.script.core.api.shell.Shell;
+import kotlin.jvm.functions.Function1;
+
+import java.util.HashMap;
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+Shell shell = $shells.newAdbShell(new HashMap&lt;String, String&gt;());
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+String startAppCommand = $shellCommands.launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, display.getId() + &quot;&quot;);
+// 通过shell执行启动app的命令
+Result result = shell.exec(startAppCommand, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        return null;
+    }
+});
+// 将启动结果打印出来
+if (result.isSuccess()) {
+    $console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信成功&quot;);
+} else {
+    $console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信失败&quot;);
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_183" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+let shell = $shells.newAdbShell($maps.mapOf())
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+let startAppCommand = $shellCommands.launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, display.getId().toString())
+// 通过shell执行启动app的命令
+let result = shell.exec(startAppCommand, function (config) {
+})
+// 将启动结果打印出来
+if (result.isSuccess()) {
+    $console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信成功&quot;)
+} else {
+    $console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信失败&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_186" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+local shell = _shells:newAdbShell(_maps:mapOf())
+-- 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+local startAppCommand = _shellCommands:launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, display:getId() .. &quot;&quot;)
+-- 通过shell执行启动app的命令
+local result = shell:exec(startAppCommand, function(config) end)
+-- 将启动结果打印出来
+if result:isSuccess() then
+    _console:log(&quot;在虚拟屏幕&quot;, display:getId(), &quot;启动微信成功&quot;)
+else
+    _console:log(&quot;在虚拟屏幕&quot;, display:getId(), &quot;启动微信失败&quot;)
+end
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_189" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\shell\Shells $shells */
+global $shells;
+/** @var m8test_java\com\m8test\script\core\api\collections\Maps $maps */
+global $maps;
+// 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+$shell = $shells-&gt;newAdbShell($maps-&gt;mapOf());
+/** @var m8test_java\com\m8test\script\core\api\shell\ShellCommands $shellCommands */
+global $shellCommands;
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+$startAppCommand = $shellCommands-&gt;launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, (string)$display-&gt;getId());
+// 通过shell执行启动app的命令
+$result = $shell-&gt;exec($startAppCommand, function ($config) {
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 将启动结果打印出来
+if ($result-&gt;isSuccess()) {
+    $console-&gt;log(javaString(&quot;在虚拟屏幕&quot;), $display-&gt;getId(), javaString(&quot;启动微信成功&quot;));
+} else {
+    $console-&gt;log(javaString(&quot;在虚拟屏幕&quot;), $display-&gt;getId(), javaString(&quot;启动微信失败&quot;));
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_192" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _maps
+from m8test_java.com.m8test.script.GlobalVariables import _shellCommands
+from m8test_java.com.m8test.script.GlobalVariables import _shells
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+shell = _shells.newAdbShell(_maps.mapOf())
+# 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 #display 参数，应用将在默认显示器上启动。
+startAppCommand = _shellCommands.launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, str(display.getId()))
+# 通过shell执行启动app的命令
+result = shell.exec(startAppCommand, lambda c: c)
+# 将启动结果打印出来
+if result.isSuccess():
+    _console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信成功&quot;)
+else:
+    _console.log(&quot;在虚拟屏幕&quot;, display.getId(), &quot;启动微信失败&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_195" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 打开应用需要使用shell命令，必须具有adb权限或者root权限的shell才可以
+shell = $shells.newAdbShell($maps.mapOf)
+# 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+startAppCommand = $shellCommands.launchApp(&quot;com.tencent.mm&quot;, &quot;0&quot;, &quot;#{display.getId}&quot;)
+# 通过shell执行启动app的命令
+result = shell.exec(startAppCommand) { |config| }
+# 将启动结果打印出来
+if result.isSuccess
+  $console.log(&quot;在虚拟屏幕&quot;, display.getId, &quot;启动微信成功&quot;)
+else
+  $console.log(&quot;在虚拟屏幕&quot;, display.getId, &quot;启动微信失败&quot;)
+end</div></div></div></section><section class="chapter"><h2 id="-s51fft_8" data-toc="-s51fft_8">虚拟屏幕属性</h2><div class="tabs" id="-s51fft_247" data-group="languages" data-anchors="[-s51fft_250,-s51fft_253,-s51fft_256,-s51fft_259,-s51fft_262,-s51fft_265,-s51fft_268,-s51fft_271]"><div class="tabs__content" data-gtm="tab" id="-s51fft_250" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._displays
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 获取虚拟屏幕宽度
+_console.log(&quot;宽度&quot;, display.getWidth())
+// 获取虚拟屏幕高度
+_console.log(&quot;高度&quot;, display.getHeight())
+// 获取虚拟屏幕密度
+_console.log(&quot;密度&quot;, display.getDensity())
+// 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+_console.log(&quot;id&quot;, display.getId())</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_253" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 获取虚拟屏幕宽度
+$console.log(&quot;宽度&quot;, display.getWidth())
+// 获取虚拟屏幕高度
+$console.log(&quot;高度&quot;, display.getHeight())
+// 获取虚拟屏幕密度
+$console.log(&quot;密度&quot;, display.getDensity())
+// 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+$console.log(&quot;id&quot;, display.getId())</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_256" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$displays;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 获取虚拟屏幕宽度
+$console.log(&quot;宽度&quot;, display.getWidth());
+// 获取虚拟屏幕高度
+$console.log(&quot;高度&quot;, display.getHeight());
+// 获取虚拟屏幕密度
+$console.log(&quot;密度&quot;, display.getDensity());
+// 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+$console.log(&quot;id&quot;, display.getId());</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_259" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 获取虚拟屏幕宽度
+$console.log(&quot;宽度&quot;, display.getWidth())
+// 获取虚拟屏幕高度
+$console.log(&quot;高度&quot;, display.getHeight())
+// 获取虚拟屏幕密度
+$console.log(&quot;密度&quot;, display.getDensity())
+// 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+$console.log(&quot;id&quot;, display.getId())</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_262" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 获取虚拟屏幕宽度
+_console:log(&quot;宽度&quot;, display:getWidth())
+-- 获取虚拟屏幕高度
+_console:log(&quot;高度&quot;, display:getHeight())
+-- 获取虚拟屏幕密度
+_console:log(&quot;密度&quot;, display:getDensity())
+-- 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+_console:log(&quot;id&quot;, display:getId())
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_265" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 获取虚拟屏幕宽度
+$console-&gt;log(javaString(&quot;宽度&quot;), $display-&gt;getWidth());
+// 获取虚拟屏幕高度
+$console-&gt;log(javaString(&quot;高度&quot;), $display-&gt;getHeight());
+// 获取虚拟屏幕密度
+$console-&gt;log(javaString(&quot;密度&quot;), $display-&gt;getDensity());
+// 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+$console-&gt;log(&quot;id&quot;, $display-&gt;getId());</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_268" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _maps
+from m8test_java.com.m8test.script.GlobalVariables import _shellCommands
+from m8test_java.com.m8test.script.GlobalVariables import _shells
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕宽度
+_console.log(&quot;宽度&quot;, display.getWidth())
+# 获取虚拟屏幕高度
+_console.log(&quot;高度&quot;, display.getHeight())
+# 获取虚拟屏幕密度
+_console.log(&quot;密度&quot;, display.getDensity())
+# 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+_console.log(&quot;id&quot;, display.getId())</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_271" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕宽度
+$console.log(&quot;宽度&quot;, display.getWidth())
+# 获取虚拟屏幕高度
+$console.log(&quot;高度&quot;, display.getHeight())
+# 获取虚拟屏幕密度
+$console.log(&quot;密度&quot;, display.getDensity())
+# 获取虚拟屏幕id, 这个经常用到，例如需要在虚拟屏幕启动应用或者通过无障碍实现自动化操作时都需要id作为参数
+$console.log(&quot;id&quot;, display.getId())</div></div></div></section><section class="chapter"><h2 id="-s51fft_9" data-toc="-s51fft_9">截取虚拟屏幕内容</h2><div class="tabs" id="-s51fft_323" data-group="languages" data-anchors="[-s51fft_326,-s51fft_329,-s51fft_332,-s51fft_335,-s51fft_338,-s51fft_341,-s51fft_344,-s51fft_347]"><div class="tabs__content" data-gtm="tab" id="-s51fft_326" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+if (!display.isDecodingEnabled()) {
+    // 启动解码
+    display.setDecodingEnabled(true)
+    // 启用后可能需要等待一段时间才能截取到屏幕内容
+    _threads.sleep(3000)
+}
+val file = _files.buildFile {
+    setPath(&quot;/sdcard&quot;, &quot;M8Test/kotlin-screenshot.png&quot;)
+}
+// 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+display.screenshot(file.getFile())</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_329" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+if (!display.isDecodingEnabled()) {
+    // 启动解码
+    display.setDecodingEnabled(true)
+    // 启用后可能需要等待一段时间才能截取到屏幕内容
+    $threads.sleep(3000)
+}
+def file = $files.buildFile {
+    it.setPath(&quot;/sdcard&quot;, &quot;M8Test/groovy-screenshot.png&quot;)
+}
+// 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+display.screenshot(file.getFile())</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_332" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.io.File;
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.$displays;
+import static com.m8test.script.GlobalVariables.$threads;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+if (!display.isDecodingEnabled()) {
+    // 启动解码
+    display.setDecodingEnabled(true);
+    // 启用后可能需要等待一段时间才能截取到屏幕内容
+    $threads.sleep(3000);
+}
+File file = new File(&quot;/sdcard&quot;, &quot;M8Test/java-screenshot.png&quot;);
+// 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+display.screenshot(file);</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_335" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+if (!display.isDecodingEnabled()) {
+    // 启动解码
+    display.setDecodingEnabled(true)
+    // 启用后可能需要等待一段时间才能截取到屏幕内容
+    $threads.sleep(3000)
+}
+let file = $files.buildFile(function (fb) {
+    fb.setPath(&quot;/sdcard&quot;, &quot;M8Test/javascript-screenshot.png&quot;)
+})
+// 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+display.screenshot(file.getFile())</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_338" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+if not display:isDecodingEnabled() then
+    -- 启动解码
+    display:setDecodingEnabled(true)
+    -- 启用后可能需要等待一段时间才能截取到屏幕内容
+    _threads:sleep(3000)
+end
+local file = _files:buildFile(function(fb)
+    fb:setPath(&quot;/sdcard&quot;, &quot;M8Test/lua-screenshot.png&quot;)
+end)
+-- 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+display:screenshot(file:getFile())
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_341" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+global $files;
+// 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+if (!$display-&gt;isDecodingEnabled()) {
+    // 启动解码
+    $display-&gt;setDecodingEnabled(true);
+    // 启用后可能需要等待一段时间才能截取到屏幕内容
+    $threads-&gt;sleep(3000);
+}
+$file = $files-&gt;buildFile(function ($it) {
+    $it-&gt;setPath(&quot;/sdcard&quot;, &quot;M8Test/php-screenshot.png&quot;);
+});
+// 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+$display-&gt;screenshot($file-&gt;getFile());</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_344" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+if not display.isDecodingEnabled():
+    # 启动解码
+    display.setDecodingEnabled(True)
+    # 启用后可能需要等待一段时间才能截取到屏幕内容
+    _threads.sleep(3000)
+
+file = _files.buildFile(lambda fb: fb.setPath(&quot;/sdcard&quot;, &quot;M8Test/python-screenshot.png&quot;))
+# 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+display.screenshot(file.getFile())
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_347" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+java_import 'com.m8test.script.core.api.file.FileBuilder'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 默认情况下虚拟屏幕是没有启用解码, 这是为了减少系统资源的使用，如果需要截屏，那么必须开启解码
+unless display.isDecodingEnabled()
+  # 启动解码
+  display.setDecodingEnabled(true)
+  # 启用后可能需要等待一段时间才能截取到屏幕内容
+  $threads.sleep(3000)
+end
+
+file = $files.buildFile {
+  # @type fb [FileBuilder]
+  |fb|
+  fb.setPath(&quot;/sdcard&quot;, &quot;M8Test/ruby-screenshot.png&quot;)
+}
+
+# 截取屏幕, 接受一个文件对象作为参数，也就是需要保存截屏到哪个文件
+display.screenshot(file.getFile())</div></div></div></section><section class="chapter"><h2 id="-s51fft_10" data-toc="-s51fft_10">操控虚拟屏幕</h2><p id="-s51fft_396">你通过虚拟屏幕 API 对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。</p><section class="chapter"><h3 id="-s51fft_397" data-toc="-s51fft_397">输入文本</h3><div class="tabs" id="-s51fft_405" data-group="languages" data-anchors="[-s51fft_408,-s51fft_411,-s51fft_414,-s51fft_417,-s51fft_420,-s51fft_423,-s51fft_426,-s51fft_429]"><div class="tabs__content" data-gtm="tab" id="-s51fft_408" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+val controller = display.getController()
+// 模拟文本输入, 前提是输入框已经获取焦点
+controller.inputText(&quot;kotlin&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_411" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+def controller = display.getController()
+// 模拟文本输入, 前提是输入框已经获取焦点
+controller.inputText(&quot;groovy&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_414" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.display.control.Controller;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+Controller controller = display.getController();
+// 模拟文本输入, 前提是输入框已经获取焦点
+controller.inputText(&quot;java&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_417" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+let controller = display.getController()
+// 模拟文本输入, 前提是输入框已经获取焦点
+controller.inputText(&quot;javascript&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_420" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+local controller = display:getController()
+-- 模拟文本输入,  前提是输入框已经获取焦点
+controller:inputText(&quot;lua&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_423" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+$controller = $display-&gt;getController();
+// 模拟文本输入, 前提是输入框已经获取焦点
+$controller-&gt;inputText(&quot;php&quot;);
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_426" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 模拟文本输入, 前提是输入框已经获取焦点
+controller.inputText(&quot;python&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_429" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 模拟文本输入, 前提是输入框已经获取焦点
+controller.inputText(&quot;ruby&quot;)
+</div></div></div></section><section class="chapter"><h3 id="-s51fft_398" data-toc="-s51fft_398">按键按下/释放</h3><div class="tabs" id="-s51fft_481" data-group="languages" data-anchors="[-s51fft_484,-s51fft_487,-s51fft_490,-s51fft_493,-s51fft_496,-s51fft_499,-s51fft_502,-s51fft_505]"><div class="tabs__content" data-gtm="tab" id="-s51fft_484" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+val controller = display.getController()
+// 按键按下
+controller.keyDown {
+    // KEYCODE_VOLUME_UP  音量加键
+    setCode(24)
+}
+// 按键释放
+controller.keyUp {
+    // KEYCODE_VOLUME_UP  音量加键
+    setCode(24)
+}
+// 上面按键按下和释放就实现了音量加键的功能</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_487" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+def controller = display.getController()
+// 按键按下
+controller.keyDown {
+    // KEYCODE_VOLUME_UP  音量加键
+    it.setCode(24)
+}
+// 按键释放
+controller.keyUp {
+    // KEYCODE_VOLUME_UP  音量加键
+    it.setCode(24)
+}
+// 上面按键按下和释放就实现了音量加键的功能</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_490" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.display.control.Controller;
+import com.m8test.script.core.api.display.control.Key;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+Controller controller = display.getController();
+// 按键按下
+controller.keyDown(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        Key it = (Key) o;
+        // KEYCODE_VOLUME_UP  音量加键
+        it.setCode(24);
+        return null;
+    }
+});
+// 按键释放
+controller.keyUp(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        Key it = (Key) o;
+        // KEYCODE_VOLUME_UP  音量加键
+        it.setCode(24);
+        return null;
+    }
+});
+// 上面按键按下和释放就实现了音量加键的功能</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_493" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+let controller = display.getController()
+// 按键按下
+controller.keyDown(function (key) {
+    // KEYCODE_VOLUME_UP  音量加键
+    key.setCode(24)
+})
+// 按键释放
+controller.keyUp(function (key) {
+    // KEYCODE_VOLUME_UP  音量加键
+    key.setCode(24)
+})
+// 上面按键按下和释放就实现了音量加键的功能</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_496" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+local controller = display:getController()
+-- 按键按下
+controller:keyDown(function(key)
+    -- KEYCODE_VOLUME_UP  音量加键
+    key:setCode(24)
+end)
+-- 按键释放
+controller:keyUp(function(key)
+    -- KEYCODE_VOLUME_UP  音量加键
+    key:setCode(24)
+end)
+-- 上面按键按下和释放就实现了音量加键的功能
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_499" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+$controller = $display-&gt;getController();
+// 按键按下
+$controller-&gt;keyDown(function ($it) {
+    // KEYCODE_VOLUME_UP  音量加键
+    $it-&gt;setCode(24);
+});
+// 按键释放
+$controller-&gt;keyUp(function ($it) {
+    // KEYCODE_VOLUME_UP  音量加键
+    $it-&gt;setCode(24);
+});
+// 上面按键按下和释放就实现了音量加键的功能</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_502" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 按键按下
+controller.keyDown(lambda key:
+                   # KEYCODE_VOLUME_UP  音量加键
+                   key.setCode(24))
+# 按键释放
+controller.keyUp(lambda key:
+                 # KEYCODE_VOLUME_UP  音量加键
+                 key.setCode(24))
+# 上面按键按下和释放就实现了音量加键的功能</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_505" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+java_import 'com.m8test.script.core.api.display.control.Key'
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 按键按下
+controller.keyDown {
+  # @type it [key]
+  |it|
+  # KEYCODE_VOLUME_UP  音量加键
+  it.setCode(24)
+}
+# 按键释放
+controller.keyUp {
+  # @type it [key]
+  |it|
+  # KEYCODE_VOLUME_UP  音量加键
+  it.setCode(24)
+}
+# 上面按键按下和释放就实现了音量加键的功能</div></div></div></section><section class="chapter"><h3 id="-s51fft_399" data-toc="-s51fft_399">返回键</h3><div class="tabs" id="-s51fft_557" data-group="languages" data-anchors="[-s51fft_560,-s51fft_563,-s51fft_566,-s51fft_569,-s51fft_572,-s51fft_575,-s51fft_578,-s51fft_581]"><div class="tabs__content" data-gtm="tab" id="-s51fft_560" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+val controller = display.getController()
+// 按下返回键
+controller.pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_563" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+def controller = display.getController()
+// 按下返回键
+controller.pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_566" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.display.control.Controller;
+import com.m8test.script.core.api.display.control.Key;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+Controller controller = display.getController();
+// 按下返回键
+controller.pressBack();</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_569" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+let controller = display.getController()
+// 按下返回键
+controller.pressBack()
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_572" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+local controller = display:getController()
+-- 按下返回键
+controller:pressBack()
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_575" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+$controller = $display-&gt;getController();
+// 按下返回键
+$controller-&gt;pressBack();
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_578" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 按下返回键
+controller.pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_581" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 按下返回键
+controller.pressBack()
+</div></div></div></section><section class="chapter"><h3 id="-s51fft_400" data-toc="-s51fft_400">上下左右滚动</h3><div class="tabs" id="-s51fft_634" data-group="languages" data-anchors="[-s51fft_637,-s51fft_640,-s51fft_643,-s51fft_646,-s51fft_649,-s51fft_652,-s51fft_655,-s51fft_658]"><div class="tabs__content" data-gtm="tab" id="-s51fft_637" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+val controller = display.getController()
+//// 向下滚动, 参数为滚动轨迹所经过的点的数量
+//controller.scrollDown(50)
+// // 向上滚动, 参数为滚动轨迹所经过的点的数量
+// controller.scrollUp(50)
+// // 向左滚动, 参数为滚动轨迹所经过的点的数量
+// controller.scrollLeft(50)
+// 向右滚动, 参数为滚动轨迹所经过的点的数量
+controller.scrollRight(50)</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_640" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+def controller = display.getController()
+//// 向下滚动, 参数为滚动轨迹所经过的点的数量
+//controller.scrollDown(50)
+//// 向上滚动, 参数为滚动轨迹所经过的点的数量
+//controller.scrollUp(50)
+//// 向左滚动, 参数为滚动轨迹所经过的点的数量
+//controller.scrollLeft(50)
+// 向右滚动, 参数为滚动轨迹所经过的点的数量
+controller.scrollRight(50)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_643" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.display.control.Controller;
+import com.m8test.script.core.api.display.control.Key;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+Controller controller = display.getController();
+// 向下滚动, 参数为滚动轨迹所经过的点的数量
+controller.scrollDown(50);
+//// 向上滚动, 参数为滚动轨迹所经过的点的数量
+//controller.scrollUp(50);
+//// 向左滚动, 参数为滚动轨迹所经过的点的数量
+//controller.scrollLeft(50);
+//// 向右滚动, 参数为滚动轨迹所经过的点的数量
+//controller.scrollRight(50);</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_646" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+let controller = display.getController()
+// 向下滚动, 参数为滚动轨迹所经过的点的数量
+controller.scrollDown(50)
+// // 向上滚动, 参数为滚动轨迹所经过的点的数量
+// controller.scrollUp(50)
+// // 向左滚动, 参数为滚动轨迹所经过的点的数量
+// controller.scrollLeft(50)
+// // 向右滚动, 参数为滚动轨迹所经过的点的数量
+// controller.scrollRight(50)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_649" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+local controller = display:getController()
+-- 向下滚动, 参数为滚动轨迹所经过的点的数量
+controller:scrollDown(50)
+---- 向上滚动, 参数为滚动轨迹所经过的点的数量
+--controller:scrollUp(50)
+---- 向左滚动, 参数为滚动轨迹所经过的点的数量
+--controller:scrollLeft(50)
+---- 向右滚动, 参数为滚动轨迹所经过的点的数量
+--controller:scrollRight(50)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_652" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+$controller = $display-&gt;getController();
+// 向下滚动, 参数为滚动轨迹所经过的点的数量
+$controller-&gt;scrollDown(50);
+//// 向上滚动, 参数为滚动轨迹所经过的点的数量
+//$controller-&gt;scrollUp(50);
+//// 向左滚动, 参数为滚动轨迹所经过的点的数量
+//$controller-&gt;scrollLeft(50);
+//// 向右滚动, 参数为滚动轨迹所经过的点的数量
+//$controller-&gt;scrollRight(50);
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_655" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 向下滚动, 参数为滚动轨迹所经过的点的数量
+controller.scrollDown(50)
+# # 向上滚动, 参数为滚动轨迹所经过的点的数量
+# controller.scrollUp(50)
+# # 向左滚动, 参数为滚动轨迹所经过的点的数量
+# controller.scrollLeft(50)
+# # 向右滚动, 参数为滚动轨迹所经过的点的数量
+# controller.scrollRight(50)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_658" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 向下滚动, 参数为滚动轨迹所经过的点的数量
+controller.scrollDown(50)
+# # 向上滚动, 参数为滚动轨迹所经过的点的数量
+# controller.scrollUp(50)
+# # 向左滚动, 参数为滚动轨迹所经过的点的数量
+# controller.scrollLeft(50)
+# # 向右滚动, 参数为滚动轨迹所经过的点的数量
+# controller.scrollRight(50)
+</div></div></div><aside class="prompt" data-type="tip" data-title="" id="-s51fft_631"><p id="-s51fft_707">你还可以通过<a href="#touch-down-move-up" id="-s51fft_708" data-tooltip="对于点击或长按操作，可直接在同一坐标点执行按下与释放动作，无需额外移动触摸位置。二者的核心区别在于：点击是按下后极短时间内（通常数百毫秒内）即释放；长按则是按下后保持一段时间（一般超过 1 秒）再释放，通过按下与释放之间的休眠时长来区分两种操作类型。">触摸按下/移动/释放</a>实现上下左右滚动。</p></aside></section><section class="chapter"><h3 id="touch-down-move-up" data-toc="touch-down-move-up">触摸按下/移动/释放</h3><div class="tabs" id="-s51fft_713" data-group="languages" data-anchors="[-s51fft_716,-s51fft_719,-s51fft_722,-s51fft_725,-s51fft_728,-s51fft_731,-s51fft_734,-s51fft_737]"><div class="tabs__content" data-gtm="tab" id="-s51fft_716" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+import com.m8test.script.GlobalVariables._threads
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+val controller = display.getController()
+// 下面是一个矩形的四个顶点x、y坐标
+val width = display.getWidth()
+val height = display.getHeight()
+val leftTopX = width / 4
+val leftTopY = height / 4
+val rightTopX = width * 3 / 4
+val rightTopY = height / 4
+val leftBottomX = width / 4
+val leftBottomY = height * 3 / 4
+val rightBottomX = width * 3 / 4
+val rightBottomY = height * 3 / 4
+// 模拟触摸按下
+controller.touchDown {
+    setPointerX(leftTopX)
+    setPointerY(leftTopY)
+}
+_threads.sleep(300)
+// 模拟触摸移动
+controller.touchMove {
+    setPointerX(rightTopX)
+    setPointerY(rightTopY)
+}
+_threads.sleep(300)
+controller.touchMove {
+    setPointerX(rightBottomX)
+    setPointerY(rightBottomY)
+}
+_threads.sleep(300)
+controller.touchMove {
+    setPointerX(leftBottomX)
+    setPointerY(leftBottomY)
+}
+_threads.sleep(300)
+controller.touchMove {
+    setPointerX(leftTopX)
+    setPointerY(leftTopY)
+}
+_threads.sleep(300)
+// 模拟触摸抬起
+controller.touchUp {
+    setPointerX(leftTopX)
+    setPointerY(leftTopY)
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_719" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+def controller = display.getController()
+// 下面是一个矩形的四个顶点x、y坐标
+def width = display.getWidth()
+def height = display.getHeight()
+def leftTopX = width / 4
+def leftTopY = height / 4
+def rightTopX = width * 3 / 4
+def rightTopY = height / 4
+def leftBottomX = width / 4
+def leftBottomY = height * 3 / 4
+def rightBottomX = width * 3 / 4
+def rightBottomY = height * 3 / 4
+// 模拟触摸按下
+controller.touchDown {
+    it.setPointerX(leftTopX as int)
+    it.setPointerY(leftTopY as int)
+}
+$threads.sleep(300)
+// 模拟触摸移动
+controller.touchMove {
+    it.setPointerX(rightTopX as int)
+    it.setPointerY(rightTopY as int)
+}
+$threads.sleep(300)
+controller.touchMove {
+    it.setPointerX(rightBottomX as int)
+    it.setPointerY(rightBottomY as int)
+}
+$threads.sleep(300)
+controller.touchMove {
+    it.setPointerX(leftBottomX as int)
+    it.setPointerY(leftBottomY as int)
+}
+$threads.sleep(300)
+controller.touchMove {
+    it.setPointerX(leftTopX as int)
+    it.setPointerY(leftTopY as int)
+}
+$threads.sleep(300)
+// 模拟触摸抬起
+controller.touchUp {
+    it.setPointerX(leftTopX as int)
+    it.setPointerY(leftTopY as int)
+}</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_722" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.display.control.Controller;
+import com.m8test.script.core.api.display.control.Touch;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.$displays;
+import static com.m8test.script.GlobalVariables.$threads;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+private static class TouchSetter implements Function1 {
+    private final int x;
+    private final int y;
+
+    public TouchSetter(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public Object invoke(Object o) {
+        Touch touch = (Touch) o;
+        touch.setPointerX(x);
+        touch.setPointerY(y);
+        return null;
+    }
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+Controller controller = display.getController();
+// 下面是一个矩形的四个顶点x、y坐标
+int width = display.getWidth();
+int height = display.getHeight();
+int leftTopX = width / 4;
+int leftTopY = height / 4;
+int rightTopX = width * 3 / 4;
+int rightTopY = height / 4;
+int leftBottomX = width / 4;
+int leftBottomY = height * 3 / 4;
+int rightBottomX = width * 3 / 4;
+int rightBottomY = height * 3 / 4;
+// 模拟触摸按下
+controller.touchDown(new TouchSetter(leftTopX, leftTopY));
+$threads.sleep(300);
+// 模拟触摸移动
+controller.touchMove(new TouchSetter(rightTopX, rightTopY));
+$threads.sleep(300);
+controller.touchMove(new TouchSetter(rightBottomX, rightBottomY));
+$threads.sleep(300);
+controller.touchMove(new TouchSetter(leftBottomX, leftBottomY));
+$threads.sleep(300);
+controller.touchMove(new TouchSetter(leftTopX, leftTopY));
+$threads.sleep(300);
+// 模拟触摸抬起
+controller.touchUp(new TouchSetter(leftTopX, leftTopY));</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_725" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+let controller = display.getController()
+// 下面是一个矩形的四个顶点x、y坐标
+let width = display.getWidth()
+let height = display.getHeight()
+let leftTopX = width / 4
+let leftTopY = height / 4
+let rightTopX = width * 3 / 4
+let rightTopY = height / 4
+let leftBottomX = width / 4
+let leftBottomY = height * 3 / 4
+let rightBottomX = width * 3 / 4
+let rightBottomY = height * 3 / 4
+// 模拟触摸按下
+controller.touchDown(function (it) {
+    it.setPointerX(leftTopX)
+    it.setPointerY(leftTopY)
+})
+$threads.sleep(300)
+// 模拟触摸移动
+controller.touchMove(function (it) {
+    it.setPointerX(rightTopX)
+    it.setPointerY(rightTopY)
+})
+$threads.sleep(300)
+controller.touchMove(function (it) {
+    it.setPointerX(rightBottomX)
+    it.setPointerY(rightBottomY)
+})
+$threads.sleep(300)
+controller.touchMove(function (it) {
+    it.setPointerX(leftBottomX)
+    it.setPointerY(leftBottomY)
+})
+$threads.sleep(300)
+controller.touchMove(function (it) {
+    it.setPointerX(leftTopX)
+    it.setPointerY(leftTopY)
+})
+$threads.sleep(300)
+// 模拟触摸抬起
+controller.touchUp(function (it) {
+    it.setPointerX(leftTopX)
+    it.setPointerY(leftTopY)
+})</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_728" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+local controller = display:getController()
+-- 下面是一个矩形的四个顶点x、y坐标
+local width = display:getWidth()
+local height = display:getHeight()
+local leftTopX = width / 4
+local leftTopY = height / 4
+local rightTopX = width * 3 / 4
+local rightTopY = height / 4
+local leftBottomX = width / 4
+local leftBottomY = height * 3 / 4
+local rightBottomX = width * 3 / 4
+local rightBottomY = height * 3 / 4
+-- 模拟触摸按下
+controller:touchDown(function(touch)
+    touch:setPointerX(leftTopX)
+    touch:setPointerY(leftTopY)
+end)
+_threads:sleep(300)
+-- 模拟触摸移动
+controller:touchMove(function(touch)
+    touch:setPointerX(rightTopX)
+    touch:setPointerY(rightTopY)
+end)
+_threads:sleep(300)
+controller:touchMove(function(touch)
+    touch:setPointerX(rightBottomX)
+    touch:setPointerY(rightBottomY)
+end)
+_threads:sleep(300)
+controller:touchMove(function(touch)
+    touch:setPointerX(leftBottomX)
+    touch:setPointerY(leftBottomY)
+end)
+_threads:sleep(300)
+controller:touchMove(function(touch)
+    touch:setPointerX(leftTopX)
+    touch:setPointerY(leftTopY)
+end)
+_threads:sleep(300)
+-- 模拟触摸抬起
+controller:touchUp(function(touch)
+    touch:setPointerX(leftTopX)
+    touch:setPointerY(leftTopY)
+end)
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_731" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+// 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+$controller = $display-&gt;getController();
+// 向下滚动, 参数为滚动轨迹所经过的点的数量
+$controller-&gt;scrollDown(50);
+// 下面是一个矩形的四个顶点x、y坐标
+$width = $display-&gt;getWidth();
+$height = $display-&gt;getHeight();
+$leftTopX = $width / 4;
+$leftTopY = $height / 4;
+$rightTopX = $width * 3 / 4;
+$rightTopY = $height / 4;
+$leftBottomX = $width / 4;
+$leftBottomY = $height * 3 / 4;
+$rightBottomX = $width * 3 / 4;
+$rightBottomY = $height * 3 / 4;
+// 模拟触摸按下
+$controller-&gt;touchDown(function ($it) use ($leftTopX, $leftTopY) {
+    $it-&gt;setPointerX($leftTopX);
+    $it-&gt;setPointerY($leftTopY);
+});
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+$threads-&gt;sleep(300);
+// 模拟触摸移动
+$controller-&gt;touchMove(function ($it) use ($rightTopX, $rightTopY) {
+    $it-&gt;setPointerX($rightTopX);
+    $it-&gt;setPointerY($rightTopY);
+});
+$threads-&gt;sleep(300);
+$controller-&gt;touchMove(function ($it) use ($rightBottomX, $rightBottomY) {
+    $it-&gt;setPointerX($rightBottomX);
+    $it-&gt;setPointerY($rightBottomY);
+});
+$threads-&gt;sleep(300);
+$controller-&gt;touchMove(function ($it) use ($leftBottomX, $leftBottomY) {
+    $it-&gt;setPointerX($leftBottomX);
+    $it-&gt;setPointerY($leftBottomY);
+});
+$threads-&gt;sleep(300);
+$controller-&gt;touchMove(function ($it) use ($leftTopX, $leftTopY) {
+    $it-&gt;setPointerX($leftTopX);
+    $it-&gt;setPointerY($leftTopY);
+});
+$threads-&gt;sleep(300);
+// 模拟触摸抬起
+$controller-&gt;touchUp(function ($it) use ($leftTopX, $leftTopY) {
+    $it-&gt;setPointerX($leftTopX);
+    $it-&gt;setPointerY($leftTopY);
+});</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_734" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 下面是一个矩形的四个顶点x、y坐标
+width = display.getWidth()
+height = display.getHeight()
+# 先进行浮点除法，再用 int() 转换为整数
+leftTopX = int(width / 4)
+leftTopY = int(height / 4)
+rightTopX = int(width * 3 / 4)
+rightTopY = int(height / 4)
+leftBottomX = int(width / 4)
+leftBottomY = int(height * 3 / 4)
+rightBottomX = int(width * 3 / 4)
+rightBottomY = int(height * 3 / 4)
+# 模拟触摸按下
+controller.touchDown(lambda it: (
+    it.setPointerX(leftTopX),
+    it.setPointerY(leftTopY),
+))
+_threads.sleep(300)
+# 模拟触摸移动
+controller.touchMove(lambda it: (
+    it.setPointerX(rightTopX),
+    it.setPointerY(rightTopY),
+))
+_threads.sleep(300)
+controller.touchMove(lambda it: (
+    it.setPointerX(rightBottomX),
+    it.setPointerY(rightBottomY),
+))
+_threads.sleep(300)
+controller.touchMove(lambda it: (
+    it.setPointerX(leftBottomX),
+    it.setPointerY(leftBottomY),
+))
+_threads.sleep(300)
+controller.touchMove(lambda it: (
+    it.setPointerX(leftTopX),
+    it.setPointerY(leftTopY),
+))
+_threads.sleep(300)
+# 模拟触摸抬起
+controller.touchUp(lambda it: (
+    it.setPointerX(leftTopX),
+    it.setPointerY(leftTopY),
+))
+</div></div><div class="tabs__content" data-gtm="tab" id="-s51fft_737" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 获取虚拟屏幕控制器，用于控制虚拟屏幕，可以对虚拟屏幕执行输入、按键、返回、滚动、触摸等操作。
+controller = display.getController()
+# 下面是一个矩形的四个顶点x、y坐标
+width = display.getWidth()
+height = display.getHeight()
+leftTopX = width / 4
+leftTopY = height / 4
+rightTopX = width * 3 / 4
+rightTopY = height / 4
+leftBottomX = width / 4
+leftBottomY = height * 3 / 4
+rightBottomX = width * 3 / 4
+rightBottomY = height * 3 / 4
+java_import 'com.m8test.script.core.api.display.control.Touch'
+# 模拟触摸按下
+controller.touchDown {
+  # @type it [Touch]
+  |it|
+  it.setPointerX(leftTopX)
+  it.setPointerY(leftTopY)
+}
+$threads.sleep(300)
+# 模拟触摸移动
+controller.touchMove  {
+  # @type it [Touch]
+  |it|
+  it.setPointerX(rightTopX)
+  it.setPointerY(rightTopY)
+}
+$threads.sleep(300)
+controller.touchMove  {
+  # @type it [Touch]
+  |it|
+  it.setPointerX(rightBottomX)
+  it.setPointerY(rightBottomY)
+}
+$threads.sleep(300)
+controller.touchMove  {
+  # @type it [Touch]
+  |it|
+  it.setPointerX(leftBottomX)
+  it.setPointerY(leftBottomY)
+}
+$threads.sleep(300)
+controller.touchMove  {
+  # @type it [Touch]
+  |it|
+  it.setPointerX(leftTopX)
+  it.setPointerY(leftTopY)
+}
+$threads.sleep(300)
+# 模拟触摸抬起
+controller.touchUp  {
+  # @type it [Touch]
+  |it|
+  it.setPointerX(leftTopX)
+  it.setPointerY(leftTopY)
+}</div></div></div><aside class="prompt" data-type="tip" data-title="" id="-s51fft_710"><p id="-s51fft_786">对于点击或长按操作，可直接在同一坐标点执行按下与释放动作，无需额外移动触摸位置。二者的核心区别在于：点击是按下后极短时间内（通常数百毫秒内）即释放；长按则是按下后保持一段时间（一般超过 1 秒）再释放，通过按下与释放之间的休眠时长来区分两种操作类型。</p></aside></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="using-virtual-display-via-ui.html" class="navigation-links__prev">在UI中使用</a><a href="image-and-color.html" class="navigation-links__next">图色</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

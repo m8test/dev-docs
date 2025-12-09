@@ -1,0 +1,1552 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:12.72003183"><title>最佳实战 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-v645f6_5","level":0,"title":"通过文本或描述选择节点","anchor":"#-v645f6_5"},{"id":"-v645f6_6","level":0,"title":"通过层次结构选择节点","anchor":"#-v645f6_6"},{"id":"-v645f6_7","level":0,"title":"结合虚拟屏幕","anchor":"#-v645f6_7"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="最佳实战 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/accessibility-best-practice.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="最佳实战 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/accessibility-best-practice.html#webpage",
+    "url": "writerside-documentation/accessibility-best-practice.html",
+    "name": "最佳实战 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="accessibility-best-practice" data-main-title="最佳实战" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="accessibility.md|无障碍"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="accessibility-best-practice" id="accessibility-best-practice.md">最佳实战</h1><p id="-v645f6_3">在使用无障碍服务查找节点时，我们可以通过<a href="accessibility-selector.html" id="-v645f6_8" data-tooltip="无障碍选择器用于选取当前界面上的无障碍节点，其原理是设置若干条件，当节点满足所有设定条件时，就会被选中。实际应用中可能存在多个节点符合条件，此时选择器会返回所有满足条件的节点。同时，也可通过不同方法及参数指定返回节点的数量，例如 findOne方法只会查找一个节点，只要存在符合条件的节点就返回该节点，即便有多个节点满足条件也是如此；而find 方法则可通过参数指定返回节点的数量。">无障碍选择器</a> 选择所需节点。对于一些简单节点，通过节点的文本或者描述信息即可获取唯一节点；但对于另一些节点，无法通过某些属性唯一定位，这时就需要通过层级结构来定位，例如指定父节点、子节点及兄弟节点的属性（无需全部使用，只需能唯一确定或获取所需数量的节点即可）。</p><aside class="prompt" data-type="tip" data-title="" id="-v645f6_4"><p id="-v645f6_9">关于无障碍相关的 API, 可参考 <a href="https://yumimiyamoto.github.io/accessibility-release/" id="-v645f6_10" data-external="true" rel="noopener noreferrer" target="_blank">无障碍服务 API</a></p></aside><section class="chapter"><h2 id="-v645f6_5" data-toc="-v645f6_5">通过文本或描述选择节点</h2><p id="-v645f6_11">如下图所示，界面中包含非常明显且内容唯一的文本，此时可通过文本内容获取节点。</p><figure id="-v645f6_12"><img alt="333" src="/333.png" title="333" width="444" height="984"></figure><p id="-v645f6_13">我们可以通过无障碍选择器的 text 方法来筛选节点信息：</p><figure id="-v645f6_14"><img alt="334" src="/334.png" title="334" width="444" height="984"></figure><div class="tabs" id="-v645f6_25" data-group="languages" data-anchors="[-v645f6_34,-v645f6_37,-v645f6_40,-v645f6_43,-v645f6_46,-v645f6_49,-v645f6_52,-v645f6_55]"><div class="tabs__content" data-gtm="tab" id="-v645f6_34" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._accessibility
+import com.m8test.script.GlobalVariables._console
+
+// 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+val selector = _accessibility!!.createSelector().text { it == &quot;插件&quot; }
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+val node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_37" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+def selector = $accessibility.createSelector().text { it == &quot;插件&quot; }
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+def node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_40" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.accessibility.api.AccessibilityNode;
+import com.m8test.accessibility.api.AccessibilitySelector;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$accessibility;
+import static com.m8test.script.GlobalVariables.$console;
+
+// 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+AccessibilitySelector selector = $accessibility.createSelector().text(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        if (o instanceof String) {
+            return &quot;插件&quot;.equals(o);
+        }
+        return false;
+    }
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+AccessibilityNode node = selector.findOne(0, -1);
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node);</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_43" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+let selector = $accessibility.createSelector().text(function (it) {
+    return it === &quot;插件&quot;
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+let node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_46" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+local selector = _accessibility:createSelector():text(function(text)
+    return text == &quot;插件&quot;
+end)
+-- 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+local node = selector:findOne(0, -1)
+-- 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console:log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_49" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+$selector = $accessibility-&gt;createSelector()-&gt;text(function ($text) {
+    return $text == javaString(&quot;插件&quot;);
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+$node = $selector-&gt;findOne(0, -1);
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console-&gt;log(javaString(&quot;找到节点&quot;), $node);
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_52" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _accessibility
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+selector = _accessibility.createSelector().text(lambda text: text == &quot;插件&quot;)
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_55" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 定义一个选择器用于筛选文本为&quot;插件&quot;的节点
+selector = $accessibility.createSelector.text { |text| text == &quot;插件&quot; }
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)
+</div></div></div><p id="-v645f6_16">除单独使用 text 方法外，还可结合其他方法组合选择器。例如判断是否在小红书首页，除找到文本为<code class="code" id="-v645f6_104">首页</code>的节点外，还需该节点处于选中状态，这时就可以增加 <code class="code" id="-v645f6_105">selected</code> 方法来选择被选中的节点，即同时满足文本为<code class="code" id="-v645f6_106">首页</code>且处于选中状态的节点。若能找到这样的节点，就表明处于小红书首页。</p><figure id="-v645f6_17"><img alt="335" src="/335.png" title="335" width="444" height="984"></figure><div class="tabs" id="-v645f6_28" data-group="languages" data-anchors="[-v645f6_109,-v645f6_112,-v645f6_115,-v645f6_118,-v645f6_121,-v645f6_124,-v645f6_127,-v645f6_130]"><div class="tabs__content" data-gtm="tab" id="-v645f6_109" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._accessibility
+import com.m8test.script.GlobalVariables._console
+
+// 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+val selector = _accessibility!!.createSelector()
+    .text { it == &quot;首页&quot; }
+    .selected { it }
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+val node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_112" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+def selector = $accessibility.createSelector()
+        .text { it == &quot;首页&quot; }
+        .selected { it }
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+def node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_115" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.accessibility.api.AccessibilityNode;
+import com.m8test.accessibility.api.AccessibilitySelector;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$accessibility;
+import static com.m8test.script.GlobalVariables.$console;
+
+// 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+AccessibilitySelector selector = $accessibility.createSelector().text(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        if (o instanceof String) {
+            return &quot;首页&quot;.equals(o);
+        }
+        return false;
+    }
+}).selected(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        return o;
+    }
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+AccessibilityNode node = selector.findOne(0, -1);
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node);</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_118" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+let selector = $accessibility.createSelector().text(function (it) {
+    return it === &quot;首页&quot;
+}).selected(function (it) {
+    return it
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+let node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_121" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+local selector = _accessibility:createSelector():text(function(text)
+    return text == &quot;首页&quot;
+end):selected(function(flag0)
+    return flag0
+end)
+-- 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+local node = selector:findOne(0, -1)
+-- 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console:log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_124" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+$selector = $accessibility-&gt;createSelector()-&gt;text(function ($text) {
+    return $text == javaString(&quot;首页&quot;);
+})-&gt;selected(function ($selected) {
+    return $selected;
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+$node = $selector-&gt;findOne(0, -1);
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console-&gt;log(javaString(&quot;找到节点&quot;), $node);
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_127" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _accessibility
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+selector = _accessibility.createSelector().text(lambda text: text == &quot;首页&quot;).selected(lambda selected: selected)
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_130" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 定义一个选择器用于筛选文本为&quot;首页&quot;并且处于选中状态的节点
+selector = $accessibility.createSelector
+                         .text { |text| text == &quot;首页&quot; }
+                         .selected { |selected| selected }
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)
+</div></div></div><p id="-v645f6_19">除通过文本选择节点外，还可通过节点的描述信息选择节点。一般情况下，图标按钮会包含描述信息，以帮助残障人士通过无障碍服务使用应用。但有些应用不会添加描述信息，甚至像微信这样的应用会限制无障碍服务的使用，所以对于描述信息，有则用，无则不用。</p><p id="-v645f6_20">在小红书首页的搜索按钮中，其描述信息为 <code class="code" id="-v645f6_179">搜索</code> ，我们可以使用该描述信息选择节点：</p><figure id="-v645f6_21"><img alt="336" src="/336.png" title="336" width="444" height="984"></figure><div class="tabs" id="-v645f6_31" data-group="languages" data-anchors="[-v645f6_182,-v645f6_185,-v645f6_188,-v645f6_191,-v645f6_194,-v645f6_197,-v645f6_200,-v645f6_203]"><div class="tabs__content" data-gtm="tab" id="-v645f6_182" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._accessibility
+import com.m8test.script.GlobalVariables._console
+
+// 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+val selector = _accessibility!!.createSelector().desc { it == &quot;搜索&quot; }
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+val node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_185" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+def selector = $accessibility.createSelector().desc { it == &quot;搜索&quot; }
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+def node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_188" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.accessibility.api.AccessibilityNode;
+import com.m8test.accessibility.api.AccessibilitySelector;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$accessibility;
+import static com.m8test.script.GlobalVariables.$console;
+
+// 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+AccessibilitySelector selector = $accessibility.createSelector().desc(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        if (o instanceof String) {
+            return &quot;搜索&quot;.equals(o);
+        }
+        return false;
+    }
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+AccessibilityNode node = selector.findOne(0, -1);
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node);</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_191" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+let selector = $accessibility.createSelector().desc(function (it) {
+    return it === &quot;搜索&quot;
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+let node = selector.findOne(0, -1)
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_194" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+local selector = _accessibility:createSelector():desc(function(desc)
+    return desc == &quot;搜索&quot;
+end)
+-- 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+local node = selector:findOne(0, -1)
+-- 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console:log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_197" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+$selector = $accessibility-&gt;createSelector()-&gt;desc(function ($desc) {
+    return $desc == javaString(&quot;搜索&quot;);
+});
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+$node = $selector-&gt;findOne(0, -1);
+// 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console-&gt;log(javaString(&quot;找到节点&quot;), $node);</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_200" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _accessibility
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+selector = _accessibility.createSelector().desc(lambda desc: desc == &quot;搜索&quot;)
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+_console.log(&quot;找到节点&quot;, node)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_203" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 定义一个选择器用于筛选描述信息为&quot;搜索&quot;的节点
+selector = $accessibility.createSelector.desc { |desc| desc == &quot;搜索&quot; }
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 这里简单打印节点，实际开发中需要判断节点是否为null, 如果不为null可以对节点进行操作，例如点击、设置文本等。
+$console.log(&quot;找到节点&quot;, node)
+</div></div></div></section><section class="chapter"><h2 id="-v645f6_6" data-toc="-v645f6_6">通过层次结构选择节点</h2><p id="-v645f6_252">若节点既无文本信息也无描述信息，我们可以通过定义层次结构来选择节点。这种方法稍显复杂，因为可能需要设置父节点、子节点及兄弟节点的选择器来描述所选节点的层级关系，当然无需全部设置，根据实际需求设置即可。</p><p id="-v645f6_253">通过层次结构选择节点时，主要用到 <code class="code" id="-v645f6_297">className</code> 方法，因为每个节点的 <code class="code" id="-v645f6_298">className</code> 都不为空，一定有值。通过这种方式，只要层级结构定义足够详细，就可以选择界面上任意所需节点。</p><p id="-v645f6_254">下面是通过层次结构选择节点的步骤：</p><p id="-v645f6_255">第一步，定义需要选择的节点的选择器。这是最重要的一步，首先必须确定需要选择的节点是什么。这里以选择小红书视频界面中右侧的工具栏（15 表示深度，0 表示索引）为例，该工具栏包含<code class="code" id="-v645f6_299">点赞</code>、 <code class="code" id="-v645f6_300">收藏</code>、 <code class="code" id="-v645f6_301">分享</code>等信息，其类名为 <code class="code" id="-v645f6_302">android.widget.LinearLayout</code>。</p><figure id="-v645f6_256"><img alt="337" src="/337.png" title="337" width="444" height="984"></figure><div class="tabs" id="-v645f6_278" data-group="languages" data-anchors="[-v645f6_305,-v645f6_308,-v645f6_311,-v645f6_314,-v645f6_317,-v645f6_320,-v645f6_323,-v645f6_326]"><div class="tabs__content" data-gtm="tab" id="-v645f6_305" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+val selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className { it == &quot;android.widget.LinearLayout&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_308" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+def selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className { it == &quot;android.widget.LinearLayout&quot; }
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_311" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+AccessibilitySelector selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.LinearLayout&quot;.equals(o);
+                }
+                return false;
+            }
+        })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_314" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+let selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className(function (it) {
+        return it === &quot;android.widget.LinearLayout&quot;
+    })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_317" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+local selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    :className(function(it) return it == &quot;android.widget.LinearLayout&quot; end)</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_320" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+$selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.LinearLayout&quot;;
+    })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_323" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = (_accessibility.createSelector()
+            # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+            .className(lambda it: it == &quot;android.widget.LinearLayout&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_326" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+  className { |className| className == &quot;android.widget.LinearLayout&quot; }.
+</div></div></div><p id="-v645f6_258">由于节点本身的信息有限，我们可以通过定义其父节点、子节点及兄弟节点的选择器来获取更多信息（无需全部使用，只要能唯一确定节点即可）。</p><p id="-v645f6_259">第二步，为父节点（14,1）定义选择器。可以看到其类名为 <code class="code" id="-v645f6_375">android.widget.FrameLayout</code> ，当然，除类名外，也可以用其他属性作为条件。</p><figure id="-v645f6_260"><img alt="338" src="/338.png" title="338" width="444" height="984"></figure><div class="tabs" id="-v645f6_281" data-group="languages" data-anchors="[-v645f6_378,-v645f6_381,-v645f6_384,-v645f6_387,-v645f6_390,-v645f6_393,-v645f6_396,-v645f6_399]"><div class="tabs__content" data-gtm="tab" id="-v645f6_378" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)父节点的选择器
+val parentSelector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    .className { it == &quot;android.widget.FrameLayout&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_381" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)父节点的选择器
+def parentSelector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+        .className { it == &quot;android.widget.FrameLayout&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_384" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)父节点的选择器
+AccessibilitySelector parentSelector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.FrameLayout&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_387" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)父节点的选择器
+let parentSelector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    .className(function (it) {
+        return it === &quot;android.widget.FrameLayout&quot;
+    })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_390" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 节点(小红书视频界面右边的工具栏)父节点的选择器
+local parentSelector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    :className(function(it) return it == &quot;android.widget.FrameLayout&quot; end)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_393" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+$parentSelector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.FrameLayout&quot;;
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_396" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 节点(小红书视频界面右边的工具栏)父节点的选择器
+parentSelector = (_accessibility.createSelector()
+                  # 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+                  .className(lambda it: it == &quot;android.widget.FrameLayout&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_399" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 节点(小红书视频界面右边的工具栏)父节点的选择器
+parentSelector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+  className { |className| className == &quot;android.widget.FrameLayout&quot; }</div></div></div><p id="-v645f6_262">第三步，为子节点定义选择器。如果仅指定父节点选择器，可能仍有较多节点满足条件，这时可以定义子节点选择器来限制子节点必须满足的条件。例如索引为 0（16,0）的子节点类名为 <code class="code" id="-v645f6_448">android.widget.Button</code>。</p><figure id="-v645f6_263"><img alt="339" src="/339.png" title="339" width="444" height="984"></figure><div class="tabs" id="-v645f6_284" data-group="languages" data-anchors="[-v645f6_451,-v645f6_454,-v645f6_457,-v645f6_460,-v645f6_463,-v645f6_466,-v645f6_469,-v645f6_472]"><div class="tabs__content" data-gtm="tab" id="-v645f6_451" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+val child0Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    .className { it == &quot;android.widget.Button&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_454" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+def child0Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+        .className { it == &quot;android.widget.Button&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_457" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+AccessibilitySelector child0Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.Button&quot;.equals(o);
+                }
+                return false;
+            }
+        })
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_460" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+let child0Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    .className(function (it) {
+        return it === &quot;android.widget.Button&quot;
+    })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_463" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+local child0Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    :className(function(it) return it == &quot;android.widget.Button&quot; end)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_466" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+$child0Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.Button&quot;;
+    })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_469" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+child0Selector = (_accessibility.createSelector()
+                  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+                  .className(lambda it: it == &quot;android.widget.Button&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_472" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+child0Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+  className { |className| className == &quot;android.widget.Button&quot; }.</div></div></div><p id="-v645f6_265">并且该节点索引为 0 的子节点（17,0）的类名为 <code class="code" id="-v645f6_521">android.widget.TextView</code>：</p><div class="tabs" id="-v645f6_287" data-group="languages" data-anchors="[-v645f6_524,-v645f6_527,-v645f6_530,-v645f6_533,-v645f6_536,-v645f6_539,-v645f6_542,-v645f6_545]"><div class="tabs__content" data-gtm="tab" id="-v645f6_524" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+val child00Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    .className { it == &quot;android.widget.TextView&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_527" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+def child00Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+        .className { it == &quot;android.widget.TextView&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_530" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+AccessibilitySelector child00Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.TextView&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_533" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+let child00Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    .className(function (it) {
+        return it === &quot;android.widget.TextView&quot;
+    })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_536" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+local child00Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    :className(function(it) return it == &quot;android.widget.TextView&quot; end)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_539" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+$child00Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.TextView&quot;;
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_542" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+child00Selector = (_accessibility.createSelector()
+                   # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+                   .className(lambda it: it == &quot;android.widget.TextView&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_545" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+child00Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+  className { |className| className == &quot;android.widget.TextView&quot; }</div></div></div><p id="-v645f6_267">索引为 1 的节点（17,1）的类名为 <code class="code" id="-v645f6_594">android.widget.ImageView</code>：</p><div class="tabs" id="-v645f6_290" data-group="languages" data-anchors="[-v645f6_597,-v645f6_600,-v645f6_603,-v645f6_606,-v645f6_609,-v645f6_612,-v645f6_615,-v645f6_618]"><div class="tabs__content" data-gtm="tab" id="-v645f6_597" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+val child01Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    .className { it == &quot;android.widget.ImageView&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_600" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+def child01Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+        .className { it == &quot;android.widget.ImageView&quot; }</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_603" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+AccessibilitySelector child01Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.ImageView&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_606" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+let child01Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    .className(function (it) {
+        return it === &quot;android.widget.ImageView&quot;
+    })</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_609" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+local child01Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    :className(function(it) return it == &quot;android.widget.ImageView&quot; end)
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_612" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+$child01Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.ImageView&quot;;
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_615" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+child01Selector = (_accessibility.createSelector()
+                   # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+                   .className(lambda it: it == &quot;android.widget.ImageView&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_618" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+child01Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+  className { |className| className == &quot;android.widget.ImageView&quot; }</div></div></div><figure id="-v645f6_269"><img alt="340" src="/340.png" title="340" width="444" height="984"></figure><p id="-v645f6_270">一般情况下，设置了父节点及子节点选择器后，就能正常选择到节点了。若仍有多个节点满足条件，可继续设置兄弟节点的选择器，或更详细地设置父节点及子节点的选择器，也可设置更多子节点的选择器。在此例中，通过上述设置已足够。</p><p id="-v645f6_271">找到节点后，我们就可以直接通过层次结构获取所需的节点信息：</p><figure id="-v645f6_272"><img alt="341" src="/341.png" title="341" width="444" height="984"></figure><div class="tabs" id="-v645f6_293" data-group="languages" data-anchors="[-v645f6_669,-v645f6_672,-v645f6_675,-v645f6_678,-v645f6_681,-v645f6_684,-v645f6_687,-v645f6_690]"><div class="tabs__content" data-gtm="tab" id="-v645f6_669" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+val selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className { it == &quot;android.widget.LinearLayout&quot; }
+    // 通过 parent 方法设置父节点的选择器
+    .parent(parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+val node = selector.findOne(0, -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console.log(&quot;点赞&quot;, node.child(0)?.child(0)?.text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console.log(&quot;评论&quot;, node.child(1)?.child(1)?.text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console.log(&quot;收藏&quot;, node.child(2)?.child(1)?.text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_672" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+def selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className { it == &quot;android.widget.LinearLayout&quot; }
+// 通过 parent 方法设置父节点的选择器
+        .parent(parentSelector)
+// 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+def node = selector.findOne(0, -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_675" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+AccessibilitySelector selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.LinearLayout&quot;.equals(o);
+                }
+                return false;
+            }
+        })
+        // 通过 parent 方法设置父节点的选择器
+        .parent(parentSelector)
+        // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child0Selector);
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+AccessibilityNode node = selector.findOne(0, -1);
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text());
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text());
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text());
+}
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_678" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+let selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className(function (it) {
+        return it === &quot;android.widget.LinearLayout&quot;
+    })
+    // 通过 parent 方法设置父节点的选择器
+    .parent(parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+let node = selector.findOne(0, -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_681" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+local selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    :className(function(it) return it == &quot;android.widget.LinearLayout&quot; end)
+    -- 通过 parent 方法设置父节点的选择器
+    :parent(parentSelector)
+    -- 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    :child(0, child0Selector)
+-- 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+local node = selector:findOne(0, -1)
+-- 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if node ~= nil then
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console:log(&quot;点赞&quot;, node:child(0):child(0):text())
+    -- 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console:log(&quot;评论&quot;, node:child(1):child(1):text())
+    -- 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console:log(&quot;收藏&quot;, node:child(2):child(1):text())
+end
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_684" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+$selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.LinearLayout&quot;;
+    })
+    // 通过 parent 方法设置父节点的选择器
+    -&gt;parent($parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    -&gt;child(0, $child0Selector);
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+$node = $selector-&gt;findOne(0, -1);
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if ($node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console-&gt;log(javaString(&quot;点赞&quot;), $node-&gt;child(0)-&gt;child(0)-&gt;text());
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console-&gt;log(javaString(&quot;评论&quot;), $node-&gt;child(1)-&gt;child(1)-&gt;text());
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console-&gt;log(javaString(&quot;收藏&quot;), $node-&gt;child(2)-&gt;child(1)-&gt;text());
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_687" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = (_accessibility.createSelector()
+            # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+            .className(lambda it: it == &quot;android.widget.LinearLayout&quot;)
+            # 通过 parent 方法设置父节点的选择器
+            .parent(parentSelector)
+            # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+            .child(0, child0Selector))
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node is not None):
+    # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    # 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    # 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_690" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+  className { |className| className == &quot;android.widget.LinearLayout&quot; }.
+  # 通过 parent 方法设置父节点的选择器
+  parent(parentSelector).
+  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+  child(0, child0Selector)
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if node
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+  $console.log(&quot;点赞&quot;, node.child(0).child(0).text)
+  # 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+  $console.log(&quot;评论&quot;, node.child(1).child(1).text)
+  # 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+  $console.log(&quot;收藏&quot;, node.child(2).child(1).text)
+end</div></div></div><p id="-v645f6_274">完整的代码如下：</p><div class="tabs" id="-v645f6_296" data-group="languages" data-anchors="[-v645f6_741,-v645f6_744,-v645f6_747,-v645f6_750,-v645f6_753,-v645f6_756,-v645f6_759,-v645f6_762]"><div class="tabs__content" data-gtm="tab" id="-v645f6_741" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._accessibility
+import com.m8test.script.GlobalVariables._console
+
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+val parentSelector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    .className { it == &quot;android.widget.FrameLayout&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+val child00Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    .className { it == &quot;android.widget.TextView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+val child01Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    .className { it == &quot;android.widget.ImageView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+val child0Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    .className { it == &quot;android.widget.Button&quot; }
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child00Selector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(1, child01Selector)
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+val selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className { it == &quot;android.widget.LinearLayout&quot; }
+    // 通过 parent 方法设置父节点的选择器
+    .parent(parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+val node = selector.findOne(0, -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console.log(&quot;点赞&quot;, node.child(0)?.child(0)?.text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console.log(&quot;评论&quot;, node.child(1)?.child(1)?.text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console.log(&quot;收藏&quot;, node.child(2)?.child(1)?.text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_744" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)父节点的选择器
+def parentSelector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+        .className { it == &quot;android.widget.FrameLayout&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+def child00Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+        .className { it == &quot;android.widget.TextView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+def child01Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+        .className { it == &quot;android.widget.ImageView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+def child0Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+        .className { it == &quot;android.widget.Button&quot; }
+// 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child00Selector)
+// 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(1, child01Selector)
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+def selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className { it == &quot;android.widget.LinearLayout&quot; }
+// 通过 parent 方法设置父节点的选择器
+        .parent(parentSelector)
+// 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+def node = selector.findOne(0, -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_747" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.accessibility.api.AccessibilityNode;
+import com.m8test.accessibility.api.AccessibilitySelector;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$accessibility;
+import static com.m8test.script.GlobalVariables.$console;
+
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+AccessibilitySelector parentSelector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.FrameLayout&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+AccessibilitySelector child00Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.TextView&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+AccessibilitySelector child01Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.ImageView&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+AccessibilitySelector child0Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.Button&quot;.equals(o);
+                }
+                return false;
+            }
+        })
+        // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child00Selector)
+        // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(1, child01Selector);
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+AccessibilitySelector selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.LinearLayout&quot;.equals(o);
+                }
+                return false;
+            }
+        })
+        // 通过 parent 方法设置父节点的选择器
+        .parent(parentSelector)
+        // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child0Selector);
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+AccessibilityNode node = selector.findOne(0, -1);
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text());
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text());
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text());
+}
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_750" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 节点(小红书视频界面右边的工具栏)父节点的选择器
+let parentSelector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    .className(function (it) {
+        return it === &quot;android.widget.FrameLayout&quot;
+    })
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+let child00Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    .className(function (it) {
+        return it === &quot;android.widget.TextView&quot;
+    })
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+let child01Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    .className(function (it) {
+        return it === &quot;android.widget.ImageView&quot;
+    })
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+let child0Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    .className(function (it) {
+        return it === &quot;android.widget.Button&quot;
+    })
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child00Selector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(1, child01Selector)
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+let selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className(function (it) {
+        return it === &quot;android.widget.LinearLayout&quot;
+    })
+    // 通过 parent 方法设置父节点的选择器
+    .parent(parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+let node = selector.findOne(0, -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_753" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 节点(小红书视频界面右边的工具栏)父节点的选择器
+local parentSelector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    :className(function(it) return it == &quot;android.widget.FrameLayout&quot; end)
+-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+local child00Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    :className(function(it) return it == &quot;android.widget.TextView&quot; end)
+-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+local child01Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    :className(function(it) return it == &quot;android.widget.ImageView&quot; end)
+-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+local child0Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    :className(function(it) return it == &quot;android.widget.Button&quot; end)
+    -- 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    :child(0, child00Selector)
+    -- 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    :child(1, child01Selector)
+-- 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+local selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    :className(function(it) return it == &quot;android.widget.LinearLayout&quot; end)
+    -- 通过 parent 方法设置父节点的选择器
+    :parent(parentSelector)
+    -- 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    :child(0, child0Selector)
+-- 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+local node = selector:findOne(0, -1)
+-- 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if node ~= nil then
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console:log(&quot;点赞&quot;, node:child(0):child(0):text())
+    -- 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console:log(&quot;评论&quot;, node:child(1):child(1):text())
+    -- 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console:log(&quot;收藏&quot;, node:child(2):child(1):text())
+end
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_756" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+$parentSelector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.FrameLayout&quot;;
+    });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+$child00Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.TextView&quot;;
+    });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+$child01Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.ImageView&quot;;
+    });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+$child0Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.Button&quot;;
+    })
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    -&gt;child(0, $child00Selector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    -&gt;child(1, $child01Selector);
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+$selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.LinearLayout&quot;;
+    })
+    // 通过 parent 方法设置父节点的选择器
+    -&gt;parent($parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    -&gt;child(0, $child0Selector);
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+$node = $selector-&gt;findOne(0, -1);
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if ($node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console-&gt;log(javaString(&quot;点赞&quot;), $node-&gt;child(0)-&gt;child(0)-&gt;text());
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console-&gt;log(javaString(&quot;评论&quot;), $node-&gt;child(1)-&gt;child(1)-&gt;text());
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console-&gt;log(javaString(&quot;收藏&quot;), $node-&gt;child(2)-&gt;child(1)-&gt;text());
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_759" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _accessibility
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 节点(小红书视频界面右边的工具栏)父节点的选择器
+parentSelector = (_accessibility.createSelector()
+                  # 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+                  .className(lambda it: it == &quot;android.widget.FrameLayout&quot;))
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+child00Selector = (_accessibility.createSelector()
+                   # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+                   .className(lambda it: it == &quot;android.widget.TextView&quot;))
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+child01Selector = (_accessibility.createSelector()
+                   # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+                   .className(lambda it: it == &quot;android.widget.ImageView&quot;))
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+child0Selector = (_accessibility.createSelector()
+                  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+                  .className(lambda it: it == &quot;android.widget.Button&quot;)
+                  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+                  .child(0, child00Selector)
+                  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+                  .child(1, child01Selector))
+# 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = (_accessibility.createSelector()
+            # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+            .className(lambda it: it == &quot;android.widget.LinearLayout&quot;)
+            # 通过 parent 方法设置父节点的选择器
+            .parent(parentSelector)
+            # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+            .child(0, child0Selector))
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node is not None):
+    # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    # 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    # 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_762" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 节点(小红书视频界面右边的工具栏)父节点的选择器
+parentSelector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+  className { |className| className == &quot;android.widget.FrameLayout&quot; }
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+child00Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+  className { |className| className == &quot;android.widget.TextView&quot; }
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+child01Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+  className { |className| className == &quot;android.widget.ImageView&quot; }
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+child0Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+  className { |className| className == &quot;android.widget.Button&quot; }.
+  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+  child(0, child00Selector).
+  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+  child(1, child01Selector)
+# 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+  className { |className| className == &quot;android.widget.LinearLayout&quot; }.
+  # 通过 parent 方法设置父节点的选择器
+  parent(parentSelector).
+  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+  child(0, child0Selector)
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(0, -1)
+# 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if node
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+  $console.log(&quot;点赞&quot;, node.child(0).child(0).text)
+  # 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+  $console.log(&quot;评论&quot;, node.child(1).child(1).text)
+  # 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+  $console.log(&quot;收藏&quot;, node.child(2).child(1).text)
+end</div></div></div></section><section class="chapter"><h2 id="-v645f6_7" data-toc="-v645f6_7">结合虚拟屏幕</h2><p id="-v645f6_811">在安卓系统中，虚拟屏幕支持无障碍服务的使用，但这一功能需在安卓 11 及以上版本中实现。其操作方式十分简便：只需先创建或获取虚拟屏幕，再将该虚拟屏幕的 ID 作为参数，传递给无障碍服务相关类的对应方法即可。</p><div class="tabs" id="-v645f6_816" data-group="languages" data-anchors="[-v645f6_819,-v645f6_822,-v645f6_825,-v645f6_828,-v645f6_831,-v645f6_834,-v645f6_837,-v645f6_840]"><div class="tabs__content" data-gtm="tab" id="-v645f6_819" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+val parentSelector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    .className { it == &quot;android.widget.FrameLayout&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+val child00Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    .className { it == &quot;android.widget.TextView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+val child01Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    .className { it == &quot;android.widget.ImageView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+val child0Selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    .className { it == &quot;android.widget.Button&quot; }
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child00Selector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(1, child01Selector)
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+val selector = _accessibility!!.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className { it == &quot;android.widget.LinearLayout&quot; }
+    // 通过 parent 方法设置父节点的选择器
+    .parent(parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+val node = selector.findOne(display.getId(), -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console.log(&quot;点赞&quot;, node.child(0)?.child(0)?.text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console.log(&quot;评论&quot;, node.child(1)?.child(1)?.text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console.log(&quot;收藏&quot;, node.child(2)?.child(1)?.text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_822" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+def parentSelector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+        .className { it == &quot;android.widget.FrameLayout&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+def child00Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+        .className { it == &quot;android.widget.TextView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+def child01Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+        .className { it == &quot;android.widget.ImageView&quot; }
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+def child0Selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+        .className { it == &quot;android.widget.Button&quot; }
+// 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child00Selector)
+// 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(1, child01Selector)
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+def selector = $accessibility.createSelector()
+// 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className { it == &quot;android.widget.LinearLayout&quot; }
+// 通过 parent 方法设置父节点的选择器
+        .parent(parentSelector)
+// 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+def node = selector.findOne(display.getId(), -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_825" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.accessibility.api.AccessibilityNode;
+import com.m8test.accessibility.api.AccessibilitySelector;
+import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+AccessibilitySelector parentSelector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.FrameLayout&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+AccessibilitySelector child00Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.TextView&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+AccessibilitySelector child01Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.ImageView&quot;.equals(o);
+                }
+                return false;
+            }
+        });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+AccessibilitySelector child0Selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.Button&quot;.equals(o);
+                }
+                return false;
+            }
+        })
+        // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child00Selector)
+        // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(1, child01Selector);
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+AccessibilitySelector selector = $accessibility.createSelector()
+        // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+        .className(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                if (o instanceof String) {
+                    return &quot;android.widget.LinearLayout&quot;.equals(o);
+                }
+                return false;
+            }
+        })
+        // 通过 parent 方法设置父节点的选择器
+        .parent(parentSelector)
+        // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+        .child(0, child0Selector);
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+AccessibilityNode node = selector.findOne(display.getId(), -1);
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text());
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text());
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text());
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_828" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+let parentSelector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    .className(function (it) {
+        return it === &quot;android.widget.FrameLayout&quot;
+    })
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+let child00Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    .className(function (it) {
+        return it === &quot;android.widget.TextView&quot;
+    })
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+let child01Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    .className(function (it) {
+        return it === &quot;android.widget.ImageView&quot;
+    })
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+let child0Selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    .className(function (it) {
+        return it === &quot;android.widget.Button&quot;
+    })
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child00Selector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(1, child01Selector)
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+let selector = $accessibility.createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    .className(function (it) {
+        return it === &quot;android.widget.LinearLayout&quot;
+    })
+    // 通过 parent 方法设置父节点的选择器
+    .parent(parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    .child(0, child0Selector)
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+let node = selector.findOne(display.getId(), -1)
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_831" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 节点(小红书视频界面右边的工具栏)父节点的选择器
+local parentSelector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    :className(function(it) return it == &quot;android.widget.FrameLayout&quot; end)
+-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+local child00Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    :className(function(it) return it == &quot;android.widget.TextView&quot; end)
+-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+local child01Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    :className(function(it) return it == &quot;android.widget.ImageView&quot; end)
+-- 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+local child0Selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    :className(function(it) return it == &quot;android.widget.Button&quot; end)
+    -- 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    :child(0, child00Selector)
+    -- 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    :child(1, child01Selector)
+-- 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+local selector = _accessibility:createSelector()
+    -- 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    :className(function(it) return it == &quot;android.widget.LinearLayout&quot; end)
+    -- 通过 parent 方法设置父节点的选择器
+    :parent(parentSelector)
+    -- 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    :child(0, child0Selector)
+-- 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+local node = selector:findOne(display:getId(), -1)
+-- 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if node ~= nil then
+    -- 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console:log(&quot;点赞&quot;, node:child(0):child(0):text())
+    -- 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console:log(&quot;评论&quot;, node:child(1):child(1):text())
+    -- 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console:log(&quot;收藏&quot;, node:child(2):child(1):text())
+end
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_834" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 节点(小红书视频界面右边的工具栏)父节点的选择器
+$parentSelector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.FrameLayout&quot;;
+    });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+$child00Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.TextView&quot;;
+    });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+$child01Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.ImageView&quot;;
+    });
+// 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+$child0Selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.Button&quot;;
+    })
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    -&gt;child(0, $child00Selector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    -&gt;child(1, $child01Selector);
+// 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+$selector = $accessibility-&gt;createSelector()
+    // 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+    -&gt;className(function ($it) {
+        return $it == &quot;android.widget.LinearLayout&quot;;
+    })
+    // 通过 parent 方法设置父节点的选择器
+    -&gt;parent($parentSelector)
+    // 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+    -&gt;child(0, $child0Selector);
+// 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+$node = $selector-&gt;findOne($display-&gt;getId(), -1);
+// 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if ($node != null) {
+    // 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    $console-&gt;log(javaString(&quot;点赞&quot;), $node-&gt;child(0)-&gt;child(0)-&gt;text());
+    // 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    $console-&gt;log(javaString(&quot;评论&quot;), $node-&gt;child(1)-&gt;child(1)-&gt;text());
+    // 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    $console-&gt;log(javaString(&quot;收藏&quot;), $node-&gt;child(2)-&gt;child(1)-&gt;text());
+}</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_837" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _accessibility
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 节点(小红书视频界面右边的工具栏)父节点的选择器
+parentSelector = (_accessibility.createSelector()
+                  # 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+                  .className(lambda it: it == &quot;android.widget.FrameLayout&quot;))
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+child00Selector = (_accessibility.createSelector()
+                   # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+                   .className(lambda it: it == &quot;android.widget.TextView&quot;))
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+child01Selector = (_accessibility.createSelector()
+                   # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+                   .className(lambda it: it == &quot;android.widget.ImageView&quot;))
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+child0Selector = (_accessibility.createSelector()
+                  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+                  .className(lambda it: it == &quot;android.widget.Button&quot;)
+                  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+                  .child(0, child00Selector)
+                  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+                  .child(1, child01Selector))
+# 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = (_accessibility.createSelector()
+            # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+            .className(lambda it: it == &quot;android.widget.LinearLayout&quot;)
+            # 通过 parent 方法设置父节点的选择器
+            .parent(parentSelector)
+            # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+            .child(0, child0Selector))
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(display.getId(), -1)
+# 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if (node is not None):
+    # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+    _console.log(&quot;点赞&quot;, node.child(0).child(0).text())
+    # 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+    _console.log(&quot;评论&quot;, node.child(1).child(1).text())
+    # 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+    _console.log(&quot;收藏&quot;, node.child(2).child(1).text())
+</div></div><div class="tabs__content" data-gtm="tab" id="-v645f6_840" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 节点(小红书视频界面右边的工具栏)父节点的选择器
+parentSelector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)父节点的类名是`android.widget.LinearLayout`
+  className { |className| className == &quot;android.widget.FrameLayout&quot; }
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的选择器
+child00Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的类名为 &quot;android.widget.TextView&quot;
+  className { |className| className == &quot;android.widget.TextView&quot; }
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的选择器
+child01Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为1的子节点的类名为 &quot;android.widget.ImageView&quot;
+  className { |className| className == &quot;android.widget.ImageView&quot; }
+# 节点(小红书视频界面右边的工具栏)索引为0的子节点的选择器
+child0Selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的类名为 `android.widget.Button`
+  className { |className| className == &quot;android.widget.Button&quot; }.
+  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+  child(0, child00Selector).
+  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+  child(1, child01Selector)
+# 定义一个选择器用于选择小红书视频界面右边工具栏，包含了`点赞`、`收藏`、`分享`等信息
+selector = $accessibility.createSelector.
+  # 节点(小红书视频界面右边的工具栏)的类名是`android.widget.LinearLayout`
+  className { |className| className == &quot;android.widget.LinearLayout&quot; }.
+  # 通过 parent 方法设置父节点的选择器
+  parent(parentSelector).
+  # 通过 child 方法设置子节点的选择器, 第一个参数为索引，第二个参数为选择器
+  child(0, child0Selector)
+# 通过选择的 findOne 方法查找节点，如果没有找到则返回 null, 第一个参数为虚拟屏幕 id, android 11(api 30) 以下的手机会忽略该参数, 0 表示主屏幕(物理屏幕镜像)，第二个参数为超时时间，单位为毫秒, 如果为负数, 查找一次直接返回, 无论有没有节点满足条件, 如果为0, 则表示一直查找知道找到满足条件的节点, 如果为大于0的数值, 那么就会在该时间内返回, 无论有没有节点满足条件。
+node = selector.findOne(display.getId(), -1)
+# 获取点赞，评论以及收藏数量, 可以直接通过层次结构获取节点
+if node
+  # 节点(小红书视频界面右边的工具栏)索引为0的子节点的索引为0的子节点的为点赞数量
+  $console.log(&quot;点赞&quot;, node.child(0).child(0).text)
+  # 节点(小红书视频界面右边的工具栏)索引为1的子节点的索引为1的子节点的为评论数量
+  $console.log(&quot;评论&quot;, node.child(1).child(1).text)
+  # 节点(小红书视频界面右边的工具栏)索引为2的子节点的索引为1的子节点的为收藏数量
+  $console.log(&quot;收藏&quot;, node.child(2).child(1).text)
+end</div></div></div><aside class="prompt" data-type="tip" data-title="" id="-v645f6_813"><p id="-v645f6_889">上面代码新增了获取或创建虚拟屏幕的相关代码，并在 findOne 方法中引入了该虚拟屏幕的 ID 作为参数，其他内容保持不变, 通过简单的修改即可适配虚拟屏幕。</p></aside></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="accessibility-selector.html" class="navigation-links__prev">选择器</a><a href="virtual-display.html" class="navigation-links__next">虚拟屏幕</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

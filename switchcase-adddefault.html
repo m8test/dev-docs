@@ -1,0 +1,125 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:36:50.768124906"><title>addDefault | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="addDefault | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/switchcase-adddefault.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="addDefault | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/switchcase-adddefault.html#webpage",
+    "url": "writerside-documentation/switchcase-adddefault.html",
+    "name": "addDefault | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="SwitchCase.addDefault" data-main-title="addDefault" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///SwitchCase.md|SwitchCase"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="SwitchCase.addDefault" id="SwitchCase.addDefault.md">addDefault</h1><aside class="prompt" data-type="tip" data-title="" id="an53nt_7"><p id="an53nt_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.control/-switch-case/add-default.html" id="an53nt_12" data-external="true" rel="noopener noreferrer" target="_blank">SwitchCase.addDefault()</a></p></aside><div class="tabs" id="an53nt_10" data-group="languages" data-anchors="[an53nt_15,an53nt_18,an53nt_21,an53nt_24,an53nt_27,an53nt_30,an53nt_33]"><div class="tabs__content" data-gtm="tab" id="an53nt_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val level = _branches.switchCase(85) {
+    add({ it!! &gt;= 90 &amp;&amp; it!! &lt; 100 }) { &quot;优秀&quot; }
+    add({ it!! &gt;= 80 &amp;&amp; it!! &lt; 90 }) { &quot;好&quot; }
+    add({ it!! &gt;= 70 &amp;&amp; it!! &lt; 80 }) { &quot;良&quot; }
+    add({ it!! &gt;= 60 &amp;&amp; it!! &lt; 70 }) { &quot;及格&quot; }
+    addDefault { &quot;不及格&quot; }
+}
+_console.log(level)</div><aside class="prompt" data-type="tip" data-title="" id="an53nt_39"><p id="an53nt_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/SwitchCase/addDefault.kts" id="an53nt_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/SwitchCase/addDefault.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="an53nt_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def level = $branches.switchCase(85) {
+    add({ it &gt;= 90 &amp;&amp; it &lt; 100 }) { &quot;优秀&quot; }
+    add({ it &gt;= 80 &amp;&amp; it &lt; 90 }) { &quot;好&quot; }
+    add({ it &gt;= 70 &amp;&amp; it &lt; 80 }) { &quot;良&quot; }
+    add({ it &gt;= 60 &amp;&amp; it &lt; 70 }) { &quot;及格&quot; }
+    addDefault { &quot;不及格&quot; }
+}
+$console.log(level)</div><aside class="prompt" data-type="tip" data-title="" id="an53nt_47"><p id="an53nt_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/SwitchCase/addDefault.groovy" id="an53nt_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/SwitchCase/addDefault.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="an53nt_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let level = $branches.switchCase(85, (switchCase) =&gt; {
+    switchCase.add((it) =&gt; {
+        return it &gt;= 90 &amp;&amp; it &lt; 100
+    }, () =&gt; {
+        return &quot;优秀&quot;
+    })
+    switchCase.add((it) =&gt; {
+        return it &gt;= 80 &amp;&amp; it &lt; 90
+    }, () =&gt; {
+        return &quot;好&quot;
+    })
+    switchCase.add((it) =&gt; {
+        return it &gt;= 70 &amp;&amp; it &lt; 80
+    }, () =&gt; {
+        return &quot;良&quot;
+    })
+    switchCase.add((it) =&gt; {
+        return it &gt;= 60 &amp;&amp; it &lt; 70
+    }, () =&gt; {
+        return &quot;及格&quot;
+    })
+    switchCase.addDefault(() =&gt; {
+        return &quot;不及格&quot;
+    })
+})
+$console.log(level)</div><aside class="prompt" data-type="tip" data-title="" id="an53nt_55"><p id="an53nt_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/SwitchCase/addDefault.js" id="an53nt_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/SwitchCase/addDefault.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="an53nt_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local level = _branches:switchCase(85, function(ifElse)
+    ifElse:add(function(it)
+        return it &gt;= 90 and it &lt; 100
+    end, function()
+        return &quot;优秀&quot;
+    end)
+    ifElse:add(function(it)
+        return it &gt;= 80 and it &lt; 90
+    end, function()
+        return &quot;好&quot;
+    end)
+    ifElse:add(function(it)
+        return it &gt;= 70 and it &lt; 80
+    end, function()
+        return &quot;良&quot;
+    end)
+    ifElse:add(function(it)
+        return it &gt;= 60 and it &lt; 70
+    end, function()
+        return &quot;及格&quot;
+    end)
+    ifElse:addDefault { &quot;不及格&quot; }
+end)
+_console:log(level)
+</div><aside class="prompt" data-type="tip" data-title="" id="an53nt_63"><p id="an53nt_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/SwitchCase/addDefault.lua" id="an53nt_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/SwitchCase/addDefault.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="an53nt_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$level = $branches-&gt;switchCase(85, function ($switchCase) {
+    $switchCase-&gt;add(function ($it) {
+        return $it &gt;= 90 and $it &lt; 100;
+    }, function () {
+        return &quot;优秀&quot;;
+    });
+    $switchCase-&gt;add(function ($it) {
+        return $it &gt;= 80 and $it &lt; 90;
+    }, function () {
+        return &quot;好&quot;;
+    });
+    $switchCase-&gt;add(function ($it) {
+        return $it &gt;= 70 and $it &lt; 80;
+    }, function () {
+        return &quot;良&quot;;
+    });
+    $switchCase-&gt;add(function ($it) {
+        return $it &gt;= 60 and $it &lt; 70;
+    }, function () {
+        return &quot;及格&quot;;
+    });
+    $switchCase-&gt;addDefault(function () {
+        return &quot;不及格&quot;;
+    });
+});
+$console-&gt;log($level);
+</div><aside class="prompt" data-type="tip" data-title="" id="an53nt_71"><p id="an53nt_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/SwitchCase/addDefault.php" id="an53nt_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/SwitchCase/addDefault.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="an53nt_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">def fn(ifElse):
+    ifElse.add(lambda it: 90 &lt;= it &lt; 100, lambda it: &quot;优秀&quot;)
+    ifElse.add(lambda it: 80 &lt;= it &lt; 90, lambda it: &quot;好&quot;)
+    ifElse.add(lambda it: 70 &lt;= it &lt; 80, lambda it: &quot;良&quot;)
+    ifElse.add(lambda it: 60 &lt;= it &lt; 70, lambda it: &quot;及格&quot;)
+    ifElse.addDefault(lambda it: &quot;不及格&quot;)
+
+
+level = _branches.switchCase(85, fn)
+_console.log(level)
+</div><aside class="prompt" data-type="tip" data-title="" id="an53nt_79"><p id="an53nt_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/SwitchCase/addDefault.py" id="an53nt_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/SwitchCase/addDefault.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="an53nt_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+level = $branches.switchCase(85) { |ifElse|
+  ifElse.add(lambda { |it| it &gt;= 90 &amp;&amp; it &lt; 100 }) { &quot;优秀&quot; }
+  ifElse.add(lambda { |it| it &gt;= 80 &amp;&amp; it &lt; 90 }) { &quot;好&quot; }
+  ifElse.add(lambda { |it| it &gt;= 70 &amp;&amp; it &lt; 80 }) { &quot;良&quot; }
+  ifElse.add(lambda { |it| it &gt;= 60 &amp;&amp; it &lt; 70 }) { &quot;及格&quot; }
+  ifElse.addDefault { |it| &quot;不及格&quot; }
+}
+$console.log(level)</div><aside class="prompt" data-type="tip" data-title="" id="an53nt_87"><p id="an53nt_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/SwitchCase/addDefault.rb" id="an53nt_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/SwitchCase/addDefault.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="switchcase-add.html" class="navigation-links__prev">add</a><a href="threads.html" class="navigation-links__next">Threads</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

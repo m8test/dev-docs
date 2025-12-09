@@ -1,0 +1,373 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:13.701158619"><title>颜色函数 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-9gpz32_4","level":0,"title":"获取十六进制颜色值","anchor":"#-9gpz32_4"},{"id":"-9gpz32_5","level":0,"title":"获取颜色相似度","anchor":"#-9gpz32_5"},{"id":"-9gpz32_6","level":0,"title":"判断颜色是否相似","anchor":"#-9gpz32_6"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="颜色函数 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/color-functions.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="颜色函数 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/color-functions.html#webpage",
+    "url": "writerside-documentation/color-functions.html",
+    "name": "颜色函数 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="color-functions" data-main-title="颜色函数" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="image-and-color.md|图色"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="color-functions" id="color-functions.md">颜色函数</h1><aside class="prompt" data-type="tip" data-title="" id="-9gpz32_3"><p id="-9gpz32_7">更多颜色相关方法请查看 <a href="https://yumimiyamoto.github.io/opencv-release/image/com.m8test.image.api/-colors/index.html" id="-9gpz32_8" data-external="true" rel="noopener noreferrer" target="_blank">Colors</a>。</p></aside><section class="chapter"><h2 id="-9gpz32_4" data-toc="-9gpz32_4">获取十六进制颜色值</h2><section class="chapter"><h3 id="-9gpz32_9" data-toc="-9gpz32_9">在图片中获取</h3><div class="tabs" id="-9gpz32_14" data-group="languages" data-anchors="[-9gpz32_17,-9gpz32_20,-9gpz32_23,-9gpz32_26,-9gpz32_29,-9gpz32_32,-9gpz32_35,-9gpz32_38]"><div class="tabs__content" data-gtm="tab" id="-9gpz32_17" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._colors
+import com.m8test.script.GlobalVariables._console
+
+// 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console.log(&quot;super_mario.jpg&quot;, _colors!!.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125))
+// 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console.log(&quot;super_mario.jpg&quot;, _colors!!.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150))
+// 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console.log(&quot;super_mario.jpg&quot;, _colors!!.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_20" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125))
+// 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150))
+// 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_23" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import static com.m8test.script.GlobalVariables.$colors;
+import static com.m8test.script.GlobalVariables.$console;
+
+// 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125));
+// 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150));
+// 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100));</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_26" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125))
+// 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150))
+// 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_29" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console:log(&quot;super_mario.jpg&quot;, _colors:getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125))
+-- 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console:log(&quot;super_mario.jpg&quot;, _colors:getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150))
+-- 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console:log(&quot;super_mario.jpg&quot;, _colors:getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_32" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\image\api\Colors $colors */
+global $colors;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console-&gt;log(&quot;super_mario.jpg&quot;, $colors-&gt;getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125));
+// 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console-&gt;log(&quot;super_mario.jpg&quot;, $colors-&gt;getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150));
+// 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console-&gt;log(&quot;super_mario.jpg&quot;, $colors-&gt;getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100));</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_35" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _colors
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console.log(&quot;super_mario.jpg&quot;, _colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125))
+# 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console.log(&quot;super_mario.jpg&quot;, _colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150))
+# 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+_console.log(&quot;super_mario.jpg&quot;, _colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_38" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 获取 (250, 125) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 250, 125))
+# 获取 (350, 150) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 350, 150))
+# 获取 (300, 100) 的颜色16进制值, 第一个参数为图片路径，第二个参数为 x 坐标，第三个参数为 y 坐标
+$console.log(&quot;super_mario.jpg&quot;, $colors.getColorHex(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, 300, 100))</div></div></div></section><section class="chapter"><h3 id="-9gpz32_10" data-toc="-9gpz32_10">在虚拟屏幕中获取</h3><div class="tabs" id="-9gpz32_90" data-group="languages" data-anchors="[-9gpz32_102,-9gpz32_105,-9gpz32_108,-9gpz32_111,-9gpz32_114,-9gpz32_93,-9gpz32_96,-9gpz32_99]"><div class="tabs__content" data-gtm="tab" id="-9gpz32_93" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console.log(display.getId(), _colors!!.getColorHexInDisplay(display.getId(), 250, 125))
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console.log(display.getId(), _colors!!.getColorHexInDisplay(display.getId(), 350, 150))
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console.log(display.getId(), _colors!!.getColorHexInDisplay(display.getId(), 300, 100))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_96" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 250, 125))
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 350, 150))
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 300, 100))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_99" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 250, 125));
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 350, 150));
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 300, 100));</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_102" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 250, 125))
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 350, 150))
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 300, 100))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_105" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console:log(display:getId(), _colors:getColorHexInDisplay(display:getId(), 250, 125))
+-- 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console:log(display:getId(), _colors:getColorHexInDisplay(display:getId(), 350, 150))
+-- 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console:log(display:getId(), _colors:getColorHexInDisplay(display:getId(), 300, 100))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_108" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\image\api\Colors $colors */
+global $colors;
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console-&gt;log($display-&gt;getId(), $colors-&gt;getColorHexInDisplay($display-&gt;getId(), 250, 125));
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console-&gt;log($display-&gt;getId(), $colors-&gt;getColorHexInDisplay($display-&gt;getId(), 350, 150));
+// 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console-&gt;log($display-&gt;getId(), $colors-&gt;getColorHexInDisplay($display-&gt;getId(), 300, 100));
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_111" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _colors
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console.log(display.getId(), _colors.getColorHexInDisplay(display.getId(), 250, 125))
+# 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console.log(display.getId(), _colors.getColorHexInDisplay(display.getId(), 350, 150))
+# 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+_console.log(display.getId(), _colors.getColorHexInDisplay(display.getId(), 300, 100))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_114" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 250, 125))
+# 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 350, 150))
+# 在虚拟屏幕中获取某个点的16进制颜色值，第一个参数为虚拟屏幕ID，第二个参数为X坐标，第三个参数为Y坐标
+$console.log(display.getId(), $colors.getColorHexInDisplay(display.getId(), 300, 100))
+</div></div></div></section></section><section class="chapter"><h2 id="-9gpz32_5" data-toc="-9gpz32_5">获取颜色相似度</h2><div class="tabs" id="-9gpz32_166" data-group="languages" data-anchors="[-9gpz32_169,-9gpz32_172,-9gpz32_175,-9gpz32_178,-9gpz32_181,-9gpz32_184,-9gpz32_187,-9gpz32_190]"><div class="tabs__content" data-gtm="tab" id="-9gpz32_169" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._colors
+import com.m8test.script.GlobalVariables._console
+
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors!!.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, true))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors!!.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, false))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors!!.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, true))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors!!.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, false))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_172" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, true))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, false))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, true))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, false))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_175" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import static com.m8test.script.GlobalVariables.$colors;
+import static com.m8test.script.GlobalVariables.$console;
+
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, true));
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, false));
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, true));
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, false));</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_178" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, true))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, false))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, true))
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, false))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_181" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console:log(_colors:getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, nil, true))
+-- 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console:log(_colors:getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, nil, false))
+-- 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console:log(_colors:getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, nil, true))
+-- 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console:log(_colors:getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, nil, false))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_184" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\image\api\Colors $colors */
+global $colors;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console-&gt;log($colors-&gt;getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, true));
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console-&gt;log($colors-&gt;getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, null, false));
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console-&gt;log($colors-&gt;getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, true));
+// 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console-&gt;log($colors-&gt;getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, null, false));</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_187" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _colors
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, None, True))
+# 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, None, False))
+# 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, None, True))
+# 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+_console.log(_colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, None, False))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_190" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, nil, true))
+# 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#00ffee&quot;, nil, false))
+# 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, nil, true))
+# 获取两个颜色值的相似度, 第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为比较算法，null为默认算法，第四个参数表示是否忽略透明度通道
+$console.log($colors.getSimilarity(&quot;#ff99ee&quot;, &quot;#ff99ee&quot;, nil, false))</div></div></div></section><section class="chapter"><h2 id="-9gpz32_6" data-toc="-9gpz32_6">判断颜色是否相似</h2><div class="tabs" id="-9gpz32_242" data-group="languages" data-anchors="[-9gpz32_245,-9gpz32_248,-9gpz32_251,-9gpz32_254,-9gpz32_257,-9gpz32_260,-9gpz32_263,-9gpz32_266]"><div class="tabs__content" data-gtm="tab" id="-9gpz32_245" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._colors
+import com.m8test.script.GlobalVariables._console
+
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+_console.log(&quot;红色和绿色是否相似&quot;, _colors!!.isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, null, null, null))
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+_console.log(&quot;红色和红色是否相似&quot;, _colors!!.isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, null, null, null))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_248" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和绿色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, null, null, null))
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和红色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, null, null, null))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_251" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import static com.m8test.script.GlobalVariables.$colors;
+import static com.m8test.script.GlobalVariables.$console;
+
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和绿色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, null, null, null));
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和红色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, null, null, null));</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_254" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和绿色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, null, null, null))
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和红色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, null, null, null))</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_257" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+_console:log(&quot;红色和绿色是否相似&quot;, _colors:isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, 90, nil, false))
+-- 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+_console:log(&quot;红色和红色是否相似&quot;, _colors:isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, 90, nil, false))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_260" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\image\api\Colors $colors */
+global $colors;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console-&gt;log(javaString(&quot;红色和绿色是否相似&quot;), $colors-&gt;isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, null, null, null));
+// 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console-&gt;log(javaString(&quot;红色和红色是否相似&quot;), $colors-&gt;isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, null, null, null));</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_263" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _colors
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+_console.log(&quot;红色和绿色是否相似&quot;, _colors.isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, None, None, None))
+# 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+_console.log(&quot;红色和红色是否相似&quot;, _colors.isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, None, None, None))
+</div></div><div class="tabs__content" data-gtm="tab" id="-9gpz32_266" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和绿色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#00ff00&quot;, 90, nil, false))
+# 判断两个颜色是否达到指定相似度。第一个参数为待比较的第一个颜色，第二个参数为待比较的第二个颜色，第三个参数为相似度百分比，第四个参数为比较算法，第五个参数表示是否忽略透明度通道
+$console.log(&quot;红色和红色是否相似&quot;, $colors.isSimilar(&quot;#ff0000&quot;, &quot;#ff0000&quot;, 90, nil, false))</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="image-functions.html" class="navigation-links__prev">图像函数</a><a href="ocr.html" class="navigation-links__next">光学字符识别</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

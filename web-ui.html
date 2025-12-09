@@ -1,0 +1,269 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:15.084977619"><title>网页界面 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="网页界面 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/web-ui.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="网页界面 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/web-ui.html#webpage",
+    "url": "writerside-documentation/web-ui.html",
+    "name": "网页界面 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="web-ui" data-main-title="网页界面" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="script-ui.md|脚本界面"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="web-ui" id="web-ui.md">网页界面</h1><p id="-gqqw6u_3">M8Test 支持使用静态网站作为脚本界面，你也可以采用 Vue、Angular 或 React 等框架进行开发。只需将框架生成的静态网站文件放置在 <code class="code" id="-gqqw6u_23">webview</code> 目录下，且静态网站的首页必须命名为 <code class="code" id="-gqqw6u_24">index.html</code> 。当然，我们更推荐使用 AI 直接生成静态网站，AI 完全有能力高效创建美观的界面。</p><figure id="-gqqw6u_4"><img alt="427" src="/427.png" title="427" width="316" height="332"></figure><p id="-gqqw6u_5">下面演示一个使用最简单的静态网站作为脚本界面的开发过程，只需两个文件：index.html 和 index.js。虽然也可以将 index.js 的内容直接嵌入到 index.html 中，但推荐将 JS 和 HTML 分开编写。</p><p id="-gqqw6u_6">首先是 <code class="code" id="-gqqw6u_25">index.html</code> 文件，其功能非常简单，仅包含一个按钮并引用 <code class="code" id="-gqqw6u_26">index.js</code> 文件，内容如下：</p><div class="code-block" data-lang="markup">
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</div><p id="-gqqw6u_8">接着是 <code class="code" id="-gqqw6u_27">index.js</code> 文件，内容如下：</p><div class="code-block" data-lang="javascript">
+(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于注册供脚本端调用的处理器
+        // 第一个参数是处理器名称，第二个参数是处理器被调用时执行的函数
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 是脚本端调用时传递的参数
+            // responseCallback 用于向脚本端返回处理结果
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                // 在此处执行初始化操作
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器
+    // 参数一：处理器名称；参数二：传递给处理器的参数；参数三：接收脚本端返回值的回调函数
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})
+</div><p id="-gqqw6u_10"><code class="code" id="-gqqw6u_28">index.js</code> 文件的功能也很简单。首先是下面这部分代码，可视为固定格式，主要用于网页端与脚本端的交互。你只需在 init 方法中定义供脚本端调用的处理器，或读取脚本端的配置信息。这些操作必须在 init 方法中调用，因为只有在该方法中 $webViewBridge 对象才会被初始化&mdash;&mdash;这个对象是网页端与脚本端交互的关键。如果过早使用，该对象可能尚未创建完成，导致无法正常工作。</p><div class="code-block" data-lang="javascript">
+(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于注册供脚本端调用的处理器
+        // 第一个参数是处理器名称，第二个参数是处理器被调用时执行的函数
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 是脚本端调用时传递的参数
+            // responseCallback 用于向脚本端返回处理结果
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    // 你可以在此处添加更多处理器，或从脚本端读取配置信息
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                // 在此处执行初始化操作
+                init();
+            },
+            false
+        );
+    }
+})()
+</div><p id="-gqqw6u_12">剩下的这部分代码非常简单，仅为按钮添加点击事件。点击按钮时，会调用脚本端注册的处理器，并将脚本端返回的内容通过弹窗显示出来。</p><div class="code-block" data-lang="javascript">
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+// $webViewBridge.callHandler() 用于调用脚本端注册的处理器
+// 参数一：处理器名称；参数二：传递给处理器的参数；参数三：接收脚本端返回值的回调函数
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})
+</div><p id="-gqqw6u_14">需要注意网页端与脚本端交互的 API 函数：</p><ul class="list _bullet" id="-gqqw6u_15"><li class="list__item" id="-gqqw6u_29"><p id="-gqqw6u_31">$webViewBridge.registerHandler：在网页端注册处理器，注册后脚本端可调用该处理器</p></li><li class="list__item" id="-gqqw6u_30"><p id="-gqqw6u_32">$webViewBridge.callHandler：用于调用脚本端注册的处理器</p></li></ul><p id="-gqqw6u_16">脚本端的代码也很简单，只需注册一个供网页端调用的处理器。在该处理器中，会调用网页端已注册的一个处理器，并对网页端传递的字符串参数进行内容扩展，然后将结果返回给网页端。</p><div class="tabs" id="-gqqw6u_22" data-group="languages" data-anchors="[-gqqw6u_35,-gqqw6u_38,-gqqw6u_41,-gqqw6u_44,-gqqw6u_47,-gqqw6u_50,-gqqw6u_53,-gqqw6u_56]"><div class="tabs__content" data-gtm="tab" id="-gqqw6u_35" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+val bridge = _webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    val handledParams = it + &quot; return from script&quot;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams) { i -&gt;
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        _console.log(i)
+    }
+    handledParams
+}
+// Activity.start() 用于启动Android系统的Activity
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-gqqw6u_38" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+def bridge = $webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    def handledParams = &quot;$it return from script&quot;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams) {
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        $console.log(it)
+    }
+    handledParams.toString()
+}
+// Activity.start() 用于启动Android系统的Activity
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-gqqw6u_41" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.ui.webview.WebViewBridge;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.*;
+
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+final WebViewBridge bridge = $webView.getBridge();
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;, new Function1() {
+    @Override
+    public Object invoke(Object s) {
+        String it = s.toString();
+        // it 表示从 WebView 端传来的参数,如果没有则为 null
+        String handledParams = it + &quot; return from script&quot;;
+        // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+        bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams, new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                String s = o.toString();
+                // s 为 WebView 端js函数返回值
+                $console.log(s);
+                return null;
+            }
+        });
+        return handledParams;
+    }
+});
+// Activity.start() 用于启动Android系统的Activity
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="-gqqw6u_44" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+let bridge = $webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;, (it) =&gt; {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    let handledParams = it + &quot; return from script&quot;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams, (it) =&gt; {
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        $console.log(it)
+    })
+    return handledParams
+})
+// Activity.start() 用于启动Android系统的Activity
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-gqqw6u_47" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+local bridge = _webView:getBridge()
+-- WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge:registerHandler(&quot;handlerForWebView&quot;, function(it)
+    -- it -&gt; String
+    -- it 表示从 WebView 端传来的参数,如果没有则为 nil
+    local handledParams = it .. &quot;return from script&quot;
+    -- WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge:callHandler(&quot;functionForScriptToCall&quot;, handledParams, function(i)
+        -- it -&gt; String
+        -- it 为 WebView 端js函数返回值
+        _console:log(i)
+    end)
+    return handledParams
+end)
+-- Activity.start() 用于启动Android系统的Activity
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="-gqqw6u_50" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+$bridge = $webView-&gt;getBridge();
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+$bridge-&gt;registerHandler(&quot;handlerForWebView&quot;, function ($it) use ($console, $bridge) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 nil
+    $handledParams = $it . &quot;return from script&quot;;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    $bridge-&gt;callHandler(&quot;functionForScriptToCall&quot;, $handledParams, function ($i) use ($console) {
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        $console-&gt;log($i);
+    });
+    return $handledParams;
+});
+// Activity.start() 用于启动Android系统的Activity
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="-gqqw6u_53" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># from 引入时必须使用相对于src目录的路径
+# 必须使用 `from m8test_java.com.m8test.script.GlobalVariables import xxx` xxx是全局变量名
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _webView
+
+# WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+bridge = _webView.getBridge()
+
+
+def fn1(it):
+    # it -&gt; String
+    # it 表示从 WebView 端传来的参数,如果没有则为 null
+    handledParams = it + &quot; return from script&quot;
+
+    def fn2(i):
+        # it -&gt; String
+        # it 为 WebView 端js函数返回值
+        _console.log(i)
+
+    # WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams, fn2)
+    return handledParams
+
+
+# WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;, fn1)
+# Activity.start() 用于启动Android系统的Activity
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-gqqw6u_56" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+bridge = $webView.getBridge()
+# WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) { |it|
+  # it -&gt; String
+  # it 表示从 WebView 端传来的参数,如果没有则为 null
+  handledParams = it + &quot;return from script&quot;
+  # WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+  bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams) { |i|
+    # it -&gt; String
+    # it 为 WebView 端js函数返回值
+    $console.log(i)
+  }
+  handledParams
+}
+# Activity.start() 用于启动Android系统的Activity
+$activity.start()</div></div></div><p id="-gqqw6u_18">需要注意脚本端与网页端交互的 API 函数：</p><ul class="list _bullet" id="-gqqw6u_19"><li class="list__item" id="-gqqw6u_105"><p id="-gqqw6u_107"><a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.ui.webview/-web-view-bridge/register-handler.html" id="-gqqw6u_108" data-external="true" rel="noopener noreferrer" target="_blank">bridge.registerHandler</a> ：用于在脚本端注册处理器，注册后网页端可调用该处理器</p></li><li class="list__item" id="-gqqw6u_106"><p id="-gqqw6u_109"><a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.ui.webview/-web-view-bridge/call-handler.html" id="-gqqw6u_110" data-external="true" rel="noopener noreferrer" target="_blank">bridge.callHandler</a> ：用于调用网页端已注册的处理器</p></li></ul><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="android-view-ui.html" class="navigation-links__prev">视图界面(View)</a><a href="declarative-ui.html" class="navigation-links__next">声明式UI</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

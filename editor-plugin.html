@@ -1,0 +1,345 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:28.736464395"><title>编辑器插件 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="编辑器插件 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/editor-plugin.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="编辑器插件 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/editor-plugin.html#webpage",
+    "url": "writerside-documentation/editor-plugin.html",
+    "name": "编辑器插件 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="editor-plugin" data-main-title="编辑器插件" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="plugins.md|插件"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="editor-plugin" id="editor-plugin.md">编辑器插件</h1><figure id="-matmyo_3"><img alt="18" src="/18.png" title="18" width="590" height="768"></figure><p id="-matmyo_4">开发编辑器插件的步骤如下：</p><ol class="list _decimal" id="-matmyo_14" type="1"><li class="list__item" id="-matmyo_37"><p>在 <code class="code" id="-matmyo_38">build.gradle.kts</code> 文件中添加 <code class="code" id="-matmyo_39">m8test sdk</code> 依赖。为减小插件 APK 的体积，如果依赖项已包含在 <a href="https://raw.githubusercontent.com/m8test/maven/refs/heads/0.1.5/com/m8test/version-catalog/0.1.5/version-catalog-0.1.5.toml" id="-matmyo_40" data-external="true" rel="noopener noreferrer" target="_blank">M8Test Version Catalog</a> 中，建议使用 <code class="code" id="-matmyo_41">compileOnly</code> 方式引入依赖。</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">import com.m8test.util.VersionUtils
+
+plugins {
+    alias(m8test.plugins.android.application)
+    alias(m8test.plugins.kotlin.android)
+    alias(m8test.plugins.kotlin.compose)
+}
+
+android {
+    namespace = &quot;com.m8test.editor.language&quot;
+    compileSdk = m8test.versions.compileSdk.get().toInt()
+
+    defaultConfig {
+        minSdk = m8test.versions.minSdk.get().toInt()
+        targetSdk = m8test.versions.targetSdk.get().toInt()
+        versionName = libs.versions.versionName.get()
+        versionCode = VersionUtils.getCode(versionName!!)
+
+        testInstrumentationRunner = &quot;androidx.test.runner.AndroidJUnitRunner&quot;
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile(&quot;proguard-android-optimize.txt&quot;),
+                &quot;proguard-rules.pro&quot;
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.toVersion(m8test.versions.sourceCompatibility.get())
+        targetCompatibility = JavaVersion.toVersion(m8test.versions.targetCompatibility.get())
+    }
+    kotlinOptions {
+        jvmTarget = m8test.versions.jvmTarget.get()
+    }
+    buildFeatures {
+        compose = true
+    }
+}
+
+dependencies {
+    compileOnly(platform(m8test.androidx.compose.bom))
+    compileOnly(m8test.bundles.compose)
+    compileOnly(m8test.m8test.sdk)
+    compileOnly(m8test.gson)
+    implementation(libs.m8test.compose.widget)
+    implementation(libs.bundles.editor.kit)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-matmyo_20"><p id="-matmyo_42"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/editor/language/build.gradle.kts" id="-matmyo_43" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/editor/language/build.gradle.kts</a></p></aside><ol class="list _decimal" id="-matmyo_9" type="1" start="2"><li class="list__item" id="-matmyo_44"><p id="-matmyo_45">编写插件类，继承 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.editor.plugin/-abstract-composable-editor-plugin/index.html" id="-matmyo_46" data-external="true" rel="noopener noreferrer" target="_blank">AbstractComposableEditorPlugin</a> 并重写 <code class="code" id="-matmyo_47">Content</code> 方法</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.editor.language
+
+import android.content.res.Resources
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.dp
+import com.blacksquircle.ui.language.css.CssLanguage
+import com.blacksquircle.ui.language.groovy.GroovyLanguage
+import com.blacksquircle.ui.language.html.HtmlLanguage
+import com.blacksquircle.ui.language.ini.IniLanguage
+import com.blacksquircle.ui.language.java.JavaLanguage
+import com.blacksquircle.ui.language.javascript.JavaScriptLanguage
+import com.blacksquircle.ui.language.json.JsonLanguage
+import com.blacksquircle.ui.language.kotlin.KotlinLanguage
+import com.blacksquircle.ui.language.lua.LuaLanguage
+import com.blacksquircle.ui.language.markdown.MarkdownLanguage
+import com.blacksquircle.ui.language.php.PhpLanguage
+import com.blacksquircle.ui.language.python.PythonLanguage
+import com.blacksquircle.ui.language.ruby.RubyLanguage
+import com.blacksquircle.ui.language.toml.TomlLanguage
+import com.blacksquircle.ui.language.typescript.TypeScriptLanguage
+import com.blacksquircle.ui.language.xml.XmlLanguage
+import com.blacksquircle.ui.language.yaml.YamlLanguage
+import com.google.accompanist.imageloading.rememberDrawablePainter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.m8test.compose.widget.AutoResizeSurfaceDialog
+import com.m8test.compose.widget.BackTopBarScaffold
+import com.m8test.editor.plugin.AbstractComposableEditorPlugin
+import com.m8test.editor.ui.Editor
+import com.m8test.plugin.api.ApkPluginProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+/**
+ * Description TODO
+ *
+ * @date 2024/12/18 15:43:44
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class LanguageEditorPlugin(apkPluginProvider: ApkPluginProvider) :
+    AbstractComposableEditorPlugin(apkPluginProvider = apkPluginProvider) {
+    private val gson = Gson()
+    private val defaultLanguages = listOf(
+        LanguageWrapper(language = &quot;groovy&quot;, extensions = mutableSetOf(&quot;groovy&quot;)),
+        LanguageWrapper(language = &quot;java&quot;, extensions = mutableSetOf(&quot;java&quot;, &quot;javas&quot;)),
+        LanguageWrapper(language = &quot;javascript&quot;, extensions = mutableSetOf(&quot;js&quot;)),
+        LanguageWrapper(language = &quot;kotlin&quot;, extensions = mutableSetOf(&quot;kt&quot;, &quot;kts&quot;)),
+        LanguageWrapper(language = &quot;lua&quot;, extensions = mutableSetOf(&quot;lua&quot;)),
+        LanguageWrapper(language = &quot;php&quot;, extensions = mutableSetOf(&quot;php&quot;)),
+        LanguageWrapper(language = &quot;python&quot;, extensions = mutableSetOf(&quot;py&quot;)),
+        LanguageWrapper(language = &quot;ruby&quot;, extensions = mutableSetOf(&quot;rb&quot;)),
+        LanguageWrapper(language = &quot;yaml&quot;, extensions = mutableSetOf(&quot;yaml&quot;, &quot;yml&quot;)),
+        LanguageWrapper(language = &quot;json&quot;, extensions = mutableSetOf(&quot;json&quot;)),
+        LanguageWrapper(language = &quot;xml&quot;, extensions = mutableSetOf(&quot;xml&quot;)),
+        LanguageWrapper(language = &quot;typescript&quot;, extensions = mutableSetOf(&quot;ts&quot;)),
+        LanguageWrapper(language = &quot;markdown&quot;, extensions = mutableSetOf(&quot;md&quot;)),
+        LanguageWrapper(language = &quot;css&quot;, extensions = mutableSetOf(&quot;css&quot;)),
+        LanguageWrapper(language = &quot;html&quot;, extensions = mutableSetOf(&quot;html&quot;)),
+        LanguageWrapper(language = &quot;ini&quot;, extensions = mutableSetOf(&quot;ini&quot;)),
+        LanguageWrapper(language = &quot;toml&quot;, extensions = mutableSetOf(&quot;toml&quot;))
+    )
+    private val languages = listOf(
+        GroovyLanguage(),
+        JavaLanguage(),
+        JavaScriptLanguage(),
+        KotlinLanguage(),
+        LuaLanguage(),
+        PhpLanguage(),
+        PythonLanguage(),
+        RubyLanguage(),
+        YamlLanguage(),
+        JsonLanguage(),
+        XmlLanguage(),
+        TypeScriptLanguage(),
+        MarkdownLanguage(),
+        CssLanguage(),
+        HtmlLanguage(),
+        IniLanguage(),
+        TomlLanguage(),
+    )
+
+    @Composable
+    private fun RestoreDialog(onConfirm: () -&gt; Unit, onDismiss: () -&gt; Unit) {
+        AutoResizeSurfaceDialog(
+            onDismissRequest = onDismiss,
+            shape = RoundedCornerShape(20.dp),
+            content = {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    val r = this@LanguageEditorPlugin.getResources()
+                    Text(
+                        text = r.getString(R.string.text_warn),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(text = r.getString(R.string.text_restore_language_warning))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        TextButton(onClick = onDismiss) {
+                            Text(text = r.getString(R.string.text_cancel))
+                        }
+                        TextButton(onClick = {
+                            onDismiss()
+                            onConfirm()
+                        }) {
+                            Text(text = r.getString(R.string.text_confirm))
+                        }
+                    }
+                }
+            })
+    }
+
+    @Composable
+    override fun Content() {
+        val languages = remember {
+            mutableStateListOf&lt;LanguageWrapper&gt;().apply {
+                addAll(getLanguagesFromSetting())
+            }
+        }
+        val onBackPressedDispatcher =
+            LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+        var canSave by remember { mutableStateOf(false) }
+        var showRestoreDialog by remember { mutableStateOf(false) }
+        val scope = rememberCoroutineScope()
+        if (showRestoreDialog) {
+            RestoreDialog(onConfirm = {
+                getSettings().remove(&quot;languages&quot;)
+                scope.launch(Dispatchers.IO) {
+                    languages.clear()
+                    delay(100)
+                    languages.addAll(getLanguagesFromSetting())
+                }
+            }) { showRestoreDialog = false }
+        }
+        BackTopBarScaffold(
+            onBackPress = { onBackPressedDispatcher?.onBackPressed() },
+            titleText = this@LanguageEditorPlugin.getResources()
+                .getString(R.string.text_editor_language_setting),
+            actions = {
+                IconButton(enabled = canSave, onClick = {
+                    getSettings().set(&quot;languages&quot;, gson.toJson(languages))
+                    canSave = false
+                }) {
+                    Icon(
+                        painter = painterResource(
+                            this@LanguageEditorPlugin.getResources(),
+                            R.drawable.ic_baseline_save_24
+                        ),
+                        contentDescription = null
+                    )
+                }
+                IconButton(onClick = { showRestoreDialog = true }) {
+                    Icon(
+                        painter = painterResource(
+                            resources = this@LanguageEditorPlugin.getResources(),
+                            R.drawable.ic_baseline_restore_24
+                        ),
+                        contentDescription = null
+                    )
+                }
+            }) { paddingValues -&gt;
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                items(languages) { language -&gt;
+                    LanguageItem(
+                        language = language,
+                        onValueChange = { canSave = true },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getLanguagesFromSetting(): List&lt;LanguageWrapper&gt; {
+        return getSettings().get(&quot;languages&quot;)
+            ?.let { gson.fromJson(it, object : TypeToken&lt;List&lt;LanguageWrapper&gt;&gt;() {}.type) }
+            ?: defaultLanguages.map {
+                LanguageWrapper(
+                    language = it.language,
+                    extensions = mutableSetOf&lt;String&gt;().apply { addAll(it.extensions) }
+                )
+            }
+    }
+
+    @Composable
+    private fun LanguageItem(
+        language: LanguageWrapper,
+        onValueChange: (String) -&gt; Unit,
+        modifier: Modifier = Modifier,
+    ) {
+        Row(modifier = modifier) {
+            var value by remember { mutableStateOf(language.extensions.joinToString()) }
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = language.language) },
+                placeholder = {
+                    val r = this@LanguageEditorPlugin.getResources()
+                    Text(text = r.getString(R.string.text_extension_placeholder))
+                },
+                value = value,
+                onValueChange = {
+                    value = it
+                    language.extensions.clear()
+                    language.extensions.addAll(value.split(&quot;,&quot;).map { it.trim() }
+                        .filter { it.isNotBlank() })
+                    onValueChange(it)
+                })
+        }
+    }
+
+    override fun onAttached(editor: Editor) {
+        super.onAttached(editor)
+        val settingLanguages = getLanguagesFromSetting()
+        editor.language = editor.file.extension.let { extension -&gt;
+            languages.firstOrNull { l -&gt;
+                settingLanguages.firstOrNull { it.language == l.languageName }
+                    ?.extensions?.contains(extension) == true
+            }
+        } ?: editor.scriptLanguage?.getName()?.lowercase()
+            ?.let { name -&gt; languages.firstOrNull { it.languageName == name } }
+    }
+}
+
+@Composable
+private fun painterResource(resources: Resources, id: Int): Painter {
+    return rememberDrawablePainter(drawable = resources.getDrawable(id, null))
+}</div><aside class="prompt" data-type="tip" data-title="" id="-matmyo_25"><p id="-matmyo_48"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/editor/language/src/main/java/com/m8test/editor/language/LanguageEditorPlugin.kt" id="-matmyo_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/editor/language/src/main/java/com/m8test/editor/language/LanguageEditorPlugin.kt</a></p></aside><ol class="list _decimal" id="-matmyo_27" type="1" start="3"><li class="list__item" id="-matmyo_50"><p>在 <code class="code" id="-matmyo_51">AndroidManifest.xml</code> 中配置插件信息</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;application android:icon=&quot;@drawable/ic_launcher&quot;&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.description&quot;
+            android:value=&quot;本插件实现了为脚本编辑器添加编程语言语法高亮显示的功能.&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.url&quot;
+            android:value=&quot;https://github.com/m8test/Plugins&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.type&quot;
+            android:value=&quot;editor&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.name&quot;
+            android:value=&quot;language-editor&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.className&quot;
+            android:value=&quot;com.m8test.editor.language.LanguageEditorPlugin&quot; /&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-matmyo_34"><p id="-matmyo_52"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/editor/language/src/main/AndroidManifest.xml" id="-matmyo_53" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/editor/language/src/main/AndroidManifest.xml</a></p></aside><ul class="list _bullet" id="-matmyo_29"><li class="list__item" id="-matmyo_54"><p><code class="code" id="-matmyo_57">com.m8test.plugin.type</code>: 插件类型，此处为 <code class="code" id="-matmyo_58">common</code></p></li><li class="list__item" id="-matmyo_55"><p><code class="code" id="-matmyo_59">com.m8test.plugin.name</code>: 插件名称，可为任意字符串</p></li><li class="list__item" id="-matmyo_56"><p><code class="code" id="-matmyo_60">com.m8test.plugin.className</code>: 插件实现类的全限定类名</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="-matmyo_36"><p><a href="https://github.com/m8test/Plugins/tree/main/editor/language/" id="-matmyo_61" data-external="true" rel="noopener noreferrer" target="_blank">查看示例代码</a></p></aside><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="build-plugin.html" class="navigation-links__prev">构建插件</a><a href="plugin-command.html" class="navigation-links__next">插件命令</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

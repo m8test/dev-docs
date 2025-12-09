@@ -1,0 +1,1135 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:25.352788612"><title>字符串操作 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="字符串操作 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/strings.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="字符串操作 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/strings.html#webpage",
+    "url": "writerside-documentation/strings.html",
+    "name": "字符串操作 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="strings" data-main-title="字符串操作" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="utility-tools.md|实用工具"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="strings" id="strings.md">字符串操作</h1><div class="tabs" id="sy5zn5_6" data-group="languages" data-anchors="[sy5zn5_12,sy5zn5_15,sy5zn5_18,sy5zn5_21,sy5zn5_24,sy5zn5_27,sy5zn5_30,sy5zn5_9]"><div class="tabs__content" data-gtm="tab" id="sy5zn5_9" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/**
+ * Strings 接口测试脚本
+ * 全局变量: _strings
+ */
+
+// 辅助函数：用于对比结果并打印日志
+fun assertLog(name: String, actual: Any?, expected: Any?) {
+    // 简单的相等性检查
+    if (actual.toString() == expected.toString()) {
+        _console.log(&quot;✅ [$name] Passed. Result: $actual&quot;)
+    } else {
+        _console.error(&quot;❌ [$name] Failed.\n   Expected: $expected\n   Actual  : $actual&quot;)
+    }
+}
+
+_console.log(&quot;🚀 开始测试 Strings 接口...&quot;)
+
+// ==========================================
+// 1. 基础属性与检查 (Basic Check)
+// ==========================================
+val textBasic = &quot; Hello M8 &quot;
+val emptyText = &quot;&quot;
+val blankText = &quot;   &quot;
+
+// getLength
+val len = _strings.getLength(textBasic)
+assertLog(&quot;getLength&quot;, len, 10)
+
+// isEmpty
+assertLog(&quot;isEmpty - false&quot;, _strings.isEmpty(textBasic), false)
+assertLog(&quot;isEmpty - true&quot;, _strings.isEmpty(emptyText), true)
+
+// isBlank
+assertLog(&quot;isBlank - false&quot;, _strings.isBlank(textBasic), false)
+assertLog(&quot;isBlank - true (空格)&quot;, _strings.isBlank(blankText), true)
+assertLog(&quot;isBlank - true (空串)&quot;, _strings.isBlank(emptyText), true)
+
+// ==========================================
+// 2. 字符串操作 (Manipulation)
+// ==========================================
+// concat
+val concatRes = _strings.concat(&quot;M8&quot;, &quot;Test&quot;)
+assertLog(&quot;concat&quot;, concatRes, &quot;M8Test&quot;)
+
+// format
+// Kotlin 中传数组需要用 arrayOf
+val fmtRes = _strings.format(&quot;Hello %s, Score: %d&quot;, arrayOf&lt;Any&gt;(&quot;World&quot;, 100))
+assertLog(&quot;format&quot;, fmtRes, &quot;Hello World, Score: 100&quot;)
+
+// toUpperCase / toLowerCase
+assertLog(&quot;toUpperCase&quot;, _strings.toUpperCase(&quot;abc&quot;), &quot;ABC&quot;)
+assertLog(&quot;toLowerCase&quot;, _strings.toLowerCase(&quot;XYZ&quot;), &quot;xyz&quot;)
+
+// trim
+assertLog(&quot;trim&quot;, _strings.trim(&quot;  abc  &quot;), &quot;abc&quot;)
+
+// ==========================================
+// 3. 搜索与判断 (Search &amp; Check)
+// ==========================================
+val textSearch = &quot;banana&quot;
+
+// contains
+assertLog(&quot;contains - true&quot;, _strings.contains(textSearch, &quot;nan&quot;), true)
+assertLog(&quot;contains - false&quot;, _strings.contains(textSearch, &quot;xyz&quot;), false)
+
+// startsWith / endsWith
+assertLog(&quot;startsWith&quot;, _strings.startsWith(textSearch, &quot;ba&quot;), true)
+assertLog(&quot;endsWith&quot;, _strings.endsWith(textSearch, &quot;na&quot;), true)
+
+// indexOf / lastIndexOf
+assertLog(&quot;indexOf&quot;, _strings.indexOf(textSearch, &quot;a&quot;), 1) // 第一个 a 在索引 1
+assertLog(&quot;lastIndexOf&quot;, _strings.lastIndexOf(textSearch, &quot;a&quot;), 5) // 最后一个 a 在索引 5
+
+// ==========================================
+// 4. 截取与分割 (Substring &amp; Split)
+// ==========================================
+val textSub = &quot;0123456789&quot;
+
+// substring (常规)
+assertLog(&quot;substring (1, 4)&quot;, _strings.substring(textSub, 1, 4), &quot;123&quot;)
+
+// substring (测试 -1 截取到末尾)
+assertLog(&quot;substring (5, -1)&quot;, _strings.substring(textSub, 5, -1), &quot;56789&quot;)
+
+// split
+val splitList = _strings.split(&quot;A,B,C&quot;, &quot;,&quot;)
+_console.log(&quot;👉 split 结果: &quot; + splitList) // 应该是 [A, B, C]
+// splitList 在 Kotlin 中通常是 List&lt;String&gt;
+if (splitList.size == 3 &amp;&amp; splitList[1] == &quot;B&quot;) {
+    _console.log(&quot;✅ [split] Passed.&quot;)
+} else {
+    _console.error(&quot;❌ [split] Failed.&quot;)
+}
+
+// ==========================================
+// 5. 替换 (Replacement)
+// ==========================================
+// replace (普通替换)
+assertLog(&quot;replace&quot;, _strings.replace(&quot;aba&quot;, &quot;a&quot;, &quot;c&quot;), &quot;cbc&quot;)
+
+// replaceRegex (正则替换：将数字替换为 *)
+assertLog(&quot;replaceRegex&quot;, _strings.replaceRegex(&quot;a1b2c3&quot;, &quot;\\d&quot;, &quot;*&quot;), &quot;a*b*c*&quot;)
+
+// ==========================================
+// 6. 加密与编码 (Crypto &amp; Encoding)
+// ==========================================
+val raw = &quot;123456&quot;
+
+// MD5
+// 123456 的 MD5 通常是 e10adc3949ba59abbe56e057f20f883e
+val md5Val = _strings.md5(raw)
+assertLog(&quot;md5&quot;, md5Val, &quot;e10adc3949ba59abbe56e057f20f883e&quot;)
+
+// Base64 Encode
+val b64Encoded = _strings.base64Encode(&quot;A&quot;)
+assertLog(&quot;base64Encode&quot;, b64Encoded, &quot;QQ==&quot;)
+
+// Base64 Decode
+val b64Decoded = _strings.base64Decode(&quot;QQ==&quot;)
+assertLog(&quot;base64Decode&quot;, b64Decoded, &quot;A&quot;)
+
+// Hex Encode ( 'A' 的 ASCII 是 65 -&gt; 0x41, 'B' 是 66 -&gt; 0x42 )
+val hexStr = _strings.toHexString(&quot;AB&quot;)
+assertLog(&quot;toHexString&quot;, hexStr, &quot;4142&quot;)
+
+// Hex Decode
+val fromHex = _strings.fromHexString(&quot;4142&quot;)
+assertLog(&quot;fromHexString&quot;, fromHex, &quot;AB&quot;)
+
+// ==========================================
+// 7. 字节转换 (Bytes)
+// ==========================================
+// toBytes
+val bytes = _strings.toBytes(&quot;Test&quot;, &quot;UTF-8&quot;)
+_console.log(&quot;👉 toBytes 长度: &quot; + bytes.size) // Kotlin 数组长度用 size
+
+// fromBytes
+val strFromBytes = _strings.fromBytes(bytes, &quot;UTF-8&quot;)
+assertLog(&quot;fromBytes&quot;, strFromBytes, &quot;Test&quot;)
+
+// ==========================================
+// 8. 随机生成 (Random)
+// ==========================================
+val randStr = _strings.random(16)
+_console.log(&quot;👉 random(16) 结果: &quot; + randStr)
+if (_strings.getLength(randStr) == 16) {
+    _console.log(&quot;✅ [random] Passed (Length check).&quot;)
+} else {
+    _console.error(&quot;❌ [random] Failed.&quot;)
+}
+
+_console.log(&quot;🎉 Strings 接口测试完毕。&quot;)
+
+_script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="sy5zn5_12" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/**
+ * Strings 接口测试脚本
+ * 全局变量: $strings
+ */
+
+$console.log(&quot;🚀 开始测试 Strings 接口...&quot;)
+
+// ==========================================
+// 1. 基础属性与检查 (Basic Check)
+// ==========================================
+def textBasic = &quot; Hello M8 &quot;
+def emptyText = &quot;&quot;
+def blankText = &quot;   &quot;
+
+// getLength
+def len = $strings.getLength(textBasic)
+assertLog(&quot;getLength&quot;, len, 10)
+
+// isEmpty
+assertLog(&quot;isEmpty - false&quot;, $strings.isEmpty(textBasic), false)
+assertLog(&quot;isEmpty - true&quot;, $strings.isEmpty(emptyText), true)
+
+// isBlank
+assertLog(&quot;isBlank - false&quot;, $strings.isBlank(textBasic), false)
+assertLog(&quot;isBlank - true (空格)&quot;, $strings.isBlank(blankText), true)
+assertLog(&quot;isBlank - true (空串)&quot;, $strings.isBlank(emptyText), true)
+
+// ==========================================
+// 2. 字符串操作 (Manipulation)
+// ==========================================
+// concat
+def concatRes = $strings.concat(&quot;M8&quot;, &quot;Test&quot;)
+assertLog(&quot;concat&quot;, concatRes, &quot;M8Test&quot;)
+
+// format (注意：Groovy List 传给 Java Array 需要转换，或者引擎支持直接传)
+// 假设这里直接传 List 即可，若报错请尝试 [&quot;World&quot;] as Object[]
+def fmtRes = $strings.format(&quot;Hello %s, Score: %d&quot;, [&quot;World&quot;, 100] as Object[])
+assertLog(&quot;format&quot;, fmtRes, &quot;Hello World, Score: 100&quot;)
+
+// toUpperCase / toLowerCase
+assertLog(&quot;toUpperCase&quot;, $strings.toUpperCase(&quot;abc&quot;), &quot;ABC&quot;)
+assertLog(&quot;toLowerCase&quot;, $strings.toLowerCase(&quot;XYZ&quot;), &quot;xyz&quot;)
+
+// trim
+assertLog(&quot;trim&quot;, $strings.trim(&quot;  abc  &quot;), &quot;abc&quot;)
+
+// ==========================================
+// 3. 搜索与判断 (Search &amp; Check)
+// ==========================================
+def textSearch = &quot;banana&quot;
+
+// contains
+assertLog(&quot;contains - true&quot;, $strings.contains(textSearch, &quot;nan&quot;), true)
+assertLog(&quot;contains - false&quot;, $strings.contains(textSearch, &quot;xyz&quot;), false)
+
+// startsWith / endsWith
+assertLog(&quot;startsWith&quot;, $strings.startsWith(textSearch, &quot;ba&quot;), true)
+assertLog(&quot;endsWith&quot;, $strings.endsWith(textSearch, &quot;na&quot;), true)
+
+// indexOf / lastIndexOf
+assertLog(&quot;indexOf&quot;, $strings.indexOf(textSearch, &quot;a&quot;), 1) // 第一个 a 在索引 1
+assertLog(&quot;lastIndexOf&quot;, $strings.lastIndexOf(textSearch, &quot;a&quot;), 5) // 最后一个 a 在索引 5
+
+// ==========================================
+// 4. 截取与分割 (Substring &amp; Split)
+// ==========================================
+def textSub = &quot;0123456789&quot;
+
+// substring (常规)
+assertLog(&quot;substring (1, 4)&quot;, $strings.substring(textSub, 1, 4), &quot;123&quot;)
+
+// substring (测试 -1 截取到末尾)
+assertLog(&quot;substring (5, -1)&quot;, $strings.substring(textSub, 5, -1), &quot;56789&quot;)
+
+// split
+def splitList = $strings.split(&quot;A,B,C&quot;, &quot;,&quot;)
+$console.log(&quot;👉 split 结果: &quot; + splitList) // 应该是 [A, B, C]
+if (splitList.size() == 3 &amp;&amp; splitList[1] == &quot;B&quot;) {
+    $console.log(&quot;✅ [split] Passed.&quot;)
+} else {
+    $console.error(&quot;❌ [split] Failed.&quot;)
+}
+
+// ==========================================
+// 5. 替换 (Replacement)
+// ==========================================
+// replace (普通替换)
+assertLog(&quot;replace&quot;, $strings.replace(&quot;aba&quot;, &quot;a&quot;, &quot;c&quot;), &quot;cbc&quot;)
+
+// replaceRegex (正则替换：将数字替换为 *)
+assertLog(&quot;replaceRegex&quot;, $strings.replaceRegex(&quot;a1b2c3&quot;, &quot;\\d&quot;, &quot;*&quot;), &quot;a*b*c*&quot;)
+
+// ==========================================
+// 6. 加密与编码 (Crypto &amp; Encoding)
+// ==========================================
+def raw = &quot;123456&quot;
+
+// MD5
+// 123456 的 MD5 通常是 e10adc3949ba59abbe56e057f20f883e
+def md5Val = $strings.md5(raw)
+assertLog(&quot;md5&quot;, md5Val, &quot;e10adc3949ba59abbe56e057f20f883e&quot;)
+
+// Base64 Encode
+def b64Encoded = $strings.base64Encode(&quot;A&quot;)
+assertLog(&quot;base64Encode&quot;, b64Encoded, &quot;QQ==&quot;)
+
+// Base64 Decode
+def b64Decoded = $strings.base64Decode(&quot;QQ==&quot;)
+assertLog(&quot;base64Decode&quot;, b64Decoded, &quot;A&quot;)
+
+// Hex Encode ( 'A' 的 ASCII 是 65 -&gt; 0x41, 'B' 是 66 -&gt; 0x42 )
+def hexStr = $strings.toHexString(&quot;AB&quot;)
+assertLog(&quot;toHexString&quot;, hexStr, &quot;4142&quot;) // 视实现细节，可能是 4142 或 41004200 (如果是UTF-16)，通常是UTF-8 hex
+
+// Hex Decode
+def fromHex = $strings.fromHexString(&quot;4142&quot;)
+assertLog(&quot;fromHexString&quot;, fromHex, &quot;AB&quot;)
+
+// ==========================================
+// 7. 字节转换 (Bytes)
+// ==========================================
+// toBytes
+def bytes = $strings.toBytes(&quot;Test&quot;, &quot;UTF-8&quot;)
+$console.log(&quot;👉 toBytes 长度: &quot; + bytes.length)
+
+// fromBytes
+def strFromBytes = $strings.fromBytes(bytes, &quot;UTF-8&quot;)
+assertLog(&quot;fromBytes&quot;, strFromBytes, &quot;Test&quot;)
+
+// ==========================================
+// 8. 随机生成 (Random)
+// ==========================================
+def randStr = $strings.random(16)
+$console.log(&quot;👉 random(16) 结果: &quot; + randStr)
+if ($strings.getLength(randStr) == 16) {
+    $console.log(&quot;✅ [random] Passed (Length check).&quot;)
+} else {
+    $console.error(&quot;❌ [random] Failed.&quot;)
+}
+
+$console.log(&quot;🎉 Strings 接口测试完毕。&quot;)
+
+
+// ==========================================
+// 辅助函数：用于对比结果并打印日志
+// ==========================================
+def assertLog(name, actual, expected) {
+    // 简单的相等性检查，忽略大小写敏感的Hex情况可以自行调整
+    if (actual.toString() == expected.toString()) {
+        $console.log(&quot;✅ [${name}] Passed. Result: ${actual}&quot;)
+    } else {
+        $console.error(&quot;❌ [${name}] Failed.\n   Expected: ${expected}\n   Actual  : ${actual}&quot;)
+    }
+}
+
+$script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="sy5zn5_15" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="sy5zn5_18" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * Strings 接口测试脚本
+ * 全局变量: $strings, $reflectors, $arrays
+ */
+
+$console.log(&quot;🚀 开始测试 Strings 接口...&quot;);
+
+// ==========================================
+// 1. 基础属性与检查 (Basic Check)
+// ==========================================
+const textBasic = &quot; Hello M8 &quot;;
+const emptyText = &quot;&quot;;
+const blankText = &quot;   &quot;;
+
+// getLength
+const len = $strings.getLength(textBasic);
+assertLog(&quot;getLength&quot;, len, 10);
+
+// isEmpty
+assertLog(&quot;isEmpty - false&quot;, $strings.isEmpty(textBasic), false);
+assertLog(&quot;isEmpty - true&quot;, $strings.isEmpty(emptyText), true);
+
+// isBlank
+assertLog(&quot;isBlank - false&quot;, $strings.isBlank(textBasic), false);
+assertLog(&quot;isBlank - true (空格)&quot;, $strings.isBlank(blankText), true);
+assertLog(&quot;isBlank - true (空串)&quot;, $strings.isBlank(emptyText), true);
+
+// ==========================================
+// 2. 字符串操作 (Manipulation)
+// ==========================================
+// concat
+const concatRes = $strings.concat(&quot;M8&quot;, &quot;Test&quot;);
+assertLog(&quot;concat&quot;, concatRes, &quot;M8Test&quot;);
+
+// format
+// 修正：使用 $reflectors 获取 Object Class
+const ObjectClass = $reflectors.reflectClassName(&quot;java.lang.Object&quot;).getTargetClass();
+const fmtRes = $strings.format(&quot;Hello %s, Score: %s&quot;, $arrays.arrayOf(ObjectClass, &quot;World&quot;, &quot;100&quot;));
+assertLog(&quot;format&quot;, fmtRes, &quot;Hello World, Score: 100&quot;);
+
+// toUpperCase / toLowerCase
+assertLog(&quot;toUpperCase&quot;, $strings.toUpperCase(&quot;abc&quot;), &quot;ABC&quot;);
+assertLog(&quot;toLowerCase&quot;, $strings.toLowerCase(&quot;XYZ&quot;), &quot;xyz&quot;);
+
+// trim
+assertLog(&quot;trim&quot;, $strings.trim(&quot;  abc  &quot;), &quot;abc&quot;);
+
+// ==========================================
+// 3. 搜索与判断 (Search &amp; Check)
+// ==========================================
+const textSearch = &quot;banana&quot;;
+
+// contains
+assertLog(&quot;contains - true&quot;, $strings.contains(textSearch, &quot;nan&quot;), true);
+assertLog(&quot;contains - false&quot;, $strings.contains(textSearch, &quot;xyz&quot;), false);
+
+// startsWith / endsWith
+assertLog(&quot;startsWith&quot;, $strings.startsWith(textSearch, &quot;ba&quot;), true);
+assertLog(&quot;endsWith&quot;, $strings.endsWith(textSearch, &quot;na&quot;), true);
+
+// indexOf / lastIndexOf
+assertLog(&quot;indexOf&quot;, $strings.indexOf(textSearch, &quot;a&quot;), 1); // 第一个 a 在索引 1
+assertLog(&quot;lastIndexOf&quot;, $strings.lastIndexOf(textSearch, &quot;a&quot;), 5); // 最后一个 a 在索引 5
+
+// ==========================================
+// 4. 截取与分割 (Substring &amp; Split)
+// ==========================================
+const textSub = &quot;0123456789&quot;;
+
+// substring (常规)
+assertLog(&quot;substring (1, 4)&quot;, $strings.substring(textSub, 1, 4), &quot;123&quot;);
+
+// substring (测试 -1 截取到末尾)
+assertLog(&quot;substring (5, -1)&quot;, $strings.substring(textSub, 5, -1), &quot;56789&quot;);
+
+// split
+const splitList = $strings.split(&quot;A,B,C&quot;, &quot;,&quot;);
+$console.log(&quot;👉 split 结果: &quot; + splitList); // 应该是 [A, B, C]
+if (splitList.size() == 3 &amp;&amp; splitList.get(1) == &quot;B&quot;) {
+    $console.log(&quot;✅ [split] Passed.&quot;);
+} else {
+    $console.error(&quot;❌ [split] Failed.&quot;);
+}
+
+// ==========================================
+// 5. 替换 (Replacement)
+// ==========================================
+// replace (普通替换)
+assertLog(&quot;replace&quot;, $strings.replace(&quot;aba&quot;, &quot;a&quot;, &quot;c&quot;), &quot;cbc&quot;);
+
+// replaceRegex (正则替换：将数字替换为 *)
+assertLog(&quot;replaceRegex&quot;, $strings.replaceRegex(&quot;a1b2c3&quot;, &quot;\\d&quot;, &quot;*&quot;), &quot;a*b*c*&quot;);
+
+// ==========================================
+// 6. 加密与编码 (Crypto &amp; Encoding)
+// ==========================================
+const raw = &quot;123456&quot;;
+
+// MD5
+// 123456 的 MD5 通常是 e10adc3949ba59abbe56e057f20f883e
+const md5Val = $strings.md5(raw);
+assertLog(&quot;md5&quot;, md5Val, &quot;e10adc3949ba59abbe56e057f20f883e&quot;);
+
+// Base64 Encode
+const b64Encoded = $strings.base64Encode(&quot;A&quot;);
+assertLog(&quot;base64Encode&quot;, b64Encoded, &quot;QQ==&quot;);
+
+// Base64 Decode
+const b64Decoded = $strings.base64Decode(&quot;QQ==&quot;);
+assertLog(&quot;base64Decode&quot;, b64Decoded, &quot;A&quot;);
+
+// Hex Encode ( 'A' 的 ASCII 是 65 -&gt; 0x41, 'B' 是 66 -&gt; 0x42 )
+const hexStr = $strings.toHexString(&quot;AB&quot;);
+assertLog(&quot;toHexString&quot;, hexStr, &quot;4142&quot;);
+
+// Hex Decode
+const fromHex = $strings.fromHexString(&quot;4142&quot;);
+assertLog(&quot;fromHexString&quot;, fromHex, &quot;AB&quot;);
+
+// ==========================================
+// 7. 字节转换 (Bytes)
+// ==========================================
+// toBytes
+const bytes = $strings.toBytes(&quot;Test&quot;, &quot;UTF-8&quot;);
+$console.log(&quot;👉 toBytes 长度: &quot; + bytes.length);
+
+// fromBytes
+const strFromBytes = $strings.fromBytes(bytes, &quot;UTF-8&quot;);
+assertLog(&quot;fromBytes&quot;, strFromBytes, &quot;Test&quot;);
+
+// ==========================================
+// 8. 随机生成 (Random)
+// ==========================================
+const randStr = $strings.random(16);
+$console.log(&quot;👉 random(16) 结果: &quot; + randStr);
+if ($strings.getLength(randStr) == 16) {
+    $console.log(&quot;✅ [random] Passed (Length check).&quot;);
+} else {
+    $console.error(&quot;❌ [random] Failed.&quot;);
+}
+
+$console.log(&quot;🎉 Strings 接口测试完毕。&quot;);
+
+
+// ==========================================
+// 辅助函数：用于对比结果并打印日志
+// ==========================================
+/**
+ * @param {string} name
+ * @param {any} actual
+ * @param {any} expected
+ */
+function assertLog(name, actual, expected) {
+    if (actual.toString() == expected.toString()) {
+        $console.log(&quot;✅ [&quot; + name + &quot;] Passed. Result: &quot; + actual);
+    } else {
+        $console.error(&quot;❌ [&quot; + name + &quot;] Failed.\n   Expected: &quot; + expected + &quot;\n   Actual  : &quot; + actual);
+    }
+}
+
+$script.getThreads().getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="sy5zn5_21" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 文件名: 4.lua
+
+-- 引入转换所需的 Java 类
+local String = require(&quot;m8test_java.java.lang.String&quot;)
+local Object = require(&quot;m8test_java.java.lang.Object&quot;)
+
+---
+-- Strings 接口测试脚本
+-- 全局变量: _strings
+--
+
+_console:log(&quot;🚀 开始测试 Strings 接口...&quot;)
+
+-- ==========================================
+-- 辅助函数：用于对比结果并打印日志
+-- ==========================================
+local function assertLog(name, actual, expected)
+    -- 简单的相等性检查
+    if tostring(actual) == tostring(expected) then
+        _console:log(&quot;✅ [&quot; .. name .. &quot;] Passed. Result: &quot; .. tostring(actual))
+    else
+        _console:error(&quot;❌ [&quot; .. name .. &quot;] Failed.\n   Expected: &quot; .. tostring(expected) .. &quot;\n   Actual  : &quot; .. tostring(actual))
+    end
+end
+
+
+-- ==========================================
+-- 1. 基础属性与检查 (Basic Check)
+-- ==========================================
+local textBasic = &quot; Hello M8 &quot;
+local emptyText = &quot;&quot;
+local blankText = &quot;   &quot;
+
+-- getLength
+local len = _strings:getLength(textBasic)
+assertLog(&quot;getLength&quot;, len, 10)
+
+-- isEmpty
+assertLog(&quot;isEmpty - false&quot;, _strings:isEmpty(textBasic), false)
+assertLog(&quot;isEmpty - true&quot;, _strings:isEmpty(emptyText), true)
+
+-- isBlank
+assertLog(&quot;isBlank - false&quot;, _strings:isBlank(textBasic), false)
+assertLog(&quot;isBlank - true (空格)&quot;, _strings:isBlank(blankText), true)
+assertLog(&quot;isBlank - true (空串)&quot;, _strings:isBlank(emptyText), true)
+
+-- ==========================================
+-- 2. 字符串操作 (Manipulation)
+-- ==========================================
+-- concat
+local concatRes = _strings:concat(&quot;M8&quot;, &quot;Test&quot;)
+assertLog(&quot;concat&quot;, concatRes, &quot;M8Test&quot;)
+
+-- format
+local formatArgs = _arrays:arrayOf(Object, &quot;World&quot;, 100)
+local fmtRes = _strings:format(&quot;Hello %s, Score: %d&quot;, formatArgs)
+assertLog(&quot;format&quot;, fmtRes, &quot;Hello World, Score: 100&quot;)
+
+-- toUpperCase / toLowerCase
+assertLog(&quot;toUpperCase&quot;, _strings:toUpperCase(&quot;abc&quot;), &quot;ABC&quot;)
+assertLog(&quot;toLowerCase&quot;, _strings:toLowerCase(&quot;XYZ&quot;), &quot;xyz&quot;)
+
+-- trim
+assertLog(&quot;trim&quot;, _strings:trim(&quot;  abc  &quot;), &quot;abc&quot;)
+
+-- ==========================================
+-- 3. 搜索与判断 (Search &amp; Check)
+-- ==========================================
+local textSearch = &quot;banana&quot;
+
+-- contains
+assertLog(&quot;contains - true&quot;, _strings:contains(textSearch, &quot;nan&quot;), true)
+assertLog(&quot;contains - false&quot;, _strings:contains(textSearch, &quot;xyz&quot;), false)
+
+-- startsWith / endsWith
+assertLog(&quot;startsWith&quot;, _strings:startsWith(textSearch, &quot;ba&quot;), true)
+assertLog(&quot;endsWith&quot;, _strings:endsWith(textSearch, &quot;na&quot;), true)
+
+-- indexOf / lastIndexOf
+assertLog(&quot;indexOf&quot;, _strings:indexOf(textSearch, &quot;a&quot;), 1) -- 第一个 a 在索引 1
+assertLog(&quot;lastIndexOf&quot;, _strings:lastIndexOf(textSearch, &quot;a&quot;), 5) -- 最后一个 a 在索引 5
+
+-- ==========================================
+-- 4. 截取与分割 (Substring &amp; Split)
+-- ==========================================
+local textSub = &quot;0123456789&quot;
+
+-- substring (常规)
+assertLog(&quot;substring (1, 4)&quot;, _strings:substring(textSub, 1, 4), &quot;123&quot;)
+
+-- substring (测试 -1 截取到末尾)
+assertLog(&quot;substring (5, -1)&quot;, _strings:substring(textSub, 5, -1), &quot;56789&quot;)
+
+-- split (返回一个 Java List, 必须包装后才能操作)
+local rawSplitList = _strings:split(&quot;A,B,C&quot;, &quot;,&quot;)
+local splitList = _objectWrappers:wrapList(rawSplitList)
+_console:log(&quot;👉 split 结果: &quot; .. tostring(splitList:getOrigin())) -- 应该是 [A, B, C]
+-- ListWrapper 有 count() 方法, get(index) 需要通过 getOrigin() 调用原始 list 的方法
+if splitList:count() == 3 and splitList:getOrigin():get(1) == &quot;B&quot; then
+    _console:log(&quot;✅ [split] Passed.&quot;)
+else
+    _console:error(&quot;❌ [split] Failed.&quot;)
+end
+
+-- ==========================================
+-- 5. 替换 (Replacement)
+-- ==========================================
+-- replace (普通替换)
+assertLog(&quot;replace&quot;, _strings:replace(&quot;aba&quot;, &quot;a&quot;, &quot;c&quot;), &quot;cbc&quot;)
+
+-- replaceRegex (正则替换：将数字替换为 *)
+assertLog(&quot;replaceRegex&quot;, _strings:replaceRegex(&quot;a1b2c3&quot;, &quot;\\d&quot;, &quot;*&quot;), &quot;a*b*c*&quot;)
+
+-- ==========================================
+-- 6. 加密与编码 (Crypto &amp; Encoding)
+-- ==========================================
+local raw = &quot;123456&quot;
+
+-- MD5
+-- 123456 的 MD5 通常是 e10adc3949ba59abbe56e057f20f883e
+local md5Val = _strings:md5(raw)
+assertLog(&quot;md5&quot;, md5Val, &quot;e10adc3949ba59abbe56e057f20f883e&quot;)
+
+-- Base64 Encode
+local b64Encoded = _strings:base64Encode(&quot;A&quot;)
+assertLog(&quot;base64Encode&quot;, b64Encoded, &quot;QQ==&quot;)
+
+-- Base64 Decode
+local b64Decoded = _strings:base64Decode(&quot;QQ==&quot;)
+assertLog(&quot;base64Decode&quot;, b64Decoded, &quot;A&quot;)
+
+-- Hex Encode ( 'A' 的 ASCII 是 65 -&gt; 0x41, 'B' 是 66 -&gt; 0x42 )
+local hexStr = _strings:toHexString(&quot;AB&quot;)
+assertLog(&quot;toHexString&quot;, hexStr, &quot;4142&quot;)
+
+-- Hex Decode
+local fromHex = _strings:fromHexString(&quot;4142&quot;)
+assertLog(&quot;fromHexString&quot;, fromHex, &quot;AB&quot;)
+
+-- ==========================================
+-- 7. 字节转换 (Bytes)
+-- ==========================================
+-- toBytes (返回 byte[], 必须包装)
+local rawBytes = _strings:toBytes(&quot;Test&quot;, &quot;UTF-8&quot;)
+local wrappedBytes = _objectWrappers:wrapByteArray(rawBytes) -- &lt;&lt;&lt;&lt;&lt; 修正点：包装 byte[]
+_console:log(&quot;👉 toBytes 长度: &quot; .. tostring(wrappedBytes:count())) -- &lt;&lt;&lt;&lt;&lt; 修正点：使用包装器的 count() 方法
+
+-- fromBytes (需要传入原始的 byte[] 对象)
+local strFromBytes = _strings:fromBytes(rawBytes, &quot;UTF-8&quot;) -- &lt;&lt;&lt;&lt;&lt; 修正点：传入原始对象
+assertLog(&quot;fromBytes&quot;, strFromBytes, &quot;Test&quot;)
+
+-- ==========================================
+-- 8. 随机生成 (Random)
+-- ==========================================
+local randStr = _strings:random(16)
+_console:log(&quot;👉 random(16) 结果: &quot; .. randStr)
+if _strings:getLength(randStr) == 16 then
+    _console:log(&quot;✅ [random] Passed (Length check).&quot;)
+else
+    _console:error(&quot;❌ [random] Failed.&quot;)
+end
+
+_console:log(&quot;🎉 Strings 接口测试完毕。&quot;)
+
+_script:getThreads():getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="sy5zn5_24" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\text\Strings $strings */
+global $strings;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+global $script;
+/** @var m8test_java\com\m8test\script\core\api\wrapper\ObjectWrappers $objectWrappers */
+global $objectWrappers;
+
+
+/**
+ * Strings 接口测试脚本
+ * 全局变量: $strings
+ */
+
+$console-&gt;log(javaString(&quot;🚀 开始测试 Strings 接口...&quot;));
+
+// ==========================================
+// 1. 基础属性与检查 (Basic Check)
+// ==========================================
+$textBasic = javaString(&quot; Hello M8 &quot;);
+$emptyText = javaString(&quot;&quot;);
+$blankText = javaString(&quot;   &quot;);
+
+// getLength
+$len = $strings-&gt;getLength($textBasic);
+assertLog(javaString(&quot;getLength&quot;), $len, 10);
+
+// isEmpty
+assertLog(javaString(&quot;isEmpty - false&quot;), $strings-&gt;isEmpty($textBasic), false);
+assertLog(javaString(&quot;isEmpty - true&quot;), $strings-&gt;isEmpty($emptyText), true);
+
+// isBlank
+assertLog(javaString(&quot;isBlank - false&quot;), $strings-&gt;isBlank($textBasic), false);
+assertLog(javaString(&quot;isBlank - true (空格)&quot;), $strings-&gt;isBlank($blankText), true);
+assertLog(javaString(&quot;isBlank - true (空串)&quot;), $strings-&gt;isBlank($emptyText), true);
+
+// ==========================================
+// 2. 字符串操作 (Manipulation)
+// ==========================================
+// concat
+$concatRes = $strings-&gt;concat(javaString(&quot;M8&quot;), javaString(&quot;Test&quot;));
+assertLog(javaString(&quot;concat&quot;), $concatRes, javaString(&quot;M8Test&quot;));
+
+// format (注意：Groovy List 传给 Java Array 需要转换，或者引擎支持直接传)
+// 假设这里直接传 List 即可，若报错请尝试 [&quot;World&quot;] as Object[]
+//$fmtRes = $strings-&gt;format(javaString(&quot;Hello %s, Score: %s&quot;), [javaString(&quot;World&quot;), &quot;100&quot;]);
+//assertLog(javaString(&quot;format&quot;), $fmtRes, javaString(&quot;Hello World, Score: 100&quot;));
+
+// toUpperCase / toLowerCase
+assertLog(javaString(&quot;toUpperCase&quot;), $strings-&gt;toUpperCase(javaString(&quot;abc&quot;)), javaString(&quot;ABC&quot;));
+assertLog(javaString(&quot;toLowerCase&quot;), $strings-&gt;toLowerCase(javaString(&quot;XYZ&quot;)), javaString(&quot;xyz&quot;));
+
+// trim
+assertLog(javaString(&quot;trim&quot;), $strings-&gt;trim(javaString(&quot;  abc  &quot;)), javaString(&quot;abc&quot;));
+
+// ==========================================
+// 3. 搜索与判断 (Search &amp; Check)
+// ==========================================
+$textSearch = javaString(&quot;banana&quot;);
+
+// contains
+assertLog(javaString(&quot;contains - true&quot;), $strings-&gt;contains($textSearch, javaString(&quot;nan&quot;)), true);
+assertLog(javaString(&quot;contains - false&quot;), $strings-&gt;contains($textSearch, javaString(&quot;xyz&quot;)), false);
+
+// startsWith / endsWith
+assertLog(javaString(&quot;startsWith&quot;), $strings-&gt;startsWith($textSearch, javaString(&quot;ba&quot;)), true);
+assertLog(javaString(&quot;endsWith&quot;), $strings-&gt;endsWith($textSearch, javaString(&quot;na&quot;)), true);
+
+// indexOf / lastIndexOf
+assertLog(javaString(&quot;indexOf&quot;), $strings-&gt;indexOf($textSearch, javaString(&quot;a&quot;)), 1); // 第一个 a 在索引 1
+assertLog(javaString(&quot;lastIndexOf&quot;), $strings-&gt;lastIndexOf($textSearch, javaString(&quot;a&quot;)), 5); // 最后一个 a 在索引 5
+
+// ==========================================
+// 4. 截取与分割 (Substring &amp; Split)
+// ==========================================
+$textSub = javaString(&quot;0123456789&quot;);
+
+// substring (常规)
+assertLog(javaString(&quot;substring (1, 4)&quot;), $strings-&gt;substring($textSub, 1, 4), javaString(&quot;123&quot;));
+
+// substring (测试 -1 截取到末尾)
+assertLog(javaString(&quot;substring (5, -1)&quot;), $strings-&gt;substring($textSub, 5, -1), javaString(&quot;56789&quot;));
+
+// split
+$rawSplitList = $strings-&gt;split(javaString(&quot;A,B,C&quot;), javaString(&quot;,&quot;));
+$splitListWrapper = $objectWrappers-&gt;wrapList($rawSplitList); // 使用 wrapList 包装
+
+$console-&gt;log(javaString(&quot;👉 split 结果: &quot;), $splitListWrapper); // 应该是 [A, B, C]
+if ($splitListWrapper-&gt;getSize() == 3 &amp;&amp; $splitListWrapper-&gt;getOrNull(1) == &quot;B&quot;) {
+    $console-&gt;log(javaString(&quot;✅ [split] Passed.&quot;));
+} else {
+    $console-&gt;error(javaString(&quot;❌ [split] Failed.&quot;));
+}
+
+// ==========================================
+// 5. 替换 (Replacement)
+// ==========================================
+// replace (普通替换)
+assertLog(javaString(&quot;replace&quot;), $strings-&gt;replace(javaString(&quot;aba&quot;), javaString(&quot;a&quot;), javaString(&quot;c&quot;)), javaString(&quot;cbc&quot;));
+
+// replaceRegex (正则替换：将数字替换为 *)
+assertLog(javaString(&quot;replaceRegex&quot;), $strings-&gt;replaceRegex(javaString(&quot;a1b2c3&quot;), javaString(&quot;\\d&quot;), javaString(&quot;*&quot;)), javaString(&quot;a*b*c*&quot;));
+
+// ==========================================
+// 6. 加密与编码 (Crypto &amp; Encoding)
+// ==========================================
+$raw = javaString(&quot;123456&quot;);
+
+// MD5
+// 123456 的 MD5 通常是 e10adc3949ba59abbe56e057f20f883e
+$md5Val = $strings-&gt;md5($raw);
+assertLog(javaString(&quot;md5&quot;), $md5Val, javaString(&quot;e10adc3949ba59abbe56e057f20f883e&quot;));
+
+// Base64 Encode
+$b64Encoded = $strings-&gt;base64Encode(javaString(&quot;A&quot;));
+assertLog(javaString(&quot;base64Encode&quot;), $b64Encoded, javaString(&quot;QQ==&quot;));
+
+// Base64 Decode
+$b64Decoded = $strings-&gt;base64Decode(javaString(&quot;QQ==&quot;));
+assertLog(javaString(&quot;base64Decode&quot;), $b64Decoded, javaString(&quot;A&quot;));
+
+// Hex Encode ( 'A' 的 ASCII 是 65 -&gt; 0x41, 'B' 是 66 -&gt; 0x42 )
+$hexStr = $strings-&gt;toHexString(javaString(&quot;AB&quot;));
+assertLog(javaString(&quot;toHexString&quot;), $hexStr, javaString(&quot;4142&quot;)); // 视实现细节，可能是 4142 或 41004200 (如果是UTF-16)，通常是UTF-8 hex
+
+// Hex Decode
+$fromHex = $strings-&gt;fromHexString(javaString(&quot;4142&quot;));
+assertLog(javaString(&quot;fromHexString&quot;), $fromHex, javaString(&quot;AB&quot;));
+
+// ==========================================
+// 7. 字节转换 (Bytes)
+// ==========================================
+// toBytes
+$rawBytes = $strings-&gt;toBytes(javaString(&quot;Test&quot;), javaString(&quot;UTF-8&quot;));
+$bytesWrapper = $objectWrappers-&gt;wrapByteArray($rawBytes); // 使用 wrapByteArray 包装
+$console-&gt;log(javaString(&quot;👉 toBytes 长度: &quot;), $bytesWrapper-&gt;count());
+
+// fromBytes (需要传递原始的byte[], 而不是包装器)
+$strFromBytes = $strings-&gt;fromBytes($rawBytes, javaString(&quot;UTF-8&quot;));
+assertLog(javaString(&quot;fromBytes&quot;), $strFromBytes, javaString(&quot;Test&quot;));
+
+// ==========================================
+// 8. 随机生成 (Random)
+// ==========================================
+$randStr = $strings-&gt;random(16);
+$console-&gt;log(javaString(&quot;👉 random(16) 结果: &quot;), $randStr);
+if ($strings-&gt;getLength($randStr) == 16) {
+    $console-&gt;log(javaString(&quot;✅ [random] Passed (Length check).&quot;));
+} else {
+    $console-&gt;error(javaString(&quot;❌ [random] Failed.&quot;));
+}
+
+$console-&gt;log(javaString(&quot;🎉 Strings 接口测试完毕。&quot;));
+
+
+// ==========================================
+// 辅助函数：用于对比结果并打印日志
+// ==========================================
+function assertLog($name, $actual, $expected)
+{
+    global $console;
+    if ($actual == $expected) {
+        $console-&gt;log(&quot;✅ [&quot; . $name . &quot;] Passed. Result: &quot;, $actual);
+    } else {
+        $console-&gt;error(&quot;❌ [&quot; . $name . &quot;] Failed.\n   Expected: &quot;, $expected, &quot;\n   Actual  : &quot;, $actual);
+    }
+}
+
+$script-&gt;getThreads()-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="sy5zn5_27" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _strings
+from m8test_java.com.m8test.script.GlobalVariables import _script
+from m8test_java.com.m8test.script.GlobalVariables import _arrays
+from m8test_java.com.m8test.script.GlobalVariables import _reflectors
+
+# ==========================================
+# 辅助函数：用于对比结果并打印日志
+# ==========================================
+def assertLog(name, actual, expected):
+    # 使用 str() 转换以安全比较
+    if str(actual) == str(expected):
+        _console.log(f&quot;✅ [{name}] Passed. Result: {actual}&quot;)
+    else:
+        _console.error(f&quot;❌ [{name}] Failed.\n   Expected: {expected}\n   Actual  : {actual}&quot;)
+
+&quot;&quot;&quot;
+Strings 接口测试脚本
+全局变量: $strings
+&quot;&quot;&quot;
+
+_console.log(&quot;🚀 开始测试 Strings 接口...&quot;)
+
+# ==========================================
+# 1. 基础属性与检查 (Basic Check)
+# ==========================================
+textBasic = &quot; Hello M8 &quot;
+emptyText = &quot;&quot;
+blankText = &quot;   &quot;
+
+# getLength
+len_val = _strings.getLength(textBasic)
+assertLog(&quot;getLength&quot;, len_val, 10)
+
+# isEmpty
+assertLog(&quot;isEmpty - false&quot;, _strings.isEmpty(textBasic), False)
+assertLog(&quot;isEmpty - true&quot;, _strings.isEmpty(emptyText), True)
+
+# isBlank
+assertLog(&quot;isBlank - false&quot;, _strings.isBlank(textBasic), False)
+assertLog(&quot;isBlank - true (空格)&quot;, _strings.isBlank(blankText), True)
+assertLog(&quot;isBlank - true (空串)&quot;, _strings.isBlank(emptyText), True)
+
+# ==========================================
+# 2. 字符串操作 (Manipulation)
+# ==========================================
+# concat
+concatRes = _strings.concat(&quot;M8&quot;, &quot;Test&quot;)
+assertLog(&quot;concat&quot;, concatRes, &quot;M8Test&quot;)
+
+# format
+# Python list is passed to Java method, Jep handles conversion.
+# Using _arrays.arrayOf is a more robust way if direct list passing fails.
+# 获取 java.lang.Object 的 Class 对象
+object_class = _reflectors.reflect(&quot;java.lang.Object&quot;).getTargetClass()
+fmtRes = _strings.format(&quot;Hello %s, Score: %d&quot;, _arrays.arrayOf(object_class, &quot;World&quot;, 100))
+assertLog(&quot;format&quot;, fmtRes, &quot;Hello World, Score: 100&quot;)
+
+# toUpperCase / toLowerCase
+assertLog(&quot;toUpperCase&quot;, _strings.toUpperCase(&quot;abc&quot;), &quot;ABC&quot;)
+assertLog(&quot;toLowerCase&quot;, _strings.toLowerCase(&quot;XYZ&quot;), &quot;xyz&quot;)
+
+# trim
+assertLog(&quot;trim&quot;, _strings.trim(&quot;  abc  &quot;), &quot;abc&quot;)
+
+# ==========================================
+# 3. 搜索与判断 (Search &amp; Check)
+# ==========================================
+textSearch = &quot;banana&quot;
+
+# contains
+assertLog(&quot;contains - true&quot;, _strings.contains(textSearch, &quot;nan&quot;), True)
+assertLog(&quot;contains - false&quot;, _strings.contains(textSearch, &quot;xyz&quot;), False)
+
+# startsWith / endsWith
+assertLog(&quot;startsWith&quot;, _strings.startsWith(textSearch, &quot;ba&quot;), True)
+assertLog(&quot;endsWith&quot;, _strings.endsWith(textSearch, &quot;na&quot;), True)
+
+# indexOf / lastIndexOf
+assertLog(&quot;indexOf&quot;, _strings.indexOf(textSearch, &quot;a&quot;), 1) # 第一个 a 在索引 1
+assertLog(&quot;lastIndexOf&quot;, _strings.lastIndexOf(textSearch, &quot;a&quot;), 5) # 最后一个 a 在索引 5
+
+# ==========================================
+# 4. 截取与分割 (Substring &amp; Split)
+# ==========================================
+textSub = &quot;0123456789&quot;
+
+# substring (常规)
+assertLog(&quot;substring (1, 4)&quot;, _strings.substring(textSub, 1, 4), &quot;123&quot;)
+
+# substring (测试 -1 截取到末尾)
+assertLog(&quot;substring (5, -1)&quot;, _strings.substring(textSub, 5, -1), &quot;56789&quot;)
+
+# split
+splitList = _strings.split(&quot;A,B,C&quot;, &quot;,&quot;)
+_console.log(&quot;👉 split 结果: &quot; + str(splitList)) # 应该是 [A, B, C]
+if len(splitList) == 3 and splitList[1] == &quot;B&quot;:
+    _console.log(&quot;✅ [split] Passed.&quot;)
+else:
+    _console.error(&quot;❌ [split] Failed.&quot;)
+
+# ==========================================
+# 5. 替换 (Replacement)
+# ==========================================
+# replace (普通替换)
+assertLog(&quot;replace&quot;, _strings.replace(&quot;aba&quot;, &quot;a&quot;, &quot;c&quot;), &quot;cbc&quot;)
+
+# replaceRegex (正则替换：将数字替换为 *)
+assertLog(&quot;replaceRegex&quot;, _strings.replaceRegex(&quot;a1b2c3&quot;, &quot;\\d&quot;, &quot;*&quot;), &quot;a*b*c*&quot;)
+
+# ==========================================
+# 6. 加密与编码 (Crypto &amp; Encoding)
+# ==========================================
+raw = &quot;123456&quot;
+
+# MD5
+md5Val = _strings.md5(raw)
+assertLog(&quot;md5&quot;, md5Val, &quot;e10adc3949ba59abbe56e057f20f883e&quot;)
+
+# Base64 Encode
+b64Encoded = _strings.base64Encode(&quot;A&quot;)
+assertLog(&quot;base64Encode&quot;, b64Encoded, &quot;QQ==&quot;)
+
+# Base64 Decode
+b64Decoded = _strings.base64Decode(&quot;QQ==&quot;)
+assertLog(&quot;base64Decode&quot;, b64Decoded, &quot;A&quot;)
+
+# Hex Encode
+hexStr = _strings.toHexString(&quot;AB&quot;)
+assertLog(&quot;toHexString&quot;, hexStr, &quot;4142&quot;)
+
+# Hex Decode
+fromHex = _strings.fromHexString(&quot;4142&quot;)
+assertLog(&quot;fromHexString&quot;, fromHex, &quot;AB&quot;)
+
+# ==========================================
+# 7. 字节转换 (Bytes)
+# ==========================================
+# toBytes
+bytes_val = _strings.toBytes(&quot;Test&quot;, &quot;UTF-8&quot;)
+_console.log(&quot;👉 toBytes 长度: &quot; + str(len(bytes_val)))
+
+# fromBytes
+strFromBytes = _strings.fromBytes(bytes_val, &quot;UTF-8&quot;)
+assertLog(&quot;fromBytes&quot;, strFromBytes, &quot;Test&quot;)
+
+# ==========================================
+# 8. 随机生成 (Random)
+# ==========================================
+randStr = _strings.random(16)
+_console.log(&quot;👉 random(16) 结果: &quot; + randStr)
+if _strings.getLength(randStr) == 16:
+    _console.log(&quot;✅ [random] Passed (Length check).&quot;)
+else:
+    _console.error(&quot;❌ [random] Failed.&quot;)
+
+_console.log(&quot;🎉 Strings 接口测试完毕。&quot;)
+
+_script.getThreads().getMain().setBackground(True)</div></div><div class="tabs__content" data-gtm="tab" id="sy5zn5_30" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# Strings 接口测试脚本
+# 全局变量: $strings
+
+$console.log(&quot;🚀 开始测试 Strings 接口...&quot;)
+
+# ==========================================
+# 辅助函数：用于对比结果并打印日志
+# ==========================================
+def assertLog(name, actual, expected)
+  # 简单的相等性检查，忽略大小写敏感的Hex情况可以自行调整
+  if actual.to_s == expected.to_s
+    $console.log(&quot;✅ [#{name}] Passed. Result: #{actual}&quot;)
+  else
+    $console.error(&quot;❌ [#{name}] Failed.\n   Expected: #{expected}\n   Actual  : #{actual}&quot;)
+  end
+end
+
+# ==========================================
+# 1. 基础属性与检查 (Basic Check)
+# ==========================================
+textBasic = &quot; Hello M8 &quot;
+emptyText = &quot;&quot;
+blankText = &quot;   &quot;
+
+# getLength
+len = $strings.getLength(textBasic)
+assertLog(&quot;getLength&quot;, len, 10)
+
+# isEmpty
+assertLog(&quot;isEmpty - false&quot;, $strings.isEmpty(textBasic), false)
+assertLog(&quot;isEmpty - true&quot;, $strings.isEmpty(emptyText), true)
+
+# isBlank
+assertLog(&quot;isBlank - false&quot;, $strings.isBlank(textBasic), false)
+assertLog(&quot;isBlank - true (空格)&quot;, $strings.isBlank(blankText), true)
+assertLog(&quot;isBlank - true (空串)&quot;, $strings.isBlank(emptyText), true)
+
+# ==========================================
+# 2. 字符串操作 (Manipulation)
+# ==========================================
+# concat
+concatRes = $strings.concat(&quot;M8&quot;, &quot;Test&quot;)
+assertLog(&quot;concat&quot;, concatRes, &quot;M8Test&quot;)
+
+# format
+# Ruby 中使用 Array [...] 传递参数
+fmtRes = $strings.format(&quot;Hello %s, Score: %d&quot;, [&quot;World&quot;, 100])
+assertLog(&quot;format&quot;, fmtRes, &quot;Hello World, Score: 100&quot;)
+
+# toUpperCase / toLowerCase
+assertLog(&quot;toUpperCase&quot;, $strings.toUpperCase(&quot;abc&quot;), &quot;ABC&quot;)
+assertLog(&quot;toLowerCase&quot;, $strings.toLowerCase(&quot;XYZ&quot;), &quot;xyz&quot;)
+
+# trim
+assertLog(&quot;trim&quot;, $strings.trim(&quot;  abc  &quot;), &quot;abc&quot;)
+
+# ==========================================
+# 3. 搜索与判断 (Search &amp; Check)
+# ==========================================
+textSearch = &quot;banana&quot;
+
+# contains
+assertLog(&quot;contains - true&quot;, $strings.contains(textSearch, &quot;nan&quot;), true)
+assertLog(&quot;contains - false&quot;, $strings.contains(textSearch, &quot;xyz&quot;), false)
+
+# startsWith / endsWith
+assertLog(&quot;startsWith&quot;, $strings.startsWith(textSearch, &quot;ba&quot;), true)
+assertLog(&quot;endsWith&quot;, $strings.endsWith(textSearch, &quot;na&quot;), true)
+
+# indexOf / lastIndexOf
+assertLog(&quot;indexOf&quot;, $strings.indexOf(textSearch, &quot;a&quot;), 1) # 第一个 a 在索引 1
+assertLog(&quot;lastIndexOf&quot;, $strings.lastIndexOf(textSearch, &quot;a&quot;), 5) # 最后一个 a 在索引 5
+
+# ==========================================
+# 4. 截取与分割 (Substring &amp; Split)
+# ==========================================
+textSub = &quot;0123456789&quot;
+
+# substring (常规)
+assertLog(&quot;substring (1, 4)&quot;, $strings.substring(textSub, 1, 4), &quot;123&quot;)
+
+# substring (测试 -1 截取到末尾)
+assertLog(&quot;substring (5, -1)&quot;, $strings.substring(textSub, 5, -1), &quot;56789&quot;)
+
+# split
+splitList = $strings.split(&quot;A,B,C&quot;, &quot;,&quot;)
+$console.log(&quot;👉 split 结果: &quot; + splitList.to_s) # 应该是 [A, B, C]
+# Ruby 中数组大小使用 .size 或 .length, 访问元素使用 []
+if splitList.size == 3 &amp;&amp; splitList[1] == &quot;B&quot;
+  $console.log(&quot;✅ [split] Passed.&quot;)
+else
+  $console.error(&quot;❌ [split] Failed.&quot;)
+end
+
+# ==========================================
+# 5. 替换 (Replacement)
+# ==========================================
+# replace (普通替换)
+assertLog(&quot;replace&quot;, $strings.replace(&quot;aba&quot;, &quot;a&quot;, &quot;c&quot;), &quot;cbc&quot;)
+
+# replaceRegex (正则替换：将数字替换为 *)
+assertLog(&quot;replaceRegex&quot;, $strings.replaceRegex(&quot;a1b2c3&quot;, &quot;\\d&quot;, &quot;*&quot;), &quot;a*b*c*&quot;)
+
+# ==========================================
+# 6. 加密与编码 (Crypto &amp; Encoding)
+# ==========================================
+raw = &quot;123456&quot;
+
+# MD5
+# 123456 的 MD5 通常是 e10adc3949ba59abbe56e057f20f883e
+md5Val = $strings.md5(raw)
+assertLog(&quot;md5&quot;, md5Val, &quot;e10adc3949ba59abbe56e057f20f883e&quot;)
+
+# Base64 Encode
+b64Encoded = $strings.base64Encode(&quot;A&quot;)
+assertLog(&quot;base64Encode&quot;, b64Encoded, &quot;QQ==&quot;)
+
+# Base64 Decode
+b64Decoded = $strings.base64Decode(&quot;QQ==&quot;)
+assertLog(&quot;base64Decode&quot;, b64Decoded, &quot;A&quot;)
+
+# Hex Encode ( 'A' 的 ASCII 是 65 -&gt; 0x41, 'B' 是 66 -&gt; 0x42 )
+hexStr = $strings.toHexString(&quot;AB&quot;)
+assertLog(&quot;toHexString&quot;, hexStr, &quot;4142&quot;) # 视实现细节，可能是 4142 或 41004200 (如果是UTF-16)，通常是UTF-8 hex
+
+# Hex Decode
+fromHex = $strings.fromHexString(&quot;4142&quot;)
+assertLog(&quot;fromHexString&quot;, fromHex, &quot;AB&quot;)
+
+# ==========================================
+# 7. 字节转换 (Bytes)
+# ==========================================
+# toBytes
+bytes = $strings.toBytes(&quot;Test&quot;, &quot;UTF-8&quot;)
+# 这里假设返回的是 Java 数组或 wrapper，Ruby 中可能需要使用 .size 或 .length
+$console.log(&quot;👉 toBytes 长度: &quot; + bytes.length.to_s)
+
+# fromBytes
+strFromBytes = $strings.fromBytes(bytes, &quot;UTF-8&quot;)
+assertLog(&quot;fromBytes&quot;, strFromBytes, &quot;Test&quot;)
+
+# ==========================================
+# 8. 随机生成 (Random)
+# ==========================================
+randStr = $strings.random(16)
+$console.log(&quot;👉 random(16) 结果: &quot; + randStr.to_s)
+if $strings.getLength(randStr) == 16
+  $console.log(&quot;✅ [random] Passed (Length check).&quot;)
+else
+  $console.error(&quot;❌ [random] Failed.&quot;)
+end
+
+$console.log(&quot;🎉 Strings 接口测试完毕。&quot;)
+
+$script.getThreads().getMain().setBackground(true)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="toaster.html" class="navigation-links__prev">吐司(Toast)</a><a href="sqlite-manager.html" class="navigation-links__next">Sqlite数据库</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

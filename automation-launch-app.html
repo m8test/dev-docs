@@ -1,0 +1,188 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:12.037522171"><title>启动应用 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"z7nq6hi_28","level":0,"title":"使用Adb Shell","anchor":"#z7nq6hi_28"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="启动应用 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/automation-launch-app.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="启动应用 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/automation-launch-app.html#webpage",
+    "url": "writerside-documentation/automation-launch-app.html",
+    "name": "启动应用 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="automation-launch-app" data-main-title="启动应用" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="automation.md|自动化"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="automation-launch-app" id="automation-launch-app.md">启动应用</h1><section class="chapter"><h2 id="z7nq6hi_28" data-toc="z7nq6hi_28">使用Adb Shell</h2><ul class="list _bullet" id="z7nq6hi_32"><li class="list__item" id="z7nq6hi_33"><p id="z7nq6hi_36">权限: Adb</p></li><li class="list__item" id="z7nq6hi_34"><p id="z7nq6hi_37">组件: <a href="https://www.m8test.com" id="z7nq6hi_38" data-external="true" rel="noopener noreferrer" target="_blank">无</a></p></li><li class="list__item" id="z7nq6hi_35"><p id="z7nq6hi_39">说明: 通过Adb Shell执行启动应用操作</p></li></ul></section><div class="tabs" id="z7nq6hi_31" data-group="languages" data-anchors="[z7nq6hi_42,z7nq6hi_45,z7nq6hi_48,z7nq6hi_51,z7nq6hi_54,z7nq6hi_57,z7nq6hi_60,z7nq6hi_63]"><div class="tabs__content" data-gtm="tab" id="z7nq6hi_42" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 创建一个adb shell对象, 需要具有adb权限
+val shell = _shells.newAdbShell(_maps.mapOf())
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+val command = _shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;)!!
+// 打印生成的命令
+_console.log(&quot;启动app的命令&quot;, command)
+// 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+val r = shell.exec(command) {}
+if (r.isSuccess()) {
+    // 输出执行结果, 通过getOutput()方法获取输出内容
+    _console.log(&quot;output&quot;, r.getOutput())
+} else {
+    // 输出错误信息, 如果没有错误则输出空字符串
+    _console.log(&quot;error&quot;, r.getStderr())
+}
+// 下面是简化版
+//shell.exec(_shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;)!!) {}</div></div><div class="tabs__content" data-gtm="tab" id="z7nq6hi_45" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个adb shell对象, 需要具有adb权限
+def shell = $shells.newAdbShell($maps.mapOf())
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+def command = $shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;);
+// 打印生成的命令
+$console.log(&quot;启动app的命令&quot;, command)
+// 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+def r = shell.exec(command) {}
+if (r.isSuccess()) {
+    // 输出执行结果, 通过getOutput()方法获取输出内容
+    $console.log(&quot;output&quot;, r.getOutput())
+} else {
+    // 输出错误信息, 如果没有错误则输出空字符串
+    $console.log(&quot;error&quot;, r.getStderr())
+}
+// 下面是简化版
+//shell.exec($shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;)) {}</div></div><div class="tabs__content" data-gtm="tab" id="z7nq6hi_48" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.shell.Result;
+import com.m8test.script.core.api.shell.Shell;
+import kotlin.jvm.functions.Function1;
+
+import java.util.HashMap;
+
+import static com.m8test.script.GlobalVariables.*;
+
+// 创建一个adb shell对象, 需要具有adb权限
+Shell shell = $shells.newAdbShell(new HashMap&lt;String, String&gt;());
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+String command = $shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;);
+// 打印生成的命令
+$console.log(&quot;启动app的命令&quot;, command);
+// 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+assert command != null;
+Result r = shell.exec(command, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        return null;
+    }
+});
+
+if (r.isSuccess()) {
+    // 输出执行结果, 通过getOutput()方法获取输出内容
+    $console.log(&quot;output&quot;, r.getOutput());
+} else {
+    // 输出错误信息, 如果没有错误则输出空字符串
+    $console.log(&quot;error&quot;, r.getStderr());
+}
+// 下面是简化版
+//shell.exec($shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;), new Function1() {
+//    @Override
+//    public Object invoke(Object o) {
+//        return null;
+//    }
+//});</div></div><div class="tabs__content" data-gtm="tab" id="z7nq6hi_51" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个adb shell对象, 需要具有adb权限 
+let shell = $shells.newAdbShell($maps.mapOf())
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+let command = $shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;);
+// 打印生成的命令
+$console.log(&quot;启动app的命令&quot;, command)
+// 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+let r = shell.exec(command, function (config) {
+})
+if (r.isSuccess()) {
+    // 输出执行结果, 通过getOutput()方法获取输出内容
+    $console.log(&quot;output&quot;, r.getOutput())
+} else {
+    // 输出错误信息, 如果没有错误则输出空字符串
+    $console.log(&quot;error&quot;, r.getStderr())
+}
+// 下面是简化版
+// shell.exec($shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;), function (config) {
+// })</div></div><div class="tabs__content" data-gtm="tab" id="z7nq6hi_54" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个adb shell对象, 需要具有adb权限
+local shell = _shells:newAdbShell(_maps:mapOf())
+-- 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+local command = _shellCommands:launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;);
+-- 打印生成的命令
+_console:log(&quot;启动app的命令&quot;, command)
+-- 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+local r = shell:exec(command, function(config) end)
+if (r:isSuccess()) then
+    -- 输出执行结果, 通过getOutput()方法获取输出内容
+    _console:log(&quot;output&quot;, r:getOutput())
+else
+    -- 输出错误信息, 如果没有错误则输出空字符串
+    _console:log(&quot;error&quot;, r:getStderr())
+end
+-- 下面是简化版
+--shell:exec(_shellCommands:launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;), function() end)
+</div></div><div class="tabs__content" data-gtm="tab" id="z7nq6hi_57" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\shell\Shells $shells */
+global $shells;
+/** @var m8test_java\com\m8test\script\core\api\shell\ShellCommands $shellCommands */
+global $shellCommands;
+/** @var m8test_java\com\m8test\script\core\api\collections\Maps $maps */
+global $maps;
+// 创建一个adb shell对象, 需要具有adb权限
+$shell = $shells-&gt;newAdbShell($maps-&gt;mapOf());
+// 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+$command = $shellCommands-&gt;launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;);
+// 打印生成的命令
+$console-&gt;log(&quot;启动app的命令&quot;, $command);
+// 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+$r = $shell-&gt;exec($command, function () {
+});
+if ($r-&gt;isSuccess()) {
+    // 输出执行结果, 通过getOutput()方法获取输出内容
+    $console-&gt;log(&quot;output&quot;, $r-&gt;getOutput());
+} else {
+    // 输出错误信息, 如果没有错误则输出空字符串
+    $console-&gt;log(&quot;error&quot;, $r-&gt;getStderr());
+}
+// 下面是简化版
+//$shell-&gt;exec($shellCommands-&gt;launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;), function () {
+//});
+</div></div><div class="tabs__content" data-gtm="tab" id="z7nq6hi_60" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _maps
+from m8test_java.com.m8test.script.GlobalVariables import _shellCommands
+from m8test_java.com.m8test.script.GlobalVariables import _shells
+
+# 创建一个adb shell对象, 需要具有adb权限
+shell = _shells.newAdbShell(_maps.mapOf())
+# 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+command = _shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;);
+# 打印生成的命令
+_console.log(&quot;启动app的命令&quot;, command)
+# 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+r = shell.exec(command, lambda x: x)
+if r.isSuccess():
+    # 输出执行结果, 通过getOutput()方法获取输出内容
+    _console.log(&quot;output&quot;, r.getOutput())
+else:
+    # 输出错误信息, 如果没有错误则输出空字符串
+    _console.log(&quot;error&quot;, r.getStderr())
+# 下面是简化版
+# shell.exec(_shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;), lambda x: x)
+</div></div><div class="tabs__content" data-gtm="tab" id="z7nq6hi_63" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个adb shell对象, 需要具有adb权限
+shell = $shells.newAdbShell($maps.mapOf)
+# 启动app的命令, 第一个参数为要启动的应用包名，例如 &quot;com.tencent.mm&quot;。第二个参数为启动应用所需的用户 ID。例如 &quot;0&quot; 代表主用户，&quot;999&quot; 代表应用分身或工作资料用户。第三个参数为目标显示器的 ID。例如 &quot;0&quot; 代表主显示器。如果此字符串为空，则命令中不会包含 --display 参数，应用将在默认显示器上启动。
+command = $shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;);
+# 打印生成的命令
+$console.log(&quot;启动app的命令&quot;, command)
+# 通过adb shell执行生成的命令, 第一个参数为命令字符串, 第二个参数为配置函数, 如果不需要可以传递一个空函数, 具体用法可参考文档
+r = shell.exec(command) {}
+if r.isSuccess
+  # 输出执行结果, 通过getOutput()方法获取输出内容
+  $console.log(&quot;output&quot;, r.getOutput)
+else
+  # 输出错误信息, 如果没有错误则输出空字符串
+  $console.log(&quot;error&quot;, r.getStderr)
+end
+# 下面是简化版
+# shell.exec($shellCommands.launchApp(&quot;com.m8test.app.runtime&quot;, &quot;0&quot;,  &quot;0&quot;)) {}</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="automation.html" class="navigation-links__prev">自动化</a><a href="automation-click.html" class="navigation-links__next">点击操作</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

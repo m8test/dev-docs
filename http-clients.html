@@ -1,0 +1,2879 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.800106423"><title>Http客户端 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"http","level":0,"title":"创建 HTTP 客户端","anchor":"#http"},{"id":"-8za098_5","level":0,"title":"发起请求","anchor":"#-8za098_5"},{"id":"websocket","level":0,"title":"处理 WebSocket 连接","anchor":"#websocket"},{"id":"-8za098_7","level":0,"title":"大文件处理","anchor":"#-8za098_7"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Http客户端 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/http-clients.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Http客户端 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/http-clients.html#webpage",
+    "url": "writerside-documentation/http-clients.html",
+    "name": "Http客户端 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="http-clients" data-main-title="Http客户端" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="http.md|网络请求"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="http-clients" id="http-clients.md">Http客户端</h1><p id="-8za098_3">HTTP 客户端是发起网络请求的起点。您可以创建多个客户端，每个客户端都有自己独立的配置（如 Cookie 存储、代理等）。</p><section class="chapter"><h2 id="http" data-toc="http">创建 HTTP 客户端</h2><section class="chapter"><h3 id="-8za098_8" data-toc="-8za098_8">创建一个默认配置的客户端</h3><p id="-8za098_10">最简单的用法是创建一个不带任何特殊配置的客户端。</p><div class="tabs" id="-8za098_14" data-group="languages" data-anchors="[-8za098_17,-8za098_20,-8za098_23,-8za098_26,-8za098_29,-8za098_32,-8za098_35,-8za098_38]"><div class="tabs__content" data-gtm="tab" id="-8za098_17" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行，等待网络请求完成
+_threads.getMain().setBackground(true)
+
+// 创建一个新的 HTTP 客户端
+val httpClient = _httpClients.newClient(null)
+
+_console.log(&quot;成功创建了一个 HTTP 客户端:&quot;, httpClient)
+
+// 当不再需要时，可以销毁客户端以释放资源
+// 在脚本结束时，所有客户端也会被自动销毁
+val deleted = _httpClients.deleteClient(httpClient)
+_console.log(&quot;客户端销毁状态:&quot;, deleted)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_20" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行，等待网络请求完成
+$threads.getMain().setBackground(true)
+
+// 创建一个新的 HTTP 客户端
+def httpClient = $httpClients.newClient(null)
+
+$console.log(&quot;成功创建了一个 HTTP 客户端:&quot;, httpClient)
+
+// 当不再需要时，可以销毁客户端以释放资源
+// 在脚本结束时，所有客户端也会被自动销毁
+def deleted = $httpClients.deleteClient(httpClient)
+$console.log(&quot;客户端销毁状态:&quot;, deleted)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_23" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_26" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行，等待网络请求完成
+$threads.getMain().setBackground(true);
+
+// 创建一个新的 HTTP 客户端
+const httpClient = $httpClients.newClient(null);
+
+$console.log(&quot;成功创建了一个 HTTP 客户端:&quot;, httpClient);
+
+// 当不再需要时，可以销毁客户端以释放资源
+// 在脚本结束时，所有客户端也会被自动销毁
+const deleted = $httpClients.deleteClient(httpClient);
+$console.log(&quot;客户端销毁状态:&quot;, deleted);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_29" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行，等待网络请求完成
+_threads:getMain():setBackground(true)
+
+-- 创建一个新的 HTTP 客户端
+local httpClient = _httpClients:newClient(nil)
+
+_console:log(&quot;成功创建了一个 HTTP 客户端:&quot;, httpClient)
+
+-- 当不再需要时，可以销毁客户端以释放资源
+-- 在脚本结束时，所有客户端也会被自动销毁
+local deleted = _httpClients:deleteClient(httpClient)
+_console:log(&quot;客户端销毁状态:&quot;, deleted)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_32" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行，等待网络请求完成
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+// 创建一个新的 HTTP 客户端
+$httpClient = $httpClients-&gt;newClient(null);
+
+$console-&gt;log(javaString(&quot;成功创建了一个 HTTP 客户端:&quot;), $httpClient);
+
+// 当不再需要时，可以销毁客户端以释放资源
+// 在脚本结束时，所有客户端也会被自动销毁
+$deleted = $httpClients-&gt;deleteClient($httpClient);
+$console-&gt;log(javaString(&quot;客户端销毁状态:&quot;), $deleted);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_35" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行，等待网络请求完成
+_threads.getMain().setBackground(True)
+
+# 创建一个新的 HTTP 客户端
+httpClient = _httpClients.newClient(None)
+
+_console.log(&quot;成功创建了一个 HTTP 客户端:&quot;, httpClient)
+
+# 当不再需要时，可以销毁客户端以释放资源
+# 在脚本结束时，所有客户端也会被自动销毁
+deleted = _httpClients.deleteClient(httpClient)
+_console.log(&quot;客户端销毁状态:&quot;, deleted)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_38" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行，等待网络请求完成
+$threads.getMain.setBackground(true)
+
+# 创建一个新的 HTTP 客户端
+httpClient = $httpClients.newClient(nil)
+
+$console.log(&quot;成功创建了一个 HTTP 客户端:&quot;, httpClient)
+
+# 当不再需要时，可以销毁客户端以释放资源
+# 在脚本结束时，所有客户端也会被自动销毁
+deleted = $httpClients.deleteClient(httpClient)
+$console.log(&quot;客户端销毁状态:&quot;, deleted)</div></div></div></section><section class="chapter"><h3 id="-8za098_9" data-toc="-8za098_9">创建一个自定义配置的客户端</h3><p id="-8za098_87">您可以为客户端配置代理、请求重定向等策略。</p><div class="tabs" id="-8za098_91" data-group="languages" data-anchors="[-8za098_100,-8za098_103,-8za098_106,-8za098_109,-8za098_112,-8za098_115,-8za098_94,-8za098_97]"><div class="tabs__content" data-gtm="tab" id="-8za098_94" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+// 创建一个配置了 HTTP 代理且禁用了自动重定向的客户端
+// newClient 的配置块通常是 Receiver 模式
+val customHttpClient = _httpClients.newClient {
+    // 设置代理服务器
+    setProxy(&quot;192.168.31.243&quot;, 10809, null) // 第三个参数为 null 表示使用默认的 HTTP 代理
+
+    // 禁用自动处理 3xx 重定向
+    setFollowRedirects(false)
+}
+
+_console.log(&quot;成功创建了自定义配置的 HTTP 客户端:&quot;, customHttpClient)
+
+// ... 使用 customHttpClient 发起请求 ...</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_97" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+// 创建一个配置了 HTTP 代理且禁用了自动重定向的客户端
+def customHttpClient = $httpClients.newClient({ config -&gt;
+    // 设置代理服务器
+    config.setProxy(&quot;192.168.31.243&quot;, 10809, null) // 第三个参数为 null 表示使用默认的 HTTP 代理
+
+    // 禁用自动处理 3xx 重定向
+    config.setFollowRedirects(false)
+})
+
+$console.log(&quot;成功创建了自定义配置的 HTTP 客户端:&quot;, customHttpClient)
+
+// ... 使用 customHttpClient 发起请求 ...</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_100" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_103" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+// 创建一个配置了 HTTP 代理且禁用了自动重定向的客户端
+const customHttpClient = $httpClients.newClient(config =&gt; {
+    // 设置代理服务器
+    config.setProxy(&quot;192.168.31.243&quot;, 10809, null); // 第三个参数为 null 表示使用默认的 HTTP 代理
+
+    // 禁用自动处理 3xx 重定向
+    config.setFollowRedirects(false);
+});
+
+$console.log(&quot;成功创建了自定义配置的 HTTP 客户端:&quot;, customHttpClient);
+
+// ... 使用 customHttpClient 发起请求 ...</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_106" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+-- 创建一个配置了 HTTP 代理且禁用了自动重定向的客户端
+local customHttpClient = _httpClients:newClient(function(config)
+    -- 设置代理服务器
+    config:setProxy(&quot;192.168.31.243&quot;, 10809, nil) -- 第三个参数为 nil 表示使用默认的 HTTP 代理
+
+    -- 禁用自动处理 3xx 重定向
+    config:setFollowRedirects(false)
+end)
+
+_console:log(&quot;成功创建了自定义配置的 HTTP 客户端:&quot;, customHttpClient)
+
+-- ... 使用 customHttpClient 发起请求 ...</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_109" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+// 创建一个配置了 HTTP 代理且禁用了自动重定向的客户端
+$customHttpClient = $httpClients-&gt;newClient(function ($config) {
+    // 设置代理服务器
+    $config-&gt;setProxy(javaString(&quot;192.168.31.243&quot;), 10809, null); // 第三个参数为 null 表示使用默认的 HTTP 代理
+
+    // 禁用自动处理 3xx 重定向
+    $config-&gt;setFollowRedirects(false);
+});
+
+$console-&gt;log(javaString(&quot;成功创建了自定义配置的 HTTP 客户端:&quot;), $customHttpClient);
+
+// ... 使用 customHttpClient 发起请求 ...</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_112" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+# 创建一个配置了 HTTP 代理且禁用了自动重定向的客户端
+customHttpClient = _httpClients.newClient(lambda config: (
+    # 设置代理服务器
+    # Groovy的 { config -&gt; ... } 转换为 lambda config: ...
+    # Groovy的 null 转换为 Python的 None
+    config.setProxy(&quot;192.168.31.243&quot;, 10809, None), # 第三个参数为 None 表示使用默认的 HTTP 代理
+
+    # 禁用自动处理 3xx 重定向
+    # Groovy的 false 转换为 Python的 False
+    config.setFollowRedirects(False)
+))
+
+# 为了安全打印，将 customHttpClient 对象转换为字符串
+_console.log(&quot;成功创建了自定义配置的 HTTP 客户端: &quot; + str(customHttpClient))
+
+# ... 使用 customHttpClient 发起请求 ...</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_115" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+# 创建一个配置了 HTTP 代理且禁用了自动重定向的客户端
+customHttpClient = $httpClients.newClient do |config|
+  # 设置代理服务器
+  config.setProxy(&quot;192.168.31.243&quot;, 10809, nil) # 第三个参数为 null 表示使用默认的 HTTP 代理
+
+  # 禁用自动处理 3xx 重定向
+  config.setFollowRedirects(false)
+end
+
+$console.log(&quot;成功创建了自定义配置的 HTTP 客户端:&quot;, customHttpClient)
+
+# ... 使用 customHttpClient 发起请求 ...</div></div></div></section></section><section class="chapter"><h2 id="-8za098_5" data-toc="-8za098_5">发起请求</h2><p id="-8za098_164">所有请求方法都返回一个 Deferred 对象，它代表一个未来的结果。您应该使用 .then(), .onError() 和 .onComplete() 来处理异步结果。</p><section class="chapter"><h3 id="get" data-toc="get">发起 GET 请求</h3><p id="-8za098_169">GET 请求通常用于从服务器获取数据。</p><div class="tabs" id="-8za098_173" data-group="languages" data-anchors="[-8za098_176,-8za098_179,-8za098_182,-8za098_185,-8za098_188,-8za098_191,-8za098_194,-8za098_197]"><div class="tabs__content" data-gtm="tab" id="-8za098_176" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+// 在脚本顶层创建一个协程作用域，供所有异步操作复用
+val scope = _coroutines.newScope(null)
+val httpClient = _httpClients.newClient(null)
+val url = &quot;http://httpbin.org/get&quot;
+
+// 示例 1: 简单的 GET 请求
+httpClient.get(scope, url, null, null)
+    .then { s, response -&gt;
+        _console.log(&quot;简单 GET 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+        // 返回一个新的 Deferred，其结果是响应体文本
+        response.getTextBody(s)
+    }
+    .then { s, bodyText -&gt;
+        _console.log(&quot;响应体:&quot;, bodyText)
+        // 链的最后一步，返回一个已完成的 Deferred 以正确结束链条
+        s.resolve(null)
+    }
+    .onError { error -&gt;
+        _console.error(&quot;简单 GET 请求失败:&quot;, error)
+    }
+
+
+// 示例 2: 带查询参数和自定义请求头的 GET 请求
+val queryParams = mapOf(
+    &quot;user&quot; to &quot;M8Test&quot;,
+    &quot;id&quot; to &quot;12345&quot;
+)
+
+// request 配置块通常是 Receiver 模式
+httpClient.get(scope, url, queryParams) {
+    // 添加自定义请求头
+    addHeader(&quot;X-Custom-Header&quot;, &quot;MyValue&quot;)
+    setUserAgent(&quot;M8Test-Script-Client/1.0&quot;)
+}
+    .then { s, response -&gt;
+        _console.log(&quot;带参数的 GET 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+        response.getTextBody(s)
+    }
+    .then { s, bodyText -&gt;
+        _console.log(&quot;响应体:&quot;, bodyText)
+        s.resolve(null)
+    }
+    .onError { error -&gt;
+        _console.error(&quot;带参数的 GET 请求失败:&quot;, error)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_179" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+// 在脚本顶层创建一个协程作用域，供所有异步操作复用
+def scope = $coroutines.newScope(null)
+def httpClient = $httpClients.newClient(null)
+def url = &quot;http://httpbin.org/get&quot;
+
+// 示例 1: 简单的 GET 请求
+httpClient.get(scope, url, null, null)
+        .then({ s, response -&gt;
+            $console.log(&quot;简单 GET 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+            // 返回一个新的 Deferred，其结果是响应体文本
+            response.getTextBody(s)
+        })
+        .then({ s, bodyText -&gt;
+            $console.log(&quot;响应体:&quot;, bodyText)
+            // 链的最后一步，返回一个已完成的 Deferred 以正确结束链条
+            s.resolve(null)
+        })
+        .onError({ error -&gt;
+            $console.error(&quot;简单 GET 请求失败:&quot;, error)
+        })
+
+
+// 示例 2: 带查询参数和自定义请求头的 GET 请求
+def queryParams = [
+        &quot;user&quot;: &quot;M8Test&quot;,
+        &quot;id&quot;: &quot;12345&quot;
+]
+
+httpClient.get(scope, url, queryParams, { request -&gt;
+    // 添加自定义请求头
+    request.addHeader(&quot;X-Custom-Header&quot;, &quot;MyValue&quot;)
+    request.setUserAgent(&quot;M8Test-Script-Client/1.0&quot;)
+})
+        .then({ s, response -&gt;
+            $console.log(&quot;带参数的 GET 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+            response.getTextBody(s)
+        })
+        .then({ s, bodyText -&gt;
+            $console.log(&quot;响应体:&quot;, bodyText)
+            s.resolve(null)
+        })
+        .onError({ error -&gt;
+            $console.error(&quot;带参数的 GET 请求失败:&quot;, error)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_182" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_185" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+// 在脚本顶层创建一个协程作用域，供所有异步操作复用
+const scope = $coroutines.newScope(null);
+const httpClient = $httpClients.newClient(null);
+const url = &quot;http://httpbin.org/get&quot;;
+
+// 示例 1: 简单的 GET 请求
+httpClient.get(scope, url, null, null)
+    .then((s, response) =&gt; {
+        $console.log(&quot;简单 GET 请求成功，状态码:&quot;, response.getStatusCode().getValue());
+        // 返回一个新的 Deferred，其结果是响应体文本
+        return response.getTextBody(s);
+    })
+    .then((s, bodyText) =&gt; {
+        $console.log(&quot;响应体:&quot;, bodyText);
+        // 链的最后一步，返回一个已完成的 Deferred 以正确结束链条
+        return s.resolve(null);
+    })
+    .onError(error =&gt; {
+        $console.error(&quot;简单 GET 请求失败:&quot;, error);
+    });
+
+
+// 示例 2: 带查询参数和自定义请求头的 GET 请求
+const queryParams = {
+    &quot;user&quot;: &quot;M8Test&quot;,
+    &quot;id&quot;: &quot;12345&quot;
+};
+
+httpClient.get(scope, url, queryParams, request =&gt; {
+    // 添加自定义请求头
+    request.addHeader(&quot;X-Custom-Header&quot;, &quot;MyValue&quot;);
+    request.setUserAgent(&quot;M8Test-Script-Client/1.0&quot;);
+})
+    .then((s, response) =&gt; {
+        $console.log(&quot;带参数的 GET 请求成功，状态码:&quot;, response.getStatusCode().getValue());
+        return response.getTextBody(s);
+    })
+    .then((s, bodyText) =&gt; {
+        $console.log(&quot;响应体:&quot;, bodyText);
+        return s.resolve(null);
+    })
+    .onError(error =&gt; {
+        $console.error(&quot;带参数的 GET 请求失败:&quot;, error);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_188" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+-- 在脚本顶层创建一个协程作用域，供所有异步操作复用
+local scope = _coroutines:newScope(nil)
+local httpClient = _httpClients:newClient(nil)
+local url = &quot;http://httpbin.org/get&quot;
+
+-- 示例 1: 简单的 GET 请求
+httpClient:get(scope, url, nil, nil)
+    :_then(function(s, response)
+        _console:log(&quot;简单 GET 请求成功，状态码:&quot;, response:getStatusCode():getValue())
+        -- 返回一个新的 Deferred，其结果是响应体文本
+        return response:getTextBody(s)
+    end)
+    :_then(function(s, bodyText)
+        _console:log(&quot;响应体:&quot;, bodyText)
+        -- 链的最后一步，返回一个已完成的 Deferred 以正确结束链条
+        return s:resolve(nil)
+    end)
+    :onError(function(error)
+        -- 在调用方法前检查 error 是否为 nil
+        if error ~= nil then
+            _console:error(&quot;简单 GET 请求失败:&quot;, error:stackTraceToString())
+        else
+            _console:error(&quot;简单 GET 请求失败，但未提供错误详情。&quot;)
+        end
+    end)
+
+
+-- 示例 2: 带查询参数和自定义请求头的 GET 请求
+-- 修正：使用 _maps API 显式创建 Java Map 对象
+local queryParams = _maps:mapOf(
+    _maps:pairOf(&quot;user&quot;, &quot;M8Test&quot;),
+    _maps:pairOf(&quot;id&quot;, &quot;12345&quot;)
+)
+
+httpClient:get(scope, url, queryParams, function(request)
+    -- 添加自定义请求头
+    request:addHeader(&quot;X-Custom-Header&quot;, &quot;MyValue&quot;)
+    request:setUserAgent(&quot;M8Test-Script-Client/1.0&quot;)
+end)
+    :_then(function(s, response)
+        _console:log(&quot;带参数的 GET 请求成功，状态码:&quot;, response:getStatusCode():getValue())
+        return response:getTextBody(s)
+    end)
+    :_then(function(s, bodyText)
+        _console:log(&quot;响应体:&quot;, bodyText)
+        return s:resolve(nil)
+    end)
+    :onError(function(error)
+        -- 在调用方法前检查 error 是否为 nil
+        if error ~= nil then
+            _console:error(&quot;带参数的 GET 请求失败:&quot;, error:stackTraceToString())
+        else
+            _console:error(&quot;带参数的 GET 请求失败，但未提供错误详情。&quot;)
+        end
+    end)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_191" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+// 在脚本顶层创建一个协程作用域，供所有异步操作复用
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$httpClient = $httpClients-&gt;newClient(null);
+$url = javaString(&quot;http://httpbin.org/get&quot;);
+
+// 示例 1: 简单的 GET 请求
+$httpClient-&gt;get($scope, $url, null, null)
+    -&gt;then(function ($s, $response) {
+        global $console;
+        $console-&gt;log(javaString(&quot;简单 GET 请求成功，状态码:&quot;), $response-&gt;getStatusCode()-&gt;getValue());
+        // 返回一个新的 Deferred，其结果是响应体文本
+        return $response-&gt;getTextBody($s);
+    })
+    -&gt;then(function ($s, $bodyText) {
+        global $console;
+        $console-&gt;log(javaString(&quot;响应体:&quot;), $bodyText);
+        // 链的最后一步，返回一个已完成的 Deferred 以正确结束链条
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;简单 GET 请求失败:&quot;), $error);
+    });
+
+
+// 示例 2: 带查询参数和自定义请求头的 GET 请求
+$queryParams = [
+    &quot;user&quot; =&gt; javaString(&quot;M8Test&quot;),
+    &quot;id&quot;   =&gt; javaString(&quot;12345&quot;)
+];
+
+$httpClient-&gt;get($scope, $url, $queryParams, function ($request) {
+    // 添加自定义请求头
+    $request-&gt;addHeader(javaString(&quot;X-Custom-Header&quot;), javaString(&quot;MyValue&quot;));
+    $request-&gt;setUserAgent(javaString(&quot;M8Test-Script-Client/1.0&quot;));
+})
+    -&gt;then(function ($s, $response) {
+        global $console;
+        $console-&gt;log(javaString(&quot;带参数的 GET 请求成功，状态码:&quot;), $response-&gt;getStatusCode()-&gt;getValue());
+        return $response-&gt;getTextBody($s);
+    })
+    -&gt;then(function ($s, $bodyText) {
+        global $console;
+        $console-&gt;log(javaString(&quot;响应体:&quot;), $bodyText);
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;带参数的 GET 请求失败:&quot;), $error);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_194" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+# 在脚本顶层创建一个协程作用域，供所有异步操作复用
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+httpClient = _httpClients.newClient(None)
+url = &quot;http://httpbin.org/get&quot;
+
+# 示例 1: 简单的 GET 请求
+httpClient.get(scope, url, None, None).then(lambda s, response: (
+    # Groovy 的多参数 log 转换为 Python 的 f-string 格式化
+    _console.log(f&quot;简单 GET 请求成功，状态码: {response.getStatusCode().getValue()}&quot;),
+    # 返回一个新的 Deferred，其结果是响应体文本
+    response.getTextBody(s)
+    # 此处有两个表达式 (log 和 return)，因此使用 [-1] 是正确的
+)[-1]).then(lambda s, bodyText: (
+    _console.log(f&quot;响应体: {bodyText}&quot;),
+    # 链的最后一步，返回一个已完成的 Deferred 以正确结束链条
+    s.resolve(None)
+    # 此处有两个表达式 (log 和 return)，因此使用 [-1] 是正确的
+)[-1]).onError(lambda error:
+               # 此处只有一个表达式，直接返回，不使用 [-1]
+               _console.error(f&quot;简单 GET 请求失败: {error}&quot;)
+               )
+
+
+# 示例 2: 带查询参数和自定义请求头的 GET 请求
+# Groovy 的 map 转换为 Python 的 dictionary
+queryParams = {
+    &quot;user&quot;: &quot;M8Test&quot;,
+    &quot;id&quot;: &quot;12345&quot;
+}
+
+# Groovy 中方法最后一个闭包参数可以写在括号外，Python 中则作为常规参数传入
+httpClient.get(scope, url, queryParams, lambda request: (
+    # 添加自定义请求头
+    request.addHeader(&quot;X-Custom-Header&quot;, &quot;MyValue&quot;),
+    request.setUserAgent(&quot;M8Test-Script-Client/1.0&quot;)
+)).then(lambda s, response: (
+    _console.log(f&quot;带参数的 GET 请求成功，状态码: {response.getStatusCode().getValue()}&quot;),
+    response.getTextBody(s)
+)[-1]).then(lambda s, bodyText: (
+    _console.log(f&quot;响应体: {bodyText}&quot;),
+    s.resolve(None)
+)[-1]).onError(lambda error:
+               _console.error(f&quot;带参数的 GET 请求失败: {error}&quot;)
+               )</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_197" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+# 在脚本顶层创建一个协程作用域，供所有异步操作复用
+scope = $coroutines.newScope(nil)
+httpClient = $httpClients.newClient(nil)
+url = &quot;http://httpbin.org/get&quot;
+
+# 示例 1: 简单的 GET 请求
+httpClient.get(scope, url, nil, nil)
+          .then do |s, response|
+  $console.log(&quot;简单 GET 请求成功，状态码:&quot;, response.getStatusCode.getValue)
+  # 返回一个新的 Deferred，其结果是响应体文本
+  response.getTextBody(s)
+end
+          .then do |s, bodyText|
+  $console.log(&quot;响应体:&quot;, bodyText)
+  # 链的最后一步，返回一个已完成的 Deferred 以正确结束链条
+  s.resolve(nil)
+end
+          .onError do |error|
+  $console.error(&quot;简单 GET 请求失败:&quot;, error)
+end
+
+
+# 示例 2: 带查询参数和自定义请求头的 GET 请求
+# Ruby 中 Hash 使用 {} 且键值对之间用 =&gt; 连接
+queryParams = {
+  &quot;user&quot; =&gt; &quot;M8Test&quot;,
+  &quot;id&quot; =&gt; &quot;12345&quot;
+}
+
+httpClient.get(scope, url, queryParams) do |request|
+  # 添加自定义请求头
+  request.addHeader(&quot;X-Custom-Header&quot;, &quot;MyValue&quot;)
+  request.setUserAgent(&quot;M8Test-Script-Client/1.0&quot;)
+end.then do |s, response|
+  $console.log(&quot;带参数的 GET 请求成功，状态码:&quot;, response.getStatusCode.getValue)
+  response.getTextBody(s)
+end.then do |s, bodyText|
+  $console.log(&quot;响应体:&quot;, bodyText)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;带参数的 GET 请求失败:&quot;, error)
+end</div></div></div></section><section class="chapter"><h3 id="post" data-toc="post">发起 POST 请求</h3><p id="-8za098_246">这常用于模拟网页表单提交。</p><div class="tabs" id="-8za098_252" data-group="languages" data-anchors="[-8za098_258,-8za098_261,-8za098_264,-8za098_267,-8za098_270,-8za098_273,-8za098_276,-8za098_279]"><div class="tabs__content" data-gtm="tab" id="-8za098_258" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val httpClient = _httpClients.newClient(null)
+val url = &quot;http://httpbin.org/post&quot;
+
+val formData = mapOf(
+    &quot;username&quot; to &quot;testuser&quot;,
+    &quot;password&quot; to &quot;secretpassword&quot;
+)
+
+httpClient.post(scope, url, formData, null)
+    .then { s, response -&gt;
+        _console.log(&quot;Form POST 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+        response.getTextBody(s)
+    }
+    .then { s, bodyText -&gt;
+        _console.log(&quot;响应体:&quot;, bodyText)
+        s.resolve(null)
+    }
+    .onError { error -&gt;
+        _console.error(&quot;Form POST 请求失败:&quot;, error)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_261" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def httpClient = $httpClients.newClient(null)
+def url = &quot;http://httpbin.org/post&quot;
+
+def formData = [
+        &quot;username&quot;: &quot;testuser&quot;,
+        &quot;password&quot;: &quot;secretpassword&quot;
+]
+
+httpClient.post(scope, url, formData, null)
+        .then({ s, response -&gt;
+            $console.log(&quot;Form POST 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+            response.getTextBody(s)
+        })
+        .then({ s, bodyText -&gt;
+            $console.log(&quot;响应体:&quot;, bodyText)
+            s.resolve(null)
+        })
+        .onError({ error -&gt;
+            $console.error(&quot;Form POST 请求失败:&quot;, error)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_264" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_267" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const httpClient = $httpClients.newClient(null);
+const url = &quot;http://httpbin.org/post&quot;;
+
+const formData = {
+    &quot;username&quot;: &quot;testuser&quot;,
+    &quot;password&quot;: &quot;secretpassword&quot;
+};
+
+httpClient.post(scope, url, formData, null)
+    .then((s, response) =&gt; {
+        $console.log(&quot;Form POST 请求成功，状态码:&quot;, response.getStatusCode().getValue());
+        return response.getTextBody(s);
+    })
+    .then((s, bodyText) =&gt; {
+        $console.log(&quot;响应体:&quot;, bodyText);
+        return s.resolve(null);
+    })
+    .onError(error =&gt; {
+        $console.error(&quot;Form POST 请求失败:&quot;, error);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_270" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local httpClient = _httpClients:newClient(nil)
+local url = &quot;http://httpbin.org/post&quot;
+
+-- 修正：使用 _maps API 显式创建 Java Map 对象
+local formData = _maps:mapOf(
+    _maps:pairOf(&quot;username&quot;, &quot;testuser&quot;),
+    _maps:pairOf(&quot;password&quot;, &quot;secretpassword&quot;)
+)
+
+httpClient:post(scope, url, formData, nil)
+    :_then(function(s, response)
+        _console:log(&quot;Form POST 请求成功，状态码:&quot;, response:getStatusCode():getValue())
+        return response:getTextBody(s)
+    end)
+    :_then(function(s, bodyText)
+        _console:log(&quot;响应体:&quot;, bodyText)
+        return s:resolve(nil)
+    end)
+    :onError(function(error)
+        if error ~= nil then
+            _console:error(&quot;Form POST 请求失败:&quot;, error:stackTraceToString())
+        else
+            _console:error(&quot;Form POST 请求失败，但未提供错误详情。&quot;)
+        end
+    end)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_273" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$httpClient = $httpClients-&gt;newClient(null);
+$url = javaString(&quot;http://httpbin.org/post&quot;);
+
+$formData = [
+    &quot;username&quot; =&gt; javaString(&quot;testuser&quot;),
+    &quot;password&quot; =&gt; javaString(&quot;secretpassword&quot;)
+];
+
+$httpClient-&gt;post($scope, $url, $formData, null)
+    -&gt;then(function ($s, $response) {
+        global $console;
+        $console-&gt;log(javaString(&quot;Form POST 请求成功，状态码:&quot;), $response-&gt;getStatusCode()-&gt;getValue());
+        return $response-&gt;getTextBody($s);
+    })
+    -&gt;then(function ($s, $bodyText) {
+        global $console;
+        $console-&gt;log(javaString(&quot;响应体:&quot;), $bodyText);
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;Form POST 请求失败:&quot;), $error);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_276" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+httpClient = _httpClients.newClient(None)
+url = &quot;http://httpbin.org/post&quot;
+
+# Groovy 的 Map [key: value] 被转换为 Python 的字典 {key: value}
+formData = {
+    &quot;username&quot;: &quot;testuser&quot;,
+    &quot;password&quot;: &quot;secretpassword&quot;
+}
+
+httpClient.post(scope, url, formData, None).then(lambda s, response: (
+    # _console.log 的多参数在 Python 中需要拼接为单个字符串
+    _console.log(&quot;Form POST 请求成功，状态码: &quot; + str(response.getStatusCode().getValue())),
+    # 返回下一个链条需要的值
+    response.getTextBody(s)
+    # then 回调中包含日志和返回值，是典型的 (...)[-1] 使用场景
+)[-1]).then(lambda s, bodyText: (
+    _console.log(&quot;响应体: &quot; + str(bodyText)),
+    s.resolve(None)
+    # 同样，日志 + 返回值，使用 (...)[-1]
+)[-1]).onError(lambda error: (
+    _console.error(&quot;Form POST 请求失败: &quot; + str(error))
+))</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_279" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+httpClient = $httpClients.newClient(nil)
+url = &quot;http://httpbin.org/post&quot;
+
+formData = {
+  &quot;username&quot; =&gt; &quot;testuser&quot;,
+  &quot;password&quot; =&gt; &quot;secretpassword&quot;
+}
+
+httpClient.post(scope, url, formData, nil)
+          .then do |s, response|
+  $console.log(&quot;Form POST 请求成功，状态码:&quot;, response.getStatusCode.getValue)
+  response.getTextBody(s)
+end
+          .then do |s, bodyText|
+  $console.log(&quot;响应体:&quot;, bodyText)
+  s.resolve(nil)
+end
+          .onError do |error|
+  $console.error(&quot;Form POST 请求失败:&quot;, error)
+end</div></div></div><p id="-8za098_248">现代 API 通信中最常见的方式。</p><div class="tabs" id="-8za098_255" data-group="languages" data-anchors="[-8za098_330,-8za098_333,-8za098_336,-8za098_339,-8za098_342,-8za098_345,-8za098_348,-8za098_351]"><div class="tabs__content" data-gtm="tab" id="-8za098_330" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val httpClient = _httpClients.newClient(null)
+val url = &quot;http://httpbin.org/post&quot;
+
+// 注意：json 参数需要是一个字符串
+// Kotlin 中可以使用 &quot;&quot;&quot; 原生字符串，或者直接字符串拼接
+val jsonString = &quot;&quot;&quot;{&quot;name&quot;: &quot;M8Test&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;features&quot;: [&quot;http&quot;, &quot;automation&quot;]}&quot;&quot;&quot;
+
+httpClient.postJson(scope, url, jsonString, null)
+    .then { s, response -&gt;
+        _console.log(&quot;JSON POST 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+        // 获取响应头
+        _console.log(&quot;响应 Content-Type:&quot;, response.getHeaders()[&quot;Content-Type&quot;])
+        response.getTextBody(s)
+    }
+    .then { s, bodyText -&gt;
+        _console.log(&quot;响应体:&quot;, bodyText)
+        s.resolve(null)
+    }
+    .onError { error -&gt;
+        _console.error(&quot;JSON POST 请求失败:&quot;, error)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_333" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def httpClient = $httpClients.newClient(null)
+def url = &quot;http://httpbin.org/post&quot;
+
+// 注意：json 参数需要是一个字符串
+def jsonString = '{&quot;name&quot;: &quot;M8Test&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;features&quot;: [&quot;http&quot;, &quot;automation&quot;]}'
+
+httpClient.postJson(scope, url, jsonString, null)
+        .then({ s, response -&gt;
+            $console.log(&quot;JSON POST 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+            // 获取响应头
+            $console.log(&quot;响应 Content-Type:&quot;, response.getHeaders()[&quot;Content-Type&quot;])
+            response.getTextBody(s)
+        })
+        .then({ s, bodyText -&gt;
+            $console.log(&quot;响应体:&quot;, bodyText)
+            s.resolve(null)
+        })
+        .onError({ error -&gt;
+            $console.error(&quot;JSON POST 请求失败:&quot;, error)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_336" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_339" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const httpClient = $httpClients.newClient(null);
+const url = &quot;http://httpbin.org/post&quot;;
+
+// 注意：json 参数需要是一个字符串
+const jsonString = '{&quot;name&quot;: &quot;M8Test&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;features&quot;: [&quot;http&quot;, &quot;automation&quot;]}';
+
+httpClient.postJson(scope, url, jsonString, null)
+    .then((s, response) =&gt; {
+        $console.log(&quot;JSON POST 请求成功，状态码:&quot;, response.getStatusCode().getValue());
+        // 获取响应头
+        $console.log(&quot;响应 Content-Type:&quot;, response.getHeaders()[&quot;Content-Type&quot;]);
+        return response.getTextBody(s);
+    })
+    .then((s, bodyText) =&gt; {
+        $console.log(&quot;响应体:&quot;, bodyText);
+        return s.resolve(null);
+    })
+    .onError(error =&gt; {
+        $console.error(&quot;JSON POST 请求失败:&quot;, error);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_342" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local httpClient = _httpClients:newClient(nil)
+local url = &quot;http://httpbin.org/post&quot;
+
+-- 注意：json 参数需要是一个字符串
+local jsonString = '{&quot;name&quot;: &quot;M8Test&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;features&quot;: [&quot;http&quot;, &quot;automation&quot;]}'
+
+httpClient:postJson(scope, url, jsonString, nil)
+    :_then(function(s, response)
+        _console:log(&quot;JSON POST 请求成功，状态码:&quot;, response:getStatusCode():getValue())
+        -- 获取响应头
+        _console:log(&quot;响应 Content-Type:&quot;, response:getHeaders():get(&quot;Content-Type&quot;))
+        return response:getTextBody(s)
+    end)
+    :_then(function(s, bodyText)
+        _console:log(&quot;响应体:&quot;, bodyText)
+        return s:resolve(nil)
+    end)
+    :onError(function(error)
+        if error ~= nil then
+            _console:error(&quot;JSON POST 请求失败:&quot;, error:stackTraceToString())
+        else
+            _console:error(&quot;JSON POST 请求失败，但未提供错误详情。&quot;)
+        end
+    end)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_345" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$httpClient = $httpClients-&gt;newClient(null);
+$url = javaString(&quot;http://httpbin.org/post&quot;);
+
+// 注意：json 参数需要是一个字符串
+$jsonString = javaString('{&quot;name&quot;: &quot;M8Test&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;features&quot;: [&quot;http&quot;, &quot;automation&quot;]}');
+
+$httpClient-&gt;postJson($scope, $url, $jsonString, null)
+    -&gt;then(function ($s, $response) {
+        global $console;
+        $console-&gt;log(javaString(&quot;JSON POST 请求成功，状态码:&quot;), $response-&gt;getStatusCode()-&gt;getValue());
+        // 获取响应头
+        $console-&gt;log(javaString(&quot;响应 Content-Type:&quot;), $response-&gt;getHeaders()[javaString(&quot;Content-Type&quot;)]);
+        return $response-&gt;getTextBody($s);
+    })
+    -&gt;then(function ($s, $bodyText) {
+        global $console;
+        $console-&gt;log(javaString(&quot;响应体:&quot;), $bodyText);
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;JSON POST 请求失败:&quot;), $error);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_348" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+httpClient = _httpClients.newClient(None)
+url = &quot;http://httpbin.org/post&quot;
+
+# 注意：json 参数需要是一个字符串
+jsonString = '{&quot;name&quot;: &quot;M8Test&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;features&quot;: [&quot;http&quot;, &quot;automation&quot;]}'
+
+httpClient.postJson(scope, url, jsonString, None).then(
+    # 这个lambda包含多个操作（两个log）和一个返回值，因此使用 (...)[-1]
+    lambda s, response: (
+        _console.log(&quot;JSON POST 请求成功，状态码:&quot;, response.getStatusCode().getValue()),
+        # 获取响应头
+        _console.log(&quot;响应 Content-Type:&quot;, response.getHeaders()[&quot;Content-Type&quot;]),
+        # response.getTextBody(s) 返回一个新的 Deferred, 作为元组的最后一个元素
+        response.getTextBody(s)
+    )[-1]
+).then(
+    # 这个lambda也包含一个log和一个返回值，同样使用 (...)[-1]
+    lambda s, bodyText: (
+        _console.log(&quot;响应体:&quot;, bodyText),
+        s.resolve(None)
+    )[-1]
+).onError(
+    # 这个lambda只有一个操作，直接执行即可
+    lambda error:
+    _console.error(&quot;JSON POST 请求失败:&quot;, error)
+)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_351" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+httpClient = $httpClients.newClient(nil)
+url = &quot;http://httpbin.org/post&quot;
+
+# 注意：json 参数需要是一个字符串
+jsonString = '{&quot;name&quot;: &quot;M8Test&quot;, &quot;version&quot;: &quot;1.0&quot;, &quot;features&quot;: [&quot;http&quot;, &quot;automation&quot;]}'
+
+httpClient.postJson(scope, url, jsonString, nil)
+          .then do |s, response|
+  $console.log(&quot;JSON POST 请求成功，状态码:&quot;, response.getStatusCode.getValue)
+  # 获取响应头
+  $console.log(&quot;响应 Content-Type:&quot;, response.getHeaders[&quot;Content-Type&quot;])
+  response.getTextBody(s)
+end
+          .then do |s, bodyText|
+  $console.log(&quot;响应体:&quot;, bodyText)
+  s.resolve(nil)
+end
+          .onError do |error|
+  $console.error(&quot;JSON POST 请求失败:&quot;, error)
+end</div></div></div></section><section class="chapter"><h3 id="multipart" data-toc="multipart">发起 Multipart 请求（文件上传）</h3><div class="tabs" id="-8za098_403" data-group="languages" data-anchors="[-8za098_406,-8za098_409,-8za098_412,-8za098_415,-8za098_418,-8za098_421,-8za098_424,-8za098_427]"><div class="tabs__content" data-gtm="tab" id="-8za098_406" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+
+// 1. 准备一个要上传的文件
+// buildFile 是 Receiver 模式
+val fileToUpload = _files.buildFile {
+    setPath(_files.getFilesDir(), &quot;my-upload.txt&quot;)
+}
+fileToUpload.writeText(&quot;这是 M8Test 脚本上传的文件内容。&quot;, &quot;UTF-8&quot;)
+_console.log(&quot;准备上传的文件:&quot;, fileToUpload.getAbsolutePath())
+
+val httpClient = _httpClients.newClient(null)
+val url = &quot;http://httpbin.org/post&quot;
+
+// postMultipart 的配置块通常是 Receiver 模式 (MultipartBuilder)
+httpClient.postMultipart(scope, url, {
+    // 添加文本字段
+    addText(&quot;description&quot;, &quot;这是一个文件上传测试&quot;, null)
+    addText(&quot;author&quot;, &quot;M8Test&quot;, null)
+
+    // 添加文件
+    // name: 表单字段名
+    // scriptFile: 要上传的文件对象
+    // fileName: 在请求中显示的文件名
+    // fileType: 文件的MIME类型
+    addFile(&quot;uploadFile&quot;, fileToUpload, &quot;user-friendly-name.txt&quot;, &quot;text/plain&quot;, null)
+}, null)
+    .then { s, response -&gt;
+        _console.log(&quot;Multipart POST 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+        response.getTextBody(s)
+    }
+    .then { s, bodyText -&gt;
+        _console.log(&quot;响应体:&quot;, bodyText)
+        s.resolve(null)
+    }
+    .onError { error -&gt;
+        _console.error(&quot;Multipart POST 请求失败:&quot;, error)
+    }
+    .onComplete {
+        // 清理临时文件
+        fileToUpload.delete()
+        _console.log(&quot;临时文件已删除。&quot;)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_409" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+
+// 1. 准备一个要上传的文件
+def fileToUpload = $files.buildFile({
+    it.setPath($files.getFilesDir(), &quot;my-upload.txt&quot;)
+})
+fileToUpload.writeText(&quot;这是 M8Test 脚本上传的文件内容。&quot;, &quot;UTF-8&quot;)
+$console.log(&quot;准备上传的文件:&quot;, fileToUpload.getAbsolutePath())
+
+def httpClient = $httpClients.newClient(null)
+def url = &quot;http://httpbin.org/post&quot;
+
+httpClient.postMultipart(scope, url, { multipart -&gt;
+    // 添加文本字段
+    multipart.addText(&quot;description&quot;, &quot;这是一个文件上传测试&quot;, null)
+    multipart.addText(&quot;author&quot;, &quot;M8Test&quot;, null)
+
+    // 添加文件
+    // name: 表单字段名
+    // scriptFile: 要上传的文件对象
+    // fileName: 在请求中显示的文件名
+    // fileType: 文件的MIME类型
+    multipart.addFile(&quot;uploadFile&quot;, fileToUpload, &quot;user-friendly-name.txt&quot;, &quot;text/plain&quot;, null)
+}, null)
+        .then({ s, response -&gt;
+            $console.log(&quot;Multipart POST 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+            response.getTextBody(s)
+        })
+        .then({ s, bodyText -&gt;
+            $console.log(&quot;响应体:&quot;, bodyText)
+            s.resolve(null)
+        })
+        .onError({ error -&gt;
+            $console.error(&quot;Multipart POST 请求失败:&quot;, error)
+        })
+        .onComplete({
+            // 清理临时文件
+            fileToUpload.delete()
+            $console.log(&quot;临时文件已删除。&quot;)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_412" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_415" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+
+// 1. 准备一个要上传的文件
+const fileToUpload = $files.buildFile(it =&gt; {
+    it.setPath($files.getFilesDir(), &quot;my-upload.txt&quot;);
+});
+fileToUpload.writeText(&quot;这是 M8Test 脚本上传的文件内容。&quot;, &quot;UTF-8&quot;);
+$console.log(&quot;准备上传的文件:&quot;, fileToUpload.getAbsolutePath());
+
+const httpClient = $httpClients.newClient(null);
+const url = &quot;http://httpbin.org/post&quot;;
+
+httpClient.postMultipart(scope, url, multipart =&gt; {
+    // 添加文本字段
+    multipart.addText(&quot;description&quot;, &quot;这是一个文件上传测试&quot;, null);
+    multipart.addText(&quot;author&quot;, &quot;M8Test&quot;, null);
+
+    // 添加文件
+    // name: 表单字段名
+    // scriptFile: 要上传的文件对象
+    // fileName: 在请求中显示的文件名
+    // fileType: 文件的MIME类型
+    multipart.addFile(&quot;uploadFile&quot;, fileToUpload, &quot;user-friendly-name.txt&quot;, &quot;text/plain&quot;, null);
+}, null)
+    .then((s, response) =&gt; {
+        $console.log(&quot;Multipart POST 请求成功，状态码:&quot;, response.getStatusCode().getValue());
+        return response.getTextBody(s);
+    })
+    .then((s, bodyText) =&gt; {
+        $console.log(&quot;响应体:&quot;, bodyText);
+        return s.resolve(null);
+    })
+    .onError(error =&gt; {
+        $console.error(&quot;Multipart POST 请求失败:&quot;, error);
+    })
+    .onComplete(() =&gt; {
+        // 清理临时文件
+        fileToUpload.delete();
+        $console.log(&quot;临时文件已删除。&quot;);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_418" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+
+-- 1. 准备一个要上传的文件
+local fileToUpload = _files:buildFile(function(it)
+    it:setPath(_files:getFilesDir(), &quot;my-upload.txt&quot;)
+end)
+fileToUpload:writeText(&quot;这是 M8Test 脚本上传的文件内容。&quot;, &quot;UTF-8&quot;)
+_console:log(&quot;准备上传的文件:&quot;, fileToUpload:getAbsolutePath())
+
+local httpClient = _httpClients:newClient(nil)
+local url = &quot;http://httpbin.org/post&quot;
+
+httpClient:postMultipart(scope, url, function(multipart)
+    -- 添加文本字段
+    multipart:addText(&quot;description&quot;, &quot;这是一个文件上传测试&quot;, nil)
+    multipart:addText(&quot;author&quot;, &quot;M8Test&quot;, nil)
+
+    -- 添加文件
+    -- name: 表单字段名
+    -- scriptFile: 要上传的文件对象
+    -- fileName: 在请求中显示的文件名
+    -- fileType: 文件的MIME类型
+    multipart:addFile(&quot;uploadFile&quot;, fileToUpload, &quot;user-friendly-name.txt&quot;, &quot;text/plain&quot;, nil)
+end, nil)
+    :_then(function(s, response)
+        _console:log(&quot;Multipart POST 请求成功，状态码:&quot;, response:getStatusCode():getValue())
+        return response:getTextBody(s)
+    end)
+    :_then(function(s, bodyText)
+        _console:log(&quot;响应体:&quot;, bodyText)
+        return s:resolve(nil)
+    end)
+    :onError(function(error)
+        if error ~= nil then
+            _console:error(&quot;Multipart POST 请求失败:&quot;, error:stackTraceToString())
+        else
+            _console:error(&quot;Multipart POST 请求失败，但未提供错误详情。&quot;)
+        end
+    end)
+    :onComplete(function()
+        -- 清理临时文件
+        fileToUpload:delete()
+        _console:log(&quot;临时文件已删除。&quot;)
+    end)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_421" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+global $files;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 1. 准备一个要上传的文件
+$fileToUpload = $files-&gt;buildFile(function ($it) use ($files) {
+    $it-&gt;setPath($files-&gt;getFilesDir(), javaString(&quot;my-upload.txt&quot;));
+});
+$fileToUpload-&gt;writeText(javaString(&quot;这是 M8Test 脚本上传的文件内容。&quot;), javaString(&quot;UTF-8&quot;));
+$console-&gt;log(javaString(&quot;准备上传的文件:&quot;), $fileToUpload-&gt;getAbsolutePath());
+
+$httpClient = $httpClients-&gt;newClient(null);
+$url = javaString(&quot;http://httpbin.org/post&quot;);
+
+$httpClient-&gt;postMultipart($scope, $url, function ($multipart) use ($fileToUpload) {
+    // 添加文本字段
+    $multipart-&gt;addText(javaString(&quot;description&quot;), javaString(&quot;这是一个文件上传测试&quot;), null);
+    $multipart-&gt;addText(javaString(&quot;author&quot;), javaString(&quot;M8Test&quot;), null);
+
+    // 添加文件
+    // name: 表单字段名
+    // scriptFile: 要上传的文件对象
+    // fileName: 在请求中显示的文件名
+    // fileType: 文件的MIME类型
+    $multipart-&gt;addFile(javaString(&quot;uploadFile&quot;), $fileToUpload, javaString(&quot;user-friendly-name.txt&quot;), javaString(&quot;text/plain&quot;), null);
+}, null)
+    -&gt;then(function ($s, $response) {
+        global $console;
+        $console-&gt;log(javaString(&quot;Multipart POST 请求成功，状态码:&quot;), $response-&gt;getStatusCode()-&gt;getValue());
+        return $response-&gt;getTextBody($s);
+    })
+    -&gt;then(function ($s, $bodyText) {
+        global $console;
+        $console-&gt;log(javaString(&quot;响应体:&quot;), $bodyText);
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;Multipart POST 请求失败:&quot;), $error);
+    })
+    -&gt;onComplete(function () use ($fileToUpload) {
+        global $console;
+        // 清理临时文件
+        $fileToUpload-&gt;delete();
+        $console-&gt;log(javaString(&quot;临时文件已删除。&quot;));
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_424" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+# 使用我们标准的作用域创建方式
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+# 1. 准备一个要上传的文件
+fileToUpload = _files.buildFile(lambda it:
+                                it.setPath(_files.getFilesDir(), &quot;my-upload.txt&quot;)
+                                )
+fileToUpload.writeText(&quot;这是 M8Test 脚本上传的文件内容。&quot;, &quot;UTF-8&quot;)
+_console.log(&quot;准备上传的文件:&quot;, fileToUpload.getAbsolutePath())
+
+httpClient = _httpClients.newClient(None)
+url = &quot;http://httpbin.org/post&quot;
+
+(httpClient.postMultipart(scope, url, lambda multipart: (
+    # 添加文本字段
+    multipart.addText(&quot;description&quot;, &quot;这是一个文件上传测试&quot;, None),
+    multipart.addText(&quot;author&quot;, &quot;M8Test&quot;, None),
+
+    # 添加文件
+    # name: 表单字段名
+    # scriptFile: 要上传的文件对象
+    # fileName: 在请求中显示的文件名
+    # fileType: 文件的MIME类型
+    multipart.addFile(&quot;uploadFile&quot;, fileToUpload, &quot;user-friendly-name.txt&quot;, &quot;text/plain&quot;, None)
+), None).then(lambda s, response: (
+    # 第一个 then，需要打印日志并返回 body Deferred
+    _console.log(&quot;Multipart POST 请求成功，状态码:&quot;, str(response.getStatusCode().getValue())),
+    response.getTextBody(s)
+)[-1]).then(lambda s, bodyText: (
+    # 第二个 then，需要打印 body 并返回最终的 resolve
+    _console.log(&quot;响应体:&quot;, bodyText),
+    s.resolve(None)
+)[-1]).onError(lambda error: (
+    # onError 回调
+    _console.error(&quot;Multipart POST 请求失败:&quot;, error)
+))
+ .onComplete(lambda: (
+    # 清理临时文件
+    fileToUpload.delete(),
+    _console.log(&quot;临时文件已删除。&quot;)
+)))
+</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_427" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+
+# 1. 准备一个要上传的文件
+fileToUpload = $files.buildFile do |it|
+  it.setPath($files.getFilesDir, &quot;my-upload.txt&quot;)
+end
+fileToUpload.writeText(&quot;这是 M8Test 脚本上传的文件内容。&quot;, &quot;UTF-8&quot;)
+$console.log(&quot;准备上传的文件:&quot;, fileToUpload.getAbsolutePath)
+
+httpClient = $httpClients.newClient(nil)
+url = &quot;http://httpbin.org/post&quot;
+
+httpClient.postMultipart(scope, url, proc do |multipart|
+  # 添加文本字段
+  multipart.addText(&quot;description&quot;, &quot;这是一个文件上传测试&quot;, nil)
+  multipart.addText(&quot;author&quot;, &quot;M8Test&quot;, nil)
+
+  # 添加文件
+  # name: 表单字段名
+  # scriptFile: 要上传的文件对象
+  # fileName: 在请求中显示的文件名
+  # fileType: 文件的MIME类型
+  multipart.addFile(&quot;uploadFile&quot;, fileToUpload, &quot;user-friendly-name.txt&quot;, &quot;text/plain&quot;, nil)
+end, nil)
+          .then do |s, response|
+  $console.log(&quot;Multipart POST 请求成功，状态码:&quot;, response.getStatusCode.getValue)
+  response.getTextBody(s)
+end
+          .then do |s, bodyText|
+  $console.log(&quot;响应体:&quot;, bodyText)
+  s.resolve(nil)
+end
+          .onError do |error|
+  $console.error(&quot;Multipart POST 请求失败:&quot;, error)
+end
+          .onComplete do
+  # 清理临时文件
+  fileToUpload.delete
+  $console.log(&quot;临时文件已删除。&quot;)
+end</div></div></div></section><section class="chapter"><h3 id="request" data-toc="request">使用通用的 request 方法</h3><p id="-8za098_476">当需要使用 GET/POST 之外的 HTTP 方法（如 PUT, DELETE, PATCH）时，可以使用 request 方法。</p><div class="tabs" id="-8za098_480" data-group="languages" data-anchors="[-8za098_483,-8za098_486,-8za098_489,-8za098_492,-8za098_495,-8za098_498,-8za098_501,-8za098_504]"><div class="tabs__content" data-gtm="tab" id="-8za098_483" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val httpClient = _httpClients.newClient(null)
+
+// 示例：发起一个 PUT 请求
+val putUrl = &quot;http://httpbin.org/put&quot;
+val putData = &quot;&quot;&quot;{&quot;id&quot;: 1, &quot;status&quot;: &quot;updated&quot;}&quot;&quot;&quot;
+
+// request 配置块通常是 Receiver 模式
+httpClient.request(scope, putUrl) {
+    // 必须设置请求方法
+    setMethod { it.getPut() }
+    // 设置请求体
+    setJsonBody(putData)
+    // 设置超时（可选）
+    setTimeout {
+        setRequestTimeout(5000) // 5秒总超时
+        setConnectTimeout(2000) // 2秒连接超时
+    }
+}
+    .then { s, response -&gt;
+        _console.log(&quot;PUT 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+        response.getTextBody(s)
+    }
+    .then { s, bodyText -&gt;
+        _console.log(&quot;响应体:&quot;, bodyText)
+        s.resolve(null)
+    }
+    .onError { error -&gt;
+        _console.error(&quot;PUT 请求失败:&quot;, error)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_486" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def httpClient = $httpClients.newClient(null)
+
+// 示例：发起一个 PUT 请求
+def putUrl = &quot;http://httpbin.org/put&quot;
+def putData = '{&quot;id&quot;: 1, &quot;status&quot;: &quot;updated&quot;}'
+
+httpClient.request(scope, putUrl, { request -&gt;
+    // 必须设置请求方法
+    request.setMethod({ methods -&gt; methods.getPut() })
+    // 设置请求体
+    request.setJsonBody(putData)
+    // 设置超时（可选）
+    request.setTimeout({ timeout -&gt;
+        timeout.setRequestTimeout(5000) // 5秒总超时
+        timeout.setConnectTimeout(2000) // 2秒连接超时
+    })
+})
+        .then({ s, response -&gt;
+            $console.log(&quot;PUT 请求成功，状态码:&quot;, response.getStatusCode().getValue())
+            response.getTextBody(s)
+        })
+        .then({ s, bodyText -&gt;
+            $console.log(&quot;响应体:&quot;, bodyText)
+            s.resolve(null)
+        })
+        .onError({ error -&gt;
+            $console.error(&quot;PUT 请求失败:&quot;, error)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_489" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_492" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const httpClient = $httpClients.newClient(null);
+
+// 示例：发起一个 PUT 请求
+const putUrl = &quot;http://httpbin.org/put&quot;;
+const putData = '{&quot;id&quot;: 1, &quot;status&quot;: &quot;updated&quot;}';
+
+httpClient.request(scope, putUrl, request =&gt; {
+    // 必须设置请求方法
+    request.setMethod(methods =&gt; methods.getPut());
+    // 设置请求体
+    request.setJsonBody(putData);
+    // 设置超时（可选）
+    request.setTimeout(timeout =&gt; {
+        timeout.setRequestTimeout(5000); // 5秒总超时
+        timeout.setConnectTimeout(2000); // 2秒连接超时
+    });
+})
+    .then((s, response) =&gt; {
+        $console.log(&quot;PUT 请求成功，状态码:&quot;, response.getStatusCode().getValue());
+        return response.getTextBody(s);
+    })
+    .then((s, bodyText) =&gt; {
+        $console.log(&quot;响应体:&quot;, bodyText);
+        return s.resolve(null);
+    })
+    .onError(error =&gt; {
+        $console.error(&quot;PUT 请求失败:&quot;, error);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_495" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local httpClient = _httpClients:newClient(nil)
+
+-- 示例：发起一个 PUT 请求
+local putUrl = &quot;http://httpbin.org/put&quot;
+local putData = '{&quot;id&quot;: 1, &quot;status&quot;: &quot;updated&quot;}'
+
+httpClient:request(scope, putUrl, function(request)
+    -- 必须设置请求方法
+    request:setMethod(function(methods) return methods:getPut() end)
+    -- 设置请求体
+    request:setJsonBody(putData)
+    -- 设置超时（可选）
+    request:setTimeout(function(timeout)
+        timeout:setRequestTimeout(5000) -- 5秒总超时
+        timeout:setConnectTimeout(2000) -- 2秒连接超时
+    end)
+end)
+    :_then(function(s, response)
+        _console:log(&quot;PUT 请求成功，状态码:&quot;, response:getStatusCode():getValue())
+        return response:getTextBody(s)
+    end)
+    :_then(function(s, bodyText)
+        _console:log(&quot;响应体:&quot;, bodyText)
+        return s:resolve(nil)
+    end)
+    :onError(function(error)
+        if error ~= nil then
+            _console:error(&quot;PUT 请求失败:&quot;, error:stackTraceToString())
+        else
+            _console:error(&quot;PUT 请求失败，但未提供错误详情。&quot;)
+        end
+    end)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_498" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$httpClient = $httpClients-&gt;newClient(null);
+
+// 示例：发起一个 PUT 请求
+$putUrl = javaString(&quot;http://httpbin.org/put&quot;);
+$putData = javaString('{&quot;id&quot;: 1, &quot;status&quot;: &quot;updated&quot;}');
+
+$httpClient-&gt;request($scope, $putUrl, function ($request) use ($putData) {
+    // 必须设置请求方法
+    $request-&gt;setMethod(function ($methods) {
+        return $methods-&gt;getPut();
+    });
+    // 设置请求体
+    $request-&gt;setJsonBody($putData);
+    // 设置超时（可选）
+    $request-&gt;setTimeout(function ($timeout) {
+        $timeout-&gt;setRequestTimeout(5000); // 5秒总超时
+        $timeout-&gt;setConnectTimeout(2000); // 2秒连接超时
+    });
+})
+    -&gt;then(function ($s, $response) {
+        global $console;
+        $console-&gt;log(javaString(&quot;PUT 请求成功，状态码:&quot;), $response-&gt;getStatusCode()-&gt;getValue());
+        return $response-&gt;getTextBody($s);
+    })
+    -&gt;then(function ($s, $bodyText) {
+        global $console;
+        $console-&gt;log(javaString(&quot;响应体:&quot;), $bodyText);
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;PUT 请求失败:&quot;), $error-&gt;stackTraceToString());
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_501" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+httpClient = _httpClients.newClient(None)
+
+# 示例：发起一个 PUT 请求
+putUrl = &quot;http://httpbin.org/put&quot;
+putData = '{&quot;id&quot;: 1, &quot;status&quot;: &quot;updated&quot;}'
+
+httpClient.request(scope, putUrl, lambda request: (
+    # 必须设置请求方法
+    request.setMethod(lambda methods: methods.getPut()),
+    # 设置请求体
+    request.setJsonBody(putData),
+    # 设置超时（可选）
+    request.setTimeout(lambda timeout: (
+        timeout.setRequestTimeout(5000), # 5秒总超时
+        timeout.setConnectTimeout(2000)  # 2秒连接超时
+    ))
+)).then(lambda s, response: (
+    # 使用多个参数传递给 log 方法，避免因类型问题导致的拼接错误
+    _console.log(&quot;PUT 请求成功，状态码:&quot;, response.getStatusCode().getValue()),
+    # 返回下一个 Deferred
+    response.getTextBody(s)
+    # 此处有两个表达式（log 和 getTextBody），所以使用 (...)[-1] 是正确的
+)[-1]).then(lambda s, bodyText: (
+    _console.log(&quot;响应体:&quot;, bodyText),
+    s.resolve(None)
+    # 此处有两个表达式（log 和 resolve），所以使用 (...)[-1] 是正确的
+)[-1]).onError(lambda error: (
+    _console.error(&quot;PUT 请求失败:&quot;, error)
+))</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_504" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+httpClient = $httpClients.newClient(nil)
+
+# 示例：发起一个 PUT 请求
+putUrl = &quot;http://httpbin.org/put&quot;
+putData = '{&quot;id&quot;: 1, &quot;status&quot;: &quot;updated&quot;}'
+
+httpClient.request(scope, putUrl) do |request|
+  # 必须设置请求方法
+  request.setMethod { |methods| methods.getPut }
+  # 设置请求体
+  request.setJsonBody(putData)
+  # 设置超时（可选）
+  request.setTimeout do |timeout|
+    timeout.setRequestTimeout(5000) # 5秒总超时
+    timeout.setConnectTimeout(2000) # 2秒连接超时
+  end
+end.then do |s, response|
+  $console.log(&quot;PUT 请求成功，状态码:&quot;, response.getStatusCode.getValue)
+  response.getTextBody(s)
+end.then do |s, bodyText|
+  $console.log(&quot;响应体:&quot;, bodyText)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;PUT 请求失败:&quot;, error.stackTraceToString())
+end</div></div></div></section></section><section class="chapter"><h2 id="websocket" data-toc="websocket">处理 WebSocket 连接</h2><p id="-8za098_553">客户端可以与 WebSocket 服务器建立持久的双向连接。</p><div class="tabs" id="-8za098_557" data-group="languages" data-anchors="[-8za098_560,-8za098_563,-8za098_566,-8za098_569,-8za098_572,-8za098_575,-8za098_578,-8za098_581]"><div class="tabs__content" data-gtm="tab" id="-8za098_560" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val httpClient = _httpClients.newClient(null)
+val wsUrl = &quot;wss://echo.websocket.org/&quot; // 使用一个公共的 WebSocket Echo 服务器
+
+_console.log(&quot;正在尝试连接 WebSocket...&quot;)
+
+// webSocket 方法现在返回一个 Job，代表整个 WebSocket 会话的生命周期
+// 注意：这里删除了 { session -&gt; ... } 的参数，直接在 lambda 中使用 this (WebSocketSession)
+val wsJob = httpClient.webSocket(scope, wsUrl, null) {
+    // 设置事件监听器
+    setOnOpen { s -&gt;
+        _console.info(&quot;WebSocket 连接已建立！&quot;)
+        // 连接成功后发送一条消息, sendText 返回一个 Job
+        sendText(s, &quot;你好，WebSocket 服务器！来自 M8Test。&quot;)
+    }
+
+    setOnText { s, text -&gt;
+        _console.log(&quot;收到文本消息:&quot;, text)
+        // 收到消息 1 秒后关闭连接
+        // currentScope.delay(毫秒) 返回一个 Deferred&lt;Unit&gt;
+        scope.delay(1000).then { ss, v -&gt;
+            // close 返回的是 Job，而 then 需要返回 Deferred
+            // 使用 toDeferred() 将 Job 转换为 Deferred&lt;Unit&gt;
+            close(ss, 1000, &quot;测试完成&quot;).toDeferred()
+        }
+    }
+
+    setOnClose { s, reason -&gt;
+        _console.warn(&quot;WebSocket 连接已关闭。原因:&quot;, reason?.getCode(), reason?.getMessage())
+        // 返回一个已完成的 Deferred (也是 Job)
+        s.resolve(null)
+    }
+
+    setOnError { s, error -&gt;
+        _console.error(&quot;WebSocket 出现错误:&quot;, error)
+        s.resolve(null)
+    }
+}
+
+// 监听 Job 的完成事件
+wsJob.invokeOnCompletion { cause -&gt;
+    if (cause != null) {
+        _console.error(&quot;WebSocket 会话 Job 异常结束:&quot;, cause)
+    } else {
+        _console.log(&quot;WebSocket 会话 Job 正常完成。&quot;)
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_563" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def httpClient = $httpClients.newClient(null)
+def wsUrl = &quot;wss://echo.websocket.org/&quot; // 使用一个公共的 WebSocket Echo 服务器
+
+$console.log(&quot;正在尝试连接 WebSocket...&quot;)
+
+// webSocket 方法现在返回一个 Job，代表整个 WebSocket 会话的生命周期
+def wsJob = httpClient.webSocket(scope, wsUrl, null, { session -&gt;
+    // 设置事件监听器
+    session.setOnOpen({ s -&gt;
+        $console.info(&quot;WebSocket 连接已建立！&quot;)
+        // 连接成功后发送一条消息, sendText 返回一个 Job
+        session.sendText(s, &quot;你好，WebSocket 服务器！来自 M8Test。&quot;)
+    })
+
+    session.setOnText({ s, text -&gt;
+        $console.log(&quot;收到文本消息:&quot;, text)
+        // 收到消息 1 秒后关闭连接
+        scope.delay(1000).then({ ss, v -&gt;
+            session.close(ss, 1000, &quot;测试完成&quot;)
+        })
+    })
+
+    session.setOnClose({ s, reason -&gt;
+        $console.warn(&quot;WebSocket 连接已关闭。原因:&quot;, reason?.getCode(), reason?.getMessage())
+        // 返回一个已完成的 Job
+        s.resolve(null)
+    })
+
+    session.setOnError({ s, error -&gt;
+        $console.error(&quot;WebSocket 出现错误:&quot;, error)
+        s.resolve(null)
+    })
+})
+
+// 监听 Job 的完成事件
+wsJob.invokeOnCompletion({ cause -&gt;
+    if (cause != null) {
+        $console.error(&quot;WebSocket 会话 Job 异常结束:&quot;, cause)
+    } else {
+        $console.log(&quot;WebSocket 会话 Job 正常完成。&quot;)
+    }
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_566" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_569" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const httpClient = $httpClients.newClient(null);
+const wsUrl = &quot;wss://echo.websocket.org/&quot;; // 使用一个公共的 WebSocket Echo 服务器
+
+$console.log(&quot;正在尝试连接 WebSocket...&quot;);
+
+// webSocket 方法现在返回一个 Job，代表整个 WebSocket 会话的生命周期
+const wsJob = httpClient.webSocket(scope, wsUrl, null, session =&gt; {
+    // 设置事件监听器
+    session.setOnOpen(s =&gt; {
+        $console.info(&quot;WebSocket 连接已建立！&quot;);
+        // 连接成功后发送一条消息, sendText 返回一个 Job，必须返回
+        return session.sendText(s, &quot;你好，WebSocket 服务器！来自 M8Test。&quot;);
+    });
+
+    session.setOnText((s, text) =&gt; {
+        $console.log(&quot;收到文本消息:&quot;, text);
+        // 收到消息 1 秒后关闭连接，整个链会返回一个 Job
+        return scope.delay(1000).then((ss, v) =&gt; {
+            return session.close(ss, 1000, &quot;测试完成&quot;);
+        });
+    });
+
+    session.setOnClose((s, reason) =&gt; {
+        $console.warn(&quot;WebSocket 连接已关闭。原因:&quot;, reason?.getCode(), reason?.getMessage());
+        // 返回一个已完成的 Job
+        return s.resolve(null);
+    });
+
+    session.setOnError((s, error) =&gt; {
+        $console.error(&quot;WebSocket 出现错误:&quot;, error);
+        return s.resolve(null);
+    });
+});
+
+// 监听 Job 的完成事件
+wsJob.invokeOnCompletion(cause =&gt; {
+    if (cause != null) {
+        $console.error(&quot;WebSocket 会话 Job 异常结束:&quot;, cause);
+    } else {
+        $console.log(&quot;WebSocket 会话 Job 正常完成。&quot;);
+    }
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_572" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local httpClient = _httpClients:newClient(nil)
+local wsUrl = &quot;wss://echo.websocket.org/&quot; -- 使用一个公共的 WebSocket Echo 服务器
+
+_console:log(&quot;正在尝试连接 WebSocket...&quot;)
+
+-- webSocket 方法现在返回一个 Job，代表整个 WebSocket 会话的生命周期
+local wsJob = httpClient:webSocket(scope, wsUrl, nil, function(session)
+    -- 设置事件监听器
+    session:setOnOpen(function(s)
+        _console:info(&quot;WebSocket 连接已建立！&quot;)
+        -- 连接成功后发送一条消息, sendText 返回一个 Job
+        return session:sendText(s, &quot;你好，WebSocket 服务器！来自 M8Test。&quot;)
+    end)
+
+    session:setOnText(function(s, text)
+        _console:log(&quot;收到文本消息:&quot;, text)
+        -- 收到消息 1 秒后关闭连接
+        return scope:delay(1000):_then(function(ss, v)
+            return session:close(ss, 1000, &quot;测试完成&quot;)
+        end)
+    end)
+
+    session:setOnClose(function(s, reason)
+        _console:warn(&quot;WebSocket 连接已关闭。原因:&quot;, reason and reason:getCode(), reason and reason:getMessage())
+        -- 返回一个已完成的 Job
+        return s:resolve(nil)
+    end)
+
+    session:setOnError(function(s, error)
+        -- 修正：添加 nil 检查
+        if error ~= nil then
+            _console:error(&quot;WebSocket 出现错误:&quot;, error:stackTraceToString())
+        else
+            _console:error(&quot;WebSocket 出现未知错误。&quot;)
+        end
+        return s:resolve(nil)
+    end)
+end)
+
+-- 监听 Job 的完成事件
+wsJob:invokeOnCompletion(function(cause)
+    if cause ~= nil then
+        _console:error(&quot;WebSocket 会话 Job 异常结束:&quot;, cause:stackTraceToString())
+    else
+        _console:log(&quot;WebSocket 会话 Job 正常完成。&quot;)
+    end
+end)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_575" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$httpClient = $httpClients-&gt;newClient(null);
+$wsUrl = javaString(&quot;wss://echo.websocket.org/&quot;); // 使用一个公共的 WebSocket Echo 服务器
+
+$console-&gt;log(javaString(&quot;正在尝试连接 WebSocket...&quot;));
+
+// webSocket 方法现在返回一个 Job，代表整个 WebSocket 会话的生命周期
+$wsJob = $httpClient-&gt;webSocket($scope, $wsUrl, null, function ($session) use ($scope) {
+    global $console;
+    // 设置事件监听器
+    $session-&gt;setOnOpen(function ($s) use ($session) {
+        global $console;
+        $console-&gt;info(javaString(&quot;WebSocket 连接已建立！&quot;));
+        // 连接成功后发送一条消息, sendText 返回一个 Job
+        // [修正] 必须返回 Job 对象
+        return $session-&gt;sendText($s, javaString(&quot;你好，WebSocket 服务器！来自 M8Test。&quot;));
+    });
+
+    $session-&gt;setOnText(function ($s, $text) use ($scope, $session) {
+        global $console;
+        $console-&gt;log(javaString(&quot;收到文本消息:&quot;), $text);
+        // 收到消息 1 秒后关闭连接
+        // [修正] 必须返回 Job 对象
+        return $scope-&gt;delay(1000)-&gt;then(function ($ss, $v) use ($session) {
+            return $session-&gt;close($ss, 1000, javaString(&quot;测试完成&quot;));
+        });
+    });
+
+    $session-&gt;setOnClose(function ($s, $reason) {
+        global $console;
+        $console-&gt;warn(javaString(&quot;WebSocket 连接已关闭。原因:&quot;), $reason ? $reason-&gt;getCode() : null, $reason ? $reason-&gt;getMessage() : null);
+        // 返回一个已完成的 Job
+        return $s-&gt;resolve(null);
+    });
+
+    $session-&gt;setOnError(function ($s, $error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;WebSocket 出现错误:&quot;), $error);
+        return $s-&gt;resolve(null);
+    });
+});
+
+// 监听 Job 的完成事件
+$wsJob-&gt;invokeOnCompletion(function ($cause) {
+    global $console;
+    if ($cause != null) {
+        $console-&gt;error(javaString(&quot;WebSocket 会话 Job 异常结束:&quot;), $cause);
+    } else {
+        $console-&gt;log(javaString(&quot;WebSocket 会话 Job 正常完成。&quot;));
+    }
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_578" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+# 使用本脚本指定的 scope 和 httpClient 创建方式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+httpClient = _httpClients.newClient(None)
+wsUrl = &quot;wss://echo.websocket.org/&quot;  # 使用一个公共的 WebSocket Echo 服务器
+
+_console.log(&quot;正在尝试连接 WebSocket...&quot;)
+
+# webSocket 方法现在返回一个 Job，代表整个 WebSocket 会话的生命周期
+wsJob = httpClient.webSocket(scope, wsUrl, None, lambda session: (
+    # 设置事件监听器
+    session.setOnOpen(lambda s: (
+        _console.info(&quot;WebSocket 连接已建立！&quot;),
+        # 连接成功后发送一条消息, sendText 返回一个 Job
+        session.sendText(s, &quot;你好，WebSocket 服务器！来自 M8Test。&quot;)
+    )[-1]),
+
+    session.setOnText(lambda s, text: (
+        _console.log(&quot;收到文本消息:&quot;, text),
+        # 收到消息 1 秒后关闭连接
+        # 这里的 then 回调是单表达式，直接返回值
+        scope.delay(1000).then(lambda ss, v:
+                               session.close(s, 1000, &quot;测试完成&quot;)
+                               )
+    )[-1]),
+
+    session.setOnClose(lambda s, reason: (
+        # Groovy 的 reason?.getCode() 转换为 Python 的条件表达式
+        _console.warn(&quot;WebSocket 连接已关闭。原因:&quot;,
+                      reason.getCode() if reason is not None else None,
+                      reason.getMessage() if reason is not None else None),
+        # 返回一个已完成的 Job
+        s.resolve(None)
+    )[-1]),
+
+    session.setOnError(lambda s, error: (
+        _console.error(&quot;WebSocket 出现错误:&quot;, error),
+        s.resolve(None)
+    )[-1])
+))
+
+# 监听 Job 的完成事件
+wsJob.invokeOnCompletion(lambda cause: (
+    # 使用 Python 条件表达式处理 if/else
+    _console.error(&quot;WebSocket 会话 Job 异常结束:&quot;, cause) if cause is not None else
+    _console.log(&quot;WebSocket 会话 Job 正常完成。&quot;)
+))
+</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_581" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+httpClient = $httpClients.newClient(nil)
+wsUrl = &quot;wss://echo.websocket.org/&quot; # 使用一个公共的 WebSocket Echo 服务器
+
+$console.log(&quot;正在尝试连接 WebSocket...&quot;)
+
+# webSocket 方法现在返回一个 Job，代表整个 WebSocket 会话的生命周期
+wsJob = httpClient.webSocket(scope, wsUrl, nil) do |session|
+  # 设置事件监听器
+  session.setOnOpen do |s|
+    $console.info(&quot;WebSocket 连接已建立！&quot;)
+    # 连接成功后发送一条消息, sendText 返回一个 Job
+    session.sendText(s, &quot;你好，WebSocket 服务器！来自 M8Test。&quot;)
+  end
+
+  session.setOnText do |s, text|
+    $console.log(&quot;收到文本消息:&quot;, text)
+    # 收到消息 1 秒后关闭连接
+    scope.delay(1000).then do |ss, v|
+      session.close(ss, 1000, &quot;测试完成&quot;)
+    end
+  end
+
+  session.setOnClose do |s, reason|
+    # 修复 Ruby 版本较低不支持 &amp;. 操作符的问题，改为三元运算符检查 nil
+    code = reason ? reason.getCode : nil
+    message = reason ? reason.getMessage : nil
+    $console.warn(&quot;WebSocket 连接已关闭。原因:&quot;, code, message)
+    # 返回一个已完成的 Job
+    s.resolve(nil)
+  end
+
+  session.setOnError do |s, error|
+    $console.error(&quot;WebSocket 出现错误:&quot;, error)
+    s.resolve(nil)
+  end
+end
+
+# 监听 Job 的完成事件
+wsJob.invokeOnCompletion do |cause|
+  if cause != nil
+    $console.error(&quot;WebSocket 会话 Job 异常结束:&quot;, cause)
+  else
+    $console.log(&quot;WebSocket 会话 Job 正常完成。&quot;)
+  end
+end</div></div></div></section><section class="chapter"><h2 id="-8za098_7" data-toc="-8za098_7">大文件处理</h2><section class="chapter"><h3 id="-8za098_630" data-toc="-8za098_630">大文件下载</h3><p id="-8za098_632">若需下载大文件，请勿直接使用 get 方法&mdash;&mdash;此举易致内存溢出。应改用 prepareGet 方法，结合通道流式下载，方可稳妥处理大文件。</p><div class="tabs" id="-8za098_638" data-group="languages" data-anchors="[-8za098_644,-8za098_647,-8za098_650,-8za098_653,-8za098_656,-8za098_659,-8za098_662,-8za098_665]"><div class="tabs__content" data-gtm="tab" id="-8za098_644" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+val scope = _coroutines.newScope {}
+val client = _httpClients.newClient { }
+
+// 创建文件，如果存在先删除
+val file = _files.buildFile {
+    setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+}
+file.mkdirs()
+file.deleteRecursively()
+
+// 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, null) { }
+    .then { s1, statement -&gt;
+        statement.execute(s1) { s2, response -&gt;
+            response.getByteReadChannelBody(s2).then { s3, channel -&gt;
+                // 为文件创建一个写入通道
+                val writeChannel = _files.toWriteChannel(file, null)
+                // 将服务器返回的数据写入文件
+                channel.copyToByteWriteChannel(s3, writeChannel, null)
+                    .then { s4, length -&gt;
+                        _console.log(&quot;文件大小为：&quot;, (length / 1024 / 1024), &quot;M&quot;)
+                        // 数据写入后就关闭文件通道，writeChannel由用户创建，所以需要自行取消，channel由系统创建,由系统管理不需要取消
+                        writeChannel.flushAndClose(s4)
+                    }
+            }
+        }
+    }
+    .then { s3, data -&gt;
+        _console.log(&quot;下载完成&quot;)
+        s3.resolve(null)
+    }
+    .onError { e -&gt;
+        _console.error(&quot;下载失败&quot;)
+    }
+_threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_647" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def scope = $coroutines.newScope {}
+def client = $httpClients.newClient { hcc -&gt; }
+// 创建文件，如果存在先删除
+def file = $files.buildFile { fb -&gt;
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+}
+file.mkdirs()
+file.deleteRecursively()
+// 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, null) { request -&gt; }
+        .then { s1, statement -&gt;
+            return statement.execute(s1) { s2, response -&gt;
+                return response.getByteReadChannelBody(s2).then { s3, channel -&gt;
+                    // 为文件创建一个写入通道
+                    def writeChannel = $files.toWriteChannel(file, null)
+                    // 将服务器返回的数据写入文件
+                    return channel.copyToByteWriteChannel(s3, writeChannel, null)
+                            .then { s4, length -&gt;
+                                $console.log(&quot;文件大小为：&quot;, (length / 1024 / 1024), &quot;M&quot;)
+                                // 数据写入后就关闭文件通道，writeChannel由用户创建，所以需要自行取消，channel由系统创建,由系统管理不需要取消
+                                return writeChannel.flushAndClose(s4)
+                            }
+                }
+            }
+        }
+        .then { s3, data -&gt;
+            $console.log(&quot;下载完成&quot;)
+            s3.resolve(null)
+        }
+        .onError { e -&gt;
+            $console.error(&quot;下载失败&quot;)
+        }
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_650" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_653" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">const scope = $coroutines.newScope(() =&gt; {});
+const client = $httpClients.newClient(hcc =&gt; {});
+// 创建文件，如果存在先删除
+const file = $files.buildFile(fb =&gt; {
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;);
+});
+file.mkdirs();
+file.deleteRecursively();
+// 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, null, request =&gt; {})
+    .then((s1, statement) =&gt; {
+        return statement.execute(s1, (s2, response) =&gt; {
+            return response.getByteReadChannelBody(s2).then((s3, channel) =&gt; {
+                // 为文件创建一个写入通道
+                const writeChannel = $files.toWriteChannel(file, null);
+                // 将服务器返回的数据写入文件
+                return channel.copyToByteWriteChannel(s3, writeChannel, null)
+                    .then((s4, length) =&gt; {
+                        $console.log(&quot;文件大小为：&quot;, (length / 1024 / 1024), &quot;M&quot;);
+                        // 数据写入后就关闭文件通道，writeChannel由用户创建，所以需要自行取消，channel由系统创建,由系统管理不需要取消
+                        return writeChannel.flushAndClose(s4);
+                    });
+            });
+        });
+    })
+    .then((s3, data) =&gt; {
+        $console.log(&quot;下载完成&quot;);
+        return s3.resolve(null);
+    })
+    .onError(e =&gt; {
+        $console.error(&quot;下载失败&quot;);
+    });
+$threads.getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_656" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local scope = _coroutines:newScope(function() end)
+local client = _httpClients:newClient(function(hcc) end)
+-- 创建文件，如果存在先删除
+local file = _files:buildFile(function(fb)
+    fb:setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+end)
+file:mkdirs()
+file:deleteRecursively()
+-- 下载一个apk, 使用通道保存数据
+client:prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, nil, function(request) end)
+    :_then(function(s1, statement)
+        return statement:execute(s1, function(s2, response)
+            return response:getByteReadChannelBody(s2):_then(function(s3, channel)
+                -- 为文件创建一个写入通道
+                local writeChannel = _files:toWriteChannel(file, nil)
+                -- 将服务器返回的数据写入文件
+                return channel:copyToByteWriteChannel(s3, writeChannel, nil)
+                    :_then(function(s4, length)
+                        _console:log(&quot;文件大小为：&quot;, (length / 1024 / 1024), &quot;M&quot;)
+                        -- 数据写入后就关闭文件通道，writeChannel由用户创建，所以需要自行取消，channel由系统创建,由系统管理不需要取消
+                        return writeChannel:flushAndClose(s4)
+                    end)
+            end)
+        end)
+    end)
+    :_then(function(s3, data)
+        _console:log(&quot;下载完成&quot;)
+        return s3:resolve(nil)
+    end)
+    :onError(function(e)
+        if e ~= nil then
+            _console:error(&quot;下载失败:&quot;, e:stackTraceToString())
+        else
+            _console:error(&quot;下载失败，但未提供错误详情。&quot;)
+        end
+    end)
+_threads:getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_659" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+global $files;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$client = $httpClients-&gt;newClient(function ($hcc) {});
+// 创建文件，如果存在先删除
+$file = $files-&gt;buildFile(function ($fb) {
+    $fb-&gt;setPath(javaString(&quot;/sdcard/M8Test/tmp&quot;), javaString(&quot;coolapk.apk&quot;));
+});
+$file-&gt;mkdirs();
+$file-&gt;deleteRecursively();
+// 下载一个apk, 使用通道保存数据
+$client-&gt;prepareGet($scope, javaString(&quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;), null, function ($request) {})
+    -&gt;then(function ($s1, $statement) use ($file) {
+        return $statement-&gt;execute($s1, function ($s2, $response) use ($file) {
+            return $response-&gt;getByteReadChannelBody($s2)-&gt;then(function ($s3, $channel) use ($file) {
+                global $files;
+                // 为文件创建一个写入通道
+                $writeChannel = $files-&gt;toWriteChannel($file, null);
+                // 将服务器返回的数据写入文件
+                return $channel-&gt;copyToByteWriteChannel($s3, $writeChannel, null)
+                    -&gt;then(function ($s4, $length) use ($writeChannel) {
+                        global $console;
+                        $console-&gt;log(javaString(&quot;文件大小为：&quot;), ($length / 1024 / 1024), javaString(&quot;M&quot;));
+                        // 数据写入后就关闭文件通道，writeChannel由用户创建，所以需要自行取消，channel由系统创建,由系统管理不需要取消
+                        return $writeChannel-&gt;flushAndClose($s4);
+                    });
+            });
+        });
+    })
+    -&gt;then(function ($s3, $data) {
+        global $console;
+        $console-&gt;log(javaString(&quot;下载完成&quot;));
+        return $s3-&gt;resolve(null);
+    })
+    -&gt;onError(function ($e) {
+        global $console;
+        $console-&gt;error(javaString(&quot;下载失败&quot;));
+    });
+$threads-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_662" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 使用空 lambda 对应 Groovy 的空闭包 {}
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+client = _httpClients.newClient(lambda hcc: None)
+
+# 创建文件，如果存在先删除
+file = _files.buildFile(lambda fb:
+                        fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+                        )
+file.mkdirs()
+file.deleteRecursively()
+
+# 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, None,
+                  lambda request: None) \
+    .then(lambda s1, statement:
+          # 这个 lambda 的唯一任务是执行 statement.execute 并返回其结果 (一个 Deferred)
+          # 这是一个单行返回，所以直接返回值，不使用 (...)[-1]
+          statement.execute(s1, lambda s2, response:
+          # 同样，这个 lambda 的唯一任务是调用 getByteReadChannelBody 并返回其结果 (一个 Deferred)
+          response.getByteReadChannelBody(s2).then(lambda s3, channel: (
+              # 为文件创建一个写入通道
+              (writeChannel := _files.toWriteChannel(file, None)),
+              # 将服务器返回的数据写入文件，并返回 copyTo 的结果 (一个 Deferred)
+              channel.copyToByteWriteChannel(s3, writeChannel, None)
+              .then(lambda s4, length: (
+                  # log 和 flushAndClose 是两个操作，使用 (...)[-1]
+                  _console.log(&quot;文件大小为：&quot;, (length / 1024 / 1024), &quot;M&quot;),
+                  # 数据写入后就关闭文件通道，writeChannel由用户创建，所以需要自行取消，channel由系统创建,由系统管理不需要取消
+                  writeChannel.flushAndClose(s4)
+              )[-1])
+          )[-1])
+                            )
+          ) \
+    .then(lambda s3, data: (
+    # log 和 resolve 是两个操作，使用 (...)[-1]
+    _console.log(&quot;下载完成&quot;),
+    s3.resolve(None)
+)[-1]) \
+    .onError(lambda e:
+             _console.error(&quot;下载失败&quot;)
+             )
+
+_threads.getMain().setBackground(True)
+</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_665" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+scope = $coroutines.newScope { }
+client = $httpClients.newClient { |hcc| }
+# 创建文件，如果存在先删除
+file = $files.buildFile do |fb|
+  fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+end
+file.mkdirs
+file.deleteRecursively
+# 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, nil) { |request| }
+  .then do |s1, statement|
+  statement.execute(s1) do |s2, response|
+    response.getByteReadChannelBody(s2).then do |s3, channel|
+      # 为文件创建一个写入通道
+      writeChannel = $files.toWriteChannel(file, nil)
+      # 将服务器返回的数据写入文件
+      channel.copyToByteWriteChannel(s3, writeChannel, nil)
+             .then do |s4, length|
+        $console.log(&quot;文件大小为：&quot;, (length / 1024 / 1024), &quot;M&quot;)
+        # 数据写入后就关闭文件通道，writeChannel由用户创建，所以需要自行取消，channel由系统创建,由系统管理不需要取消
+        writeChannel.flushAndClose(s4)
+      end
+    end
+  end
+end
+  .then do |s3, data|
+  $console.log(&quot;下载完成&quot;)
+  s3.resolve(nil)
+end
+  .onError do |e|
+  $console.error(&quot;下载失败&quot;)
+end
+$threads.getMain.setBackground(true)</div></div></div><p id="-8za098_634">如需实时查看下载进度，可参考下方示例：</p><div class="tabs" id="-8za098_641" data-group="languages" data-anchors="[-8za098_716,-8za098_719,-8za098_722,-8za098_725,-8za098_728,-8za098_731,-8za098_734,-8za098_737]"><div class="tabs__content" data-gtm="tab" id="-8za098_716" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+val scope = _coroutines.newScope {}
+val client = _httpClients.newClient { }
+
+// 创建文件，如果存在先删除
+val file = _files.buildFile {
+    setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+}
+file.mkdirs()
+file.deleteRecursively()
+
+// 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, null) { }
+    .then { s1, statement -&gt;
+        statement.execute(s1) { s2, response -&gt;
+            response.getByteReadChannelBody(s2).then { s3, channel -&gt;
+                var current = 0L // Long type
+                val buffer = _arrays.newByteArray(8192)
+                // 为文件创建一个写入通道
+                val writeChannel = _files.toWriteChannel(file, null)
+
+                s3.loop { s4 -&gt;
+                    // 如果通道已经关闭直接退出循环
+                    if (channel.isClosedForRead()) {
+                        return@loop s4.resolve(false)
+                    }
+                    channel.readAvailable(s4, buffer, 0, buffer.size).then { s5, length -&gt;
+                        if (length &lt;= 0) {
+                            return@then s5.resolve(false)
+                        }
+                        current += length
+                        // 下面注释掉，因为可能会非常频繁输出日志
+                        // _console.log(&quot;下载进度：${current / 1024 / 1024}M&quot;)
+                        writeChannel.writeFully(s5, buffer, 0, length).then { s6, data -&gt; s6.resolve(true) }
+                    }
+                }.then { s, data -&gt;
+                    // loop 循环结束，关闭写入通道, 这一步必须有，否则可能会造成文件损坏
+                    writeChannel.flushAndClose(s)
+                }
+            }
+        }
+    }
+    .then { s3, data -&gt;
+        _console.log(&quot;下载完成&quot;)
+        s3.resolve(null)
+    }
+    .onError { e -&gt;
+        _console.error(&quot;下载失败&quot;)
+    }
+_threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_719" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def scope = $coroutines.newScope {}
+def client = $httpClients.newClient { hcc -&gt; }
+// 创建文件，如果存在先删除
+def file = $files.buildFile { fb -&gt;
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+}
+file.mkdirs()
+file.deleteRecursively()
+// 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, null) { request -&gt; }
+        .then { s1, statement -&gt;
+            return statement.execute(s1) { s2, response -&gt;
+                return response.getByteReadChannelBody(s2).then { s3, channel -&gt;
+                    def current = 0
+                    def buffer = $arrays.newByteArray(8192)
+                    // 为文件创建一个写入通道
+                    def writeChannel = $files.toWriteChannel(file, null)
+                    return s3.loop { s4 -&gt;
+                        // 如果通道已经关闭直接退出循环
+                        if (channel.isClosedForRead()) {
+                            return s4.resolve(false)
+                        }
+                        return channel.readAvailable(s4, buffer, 0, buffer.size()).then { s5, length -&gt;
+                            if (length &lt;= 0) {
+                                return s5.resolve(false)
+                            }
+                            current += length
+                            // 下面注释掉，因为可能会非常频繁输出日志
+//                            $console.log(&quot;下载进度：${current / 1024 / 1024}M&quot;)
+                            return writeChannel.writeFully(s5, buffer, 0, length).then { s6, data -&gt; return s6.resolve(true) }
+                        }
+                    }.then { s, data -&gt;
+                        // loop 循环结束，关闭写入通道, 这一步必须有，否则可能会造成文件损坏
+                        return writeChannel.flushAndClose(s)
+                    }
+                }
+            }
+        }
+        .then { s3, data -&gt;
+            $console.log(&quot;下载完成&quot;)
+            s3.resolve(null)
+        }
+        .onError { e -&gt;
+            $console.error(&quot;下载失败&quot;)
+        }
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_722" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_725" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">const scope = $coroutines.newScope(() =&gt; {});
+const client = $httpClients.newClient(hcc =&gt; {});
+// 创建文件，如果存在先删除
+const file = $files.buildFile(fb =&gt; {
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;);
+});
+file.mkdirs();
+file.deleteRecursively();
+// 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, null, request =&gt; {})
+    .then((s1, statement) =&gt; {
+        return statement.execute(s1, (s2, response) =&gt; {
+            return response.getByteReadChannelBody(s2).then((s3, channel) =&gt; {
+                let current = 0;
+                const buffer = $arrays.newByteArray(8192);
+                // 为文件创建一个写入通道
+                const writeChannel = $files.toWriteChannel(file, null);
+                return s3.loop(s4 =&gt; {
+                    // 如果通道已经关闭直接退出循环
+                    if (channel.isClosedForRead() == true) {
+                        return s4.resolve(false);
+                    }
+                    return channel.readAvailable(s4, buffer, 0, buffer.length).then((s5, length) =&gt; {
+                        if (length &lt;= 0) {
+                            return s5.resolve(false);
+                        }
+                        current += length;
+                        // 下面注释掉，因为可能会非常频繁输出日志
+                        // $console.log(`下载进度：${current / 1024 / 1024}M`);
+                        return writeChannel.writeFully(s5, buffer, 0, length).then((s6, data) =&gt; s6.resolve(true));
+                    });
+                })
+                    .then((s, data) =&gt; {
+                        // loop 循环结束，关闭写入通道, 这一步必须有，否则可能会造成文件损坏
+                        return writeChannel.flushAndClose(s);
+                    });
+            });
+        });
+    })
+    .then((s3, data) =&gt; {
+        $console.log(&quot;下载完成&quot;);
+        return s3.resolve(null);
+    })
+    .onError(e =&gt; {
+        $console.error(&quot;下载失败&quot;);
+    });
+$threads.getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_728" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local scope = _coroutines:newScope(function() end)
+local client = _httpClients:newClient(function(hcc) end)
+-- 创建文件，如果存在先删除
+local file = _files:buildFile(function(fb)
+    fb:setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+end)
+file:mkdirs()
+file:deleteRecursively()
+-- 下载一个apk, 使用通道保存数据
+client:prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, nil, function(request) end)
+    :_then(function(s1, statement)
+        return statement:execute(s1, function(s2, response)
+            return response:getByteReadChannelBody(s2):_then(function(s3, channel)
+                local current = 0
+                local buffer = _arrays:newByteArray(8192)
+                -- 为文件创建一个写入通道
+                local writeChannel = _files:toWriteChannel(file, nil)
+                return s3:loop(function(s4)
+                    -- 如果通道已经关闭直接退出循环
+                    if channel:isClosedForRead() then
+                        return s4:resolve(false)
+                    end
+                    -- Lua的'#'操作符对Java数组无效, 使用包装器获取长度
+                    return channel:readAvailable(s4, buffer, 0, _objectWrappers:wrapByteArray(buffer):count()):_then(function(s5, length)
+                        if length &lt;= 0 then
+                            return s5:resolve(false)
+                        end
+                        current = current + length
+                        -- 下面注释掉，因为可能会非常频繁输出日志
+                        -- _console:log(&quot;下载进度：&quot; .. tostring(current / 1024 / 1024) .. &quot;M&quot;)
+                        return writeChannel:writeFully(s5, buffer, 0, length):_then(function(s6, data) return s6:resolve(true) end)
+                    end)
+                end):_then(function(s, data)
+                    -- loop 循环结束，关闭写入通道, 这一步必须有，否则可能会造成文件损坏
+                    return writeChannel:flushAndClose(s)
+                end)
+            end)
+        end)
+    end)
+    :_then(function(s3, data)
+        _console:log(&quot;下载完成&quot;)
+        return s3:resolve(nil)
+    end)
+    :onError(function(e)
+        if e ~= nil then
+            _console:error(&quot;下载失败:&quot;, e:stackTraceToString())
+        else
+            _console:error(&quot;下载失败，但未提供错误详情。&quot;)
+        end
+    end)
+_threads:getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_731" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+global $files;
+/** @var m8test_java\com\m8test\script\core\api\collections\Arrays $arrays */
+global $arrays;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$client = $httpClients-&gt;newClient(function ($hcc) {
+});
+// 创建文件，如果存在先删除
+$file = $files-&gt;buildFile(function ($fb) {
+    $fb-&gt;setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;);
+});
+$file-&gt;mkdirs();
+$file-&gt;deleteRecursively();
+// 下载一个apk, 使用通道保存数据
+$client-&gt;prepareGet($scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, null, function ($request) {
+})-&gt;then(function ($s1, $statement) use ($scope, $file) {
+    return $statement-&gt;execute($s1, function ($s2, $response) use ($scope, $file) {
+        return $response-&gt;getByteReadChannelBody($s2)-&gt;then(function ($s3, $channel) use ($scope, $file) {
+            global $arrays, $files;
+            $current = 0;
+            $buffer = $arrays-&gt;newByteArray(8192);
+            // 为文件创建一个写入通道
+            $writeChannel = $files-&gt;toWriteChannel($file, null);
+            return $s3-&gt;loop(function ($s4) use ($scope, $channel, $buffer, $writeChannel, &amp;$current) {
+                // 如果通道已经关闭直接退出循环
+                if ($channel-&gt;isClosedForRead()) {
+                    return $s4-&gt;resolve(false);
+                }
+                return $channel-&gt;readAvailable($s4, $buffer, 0, 8192)-&gt;then(function ($s5, $length) use ($scope, $writeChannel, $buffer, &amp;$current) {
+                    if ($length &lt;= 0) {
+                        return $s5-&gt;resolve(false);
+                    }
+                    $current += $length;
+                    // 下面注释掉，因为可能会非常频繁输出日志
+                    // $console-&gt;log(&quot;下载进度：${current / 1024 / 1024}M&quot;)
+                    return $writeChannel-&gt;writeFully($s5, $buffer, 0, $length)-&gt;then(function ($s6, $data) use ($scope) {
+                        return $s6-&gt;resolve(true);
+                    });
+                });
+            })-&gt;then(function ($s, $data) use ($scope, $writeChannel) {
+                // loop 循环结束，关闭写入通道, 这一步必须有，否则可能会造成文件损坏
+                return $writeChannel-&gt;flushAndClose($s);
+            });
+        });
+    });
+})
+    -&gt;then(function ($s3, $data) {
+        global $console;
+        $console-&gt;log(javaString(&quot;下载完成&quot;));
+        return $s3-&gt;resolve(null);
+    })
+    -&gt;onError(function ($e) {
+        global $console;
+        $console-&gt;error(javaString(&quot;下载失败&quot;));
+    });
+$threads-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_734" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># python 暂时不支持文件下载显示进度，如果需要的话可以使用python网络请求库实现(例如requests)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_737" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+scope = $coroutines.newScope { }
+client = $httpClients.newClient { |hcc| }
+# 创建文件，如果存在先删除
+file = $files.buildFile do |fb|
+  fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;coolapk.apk&quot;)
+end
+file.mkdirs
+file.deleteRecursively
+# 下载一个apk, 使用通道保存数据
+client.prepareGet(scope, &quot;https://dl.coolapk.com/down?pn=com.coolapk.market&amp;id=NDU5OQ&amp;h=46bb9d98&amp;from=from-web&quot;, nil) { |request| }
+  .then do |s1, statement|
+  statement.execute(s1) do |s2, response|
+    response.getByteReadChannelBody(s2).then do |s3, channel|
+      current = 0
+      buffer = $arrays.newByteArray(8192)
+      # 为文件创建一个写入通道
+      writeChannel = $files.toWriteChannel(file, nil)
+      s3.loop do |s4|
+        # 如果通道已经关闭直接退出循环
+        if channel.isClosedForRead
+          # 【修复】使用 next 代替 return 来从块中提前返回
+          next s4.resolve(false)
+        end
+        channel.readAvailable(s4, buffer, 0, buffer.size).then do |s5, length|
+          if length &lt;= 0
+            # 【修复】使用 next 代替 return
+            next s5.resolve(false)
+          end
+          current += length
+          # 下面注释掉，因为可能会非常频繁输出日志
+          # $console.log(&quot;下载进度：#{current / 1024 / 1024}M&quot;)
+          # Ruby块最后一行自动作为返回值，不需要 return
+          writeChannel.writeFully(s5, buffer, 0, length).then { |s6, data| s6.resolve(true) }
+        end
+      end.then do |s, data|
+        # loop 循环结束，关闭写入通道, 这一步必须有，否则可能会造成文件损坏
+        writeChannel.flushAndClose(s)
+      end
+    end
+  end
+end
+  .then do |s3, data|
+  $console.log(&quot;下载完成&quot;)
+  s3.resolve(nil)
+end
+  .onError do |e|
+  $console.error(&quot;下载失败&quot;)
+end
+$threads.getMain.setBackground(true)</div></div></div></section><section class="chapter"><h3 id="-8za098_631" data-toc="-8za098_631">上传大文件</h3><p id="-8za098_786">同样，若需上传大文件，请勿直接使用 post 方法&mdash;&mdash;此举易致内存溢出。应改用 preparePost 方法，结合通道流式上传，方可稳妥处理大文件。</p><div class="tabs" id="-8za098_790" data-group="languages" data-anchors="[-8za098_793,-8za098_796,-8za098_799,-8za098_802,-8za098_805,-8za098_808,-8za098_811,-8za098_814]"><div class="tabs__content" data-gtm="tab" id="-8za098_793" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+val scope = _coroutines.newScope {}
+val client = _httpClients.newClient { }
+
+// 创建文件，如果存在先删除
+val origin = _files.buildFile {
+    setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;origin.bin&quot;)
+}
+origin.mkdirs()
+origin.deleteRecursively()
+
+// 填充数据到文件中
+val b = _arrays.newByteArray(8)
+for (i in 0 until 1024) {
+    origin.appendBytes(b)
+}
+
+val dest = _files.buildFile {
+    setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;dest.bin&quot;)
+}
+dest.mkdirs()
+dest.deleteRecursively()
+
+// 模拟上传一个大文件
+client.preparePost(scope, &quot;https://httpbin.org/post&quot;, null) {
+    // 通过通道设置请求体，这样可以避免内存溢出
+    setWriteChannelContentBody {
+        val length = origin.getFile().length()
+        setContentLength(length)
+        writeTo { s, channel -&gt;
+            // 创建文件读取通道
+            val readChannel = _files.toReadChannel(origin, 0, length - 1, null)
+            // 复制到字节写入通道并关闭
+            readChannel.copyToByteWriteChannelAndClose(s, channel)
+        }
+    }
+}.then { s1, statement -&gt;
+    // 这里可以处理服务器响应信息
+    statement.execute(s1) { s2, response -&gt;
+        response.getTextBody(s2).then { s3, text -&gt;
+            _console.log(text)
+            s3.resolve(null)
+        }
+    }
+}.then { s3, data -&gt;
+    _console.log(&quot;下载完成&quot;)
+    s3.resolve(null)
+}.onError { e -&gt;
+    // Kotlin 中 Exception 通常使用 e.stackTraceToString() (标准库扩展) 或 e.toString()
+    // 假设 ThrowableWrapper 暴露了类似方法
+    _console.error(&quot;下载失败&quot;, e)
+}
+_threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_796" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def scope = $coroutines.newScope {}
+def client = $httpClients.newClient { hcc -&gt; }
+// 创建文件，如果存在先删除
+def origin = $files.buildFile { fb -&gt;
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;origin.bin&quot;)
+}
+origin.mkdirs()
+origin.deleteRecursively()
+// 填充数据到文件中
+def b = $arrays.newByteArray(8)
+for (i in 0..&lt;1024) {
+    origin.appendBytes(b)
+}
+def dest = $files.buildFile { fb -&gt;
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;dest.bin&quot;)
+}
+dest.mkdirs()
+dest.deleteRecursively()
+// 模拟上传一个大文件
+client.preparePost(scope, &quot;https://httpbin.org/post&quot;, null) { request -&gt;
+    // 通过通道设置请求体，这样可以避免内存溢出
+    request.setWriteChannelContentBody { wcc -&gt;
+        def length = origin.getFile().length()
+        wcc.setContentLength(length)
+        wcc.writeTo { s, channel -&gt;
+            // 创建文件读取通道
+            def readChannel = $files.toReadChannel(origin, 0, length - 1, null)
+            // 复制到字节写入通道并关闭
+            return readChannel.copyToByteWriteChannelAndClose(s, channel)
+        }
+    }
+}.then { s1, statement -&gt;
+    // 这里可以处理服务器响应信息
+    return statement.execute(s1) { s2, response -&gt;
+        return response.getTextBody(s2).then { s3, text -&gt;
+            $console.log(text)
+            return s3.resolve(null)
+        }
+    }
+}.then { s3, data -&gt;
+    $console.log(&quot;下载完成&quot;)
+    s3.resolve(null)
+}.onError { e -&gt;
+    $console.error(&quot;下载失败&quot;, e.stackTraceToString())
+}
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_799" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8za098_802" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">const scope = $coroutines.newScope(() =&gt; {});
+const client = $httpClients.newClient(hcc =&gt; {});
+// 创建文件，如果存在先删除
+const origin = $files.buildFile(fb =&gt; {
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;origin.bin&quot;);
+});
+origin.mkdirs();
+origin.deleteRecursively();
+// 填充数据到文件中
+const b = $arrays.newByteArray(8);
+for (let i = 0; i &lt; 1024; i++) {
+    origin.appendBytes(b);
+}
+const dest = $files.buildFile(fb =&gt; {
+    fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;dest.bin&quot;);
+});
+dest.mkdirs();
+dest.deleteRecursively();
+// 模拟上传一个大文件
+client.preparePost(scope, &quot;https://httpbin.org/post&quot;, null, request =&gt; {
+    // 通过通道设置请求体，这样可以避免内存溢出
+    request.setWriteChannelContentBody(wcc =&gt; {
+        const length = origin.getFile().length();
+        wcc.setContentLength(length);
+        wcc.writeTo((s, channel) =&gt; {
+            // 创建文件读取通道
+            const readChannel = $files.toReadChannel(origin, 0, length - 1, null);
+            // 复制到字节写入通道并关闭
+            return readChannel.copyToByteWriteChannelAndClose(s, channel);
+        });
+    });
+}).then((s1, statement) =&gt; {
+    // 这里可以处理服务器响应信息
+    return statement.execute(s1, (s2, response) =&gt; {
+        return response.getTextBody(s2).then((s3, text) =&gt; {
+            $console.log(text);
+            return s3.resolve(null);
+        });
+    });
+}).then((s3, data) =&gt; {
+    $console.log(&quot;下载完成&quot;);
+    return s3.resolve(null);
+}).onError(e =&gt; {
+    $console.error(&quot;下载失败&quot;, e.stackTraceToString());
+});
+$threads.getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_805" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local scope = _coroutines:newScope(function() end)
+local client = _httpClients:newClient(function(hcc) end)
+-- 创建文件，如果存在先删除
+local origin = _files:buildFile(function(fb)
+    fb:setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;origin.bin&quot;)
+end)
+origin:mkdirs()
+origin:deleteRecursively()
+-- 填充数据到文件中
+local b = _arrays:newByteArray(8)
+for i = 0, 1023 do
+    origin:appendBytes(b)
+end
+local dest = _files:buildFile(function(fb)
+    fb:setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;dest.bin&quot;)
+end)
+dest:mkdirs()
+dest:deleteRecursively()
+-- 模拟上传一个大文件
+client:preparePost(scope, &quot;https://httpbin.org/post&quot;, nil, function(request)
+    -- 通过通道设置请求体，这样可以避免内存溢出
+    request:setWriteChannelContentBody(function(wcc)
+        local length = origin:getFile():length()
+        wcc:setContentLength(length)
+        wcc:writeTo(function(s, channel)
+            -- 创建文件读取通道
+            local readChannel = _files:toReadChannel(origin, 0, length - 1, nil)
+            -- 复制到字节写入通道并关闭
+            return readChannel:copyToByteWriteChannelAndClose(s, channel)
+        end)
+    end)
+end):_then(function(s1, statement)
+    -- 这里可以处理服务器响应信息
+    return statement:execute(s1, function(s2, response)
+        return response:getTextBody(s2):_then(function(s3, text)
+            _console:log(text)
+            return s3:resolve(nil)
+        end)
+    end)
+end):_then(function(s3, data)
+    _console:log(&quot;下载完成&quot;)
+    return s3:resolve(nil)
+end):onError(function(e)
+    if e ~= nil then
+        _console:error(&quot;下载失败&quot;, e:stackTraceToString())
+    else
+        _console:error(&quot;下载失败，但未提供错误详情。&quot;)
+    end
+end)
+_threads:getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_808" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+global $files;
+/** @var m8test_java\com\m8test\script\core\api\collections\Arrays $arrays */
+global $arrays;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$client = $httpClients-&gt;newClient(function ($hcc) {});
+// 创建文件，如果存在先删除
+$origin = $files-&gt;buildFile(function ($fb) {
+    $fb-&gt;setPath(javaString(&quot;/sdcard/M8Test/tmp&quot;), javaString(&quot;origin.bin&quot;));
+});
+$origin-&gt;mkdirs();
+$origin-&gt;deleteRecursively();
+// 填充数据到文件中
+$b = $arrays-&gt;newByteArray(8);
+for ($i = 0; $i &lt; 1024; $i++) {
+    $origin-&gt;appendBytes($b);
+}
+$dest = $files-&gt;buildFile(function ($fb) {
+    $fb-&gt;setPath(javaString(&quot;/sdcard/M8Test/tmp&quot;), javaString(&quot;dest.bin&quot;));
+});
+$dest-&gt;mkdirs();
+$dest-&gt;deleteRecursively();
+// 模拟上传一个大文件
+$client-&gt;preparePost($scope, javaString(&quot;https://httpbin.org/post&quot;), null, function ($request) use ($origin) {
+    // 通过通道设置请求体，这样可以避免内存溢出
+    $request-&gt;setWriteChannelContentBody(function ($wcc) use ($origin) {
+        $length = $origin-&gt;getFile()-&gt;length();
+        $wcc-&gt;setContentLength($length);
+        $wcc-&gt;writeTo(function ($s, $channel) use ($origin, $length) {
+            global $files;
+            // 创建文件读取通道
+            $readChannel = $files-&gt;toReadChannel($origin, 0, $length - 1, null);
+            // 复制到字节写入通道并关闭
+            return $readChannel-&gt;copyToByteWriteChannelAndClose($s, $channel);
+        });
+    });
+})-&gt;then(function ($s1, $statement) {
+    // 这里可以处理服务器响应信息
+    return $statement-&gt;execute($s1, function ($s2, $response) {
+        return $response-&gt;getTextBody($s2)-&gt;then(function ($s3, $text) {
+            global $console;
+            $console-&gt;log($text);
+            return $s3-&gt;resolve(null);
+        });
+    });
+})-&gt;then(function ($s3, $data) {
+    global $console;
+    $console-&gt;log(javaString(&quot;下载完成&quot;));
+    return $s3-&gt;resolve(null);
+})-&gt;onError(function ($e) {
+    global $console;
+    $console-&gt;error(javaString(&quot;下载失败&quot;), $e-&gt;getStackTraceAsString());
+});
+$threads-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_811" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _arrays
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+# 对于空的配置闭包，使用 lambda _: None
+client = _httpClients.newClient(lambda hcc: None)
+
+# 创建文件，如果存在先删除
+origin = _files.buildFile(lambda fb:
+                          fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;origin.bin&quot;)
+                          )
+origin.mkdirs()
+origin.deleteRecursively()
+
+# 填充数据到文件中
+# Groovy 的 for (i in 0..&lt;1024) 转换为 Python 的 for i in range(1024)
+b = _arrays.newByteArray(8)
+for i in range(1024):
+    origin.appendBytes(b)
+
+dest = _files.buildFile(lambda fb:
+                        fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;dest.bin&quot;)
+                        )
+dest.mkdirs()
+dest.deleteRecursively()
+
+# 模拟上传一个大文件
+(client.preparePost(scope, &quot;https://httpbin.org/post&quot;, None, lambda request:
+# 通过通道设置请求体，这样可以避免内存溢出
+request.setWriteChannelContentBody(lambda wcc: (
+    (length := origin.getFile().length()),
+    wcc.setContentLength(length),
+    wcc.writeTo(lambda s, channel: (
+        # 创建文件读取通道
+        (readChannel := _files.toReadChannel(origin, 0, length - 1, None)),
+        # 复制到字节写入通道并关闭
+        # 这个 lambda 只有一个返回表达式，所以直接返回
+        readChannel.copyToByteWriteChannelAndClose(scope, channel)
+    )[-1]))))
+ .then(lambda s1, statement:
+       # 这里可以处理服务器响应信息
+       # 这个 lambda 只有一个返回表达式，直接返回
+       statement.execute(s1, lambda s2, response:
+       # 这个 lambda 只有一个返回表达式，直接返回
+       response.getTextBody(s2).then(lambda s3, text: (
+           _console.log(text),
+           s3.resolve(None)
+       )[-1])))
+ .then(lambda s3, data: (_console.log(&quot;下载完成&quot;), s3.resolve(None))[-1])
+ .onError(lambda e:
+          # 这个 lambda 只有一个表达式，直接调用
+          _console.error(&quot;下载失败&quot;, e.stackTraceToString())
+          ))
+
+_threads.getMain().setBackground(True)
+</div></div><div class="tabs__content" data-gtm="tab" id="-8za098_814" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+scope = $coroutines.newScope { }
+client = $httpClients.newClient { |hcc| }
+# 创建文件，如果存在先删除
+origin = $files.buildFile do |fb|
+  fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;origin.bin&quot;)
+end
+origin.mkdirs
+origin.deleteRecursively
+# 填充数据到文件中
+b = $arrays.newByteArray(8)
+(0...1024).each do |i|
+  origin.appendBytes(b)
+end
+dest = $files.buildFile do |fb|
+  fb.setPath(&quot;/sdcard/M8Test/tmp&quot;, &quot;dest.bin&quot;)
+end
+dest.mkdirs
+dest.deleteRecursively
+# 模拟上传一个大文件
+client.preparePost(scope, &quot;https://httpbin.org/post&quot;, nil) do |request|
+  # 通过通道设置请求体，这样可以避免内存溢出
+  request.setWriteChannelContentBody do |wcc|
+    length = origin.getFile.length
+    wcc.setContentLength(length)
+    wcc.writeTo do |s, channel|
+      # 创建文件读取通道
+      readChannel = $files.toReadChannel(origin, 0, length - 1, nil)
+      # 复制到字节写入通道并关闭
+      readChannel.copyToByteWriteChannelAndClose(s, channel)
+    end
+  end
+end.then do |s1, statement|
+  # 这里可以处理服务器响应信息
+  statement.execute(s1) do |s2, response|
+    response.getTextBody(s2).then do |s3, text|
+      $console.log(text)
+      s3.resolve(nil)
+    end
+  end
+end.then do |s3, data|
+  $console.log(&quot;下载完成&quot;)
+  s3.resolve(nil)
+end.onError do |e|
+  $console.error(&quot;下载失败&quot;, e.stackTraceToString)
+end
+$threads.getMain.setBackground(true)</div></div></div></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="http.html" class="navigation-links__prev">网络请求</a><a href="http-servers.html" class="navigation-links__next">HTTP 服务器</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

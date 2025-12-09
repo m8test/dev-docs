@@ -1,0 +1,124 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:34:51.742826993"><title>remove | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="remove | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/taskcontainer-remove.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="remove | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/taskcontainer-remove.html#webpage",
+    "url": "writerside-documentation/taskcontainer-remove.html",
+    "name": "remove | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="TaskContainer.remove" data-main-title="remove" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="project-based.md|项目化///builder-api.md|构建脚本 Api///TaskContainer.md|TaskContainer"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="TaskContainer.remove" id="TaskContainer.remove.md">remove</h1><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_9"><p id="-scj7sv_13">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.builder.api/-task-container/remove.html" id="-scj7sv_14" data-external="true" rel="noopener noreferrer" target="_blank">TaskContainer.remove()</a></p></aside><div class="tabs" id="-scj7sv_12" data-group="languages" data-anchors="[-scj7sv_17,-scj7sv_20,-scj7sv_23,-scj7sv_26,-scj7sv_29,-scj7sv_32,-scj7sv_35]"><div class="tabs__content" data-gtm="tab" id="-scj7sv_17" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">_project.getPlugins().apply(&quot;kotlin&quot;)
+_project.setConfig {
+    setEntry(&quot;com/example/script/primary.kts&quot;)
+    setPackageName(&quot;com.example.script.kotlin&quot;)
+    setLogo(&quot;logo.png&quot;)
+}
+_project.getTasks().add(&quot;taskName&quot;) {
+    getActions().add(&quot;actionName&quot;) {
+        onPerform {
+            _console.log(&quot;taskName.${getName()} onPerform&quot;)
+        }
+    }
+}
+_console.log(&quot;remove&quot;, _project.getTasks().remove(&quot;taskName&quot;))
+</div><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_41"><p id="-scj7sv_42"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/builder//TaskContainer/remove/build.kts" id="-scj7sv_43" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/builder//TaskContainer/remove/build.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-scj7sv_20" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$project.getPlugins().apply(&quot;groovy&quot;)
+$project.setConfig {
+    setEntry(&quot;com/example/script/primary.groovy&quot;)
+    setPackageName(&quot;com.example.script.groovy&quot;)
+    setLogo(&quot;logo.png&quot;)
+}
+$project.getTasks().add(&quot;taskName&quot;) {
+    getActions().add(&quot;actionName&quot;) {
+        onPerform {
+            $console.log(&quot;taskName.${getName()} onPerform&quot;)
+        }
+    }
+}
+$console.log(&quot;remove&quot;, $project.getTasks().remove(&quot;taskName&quot;))
+</div><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_49"><p id="-scj7sv_50"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/builder//TaskContainer/remove/build.groovy" id="-scj7sv_51" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/builder//TaskContainer/remove/build.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-scj7sv_23" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$project.getPlugins().apply(&quot;javascript&quot;)
+$project.setConfig(config =&gt; {
+    config.setEntry(&quot;com/example/script/primary.js&quot;)
+    config.setPackageName(&quot;com.example.script.js&quot;)
+    config.setLogo(&quot;logo.png&quot;)
+})
+$project.getTasks().add(&quot;taskName&quot;, task =&gt; {
+    task.getActions().add(&quot;actionName&quot;, action =&gt; {
+        action.onPerform(() =&gt; {
+            $console.log(&quot;taskName.&quot; + action.getName() + &quot; onPerform&quot;)
+        })
+    })
+})
+$console.log(&quot;remove&quot;, $project.getTasks().remove(&quot;taskName&quot;))
+</div><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_57"><p id="-scj7sv_58"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/builder//TaskContainer/remove/build.js" id="-scj7sv_59" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/builder//TaskContainer/remove/build.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-scj7sv_26" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_project:getPlugins():apply(&quot;lua&quot;)
+_project:setConfig(function(c)
+    c:setEntry(&quot;com/example/script/primary.lua&quot;)
+    c:setPackageName(&quot;com.example.script.lua&quot;)
+    c:setLogo(&quot;logo.png&quot;)
+end)
+_project:getTasks():add(&quot;taskName&quot;, function(task)
+    task:getActions():add(&quot;actionName&quot;, function(action)
+        action:onPerform(function()
+            _console:log(&quot;taskName.&quot; .. action:getName() .. &quot; onPerform&quot;)
+        end)
+    end)
+end)
+_console:log(&quot;remove&quot;, _project:getTasks():remove(&quot;taskName&quot;))</div><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_65"><p id="-scj7sv_66"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/builder//TaskContainer/remove/build.lua" id="-scj7sv_67" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/builder//TaskContainer/remove/build.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-scj7sv_29" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$project-&gt;getPlugins()-&gt;apply(&quot;php&quot;);
+$project-&gt;setConfig(function ($c) {
+    $c-&gt;setEntry(&quot;com/example/script/primary.php&quot;);
+    $c-&gt;setPackageName(&quot;com.example.script.php&quot;);
+    $c-&gt;setLogo(&quot;logo.png&quot;);
+});
+$project-&gt;getTasks()-&gt;add(&quot;taskName&quot;, function ($task) use ($console) {
+    $task-&gt;getActions()-&gt;add(&quot;actionName&quot;, function ($action) use ($console) {
+        $action-&gt;onPerform(function () use ($console, $action) {
+            $console-&gt;log(&quot;taskName.&quot; . $action-&gt;getName() . &quot; onPerform&quot;);
+        });
+    });
+});
+$console-&gt;log(&quot;remove&quot;, $project-&gt;getTasks()-&gt;remove(&quot;taskName&quot;));</div><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_73"><p id="-scj7sv_74"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/builder//TaskContainer/remove/build.php" id="-scj7sv_75" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/builder//TaskContainer/remove/build.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-scj7sv_32" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">_project.getPlugins().apply(&quot;python&quot;)
+
+
+def configuration(config):
+    config.setEntry(&quot;com/example/script/primary.py&quot;)
+    config.setPackageName(&quot;com.example.script.py&quot;)
+    config.setLogo(&quot;logo.png&quot;)
+
+
+_project.setConfig(configuration)
+
+
+def fn1(task):
+    def fn2(action):
+        def fn3(s):
+            _console.log(&quot;taskName.&quot; + action.getName() + &quot; onPerform&quot;)
+
+        action.onPerform(fn3)
+
+    task.getActions().add(&quot;actionName&quot;, fn2)
+
+
+_project.getTasks().add(&quot;taskName&quot;, fn1)
+_console.log(&quot;remove&quot;, _project.getTasks().remove(&quot;taskName&quot;))
+</div><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_81"><p id="-scj7sv_82"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/builder//TaskContainer/remove/build.py" id="-scj7sv_83" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/builder//TaskContainer/remove/build.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-scj7sv_35" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$project.getPlugins().apply(&quot;ruby&quot;)
+$project.setConfig { |config|
+  config.setEntry(&quot;com/example/script/primary.rb&quot;)
+  config.setPackageName(&quot;com.example.script.rb&quot;)
+  config.setLogo(&quot;logo.png&quot;)
+}
+$project.getTasks().add(&quot;taskName&quot;) { |task|
+  task.getActions().add(&quot;actionName&quot;) { |action|
+    action.onPerform {
+      $console.log(&quot;taskName.#{action.getName()} onPerform&quot;)
+    }
+  }
+}
+$console.log(&quot;remove&quot;, $project.getTasks().remove(&quot;taskName&quot;))
+</div><aside class="prompt" data-type="tip" data-title="" id="-scj7sv_89"><p id="-scj7sv_90"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/builder//TaskContainer/remove/build.rb" id="-scj7sv_91" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/builder//TaskContainer/remove/build.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="taskcontainer-getbyname.html" class="navigation-links__prev">getByName</a><a href="taskcontainer-removeif.html" class="navigation-links__next">removeIf</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

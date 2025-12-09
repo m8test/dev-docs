@@ -1,0 +1,99 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:12.407197013"><title>返回操作 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-jtt9qi_29","level":0,"title":"使用无障碍服务","anchor":"#-jtt9qi_29"},{"id":"-jtt9qi_57","level":0,"title":"使用物理屏幕镜像屏幕","anchor":"#-jtt9qi_57"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="返回操作 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/automation-back.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="返回操作 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/automation-back.html#webpage",
+    "url": "writerside-documentation/automation-back.html",
+    "name": "返回操作 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="automation-back" data-main-title="返回操作" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="automation.md|自动化"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="automation-back" id="automation-back.md">返回操作</h1><section class="chapter"><h2 id="-jtt9qi_29" data-toc="-jtt9qi_29">使用无障碍服务</h2><ul class="list _bullet" id="-jtt9qi_61"><li class="list__item" id="-jtt9qi_62"><p id="-jtt9qi_65">权限: 无障碍服务</p></li><li class="list__item" id="-jtt9qi_63"><p id="-jtt9qi_66">组件: <a href="https://github.com/YumiMiyamoto/accessibility-release" id="-jtt9qi_67" data-external="true" rel="noopener noreferrer" target="_blank">YumiMiyamotoAccessibility</a></p></li><li class="list__item" id="-jtt9qi_64"><p id="-jtt9qi_68">说明: 通过无障碍服务执行全局返回操作，返回值为true或false，分别表示操作成功与失败</p></li></ul></section><div class="tabs" id="-jtt9qi_32" data-group="languages" data-anchors="[-jtt9qi_71,-jtt9qi_74,-jtt9qi_77,-jtt9qi_80,-jtt9qi_83,-jtt9qi_86,-jtt9qi_89,-jtt9qi_92]"><div class="tabs__content" data-gtm="tab" id="-jtt9qi_71" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import android.accessibilityservice.AccessibilityService
+import com.m8test.script.GlobalVariables.*
+
+_console.log(_accessibility!!.getService()!!.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK))
+</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_74" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import android.accessibilityservice.AccessibilityService
+
+$console.log($accessibility.getService().performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK))</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_77" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import android.accessibilityservice.AccessibilityService;
+import static com.m8test.script.GlobalVariables.*;
+
+$console.log($accessibility.getService().performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK));</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_80" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$console.log($accessibility.getService().performGlobalAction(Packages.android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK))</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_83" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local AccessibilityService = require(&quot;m8test_java.android.accessibilityservice.AccessibilityService&quot;)
+_console:log(_accessibility:getService():performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK))
+</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_86" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\android\accessibilityservice\AccessibilityService;
+
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+$result = $accessibility-&gt;getService()-&gt;performGlobalAction(AccessibilityService::$_MJ_GLOBAL_ACTION_BACK);
+$console-&gt;log($result);
+</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_89" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.android.accessibilityservice.AccessibilityService import AccessibilityService
+from m8test_java.com.m8test.script.GlobalVariables import _accessibility
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+_console.log(_accessibility.getService().performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK))
+</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_92" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">java_import 'android.accessibilityservice.AccessibilityService'
+
+$console.log($accessibility.getService().performGlobalAction(AccessibilityService.#::
+GLOBAL_ACTION_BACK))</div></div></div><section class="chapter"><h2 id="-jtt9qi_57" data-toc="-jtt9qi_57">使用物理屏幕镜像屏幕</h2><ul class="list _bullet" id="-jtt9qi_141"><li class="list__item" id="-jtt9qi_142"><p id="-jtt9qi_145">权限: Adb</p></li><li class="list__item" id="-jtt9qi_143"><p id="-jtt9qi_146">组件: <a href="https://www.m8test.com" id="-jtt9qi_147" data-external="true" rel="noopener noreferrer" target="_blank">无</a></p></li><li class="list__item" id="-jtt9qi_144"><p id="-jtt9qi_148">说明: 通过镜像屏幕模拟返回事件</p></li></ul></section><div class="tabs" id="-jtt9qi_60" data-group="languages" data-anchors="[-jtt9qi_151,-jtt9qi_154,-jtt9qi_157,-jtt9qi_160,-jtt9qi_163,-jtt9qi_166,-jtt9qi_169,-jtt9qi_172]"><div class="tabs__content" data-gtm="tab" id="-jtt9qi_151" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+
+// 创建或者获取物理屏幕的镜像屏幕
+val display = _displays.getMain()
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+val controller = display.getController()
+// 模拟按下返回键
+controller.pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_154" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建或者获取物理屏幕的镜像屏幕
+def display = $displays.getMain()
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+def controller = display.getController()
+// 模拟按下返回键
+controller.pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_157" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.display.control.Controller;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+// 创建或者获取物理屏幕的镜像屏幕
+Display display = $displays.getMain();
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+Controller controller = display.getController();
+// 模拟按下返回键
+controller.pressBack();</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_160" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建或者获取物理屏幕的镜像屏幕
+let display = $displays.getMain()
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+let controller = display.getController()
+// 模拟按下返回键
+controller.pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_163" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建或者获取物理屏幕的镜像屏幕
+local display = _displays:getMain()
+-- 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+local controller = display:getController()
+-- 模拟按下返回键
+controller:pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_166" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+// 创建或者获取物理屏幕的镜像屏幕
+$display = $displays-&gt;getMain();
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+$controller = $display-&gt;getController();
+// 模拟按下返回键
+$controller-&gt;pressBack();</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_169" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+
+# 创建或者获取物理屏幕的镜像屏幕
+display = _displays.getMain()
+# 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+controller = display.getController()
+# 模拟按下返回键
+controller.pressBack()</div></div><div class="tabs__content" data-gtm="tab" id="-jtt9qi_172" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建或者获取物理屏幕的镜像屏幕
+display = $displays.getMain()
+# 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+controller = display.getController()
+# 模拟按下返回键
+controller.pressBack()</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="automation-swipe-right.html" class="navigation-links__prev">向右滑动</a><a href="automation-home.html" class="navigation-links__next">回到主页</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

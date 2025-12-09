@@ -1,0 +1,170 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:37:00.819036371"><title>evaluateJsFile | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="evaluateJsFile | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/webviewbridge-evaluatejsfile.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="evaluateJsFile | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/webviewbridge-evaluatejsfile.html#webpage",
+    "url": "writerside-documentation/webviewbridge-evaluatejsfile.html",
+    "name": "evaluateJsFile | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="WebViewBridge.evaluateJsFile" data-main-title="evaluateJsFile" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///WebViewBridge.md|WebViewBridge"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="WebViewBridge.evaluateJsFile" id="WebViewBridge.evaluateJsFile.md">evaluateJsFile</h1><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_9"><p id="-ywhrgz_13">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.ui.webview/-web-view-bridge/evaluate-js-file.html" id="-ywhrgz_14" data-external="true" rel="noopener noreferrer" target="_blank">WebViewBridge.evaluateJsFile()</a></p></aside><div class="tabs" id="-ywhrgz_12" data-group="languages" data-anchors="[-ywhrgz_17,-ywhrgz_20,-ywhrgz_23,-ywhrgz_26,-ywhrgz_29,-ywhrgz_32,-ywhrgz_35]"><div class="tabs__content" data-gtm="tab" id="-ywhrgz_17" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+val bridge = _webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    // Files.buildFile() 用于构建一个 ScriptFile 对象
+    val jsFilePath = _files.buildFile {
+        // delegate -&gt; FileBuilder
+        // FileBuilder.setRelativePath() 用于设置相对于项目根目录的路径
+        setRelativePath(&quot;res&quot;, &quot;plugin.js&quot;)
+    }
+    // WebViewBridge.evaluateJsFile() 用于在 WebView 端执行js文件
+    bridge.evaluateJsFile(jsFilePath, false) { i -&gt;
+        _console.log(&quot;执行js文件结果:$i&quot;)
+    }
+    // 返回内容到 WebView 端,只能是字符串或者null
+    &quot;$it return from script&quot;
+}
+// Activity.start() 用于启动Android系统的Activity
+_activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_41"><p id="-ywhrgz_42"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.kts" id="-ywhrgz_43" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ywhrgz_20" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">package com.example.script
+
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+def bridge = $webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    // Files.buildFile() 用于构建一个 ScriptFile 对象
+    def jsFilePath = $files.buildFile {
+        // delegate -&gt; FileBuilder
+        // FileBuilder.setRelativePath() 用于设置相对于项目根目录的路径
+        setRelativePath(&quot;res&quot;, &quot;plugin.js&quot;)
+    }
+    // WebViewBridge.evaluateJsFile() 用于在 WebView 端执行js文件
+    bridge.evaluateJsFile(jsFilePath, false) { i -&gt;
+        $console.log(&quot;执行js文件结果:$i&quot;)
+    }
+    // 返回内容到 WebView 端,只能是字符串或者null
+    &quot;$it return from script&quot;
+}
+// Activity.start() 用于启动Android系统的Activity
+$activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_49"><p id="-ywhrgz_50"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.groovy" id="-ywhrgz_51" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ywhrgz_23" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+let bridge = $webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;, (it) =&gt; {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    // Files.buildFile() 用于构建一个 ScriptFile 对象
+    let jsFilePath = $files.buildFile((fileBuilder) =&gt; {
+        // delegate -&gt; FileBuilder
+        // FileBuilder.setRelativePath() 用于设置相对于项目根目录的路径
+        fileBuilder.setRelativePath(&quot;res&quot;, &quot;plugin.js&quot;)
+    })
+    // WebViewBridge.evaluateJsFile() 用于在 WebView 端执行js文件
+    bridge.evaluateJsFile(jsFilePath, false, (i) =&gt; {
+        $console.log(&quot;执行js文件结果:&quot;, i)
+    })
+    // 返回内容到 WebView 端,只能是字符串或者null
+    return it + &quot; return from script&quot;
+})
+// Activity.start() 用于启动Android系统的Activity
+$activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_57"><p id="-ywhrgz_58"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.js" id="-ywhrgz_59" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ywhrgz_26" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+local bridge = _webView:getBridge()
+-- WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge:registerHandler(&quot;handlerForWebView&quot;, function(it)
+    -- it -&gt; String
+    -- it 表示从 WebView 端传来的参数,如果没有则为 nil
+    -- Files.buildFile() 用于构建一个 ScriptFile 对象
+    local jsFilePath = _files:buildFile(function(fileBuilder)
+        -- delegate -&gt; FileBuilder
+        -- FileBuilder.setRelativePath() 用于设置相对于项目根目录的路径
+        fileBuilder:setRelativePath(&quot;res&quot;, &quot;plugin.js&quot;)
+    end)
+    -- WebViewBridge.evaluateJsFile() 用于在 WebView 端执行js文件
+    bridge:evaluateJsFile(jsFilePath, false, function(i)
+        _console:log(&quot;执行js文件结果:&quot;, i)
+    end)
+    -- 返回内容到 WebView 端,只能是字符串或者nil
+    return it .. &quot; return from script&quot;
+end)
+-- Activity.start() 用于启动Android系统的Activity
+_activity:start()
+</div><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_65"><p id="-ywhrgz_66"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.lua" id="-ywhrgz_67" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ywhrgz_29" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+$bridge = $webView-&gt;getBridge();
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+$bridge-&gt;registerHandler(&quot;handlerForWebView&quot;, function ($it) use ($console, $bridge, $files) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 nil
+    // Files.buildFile() 用于构建一个 ScriptFile 对象
+    $jsFilePath = $files-&gt;buildFile(function ($fileBuilder) {
+        // delegate -&gt; FileBuilder
+        // FileBuilder.setRelativePath() 用于设置相对于项目根目录的路径
+        $fileBuilder-&gt;setRelativePath(&quot;res&quot;, &quot;plugin.js&quot;);
+    });
+    // WebViewBridge.evaluateJsFile() 用于在 WebView 端执行js文件
+    $bridge-&gt;evaluateJsFile($jsFilePath, false, function ($i) use ($console) {
+        $console-&gt;log(&quot;执行js文件结果:&quot;, $i);
+    });
+    // 返回内容到 WebView 端,只能是字符串或者nil
+    return $it . &quot; return from script&quot;;
+});
+// Activity.start() 用于启动Android系统的Activity
+$activity-&gt;start();
+</div><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_73"><p id="-ywhrgz_74"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.php" id="-ywhrgz_75" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ywhrgz_32" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+bridge = _webView.getBridge()
+
+
+def fn1(it):
+    # it -&gt; String
+    # it 表示从 WebView 端传来的参数,如果没有则为 null
+    def fn2(fileBuilder):
+        # delegate -&gt; FileBuilder
+        # FileBuilder.setRelativePath() 用于设置相对于项目根目录的路径
+        fileBuilder.setRelativePath(&quot;res&quot;, &quot;plugin.js&quot;)
+
+    jsFilePath = _files.buildFile(fn2)
+
+    def fn3(i):
+        _console.log(&quot;执行js文件结果:&quot;, i)
+
+    # WebViewBridge.evaluateJsFile() 用于在 WebView 端执行js文件
+    bridge.evaluateJsFile(jsFilePath, False, fn3)
+    # 返回内容到 WebView 端,只能是字符串或者null
+    return it + &quot;return from script&quot;
+
+
+# WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;, fn1)
+# Activity.start() 用于启动Android系统的Activity
+_activity.start()
+</div><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_81"><p id="-ywhrgz_82"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.py" id="-ywhrgz_83" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ywhrgz_35" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+bridge = $webView.getBridge()
+# WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) { |it|
+  # it -&gt; String
+  # it 表示从 WebView 端传来的参数,如果没有则为 null
+  # Files.buildFile() 用于构建一个 ScriptFile 对象
+  jsFilePath = $files.buildFile { |fileBuilder|
+    # delegate -&gt; FileBuilder
+    # FileBuilder.setRelativePath() 用于设置相对于项目根目录的路径
+    fileBuilder.setRelativePath(&quot;res&quot;, &quot;plugin.js&quot;)
+  }
+  # WebViewBridge.evaluateJsFile() 用于在 WebView 端执行js文件
+  bridge.evaluateJsFile(jsFilePath, false) { |i|
+    $console.log(&quot;执行js文件结果:&quot;, i)
+  }
+  # 返回内容到 WebView 端,只能是字符串或者null
+  it + &quot; return from script&quot;
+}
+# Activity.start() 用于启动Android系统的Activity
+$activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-ywhrgz_89"><p id="-ywhrgz_90"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.rb" id="-ywhrgz_91" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main//WebViewBridge/evaluateJsFile/src/com/example/script/primary.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="webviewbridge-callhandler.html" class="navigation-links__prev">callHandler</a><a href="webviewbridge-evaluatejsstring.html" class="navigation-links__next">evaluateJsString</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:25.264269239"><title>剪切板 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="剪切板 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/clipboard.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="剪切板 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/clipboard.html#webpage",
+    "url": "writerside-documentation/clipboard.html",
+    "name": "剪切板 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="clipboard" data-main-title="剪切板" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="utility-tools.md|实用工具"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="clipboard" id="clipboard.md">剪切板</h1><div class="tabs" id="-nbejj7_6" data-group="languages" data-anchors="[-nbejj7_12,-nbejj7_15,-nbejj7_18,-nbejj7_21,-nbejj7_24,-nbejj7_27,-nbejj7_30,-nbejj7_9]"><div class="tabs__content" data-gtm="tab" id="-nbejj7_9" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 1. 创建协程作用域，这是启动异步任务所必须的
+// _coroutines 是全局变量，对应 Coroutines 接口
+val scope = _coroutines.newScope(null)
+
+// 2. 准备测试数据
+val testContent = &quot;M8Test Clipboard Test: &quot; + System.currentTimeMillis()
+_console.log(&quot;准备写入剪贴板内容: &quot; + testContent)
+
+// 3. 执行设置剪贴板操作 (setText)
+// _clipboard 是全局变量，对应 Clipboard 接口
+_clipboard.setText(scope, testContent)
+// 4. 处理 setText 的结果 (Deferred&lt;Boolean&gt;)
+    .then { currentScope, isSuccess -&gt;
+        if (isSuccess) {
+            _console.log(&quot;写入操作成功，正在准备读取...&quot;)
+
+            // 写入成功后，返回一个新的 Deferred&lt;String?&gt; 进行链式调用
+            // 这里调用 getText 读取剪贴板
+            // Kotlin Lambda 中最后一行是返回值
+            _clipboard.getText(currentScope)
+        } else {
+            _console.error(&quot;写入操作失败！&quot;)
+            // 如果失败，返回一个包含 null 的已完成 Deferred
+            currentScope.resolve(null)
+        }
+    }
+// 5. 处理 getText 的结果 (Deferred&lt;String?&gt;)
+    .then { currentScope, clipboardText -&gt;
+        _console.log(&quot;从剪贴板读取到的内容: &quot; + clipboardText)
+
+        // 验证结果
+        if (clipboardText == testContent) {
+            _console.log(&quot;✅ 测试通过：读取内容与写入内容一致。&quot;)
+        } else {
+            _console.error(&quot;❌ 测试失败：内容不一致。\n期望: $testContent\n实际: $clipboardText&quot;)
+        }
+
+        // 链式调用结束，返回一个空的 Deferred
+        currentScope.resolve(true)
+    }
+// 6. 全局异常捕获
+    .onError { error -&gt;
+        _console.error(&quot;测试过程中发生异常: &quot; + error)
+    }
+
+_script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-nbejj7_12" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 1. 创建协程作用域，这是启动异步任务所必须的
+// $coroutines 是全局变量，对应 Coroutines 接口
+def scope = $coroutines.newScope(null)
+
+// 2. 准备测试数据
+def testContent = &quot;M8Test Clipboard Test: &quot; + System.currentTimeMillis()
+$console.log(&quot;准备写入剪贴板内容: &quot; + testContent)
+
+// 3. 执行设置剪贴板操作 (setText)
+// $clipboard 是全局变量，对应 Clipboard 接口
+$clipboard.setText(scope, testContent)
+// 4. 处理 setText 的结果 (Deferred&lt;Boolean&gt;)
+        .then { currentScope, isSuccess -&gt;
+            if (isSuccess) {
+                $console.log(&quot;写入操作成功，正在准备读取...&quot;)
+
+                // 写入成功后，返回一个新的 Deferred&lt;String?&gt; 进行链式调用
+                // 这里调用 getText 读取剪贴板
+                return $clipboard.getText(currentScope)
+            } else {
+                $console.error(&quot;写入操作失败！&quot;)
+                // 如果失败，返回一个包含 null 的已完成 Deferred，以便中断后续逻辑或传递失败状态
+                return currentScope.resolve(null)
+            }
+        }
+// 5. 处理 getText 的结果 (Deferred&lt;String?&gt;)
+        .then { currentScope, clipboardText -&gt;
+            $console.log(&quot;从剪贴板读取到的内容: &quot; + clipboardText)
+
+            // 验证结果
+            if (clipboardText == testContent) {
+                $console.log(&quot;✅ 测试通过：读取内容与写入内容一致。&quot;)
+            } else {
+                $console.error(&quot;❌ 测试失败：内容不一致。\n期望: $testContent\n实际: $clipboardText&quot;)
+            }
+
+            // 链式调用结束，返回一个空的 Deferred
+            return currentScope.resolve(true)
+        }
+// 6. 全局异常捕获
+        .onError { error -&gt;
+            $console.error(&quot;测试过程中发生异常: &quot; + error)
+        }
+$script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-nbejj7_15" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-nbejj7_18" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 1. 创建协程作用域，这是启动异步任务所必须的
+// $coroutines 是全局变量，对应 Coroutines 接口
+const scope = $coroutines.newScope(null);
+
+// 2. 准备测试数据
+const testContent = &quot;M8Test Clipboard Test: &quot; + Packages.java.lang.System.currentTimeMillis();
+$console.log(&quot;准备写入剪贴板内容: &quot; + testContent);
+
+// 3. 执行设置剪贴板操作 (setText)
+// $clipboard 是全局变量，对应 Clipboard 接口
+$clipboard.setText(scope, testContent)
+    // 4. 处理 setText 的结果 (Deferred&lt;Boolean&gt;)
+    .then((currentScope, isSuccess) =&gt; {
+        if (isSuccess == true) {
+            $console.log(&quot;写入操作成功，正在准备读取...&quot;);
+
+            // 写入成功后，返回一个新的 Deferred&lt;String?&gt; 进行链式调用
+            // 这里调用 getText 读取剪贴板
+            return $clipboard.getText(currentScope);
+        } else {
+            $console.error(&quot;写入操作失败！&quot;);
+            // 如果失败，返回一个包含 null 的已完成 Deferred，以便中断后续逻辑或传递失败状态
+            return currentScope.resolve(null);
+        }
+    })
+    // 5. 处理 getText 的结果 (Deferred&lt;String?&gt;)
+    .then((currentScope, clipboardText) =&gt; {
+        $console.log(&quot;从剪贴板读取到的内容: &quot; + clipboardText);
+
+        // 验证结果
+        if (clipboardText == testContent) {
+            $console.log(&quot;✅ 测试通过：读取内容与写入内容一致。&quot;);
+        } else {
+            $console.error(&quot;❌ 测试失败：内容不一致。\n期望: &quot; + testContent + &quot;\n实际: &quot; + clipboardText);
+        }
+
+        // 链式调用结束，返回一个空的 Deferred
+        return currentScope.resolve(true);
+    })
+    // 6. 全局异常捕获
+    .onError(error =&gt; {
+        $console.error(&quot;测试过程中发生异常: &quot; + error);
+    });
+
+$script.getThreads().getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-nbejj7_21" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 1. 创建协程作用域，这是启动异步任务所必须的
+-- _coroutines 是全局变量，对应 Coroutines 接口
+local scope = _coroutines:newScope(nil)
+
+-- 2. 准备测试数据
+local testContent = &quot;M8Test Clipboard Test: &quot; .. os.time() * 1000 -- os.time() is in seconds
+_console:log(&quot;准备写入剪贴板内容: &quot; .. testContent)
+
+-- 3. 执行设置剪贴板操作 (setText)
+-- _clipboard 是全局变量，对应 Clipboard 接口
+_clipboard:setText(scope, testContent)
+-- 4. 处理 setText 的结果 (Deferred&lt;Boolean&gt;)
+    :_then(function(currentScope, isSuccess)
+        if isSuccess then
+            _console:log(&quot;写入操作成功，正在准备读取...&quot;)
+
+            -- 写入成功后，返回一个新的 Deferred&lt;String?&gt; 进行链式调用
+            -- 这里调用 getText 读取剪贴板
+            return _clipboard:getText(currentScope)
+        else
+            _console:error(&quot;写入操作失败！&quot;)
+            -- 如果失败，返回一个包含 nil 的已完成 Deferred，以便中断后续逻辑或传递失败状态
+            return currentScope:resolve(nil)
+        end
+    end)
+-- 5. 处理 getText 的结果 (Deferred&lt;String?&gt;)
+    :_then(function(currentScope, clipboardText)
+        _console:log(&quot;从剪贴板读取到的内容: &quot; .. tostring(clipboardText))
+
+        -- 验证结果
+        if clipboardText == testContent then
+            _console:log(&quot;✅ 测试通过：读取内容与写入内容一致。&quot;)
+        else
+            _console:error(&quot;❌ 测试失败：内容不一致。\n期望: &quot; .. testContent .. &quot;\n实际: &quot; .. tostring(clipboardText))
+        end
+
+        -- 链式调用结束，返回一个空的 Deferred
+        return currentScope:resolve(true)
+    end)
+-- 6. 全局异常捕获
+    :onError(function(error)
+        _console:error(&quot;测试过程中发生异常: &quot; .. tostring(error))
+    end)
+_script:getThreads():getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-nbejj7_24" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// 通过 use 导入java类, 通过&quot;m8test_java\全类名&quot;的方式
+use m8test_java\java\lang\System;
+
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\device\Clipboard $clipboard */
+global $clipboard;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+global $script;
+
+// 1. 创建协程作用域，这是启动异步任务所必须的
+// $coroutines 是全局变量，对应 Coroutines 接口
+// 1. 创建协程作用域，并指定其调度器为脚本主线程
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 2. 准备测试数据
+$testContent = javaString(&quot;M8Test Clipboard Test: &quot;) . System::currentTimeMillis();
+$console-&gt;log(javaString(&quot;准备写入剪贴板内容: &quot;), $testContent);
+
+// 3. 执行设置剪贴板操作 (setText)
+// $clipboard 是全局变量，对应 Clipboard 接口
+$clipboard-&gt;setText($scope, $testContent)
+// 4. 处理 setText 的结果 (Deferred&lt;Boolean&gt;)
+    -&gt;then(function ($currentScope, $isSuccess) use ($testContent, $clipboard) {
+        global $console;
+        if ($isSuccess) {
+            $console-&gt;log(javaString(&quot;写入操作成功，正在准备读取...&quot;));
+            // 写入成功后，返回一个新的 Deferred&lt;String&gt; 进行链式调用
+            // 这里调用 getText 读取剪贴板
+            return $clipboard-&gt;getText($currentScope);
+        } else {
+            $console-&gt;error(javaString(&quot;写入操作失败！&quot;));
+            // 如果失败，返回一个包含 null 的已完成 Deferred，以便中断后续逻辑或传递失败状态
+            return $currentScope-&gt;resolve(null);
+        }
+    })
+    // 5. 处理 getText 的结果 (Deferred&lt;String&gt;)
+    -&gt;then(function ($currentScope, $clipboardText) use ($testContent) {
+        global $console;
+        $console-&gt;log(javaString(&quot;从剪贴板读取到的内容: &quot;), $clipboardText);
+
+        // 验证结果
+        if ($clipboardText == $testContent) {
+            $console-&gt;log(javaString(&quot;✅ 测试通过：读取内容与写入内容一致。&quot;));
+        } else {
+            $console-&gt;error(javaString(&quot;❌ 测试失败：内容不一致。\n期望: &quot;) . $testContent . javaString(&quot;\n实际: &quot;) . $clipboardText);
+        }
+
+        // 链式调用结束，返回一个空的 Deferred
+        return $currentScope-&gt;resolve(true);
+    })
+    // 6. 全局异常捕获
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;测试过程中发生异常: &quot;), $error);
+    });
+$script-&gt;getThreads()-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-nbejj7_27" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _clipboard
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+# 1. 创建协程作用域，这是启动异步任务所必须的
+# $coroutines 是全局变量，对应 Coroutines 接口
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+# 2. 准备测试数据
+# System.currentTimeMillis() is Java, time.time() * 1000 is a Python equivalent
+import time
+
+testContent = &quot;M8Test Clipboard Test: &quot; + str(int(time.time() * 1000))
+_console.log(&quot;准备写入剪贴板内容: &quot; + testContent)
+
+# 3. 执行设置剪贴板操作 (setText)
+# $clipboard 是全局变量，对应 Clipboard 接口
+_clipboard.setText(scope, testContent).then(
+    # 4. 处理 setText 的结果 (Deferred&lt;Boolean&gt;)
+    # 使用Python条件表达式处理 if/else 逻辑
+    lambda currentScope, isSuccess:
+    (
+        _console.log(&quot;写入操作成功，正在准备读取...&quot;),
+        # 写入成功后，返回一个新的 Deferred&lt;String?&gt; 进行链式调用
+        # 这里调用 getText 读取剪贴板
+        _clipboard.getText(currentScope)
+    )[-1] if isSuccess else (
+        _console.error(&quot;写入操作失败！&quot;),
+        # 如果失败，返回一个包含 null 的已完成 Deferred
+        currentScope.resolve(None)
+    )[-1]
+).then(
+    # 5. 处理 getText 的结果 (Deferred&lt;String?&gt;)
+    lambda currentScope, clipboardText: (
+        _console.log(&quot;从剪贴板读取到的内容: &quot; + str(clipboardText)),
+
+        # 验证结果
+        (
+            _console.log(&quot;✅ 测试通过：读取内容与写入内容一致。&quot;) if clipboardText == testContent
+            else _console.error(f&quot;❌ 测试失败：内容不一致。\n期望: {testContent}\n实际: {clipboardText}&quot;)
+        ),
+
+        # 链式调用结束，返回一个空的 Deferred
+        currentScope.resolve(True)
+    )[-1]
+).onError(
+    # 6. 全局异常捕获
+    lambda error: _console.error(&quot;测试过程中发生异常: &quot;, error.stackTraceToString())
+)
+
+_script.getThreads().getMain().setBackground(True)
+</div></div><div class="tabs__content" data-gtm="tab" id="-nbejj7_30" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 1. 创建协程作用域，这是启动异步任务所必须的
+# $coroutines 是全局变量，对应 Coroutines 接口
+scope = $coroutines.newScope(nil)
+
+# 2. 准备测试数据
+# 调用 Java 静态方法需要使用 M8testJava::Java::Lang::System::N__currentTimeMillis()
+testContent = &quot;M8Test Clipboard Test: &quot; + M8testJava::Java::Lang::System::N__currentTimeMillis().to_s
+$console.log(&quot;准备写入剪贴板内容: &quot; + testContent)
+
+# 3. 执行设置剪贴板操作 (setText)
+# $clipboard 是全局变量，对应 Clipboard 接口
+# 这里将 proc 改为了 block 形式，直接跟在方法后面
+$clipboard.setText(scope, testContent)
+          .then { |currentScope, isSuccess|
+            if isSuccess
+              $console.log(&quot;写入操作成功，正在准备读取...&quot;)
+
+              # 写入成功后，返回一个新的 Deferred&lt;String?&gt; 进行链式调用
+              # 这里调用 getText 读取剪贴板
+              # Ruby Block 中最后一行表达式即为返回值，不要使用 return
+              $clipboard.getText(currentScope)
+            else
+              $console.error(&quot;写入操作失败！&quot;)
+              # 如果失败，返回一个包含 nil 的已完成 Deferred，以便中断后续逻辑或传递失败状态
+              currentScope.resolve(nil)
+            end
+          }
+          .then { |currentScope, clipboardText|
+            # 处理 getText 的结果 (Deferred&lt;String?&gt;)
+            $console.log(&quot;从剪贴板读取到的内容: &quot; + clipboardText.to_s)
+
+            # 验证结果
+            if clipboardText.to_s == testContent
+              $console.log(&quot;✅ 测试通过：读取内容与写入内容一致。&quot;)
+            else
+              $console.error(&quot;❌ 测试失败：内容不一致。\n期望: #{testContent}\n实际: #{clipboardText}&quot;)
+            end
+
+            # 链式调用结束，返回一个空的 Deferred
+            currentScope.resolve(true)
+          }
+          .onError { |error|
+            # 6. 全局异常捕获
+            $console.error(&quot;测试过程中发生异常: &quot; + error.to_s)
+          }
+
+$script.getThreads().getMain().setBackground(true)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="device-info.html" class="navigation-links__prev">设备信息</a><a href="toaster.html" class="navigation-links__next">吐司(Toast)</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

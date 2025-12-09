@@ -1,0 +1,679 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.514590465"><title>生命周期 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"job","level":0,"title":"Job 的状态查询","anchor":"#job"},{"id":"b9mucf_5","level":0,"title":"取消协程或作用域","anchor":"#b9mucf_5"},{"id":"job-invokeoncompletion","level":0,"title":"job.invokeOnCompletion: 注册完成回调","anchor":"#job-invokeoncompletion"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="生命周期 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/coroutines-lifecycle.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="生命周期 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/coroutines-lifecycle.html#webpage",
+    "url": "writerside-documentation/coroutines-lifecycle.html",
+    "name": "生命周期 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="coroutines-lifecycle" data-main-title="生命周期" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="coroutines.md|协程"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="coroutines-lifecycle" id="coroutines-lifecycle.md">生命周期</h1><p id="b9mucf_3">每个通过 launch 或 async 启动的协程都由一个 Job 对象表示，它不仅是协程的句柄，也是其生命周期状态的体现。</p><section class="chapter"><h2 id="job" data-toc="job">Job 的状态查询</h2><p id="b9mucf_7">Job 对象提供了多个方法来查询协程的当前状态。</p><ul class="list _bullet" id="b9mucf_8"><li class="list__item" id="b9mucf_13"><p id="b9mucf_16">isActive: true 表示协程正在运行或可以运行。</p></li><li class="list__item" id="b9mucf_14"><p id="b9mucf_17">isCompleted: true 表示协程已结束（无论成功、失败还是被取消）。</p></li><li class="list__item" id="b9mucf_15"><p id="b9mucf_18">isCancelled: true 表示协程已被取消或因失败而正在取消中。</p></li></ul><div class="tabs" id="b9mucf_12" data-group="languages" data-anchors="[b9mucf_21,b9mucf_24,b9mucf_27,b9mucf_30,b9mucf_33,b9mucf_36,b9mucf_39,b9mucf_42]"><div class="tabs__content" data-gtm="tab" id="b9mucf_21" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 6.1: 查询一个 Job 的生命周期状态
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+// 启动一个会运行一段时间的协程
+// 修复：移除 lambda 参数 s -&gt;，直接调用 delay
+val job = scope.launch(null, null) { delay(1000) }
+
+_console.log(&quot;任务刚启动:&quot;)
+_console.log(&quot;  - is active: &quot; + job.isActive())
+_console.log(&quot;  - is completed: &quot; + job.isCompleted())
+_console.log(&quot;  - is cancelled: &quot; + job.isCancelled())
+
+// 等待 500 毫秒，任务仍在运行中
+scope.delay(500).then { s, _ -&gt;
+    _console.log(&quot;\n任务运行 500 毫秒后:&quot;)
+    _console.log(&quot;  - is active: &quot; + job.isActive())
+    _console.log(&quot;  - is completed: &quot; + job.isCompleted())
+    _console.log(&quot;  - is cancelled: &quot; + job.isCancelled())
+    job.toDeferred()
+}.then { s, _ -&gt;
+    _console.log(&quot;\n任务自然完成后:&quot;)
+    _console.log(&quot;  - is active: &quot; + job.isActive())     // 变为 false
+    _console.log(&quot;  - is completed: &quot; + job.isCompleted()) // 变为 true
+    _console.log(&quot;  - is cancelled: &quot; + job.isCancelled()) // 保持 false
+    s.resolve(null)
+}</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_24" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 6.1: 查询一个 Job 的生命周期状态
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+// 启动一个会运行一段时间的协程
+def job = scope.launch(null, null, { s -&gt; s.delay(1000) })
+
+$console.log(&quot;任务刚启动:&quot;)
+$console.log(&quot;  - is active: &quot; + job.isActive())
+$console.log(&quot;  - is completed: &quot; + job.isCompleted())
+$console.log(&quot;  - is cancelled: &quot; + job.isCancelled())
+
+// 等待 500 毫秒，任务仍在运行中
+scope.delay(500).then({ s, _ -&gt;
+    $console.log(&quot;\n任务运行 500 毫秒后:&quot;)
+    $console.log(&quot;  - is active: &quot; + job.isActive())
+    $console.log(&quot;  - is completed: &quot; + job.isCompleted())
+    $console.log(&quot;  - is cancelled: &quot; + job.isCancelled())
+    job.toDeferred()
+}).then({ s, _ -&gt;
+    $console.log(&quot;\n任务自然完成后:&quot;)
+    $console.log(&quot;  - is active: &quot; + job.isActive())     // 变为 false
+    $console.log(&quot;  - is completed: &quot; + job.isCompleted()) // 变为 true
+    $console.log(&quot;  - is cancelled: &quot; + job.isCancelled()) // 保持 false
+    s.resolve(null)
+})</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_27" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_30" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 6.1: 查询一个 Job 的生命周期状态
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+// 启动一个会运行一段时间的协程
+const job = scope.launch(null, null, s =&gt; s.delay(1000));
+
+$console.log(&quot;任务刚启动:&quot;);
+$console.log(&quot;  - is active: &quot; + job.isActive());
+$console.log(&quot;  - is completed: &quot; + job.isCompleted());
+$console.log(&quot;  - is cancelled: &quot; + job.isCancelled());
+
+// 等待 500 毫秒，任务仍在运行中
+scope.delay(500).then((s, _) =&gt; {
+    $console.log(&quot;\n任务运行 500 毫秒后:&quot;);
+    $console.log(&quot;  - is active: &quot; + job.isActive());
+    $console.log(&quot;  - is completed: &quot; + job.isCompleted());
+    $console.log(&quot;  - is cancelled: &quot; + job.isCancelled());
+    return job.toDeferred();
+}).then((s, _) =&gt; {
+    $console.log(&quot;\n任务自然完成后:&quot;);
+    $console.log(&quot;  - is active: &quot; + job.isActive());     // 变为 false
+    $console.log(&quot;  - is completed: &quot; + job.isCompleted()); // 变为 true
+    $console.log(&quot;  - is cancelled: &quot; + job.isCancelled()); // 保持 false
+    return s.resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_33" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 6.1: 查询一个 Job 的生命周期状态
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+-- 启动一个会运行一段时间的协程
+local job = scope:launch(nil, nil, function(s) return s:delay(1000) end)
+
+_console:log(&quot;任务刚启动:&quot;)
+_console:log(&quot;  - is active: &quot; .. tostring(job:isActive()))
+_console:log(&quot;  - is completed: &quot; .. tostring(job:isCompleted()))
+_console:log(&quot;  - is cancelled: &quot; .. tostring(job:isCancelled()))
+
+-- 等待 500 毫秒，任务仍在运行中
+scope:delay(500):_then(function(s, _)
+    _console:log(&quot;\n任务运行 500 毫秒后:&quot;)
+    _console:log(&quot;  - is active: &quot; .. tostring(job:isActive()))
+    _console:log(&quot;  - is completed: &quot; .. tostring(job:isCompleted()))
+    _console:log(&quot;  - is cancelled: &quot; .. tostring(job:isCancelled()))
+    return job:toDeferred()
+end):_then(function(s, _)
+    _console:log(&quot;\n任务自然完成后:&quot;)
+    _console:log(&quot;  - is active: &quot; .. tostring(job:isActive()))     -- 变为 false
+    _console:log(&quot;  - is completed: &quot; .. tostring(job:isCompleted())) -- 变为 true
+    _console:log(&quot;  - is cancelled: &quot; .. tostring(job:isCancelled())) -- 保持 false
+    return s:resolve(nil)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_36" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 6.1: 查询一个 Job 的生命周期状态
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 启动一个会运行一段时间的协程
+$job = $scope-&gt;launch(null, null, function ($s) {
+    return $s-&gt;delay(1000);
+});
+
+$console-&gt;log(javaString(&quot;任务刚启动:&quot;));
+$console-&gt;log(javaString(&quot;  - is active: &quot;) . ($job-&gt;isActive() ? 'true' : 'false'));
+$console-&gt;log(javaString(&quot;  - is completed: &quot;) . ($job-&gt;isCompleted() ? 'true' : 'false'));
+$console-&gt;log(javaString(&quot;  - is cancelled: &quot;) . ($job-&gt;isCancelled() ? 'true' : 'false'));
+
+// 等待 500 毫秒，任务仍在运行中
+$scope-&gt;delay(500)-&gt;then(function ($s, $_) use ($job) {
+    global $console;
+    $console-&gt;log(javaString(&quot;\n任务运行 500 毫秒后:&quot;));
+    $console-&gt;log(javaString(&quot;  - is active: &quot;) . ($job-&gt;isActive() ? 'true' : 'false'));
+    $console-&gt;log(javaString(&quot;  - is completed: &quot;) . ($job-&gt;isCompleted() ? 'true' : 'false'));
+    $console-&gt;log(javaString(&quot;  - is cancelled: &quot;) . ($job-&gt;isCancelled() ? 'true' : 'false'));
+    return $job-&gt;toDeferred();
+})-&gt;then(function ($s, $_) use ($job) {
+    global $console;
+    $console-&gt;log(javaString(&quot;\n任务自然完成后:&quot;));
+    $console-&gt;log(javaString(&quot;  - is active: &quot;) . ($job-&gt;isActive() ? 'true' : 'false'));     // 变为 false
+    $console-&gt;log(javaString(&quot;  - is completed: &quot;) . ($job-&gt;isCompleted() ? 'true' : 'false')); // 变为 true
+    $console-&gt;log(javaString(&quot;  - is cancelled: &quot;) . ($job-&gt;isCancelled() ? 'true' : 'false')); // 保持 false
+    return $s-&gt;resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_39" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 6.1: 查询一个 Job 的生命周期状态
+#
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+# 启动一个会运行一段时间的协程
+job = scope.launch(None, None, lambda s: s.delay(1000))
+
+_console.log(&quot;任务刚启动:&quot;)
+_console.log(&quot;  - is active: &quot; + str(job.isActive()))
+_console.log(&quot;  - is completed: &quot; + str(job.isCompleted()))
+_console.log(&quot;  - is cancelled: &quot; + str(job.isCancelled()))
+
+# 等待 500 毫秒，任务仍在运行中
+scope.delay(500).then(lambda s, _: (
+    _console.log(&quot;\n任务运行 500 毫秒后:&quot;),
+    _console.log(&quot;  - is active: &quot; + str(job.isActive())),
+    _console.log(&quot;  - is completed: &quot; + str(job.isCompleted())),
+    _console.log(&quot;  - is cancelled: &quot; + str(job.isCancelled())),
+    job.toDeferred()
+)[-1]).then(lambda s, _: (
+    _console.log(&quot;\n任务自然完成后:&quot;),
+    _console.log(&quot;  - is active: &quot; + str(job.isActive())),  # 变为 false
+    _console.log(&quot;  - is completed: &quot; + str(job.isCompleted())),  # 变为 true
+    _console.log(&quot;  - is cancelled: &quot; + str(job.isCancelled())),  # 保持 false
+    s.resolve(None)
+)[-1])
+</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_42" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 6.1: 查询一个 Job 的生命周期状态
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+# 启动一个会运行一段时间的协程
+job = scope.launch(nil, nil) { |s| s.delay(1000) }
+
+$console.log(&quot;任务刚启动:&quot;)
+$console.log(&quot;  - is active: &quot; + job.isActive().to_s)
+$console.log(&quot;  - is completed: &quot; + job.isCompleted().to_s)
+$console.log(&quot;  - is cancelled: &quot; + job.isCancelled().to_s)
+
+# 等待 500 毫秒，任务仍在运行中
+scope.delay(500).then do |s, _|
+  $console.log(&quot;\n任务运行 500 毫秒后:&quot;)
+  $console.log(&quot;  - is active: &quot; + job.isActive().to_s)
+  $console.log(&quot;  - is completed: &quot; + job.isCompleted().to_s)
+  $console.log(&quot;  - is cancelled: &quot; + job.isCancelled().to_s)
+  job.toDeferred()
+end.then do |s, _|
+  $console.log(&quot;\n任务自然完成后:&quot;)
+  $console.log(&quot;  - is active: &quot; + job.isActive().to_s)     # 变为 false
+  $console.log(&quot;  - is completed: &quot; + job.isCompleted().to_s) # 变为 true
+  $console.log(&quot;  - is cancelled: &quot; + job.isCancelled().to_s) # 保持 false
+  s.resolve(nil)
+end</div></div></div></section><section class="chapter"><h2 id="b9mucf_5" data-toc="b9mucf_5">取消协程或作用域</h2><p id="b9mucf_91">取消是结构化并发的核心。您可以取消单个 Job，也可以取消整个 CoroutineScope，后者会取消作用域内所有活动的协程。</p><div class="tabs" id="b9mucf_95" data-group="languages" data-anchors="[b9mucf_101,b9mucf_104,b9mucf_107,b9mucf_110,b9mucf_113,b9mucf_116,b9mucf_119,b9mucf_98]"><div class="tabs__content" data-gtm="tab" id="b9mucf_98" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 6.2: 取消一个长时间运行的 Job
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+// 修复：移除 lambda 参数 s -&gt;
+val longRunningJob = scope.launch(null, null) {
+    _console.log(&quot;一个需要5秒才能完成的漫长任务已启动...&quot;)
+    delay(5000).then { s1, _ -&gt;
+        _console.log(&quot;任务完成, 这个任务被取消了，不应该执行&quot;)
+        s1.resolve(null)
+    }
+}
+
+// 在任务启动后，等待 2.5 秒然后取消它
+scope.delay(2500).then { s, _ -&gt;
+    _console.log(&quot;  - is active: &quot; + longRunningJob.isActive())
+    _console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted())
+    _console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled())
+
+    _console.log(&quot;\n发送取消信号给任务！&quot;)
+    longRunningJob.cancel(&quot;用户请求超时。&quot;)
+
+    // 检查取消后的状态
+    _console.log(&quot;任务取消信号已发送:&quot;)
+    _console.log(&quot;  - is active: &quot; + longRunningJob.isActive())
+    _console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted()) // 可能还未完全完成
+    _console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled()) // 变为 true
+    s.resolve(null)
+}</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_101" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 6.2: 取消一个长时间运行的 Job
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+def longRunningJob = scope.launch(null, null, { s -&gt;
+    $console.log(&quot;一个需要5秒才能完成的漫长任务已启动...&quot;)
+    s.delay(5000).then { s1 -&gt;
+        $console.log(&quot;任务完成, 这个任务被取消了，不应该执行&quot;)
+        s1.resolve(null)
+    }
+})
+
+// 在任务启动后，等待 2.5 秒然后取消它
+scope.delay(2500).then({ s, _ -&gt;
+    $console.log(&quot;  - is active: &quot; + longRunningJob.isActive())
+    $console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted())
+    $console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled())
+
+    $console.log(&quot;\n发送取消信号给任务！&quot;)
+    longRunningJob.cancel(&quot;用户请求超时。&quot;)
+
+    // 检查取消后的状态
+    $console.log(&quot;任务取消信号已发送:&quot;)
+    $console.log(&quot;  - is active: &quot; + longRunningJob.isActive())
+    $console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted()) // 可能还未完全完成
+    $console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled()) // 变为 true
+    s.resolve(null)
+})</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_104" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_107" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 6.2: 取消一个长时间运行的 Job
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+const longRunningJob = scope.launch(null, null, s =&gt; {
+    $console.log(&quot;一个需要5秒才能完成的漫长任务已启动...&quot;);
+    s.delay(5000).then(s1 =&gt; {
+        $console.log(&quot;任务完成, 这个任务被取消了，不应该执行&quot;);
+        return s1.resolve(null);
+    });
+});
+
+// 在任务启动后，等待 2.5 秒然后取消它
+scope.delay(2500).then((s, _) =&gt; {
+    $console.log(&quot;  - is active: &quot; + longRunningJob.isActive());
+    $console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted());
+    $console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled());
+
+    $console.log(&quot;\n发送取消信号给任务！&quot;);
+    longRunningJob.cancel(&quot;用户请求超时。&quot;);
+
+    // 检查取消后的状态
+    $console.log(&quot;任务取消信号已发送:&quot;);
+    $console.log(&quot;  - is active: &quot; + longRunningJob.isActive());
+    $console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted()); // 可能还未完全完成
+    $console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled()); // 变为 true
+    return s.resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_110" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 6.2: 取消一个长时间运行的 Job
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+local longRunningJob = scope:launch(nil, nil, function(s)
+    _console:log(&quot;一个需要5秒才能完成的漫长任务已启动...&quot;)
+    s:delay(5000):_then(function(s1)
+        _console:log(&quot;任务完成, 这个任务被取消了，不应该执行&quot;)
+        return s1:resolve(nil)
+    end)
+end)
+
+-- 在任务启动后，等待 2.5 秒然后取消它
+scope:delay(2500):_then(function(s, _)
+    _console:log(&quot;  - is active: &quot; .. tostring(longRunningJob:isActive()))
+    _console:log(&quot;  - is completed: &quot; .. tostring(longRunningJob:isCompleted()))
+    _console:log(&quot;  - is cancelled: &quot; .. tostring(longRunningJob:isCancelled()))
+
+    _console:log(&quot;\n发送取消信号给任务！&quot;)
+    longRunningJob:cancel(&quot;用户请求超时。&quot;)
+
+    -- 检查取消后的状态
+    _console:log(&quot;任务取消信号已发送:&quot;)
+    _console:log(&quot;  - is active: &quot; .. tostring(longRunningJob:isActive()))
+    _console:log(&quot;  - is completed: &quot; .. tostring(longRunningJob:isCompleted())) -- 可能还未完全完成
+    _console:log(&quot;  - is cancelled: &quot; .. tostring(longRunningJob:isCancelled())) -- 变为 true
+    return s:resolve(nil)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_113" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 6.2: 取消一个长时间运行的 Job
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$longRunningJob = $scope-&gt;launch(null, null, function ($s) {
+    global $console;
+    $console-&gt;log(javaString(&quot;一个需要5秒才能完成的漫长任务已启动...&quot;));
+    $s-&gt;delay(5000)-&gt;then(function ($s1) {
+        global $console;
+        $console-&gt;log(javaString(&quot;任务完成, 这个任务被取消了，不应该执行&quot;));
+        return $s1-&gt;resolve(null);
+    });
+});
+
+// 在任务启动后，等待 2.5 秒然后取消它
+$scope-&gt;delay(2500)-&gt;then(function ($s, $_) use ($longRunningJob) {
+    global $console;
+    $console-&gt;log(javaString(&quot;  - is active: &quot;) . ($longRunningJob-&gt;isActive() ? 'true' : 'false'));
+    $console-&gt;log(javaString(&quot;  - is completed: &quot;) . ($longRunningJob-&gt;isCompleted() ? 'true' : 'false'));
+    $console-&gt;log(javaString(&quot;  - is cancelled: &quot;) . ($longRunningJob-&gt;isCancelled() ? 'true' : 'false'));
+
+    $console-&gt;log(javaString(&quot;\n发送取消信号给任务！&quot;));
+    $longRunningJob-&gt;cancel(javaString(&quot;用户请求超时。&quot;));
+
+    // 检查取消后的状态
+    $console-&gt;log(javaString(&quot;任务取消信号已发送:&quot;));
+    $console-&gt;log(javaString(&quot;  - is active: &quot;) . ($longRunningJob-&gt;isActive() ? 'true' : 'false'));
+    $console-&gt;log(javaString(&quot;  - is completed: &quot;) . ($longRunningJob-&gt;isCompleted() ? 'true' : 'false')); // 可能还未完全完成
+    $console-&gt;log(javaString(&quot;  - is cancelled: &quot;) . ($longRunningJob-&gt;isCancelled() ? 'true' : 'false')); // 变为 true
+    return $s-&gt;resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_116" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 6.2: 取消一个长时间运行的 Job
+#
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+longRunningJob = scope.launch(None, None, lambda s: (
+    _console.log(&quot;一个需要5秒才能完成的漫长任务已启动...&quot;),
+    s.delay(5000).then(lambda s1: (
+        _console.log(&quot;任务完成, 这个任务被取消了，不应该执行&quot;),
+        s1.resolve(None)
+    )[-1])
+))
+
+# 在任务启动后，等待 2.5 秒然后取消它
+scope.delay(2500).then(lambda s, _: (
+    _console.log(&quot;  - is active: &quot; + str(longRunningJob.isActive())),
+    _console.log(&quot;  - is completed: &quot; + str(longRunningJob.isCompleted())),
+    _console.log(&quot;  - is cancelled: &quot; + str(longRunningJob.isCancelled())),
+    _console.log(&quot;\n发送取消信号给任务！&quot;),
+    longRunningJob.cancel(&quot;用户请求超时。&quot;),
+    # 检查取消后的状态
+    _console.log(&quot;任务取消信号已发送:&quot;),
+    _console.log(&quot;  - is active: &quot; + str(longRunningJob.isActive())),
+    _console.log(&quot;  - is completed: &quot; + str(longRunningJob.isCompleted())),  # 可能还未完全完成
+    _console.log(&quot;  - is cancelled: &quot; + str(longRunningJob.isCancelled())),  # 变为 true
+    s.resolve(None)
+)[-1])
+</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_119" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 6.2: 取消一个长时间运行的 Job
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+longRunningJob = scope.launch(nil, nil) do |s|
+  $console.log(&quot;一个需要5秒才能完成的漫长任务已启动...&quot;)
+  s.delay(5000).then do |s1|
+    $console.log(&quot;任务完成, 这个任务被取消了，不应该执行&quot;)
+    s1.resolve(nil)
+  end
+end
+
+# 在任务启动后，等待 2.5 秒然后取消它
+scope.delay(2500).then do |s, _|
+  $console.log(&quot;  - is active: &quot; + longRunningJob.isActive().to_s)
+  $console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted().to_s)
+  $console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled().to_s)
+
+  $console.log(&quot;\n发送取消信号给任务！&quot;)
+  longRunningJob.cancel(&quot;用户请求超时。&quot;)
+
+  # 检查取消后的状态
+  $console.log(&quot;任务取消信号已发送:&quot;)
+  $console.log(&quot;  - is active: &quot; + longRunningJob.isActive().to_s)
+  $console.log(&quot;  - is completed: &quot; + longRunningJob.isCompleted().to_s) # 可能还未完全完成
+  $console.log(&quot;  - is cancelled: &quot; + longRunningJob.isCancelled().to_s) # 变为 true
+  s.resolve(nil)
+end</div></div></div></section><section class="chapter"><h2 id="job-invokeoncompletion" data-toc="job-invokeoncompletion">job.invokeOnCompletion: 注册完成回调</h2><p id="b9mucf_168">.onComplete() 是 Deferred 的便利方法，但更底层的 job.invokeOnCompletion 提供了更原始的能力：它会接收一个可空的 Throwable 参数，让你能精确地知道任务是如何结束的。</p><div class="tabs" id="b9mucf_172" data-group="languages" data-anchors="[b9mucf_175,b9mucf_178,b9mucf_181,b9mucf_184,b9mucf_187,b9mucf_190,b9mucf_193,b9mucf_196]"><div class="tabs__content" data-gtm="tab" id="b9mucf_175" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 6.3: 使用 invokeOnCompletion 监听 Job 的最终状态
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+val job = scope.delay(500).then { innerScope, _ -&gt;
+    if (Math.random() &gt; 0.5) {
+        innerScope.resolve(&quot;操作成功&quot;)
+    } else {
+        val err = _exceptions.newThrowable { setMessageAndClassName(&quot;模拟一个随机错误&quot;, null) }
+        innerScope.reject(err)
+    }
+}
+
+// 注册一个完成回调
+job.invokeOnCompletion { error -&gt;
+    if (error == null) {
+        _console.log(&quot;invokeOnCompletion: 任务成功完成！&quot;)
+    } else {
+        _console.error(&quot;invokeOnCompletion: 任务因异常而完成 -&gt; &quot; + error.getMessage())
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_178" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 6.3: 使用 invokeOnCompletion 监听 Job 的最终状态
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+def job = scope.delay(500).then({ innerScope, _ -&gt;
+    if (Math.random() &gt; 0.5) {
+        innerScope.resolve(&quot;操作成功&quot;)
+    } else {
+        def err = $exceptions.newThrowable({ it.setMessageAndClassName(&quot;模拟一个随机错误&quot;, null) })
+        innerScope.reject(err)
+    }
+})
+
+// 注册一个完成回调
+job.invokeOnCompletion({ error -&gt;
+    if (error == null) {
+        $console.log(&quot;invokeOnCompletion: 任务成功完成！&quot;)
+    } else {
+        $console.error(&quot;invokeOnCompletion: 任务因异常而完成 -&gt; &quot; + error.getMessage())
+    }
+})</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_181" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_184" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 6.3: 使用 invokeOnCompletion 监听 Job 的最终状态
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+const job = scope.delay(500).then((innerScope, _) =&gt; {
+    if (Math.random() &gt; 0.5) {
+        return innerScope.resolve(&quot;操作成功&quot;);
+    } else {
+        const err = $exceptions.newThrowable(it =&gt; it.setMessageAndClassName(&quot;模拟一个随机错误&quot;, null));
+        return innerScope.reject(err);
+    }
+});
+
+// 注册一个完成回调
+job.invokeOnCompletion(error =&gt; {
+    if (error == null) {
+        $console.log(&quot;invokeOnCompletion: 任务成功完成！&quot;);
+    } else {
+        $console.error(&quot;invokeOnCompletion: 任务因异常而完成 -&gt; &quot; + error.getMessage());
+    }
+});</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_187" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 6.3: 使用 invokeOnCompletion 监听 Job 的最终状态
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+local job = scope:delay(500):_then(function(innerScope, _)
+    if math.random() &gt; 0.5 then
+        return innerScope:resolve(&quot;操作成功&quot;)
+    else
+        local err = _exceptions:newThrowable(function(it) it:setMessageAndClassName(&quot;模拟一个随机错误&quot;, nil) end)
+        return innerScope:reject(err)
+    end
+end)
+
+-- 注册一个完成回调
+job:invokeOnCompletion(function(error)
+    if error == nil then
+        _console:log(&quot;invokeOnCompletion: 任务成功完成！&quot;)
+    else
+        _console:error(&quot;invokeOnCompletion: 任务因异常而完成 -&gt; &quot; .. error:getMessage())
+    end
+end)</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_190" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\exception\Exceptions $exceptions */
+global $exceptions;
+
+/*
+ * 完整示例 6.3: 使用 invokeOnCompletion 监听 Job 的最终状态
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$job = $scope-&gt;delay(500)-&gt;then(function ($innerScope, $_) {
+    global $exceptions;
+    if ((mt_rand() / mt_getrandmax()) &gt; 0.5) {
+        return $innerScope-&gt;resolve(javaString(&quot;操作成功&quot;));
+    } else {
+        $err = $exceptions-&gt;newThrowable(function ($it) {
+            $it-&gt;setMessageAndClassName(javaString(&quot;模拟一个随机错误&quot;), null);
+        });
+        return $innerScope-&gt;reject($err);
+    }
+});
+
+// 注册一个完成回调
+$job-&gt;invokeOnCompletion(function ($error) {
+    global $console;
+    if ($error == null) {
+        $console-&gt;log(javaString(&quot;invokeOnCompletion: 任务成功完成！&quot;));
+    } else {
+        $console-&gt;error(javaString(&quot;invokeOnCompletion: 任务因异常而完成 -&gt; &quot;) . $error-&gt;getMessage());
+    }
+});</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_193" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入Python标准库
+import random
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _exceptions
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+#
+# 完整示例 6.3: 使用 invokeOnCompletion 监听 Job 的最终状态
+#
+
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+job = scope.delay(500).then(lambda innerScope, _:
+                            innerScope.resolve(&quot;操作成功&quot;) if random.random() &gt; 0.5 else
+                            innerScope.reject(_exceptions.newThrowable(
+                                lambda it: it.setMessageAndClassName(&quot;模拟一个随机错误&quot;, None)))
+                            )
+
+# 注册一个完成回调
+job.invokeOnCompletion(lambda error: (
+    _console.log(&quot;invokeOnCompletion: 任务成功完成！&quot;) if error is None else
+    _console.error(&quot;invokeOnCompletion: 任务因异常而完成 -&gt; &quot; + str(error.getMessage()))
+))
+</div></div><div class="tabs__content" data-gtm="tab" id="b9mucf_196" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 6.3: 使用 invokeOnCompletion 监听 Job 的最终状态
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+job = scope.delay(500).then do |innerScope, _|
+  if Java::JavaLang::Math.random() &gt; 0.5
+    innerScope.resolve(&quot;操作成功&quot;)
+  else
+    err = $exceptions.newThrowable { |it| it.setMessageAndClassName(&quot;模拟一个随机错误&quot;, nil) }
+    innerScope.reject(err)
+  end
+end
+
+# 注册一个完成回调
+job.invokeOnCompletion do |error|
+  if error == nil
+    $console.log(&quot;invokeOnCompletion: 任务成功完成！&quot;)
+  else
+    $console.error(&quot;invokeOnCompletion: 任务因异常而完成 -&gt; &quot; + error.getMessage())
+  end
+end</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="coroutines-concurrent-programming.html" class="navigation-links__prev">并发编程</a><a href="coroutines-advanced-topics.html" class="navigation-links__next">高级主题</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

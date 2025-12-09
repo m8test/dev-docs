@@ -1,0 +1,90 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:12.279355098"><title>向下滑动 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-7aw6go_29","level":0,"title":"使用无障碍服务","anchor":"#-7aw6go_29"},{"id":"-7aw6go_57","level":0,"title":"使用物理屏幕镜像屏幕","anchor":"#-7aw6go_57"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="向下滑动 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/automation-swipe-down.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="向下滑动 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/automation-swipe-down.html#webpage",
+    "url": "writerside-documentation/automation-swipe-down.html",
+    "name": "向下滑动 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="automation-swipe-down" data-main-title="向下滑动" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="automation.md|自动化"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="automation-swipe-down" id="automation-swipe-down.md">向下滑动</h1><section class="chapter"><h2 id="-7aw6go_29" data-toc="-7aw6go_29">使用无障碍服务</h2><ul class="list _bullet" id="-7aw6go_61"><li class="list__item" id="-7aw6go_62"><p id="-7aw6go_65">权限: 无障碍服务</p></li><li class="list__item" id="-7aw6go_63"><p id="-7aw6go_66">组件: <a href="https://github.com/YumiMiyamoto/accessibility-release" id="-7aw6go_67" data-external="true" rel="noopener noreferrer" target="_blank">YumiMiyamotoAccessibility</a></p></li><li class="list__item" id="-7aw6go_64"><p id="-7aw6go_68">说明: 通过无障碍服务执行全局向下滑动操作，返回值为true或false，分别表示操作成功与失败</p></li></ul></section><div class="tabs" id="-7aw6go_32" data-group="languages" data-anchors="[-7aw6go_71,-7aw6go_74,-7aw6go_77,-7aw6go_80,-7aw6go_83,-7aw6go_86,-7aw6go_89,-7aw6go_92]"><div class="tabs__content" data-gtm="tab" id="-7aw6go_71" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+_console.log(_accessibility!!.swipeDown())
+</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_74" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$console.log($accessibility.swipeDown())</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_77" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import static com.m8test.script.GlobalVariables.*;
+
+$console.log($accessibility.swipeDown());</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_80" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$console.log($accessibility.swipeDown())</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_83" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_console:log(_accessibility:swipeDown())
+</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_86" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\accessibility\api\Accessibility $accessibility */
+global $accessibility;
+$result = $accessibility-&gt;swipeDown();
+$console-&gt;log($result);
+</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_89" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _accessibility
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+_console.log(_accessibility.swipeDown())
+</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_92" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$console.log($accessibility.swipeDown)
+</div></div></div><section class="chapter"><h2 id="-7aw6go_57" data-toc="-7aw6go_57">使用物理屏幕镜像屏幕</h2><ul class="list _bullet" id="-7aw6go_141"><li class="list__item" id="-7aw6go_142"><p id="-7aw6go_145">权限: Adb</p></li><li class="list__item" id="-7aw6go_143"><p id="-7aw6go_146">组件: <a href="https://www.m8test.com" id="-7aw6go_147" data-external="true" rel="noopener noreferrer" target="_blank">无</a></p></li><li class="list__item" id="-7aw6go_144"><p id="-7aw6go_148">说明: 通过镜像屏幕注入触摸事件模拟向下滚动</p></li></ul></section><div class="tabs" id="-7aw6go_60" data-group="languages" data-anchors="[-7aw6go_151,-7aw6go_154,-7aw6go_157,-7aw6go_160,-7aw6go_163,-7aw6go_166,-7aw6go_169,-7aw6go_172]"><div class="tabs__content" data-gtm="tab" id="-7aw6go_151" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._displays
+
+// 创建或者获取物理屏幕的镜像屏幕
+val display = _displays.getMain()
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+val controller = display.getController()
+// 向下滚动，参数为滚动轨迹经过的坐标点数
+controller.scrollDown(50)</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_154" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建或者获取物理屏幕的镜像屏幕
+def display = $displays.getMain()
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+def controller = display.getController()
+// 向下滚动，参数为滚动轨迹经过的坐标点数
+controller.scrollDown(50)</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_157" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.display.control.Controller;
+
+import static com.m8test.script.GlobalVariables.$displays;
+
+// 创建或者获取物理屏幕的镜像屏幕
+Display display = $displays.getMain();
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+Controller controller = display.getController();
+// 向下滚动，参数为滚动轨迹经过的坐标点数
+controller.scrollDown(50);</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_160" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建或者获取物理屏幕的镜像屏幕
+let display = $displays.getMain()
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+let controller = display.getController()
+// 向下滚动，参数为滚动轨迹经过的坐标点数
+controller.scrollDown(50)</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_163" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建或者获取物理屏幕的镜像屏幕
+local display = _displays:getMain()
+-- 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+local controller = display:getController()
+-- 向下滚动，参数为滚动轨迹经过的坐标点数
+controller:scrollDown(50)</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_166" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+// 创建或者获取物理屏幕的镜像屏幕
+$display = $displays-&gt;getMain();
+// 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+$controller = $display-&gt;getController();
+// 向下滚动，参数为滚动轨迹经过的坐标点数
+$controller-&gt;scrollDown(50);</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_169" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+
+# 创建或者获取物理屏幕的镜像屏幕
+display = _displays.getMain()
+# 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+controller = display.getController()
+# 向下滚动，参数为滚动轨迹经过的坐标点数
+controller.scrollDown(50)
+</div></div><div class="tabs__content" data-gtm="tab" id="-7aw6go_172" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建或者获取物理屏幕的镜像屏幕
+display = $displays.getMain()
+# 获取虚拟屏幕的控制器, 可以对虚拟屏幕实现自动化操作
+controller = display.getController()
+# 向下滚动，参数为滚动轨迹经过的坐标点数
+controller.scrollDown(50)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="automation-swipe-up.html" class="navigation-links__prev">向上滑动</a><a href="automation-swipe-left.html" class="navigation-links__next">向左滑动</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

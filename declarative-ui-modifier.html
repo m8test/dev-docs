@@ -1,0 +1,2845 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:15.418902615"><title>修饰符 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"z7hqr8m_12","level":0,"title":"修饰符顺序很重要","anchor":"#z7hqr8m_12"},{"id":"z7hqr8m_13","level":0,"title":"内置修饰符","anchor":"#z7hqr8m_13"},{"id":"compose","level":0,"title":"Compose 中的作用域安全","anchor":"#compose"},{"id":"z7hqr8m_15","level":0,"title":"约束条件和修饰符顺序","anchor":"#z7hqr8m_15"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="修饰符 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/declarative-ui-modifier.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="修饰符 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/declarative-ui-modifier.html#webpage",
+    "url": "writerside-documentation/declarative-ui-modifier.html",
+    "name": "修饰符 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="declarative-ui-modifier" data-main-title="修饰符" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="declarative-ui.md|声明式UI"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="declarative-ui-modifier" id="declarative-ui-modifier.md">修饰符</h1><p id="z7hqr8m_3">借助修饰符，您可以修饰或扩充可组合项。您可以使用修饰符来执行以下操作：</p><ul class="list _bullet" id="z7hqr8m_4"><li class="list__item" id="z7hqr8m_22"><p id="z7hqr8m_26">更改可组合项的大小、布局、行为和外观</p></li><li class="list__item" id="z7hqr8m_23"><p id="z7hqr8m_27">添加信息，如无障碍标签</p></li><li class="list__item" id="z7hqr8m_24"><p id="z7hqr8m_28">处理用户输入</p></li><li class="list__item" id="z7hqr8m_25"><p id="z7hqr8m_29">添加高级互动，如使元素可点击、可滚动、可拖动或可缩放</p></li></ul><div class="tabs" id="z7hqr8m_18" data-group="languages" data-anchors="[z7hqr8m_32,z7hqr8m_35,z7hqr8m_38,z7hqr8m_41,z7hqr8m_44,z7hqr8m_47,z7hqr8m_50,z7hqr8m_53]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_32" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._activity
+import com.m8test.script.GlobalVariables._composeView
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_35" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_38" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_41" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_44" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end, function(shapes) return shapes:getRectangleShape() end)
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_47" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_50" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            # Groovy的 { it.setRed(255) } 对应 lambda it: it.setRed(255)
+            # Groovy的 { shapes -&gt; shapes.getRectangleShape() } 对应 lambda shapes: shapes.getRectangleShape()
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape())
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name)
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_53" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_6"><img alt="431" src="/431.png" title="431" width="441" height="135"></figure><p id="z7hqr8m_7">您可以将以下函数连在一起以将其组合起来：</p><div class="tabs" id="z7hqr8m_21" data-group="languages" data-anchors="[z7hqr8m_104,z7hqr8m_107,z7hqr8m_110,z7hqr8m_113,z7hqr8m_116,z7hqr8m_119,z7hqr8m_122,z7hqr8m_125]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_104" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                .fillMaxWidth(1.0f) // 宽度最大, 可以通过链式调用添加更多的修饰符
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_107" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                    .fillMaxWidth(1.0f) // 宽度最大, 可以通过链式调用添加更多的修饰符
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_110" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_113" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape())
+                .fillMaxWidth(1.0); // 宽度最大, 可以通过链式调用添加更多的修饰符
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_116" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- import com.m8test.script.core.api.ui.compose.modifier.Modifier -- Lua中不需要
+-- import com.m8test.script.core.api.ui.compose.slot.Slot -- Lua中不需要
+
+-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(color) color:setRed(255) end, function(shapes) return shapes:getRectangleShape() end)
+                :fillMaxWidth(1.0) -- 宽度最大, 可以通过链式调用添加更多的修饰符
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_119" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            )-&gt;fillMaxWidth(1.0); // 宽度最大, 可以通过链式调用添加更多的修饰符
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_122" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            # 链式调用在Python的lambda中可以直接作为单个表达式返回
+            modifier.background(
+                lambda it: it.setRed(255),
+                lambda shapes: shapes.getRectangleShape()
+            ).fillMaxWidth(1.0) # 宽度最大, 可以通过链式调用添加更多的修饰符
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name)
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_125" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+              .fillMaxWidth(1.0) # 宽度最大, 可以通过链式调用添加更多的修饰符
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_9"><img alt="432" src="/432.png" title="432" width="444" height="122"></figure><p id="z7hqr8m_10">请注意，在上面的代码中，结合使用了不同的修饰符函数。</p><ul class="list _bullet" id="z7hqr8m_11"><li class="list__item" id="z7hqr8m_174"><p id="z7hqr8m_176">padding 在元素周围留出空间。</p></li><li class="list__item" id="z7hqr8m_175"><p id="z7hqr8m_177">fillMaxWidth 使可组合项填充其父项为它提供的最大宽度。</p></li></ul><section class="chapter"><h2 id="z7hqr8m_12" data-toc="z7hqr8m_12">修饰符顺序很重要</h2><p id="z7hqr8m_178">修饰符函数的顺序非常重要。由于每个函数都会对 Modifier 进行更改，因此顺序会影响最终结果。让我们来看看这方面的一个示例：</p><div class="tabs" id="z7hqr8m_184" data-group="languages" data-anchors="[z7hqr8m_187,z7hqr8m_190,z7hqr8m_193,z7hqr8m_196,z7hqr8m_199,z7hqr8m_202,z7hqr8m_205,z7hqr8m_208]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_187" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Column {
+            setContent {
+                Text {
+                    // 设置 Text 组件显示的文本
+                    setText(&quot;M8Test&quot;)
+                    // 这个Modifier先设置了padding，再设置border
+                    setModifier {
+                        padding { setAll { it.fromInt(16) } }
+                        border({ it.fromInt(2) }, { setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+                    }
+                }
+                Text {
+                    // 设置 Text 组件显示的文本
+                    setText(&quot;M8Test&quot;)
+                    // 这个Modifier先设置了border再设置padding
+                    setModifier {
+                        border({ it.fromInt(2) }, { setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+                        padding { setAll { it.fromInt(16) } }
+                    }
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_190" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot.Column { column -&gt;
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;M8Test&quot;)
+                // 这个Modifier先设置了padding，再设置border
+                text.setModifier { modifier -&gt;
+                    modifier.padding { paddingValues -&gt; paddingValues.setAll { it.fromInt(16) } }
+                    modifier.border({ it.fromInt(2) }, { color -&gt; color.setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;M8Test&quot;)
+                // 这个Modifier先设置了border再设置padding
+                text.setModifier { modifier -&gt;
+                    modifier.border({ it.fromInt(2) }, { color -&gt; color.setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+                    modifier.padding { paddingValues -&gt; paddingValues.setAll { it.fromInt(16) } }
+                }
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_193" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_196" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot.Column(column =&gt; {
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;M8Test&quot;);
+                // 这个Modifier先设置了padding，再设置border
+                text.setModifier(modifier =&gt; {
+                    modifier.padding(paddingValues =&gt; paddingValues.setAll(it =&gt; it.fromInt(16)));
+                    modifier.border(it =&gt; it.fromInt(2), color =&gt; color.setRed(255), shapes =&gt; shapes.getRectangleShape());
+                });
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;M8Test&quot;);
+                // 这个Modifier先设置了border再设置padding
+                text.setModifier(modifier =&gt; {
+                    modifier.border(it =&gt; it.fromInt(2), color =&gt; color.setRed(255), shapes =&gt; shapes.getRectangleShape());
+                    modifier.padding(paddingValues =&gt; paddingValues.setAll(it =&gt; it.fromInt(16)));
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_199" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot:Column(function(column)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;M8Test&quot;)
+                -- 这个Modifier先设置了padding，再设置border
+                text:setModifier(function(modifier)
+                    modifier:padding(function(paddingValues) paddingValues:setAll(function(it) return it:fromInt(16) end) end)
+                    modifier:border(function(it) return it:fromInt(2) end, function(color) color:setRed(255) end, function(shapes) return shapes:getRectangleShape() end)
+                end)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;M8Test&quot;)
+                -- 这个Modifier先设置了border再设置padding
+                text:setModifier(function(modifier)
+                    modifier:border(function(it) return it:fromInt(2) end, function(color) color:setRed(255) end, function(shapes) return shapes:getRectangleShape() end)
+                    modifier:padding(function(paddingValues) paddingValues:setAll(function(it) return it:fromInt(16) end) end)
+                end)
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_202" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    $slot-&gt;Column(function ($column) {
+        $column-&gt;setContent(function ($columnSlot) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;M8Test&quot;));
+                // 这个Modifier先设置了padding，再设置border
+                $text-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;padding(function ($paddingValues) {
+                        $paddingValues-&gt;setAll(function ($it) {
+                            return $it-&gt;fromInt(16);
+                        });
+                    });
+                    $modifier-&gt;border(
+                        function ($it) { return $it-&gt;fromInt(2); },
+                        function ($color) { $color-&gt;setRed(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                });
+            });
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;M8Test&quot;));
+                // 这个Modifier先设置了border再设置padding
+                $text-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;border(
+                        function ($it) { return $it-&gt;fromInt(2); },
+                        function ($color) { $color-&gt;setRed(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                    $modifier-&gt;padding(function ($paddingValues) {
+                        $paddingValues-&gt;setAll(function ($it) {
+                            return $it-&gt;fromInt(16);
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_205" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot.Column(lambda column: (
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;M8Test&quot;),
+                # 这个Modifier先设置了padding，再设置border
+                text.setModifier(lambda modifier: (
+                    modifier.padding(lambda paddingValues: paddingValues.setAll(lambda it: it.fromInt(16))),
+                    modifier.border(lambda it: it.fromInt(2), lambda color: color.setRed(255), lambda shapes: shapes.getRectangleShape())
+                ))
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;M8Test&quot;),
+                # 这个Modifier先设置了border再设置padding
+                text.setModifier(lambda modifier: (
+                    modifier.border(lambda it: it.fromInt(2), lambda color: color.setRed(255), lambda shapes: shapes.getRectangleShape()),
+                    modifier.padding(lambda paddingValues: paddingValues.setAll(lambda it: it.fromInt(16)))
+                ))
+            ))
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_208" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  slot.Column do |column|
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;M8Test&quot;)
+        # 这个Modifier先设置了padding，再设置border
+        text.setModifier do |modifier|
+          modifier.padding { |paddingValues| paddingValues.setAll { |it| it.fromInt(16) } }
+          modifier.border(lambda { |it| it.fromInt(2) }, lambda { |color| color.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+        end
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;M8Test&quot;)
+        # 这个Modifier先设置了border再设置padding
+        text.setModifier do |modifier|
+          modifier.border(lambda { |it| it.fromInt(2) }, lambda { |color| color.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+          modifier.padding { |paddingValues| paddingValues.setAll { |it| it.fromInt(16) } }
+        end
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_180"><img alt="430" src="/430.png" title="430" width="446" height="200"></figure><aside class="prompt" data-type="tip" data-title="" id="z7hqr8m_181"><p id="z7hqr8m_257">注意：明确的顺序可帮助您推断不同的修饰符将如何相互作用。您可以将这一点与基于视图的系统进行比较。在基于视图的系统中，您必须了解框模型，在这种模型中，在元素的&ldquo;外部&rdquo;应用外边距，而在元素的&ldquo;内部&rdquo;应用内边距，并且背景元素将相应地调整大小。 修饰符设计使这种行为变得明确且可预测，并且可让您更好地进行控制，以实现您期望的确切行为。这也说明了为什么没有外边距修饰符，而只有 padding 修饰符。</p></aside></section><section class="chapter"><h2 id="z7hqr8m_13" data-toc="z7hqr8m_13">内置修饰符</h2><p id="z7hqr8m_258">Jetpack Compose 提供了一个内置修饰符列表，可帮助您修饰或扩充可组合项。以下是一些用于调整布局的常见修饰符。</p><section class="chapter"><h3 id="padding-size" data-toc="padding-size">padding 和 size</h3><p id="z7hqr8m_261">默认情况下，Compose 中提供的布局会封装其子项。不过，您可以使用 size 修饰符设置尺寸：</p><div class="tabs" id="z7hqr8m_278" data-group="languages" data-anchors="[z7hqr8m_290,z7hqr8m_293,z7hqr8m_296,z7hqr8m_299,z7hqr8m_302,z7hqr8m_305,z7hqr8m_308,z7hqr8m_311]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_290" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_293" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            modifier.size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_296" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_299" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+            modifier.size(it =&gt; it.createSize(it.fromInt(200), it.fromInt(100)));
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_302" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end,  function(shapes) return shapes:getRectangleShape() end)
+            modifier:size(function(it) return it:createSize(it:fromInt(200), it:fromInt(100)) end)
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_305" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+            $modifier-&gt;size(function ($it) {
+                return $it-&gt;createSize($it-&gt;fromInt(200), $it-&gt;fromInt(100));
+            });
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_308" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            # { it.setRed(255) } -&gt; lambda it: it.setRed(255)
+            # { shapes -&gt; shapes.getRectangleShape() } -&gt; lambda shapes: shapes.getRectangleShape()
+            modifier.background(lambda it: it.setRed(255),  lambda shapes: shapes.getRectangleShape()),
+            modifier.size(lambda it: it.createSize(it.fromInt(200), it.fromInt(100)))
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name)
+            ))
+        ))
+    ))
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_311" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+      modifier.size { |it| it.createSize(it.fromInt(200), it.fromInt(100)) }
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_263"><img alt="433" src="/433.png" title="433" width="450" height="240"></figure><p id="z7hqr8m_264">请注意，如果指定的尺寸不符合来自布局父项的约束条件，则可能不会采用该尺寸。如果您希望可组合项的尺寸固定不变，而不考虑传入的约束条件，请使用 requiredSize 修饰符：</p><div class="tabs" id="z7hqr8m_281" data-group="languages" data-anchors="[z7hqr8m_362,z7hqr8m_365,z7hqr8m_368,z7hqr8m_371,z7hqr8m_374,z7hqr8m_377,z7hqr8m_380,z7hqr8m_383]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_362" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_365" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            modifier.size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+                text.setModifier { modifier -&gt;
+                    modifier.requiredSize { it.createSize(it.fromInt(150), it.fromInt(150)) }
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background({ it.setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_368" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_371" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+            modifier.size(it =&gt; it.createSize(it.fromInt(200), it.fromInt(100)));
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+                text.setModifier(modifier =&gt; {
+                    modifier.requiredSize(it =&gt; it.createSize(it.fromInt(150), it.fromInt(150)));
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background(it =&gt; it.setBlue(255), shapes =&gt; shapes.getRectangleShape());
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_374" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end, function(shapes) return shapes:getRectangleShape() end)
+            modifier:size(function(it) return it:createSize(it:fromInt(200), it:fromInt(100)) end)
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+                text:setModifier(function(modifier)
+                    modifier:requiredSize(function(it) return it:createSize(it:fromInt(150), it:fromInt(150)) end)
+                    -- 这里加个背景色是为了更好的展示效果
+                    modifier:background(function(it) it:setBlue(255) end, function(shapes) return shapes:getRectangleShape() end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_377" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+            $modifier-&gt;size(function ($it) {
+                return $it-&gt;createSize($it-&gt;fromInt(200), $it-&gt;fromInt(100));
+            });
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+                $text-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;requiredSize(function ($it) {
+                        return $it-&gt;createSize($it-&gt;fromInt(150), $it-&gt;fromInt(150));
+                    });
+                    // 这里加个背景色是为了更好的展示效果
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setBlue(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_380" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape()),
+            modifier.size(lambda it: it.createSize(it.fromInt(200), it.fromInt(100)))
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name),
+                text.setModifier(lambda modifier: (
+                    modifier.requiredSize(lambda it: it.createSize(it.fromInt(150), it.fromInt(150))),
+                    # 这里加个背景色是为了更好的展示效果
+                    modifier.background(lambda it: it.setBlue(255), lambda shapes: shapes.getRectangleShape())
+                ))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_383" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+      modifier.size { |it| it.createSize(it.fromInt(200), it.fromInt(100)) }
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+        text.setModifier do |modifier|
+          modifier.requiredSize { |it| it.createSize(it.fromInt(150), it.fromInt(150)) }
+          # 这里加个背景色是为了更好的展示效果
+          modifier.background(lambda { |it| it.setBlue(255) }, lambda { |shapes| shapes.getRectangleShape() })
+        end
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_266"><img alt="434" src="/434.png" title="434" width="444" height="257"></figure><p id="z7hqr8m_267">在此示例中，即使父项的 height 设置为 100.dp，Text 的高度还是 150.dp，因为 requiredSize 修饰符优先级较高。</p><aside class="prompt" data-type="tip" data-title="" id="z7hqr8m_268"><p id="z7hqr8m_432">注意：布局基于约束条件，而通常父项会将这些约束条件传递给子项。子项应该遵守这些约束条件。但是，不一定始终符合界面要求。有几种方法可以避免这种子项行为。 例如，您可以将 requiredSize 等修饰符直接传递给子项，替换子项从父项接收的约束条件，也可以使用行为不同的自定义布局。当子项不遵守其约束条件时，布局系统会让父项对此置若罔闻。父项会将子项的 width 和 height 值视为已根据父项提供的约束条件强制转换过。然后，布局系统会假定子项遵守这些约束条件，将子项居中放置在父项分配的空间中。开发者可以通过对子项应用 wrapContentSize 修饰符来替换此居中行为。</p></aside><p id="z7hqr8m_269">如果您希望子布局填充父项允许的所有可用高度，请添加 fillMaxHeight 修饰符（Compose 还提供了 fillMaxSize 和 fillMaxWidth）：</p><div class="tabs" id="z7hqr8m_284" data-group="languages" data-anchors="[z7hqr8m_435,z7hqr8m_438,z7hqr8m_441,z7hqr8m_444,z7hqr8m_447,z7hqr8m_450,z7hqr8m_453,z7hqr8m_456]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_435" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+                setModifier {
+                    fillMaxHeight(1.0f)
+                    // 这里加个背景色是为了更好的展示效果
+                    background({ setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_438" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            modifier.size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+                text.setModifier { modifier -&gt;
+                    modifier.fillMaxHeight(1.0f)
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background({ it.setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_441" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_444" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+            modifier.size(it =&gt; it.createSize(it.fromInt(200), it.fromInt(100)));
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+                text.setModifier(modifier =&gt; {
+                    modifier.fillMaxHeight(1.0);
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background(it =&gt; it.setBlue(255), shapes =&gt; shapes.getRectangleShape());
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_447" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end,  function(shapes) return shapes:getRectangleShape() end)
+            modifier:size(function(it) return it:createSize(it:fromInt(200), it:fromInt(100)) end)
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+                text:setModifier(function(modifier)
+                    modifier:fillMaxHeight(1.0)
+                    -- 这里加个背景色是为了更好的展示效果
+                    modifier:background(function(it) it:setBlue(255) end,  function(shapes) return shapes:getRectangleShape() end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_450" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+            $modifier-&gt;size(function ($it) {
+                return $it-&gt;createSize($it-&gt;fromInt(200), $it-&gt;fromInt(100));
+            });
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+                $text-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;fillMaxHeight(1.0);
+                    // 这里加个背景色是为了更好的展示效果
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setBlue(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_453" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape()),
+            modifier.size(lambda it: it.createSize(it.fromInt(200), it.fromInt(100)))
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name),
+                text.setModifier(lambda modifier: (
+                    # Groovy的 1.0f 在Python中就是 1.0
+                    modifier.fillMaxHeight(1.0),
+                    # 这里加个背景色是为了更好的展示效果
+                    modifier.background(lambda it: it.setBlue(255), lambda shapes: shapes.getRectangleShape())
+                ))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分-发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_456" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+      modifier.size { |it| it.createSize(it.fromInt(200), it.fromInt(100)) }
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+        text.setModifier do |modifier|
+          modifier.fillMaxHeight(1.0)
+          # 这里加个背景色是为了更好的展示效果
+          modifier.background(lambda { |it| it.setBlue(255) }, lambda { |shapes| shapes.getRectangleShape() })
+        end
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_271"><img alt="435" src="/435.png" title="435" width="450" height="204"></figure><p id="z7hqr8m_272">如需在整个元素周围全添加内边距，请设置 padding 修饰符。</p><p id="z7hqr8m_273">如需在文本基线上方添加内边距，以实现从布局顶部到基线保持特定距离，请使用 paddingFromBaseline 修饰符：</p><div class="tabs" id="z7hqr8m_287" data-group="languages" data-anchors="[z7hqr8m_507,z7hqr8m_510,z7hqr8m_513,z7hqr8m_516,z7hqr8m_519,z7hqr8m_522,z7hqr8m_525,z7hqr8m_528]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_507" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+                setModifier {
+                    // 这里加个背景色是为了更好的展示效果
+                    background({ setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                        .paddingFromBaseline({ it.fromInt(50) }, { it.fromInt(0) })
+                }
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_510" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            modifier.size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+                text.setModifier { modifier -&gt;
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background({ it.setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                            .paddingFromBaseline({ it.fromInt(50) }, { it.fromInt(0) })
+                }
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_513" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_516" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+            modifier.size(it =&gt; it.createSize(it.fromInt(200), it.fromInt(100)));
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+                text.setModifier(modifier =&gt; {
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background(it =&gt; it.setBlue(255), shapes =&gt; shapes.getRectangleShape())
+                        .paddingFromBaseline(it =&gt; it.fromInt(50), it =&gt; it.fromInt(0));
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_519" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- groovy import 在 lua 中不需要
+-- import com.m8test.script.core.api.ui.compose.modifier.Modifier
+-- import com.m8test.script.core.api.ui.compose.slot.Slot
+
+-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end, function(shapes) return shapes:getRectangleShape() end)
+            modifier:size(function(it) return it:createSize(it:fromInt(200), it:fromInt(100)) end)
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+                text:setModifier(function(modifier)
+                    -- 这里加个背景色是为了更好的展示效果
+                    modifier:background(function(it) it:setBlue(255) end, function(shapes) return shapes:getRectangleShape() end)
+                            :paddingFromBaseline(function(it) return it:fromInt(50) end, function(it) return it:fromInt(0) end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_522" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+            $modifier-&gt;size(function ($it) {
+                return $it-&gt;createSize($it-&gt;fromInt(200), $it-&gt;fromInt(100));
+            });
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+                $text-&gt;setModifier(function ($modifier) {
+                    // 这里加个背景色是为了更好的展示效果
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setBlue(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    )-&gt;paddingFromBaseline(
+                        function ($it) { return $it-&gt;fromInt(50); },
+                        function ($it) { return $it-&gt;fromInt(0); }
+                    );
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_525" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape()),
+            modifier.size(lambda it: it.createSize(it.fromInt(200), it.fromInt(100)))
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name),
+                text.setModifier(lambda modifier: (
+                    # 这里加个背景色是为了更好的展示效果
+                    # 链式调用在Python中可以直接转换，因为它本身是一个单一的表达式
+                    modifier.background(lambda it: it.setBlue(255), lambda shapes: shapes.getRectangleShape())
+                    .paddingFromBaseline(lambda it: it.fromInt(50), lambda it: it.fromInt(0))
+                ))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_528" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+      modifier.size { |it| it.createSize(it.fromInt(200), it.fromInt(100)) }
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+        text.setModifier do |modifier|
+          # 这里加个背景色是为了更好的展示效果
+          modifier.background(lambda { |it| it.setBlue(255) }, lambda { |shapes| shapes.getRectangleShape() })
+                  .paddingFromBaseline(lambda { |it| it.fromInt(50) }, lambda { |it| it.fromInt(0) })
+        end
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_275"><img alt="436" src="/436.png" title="436" width="450" height="263"></figure></section><section class="chapter"><h3 id="z7hqr8m_260" data-toc="z7hqr8m_260">偏移</h3><p id="z7hqr8m_577">如需相对于原始位置放置布局，请添加 offset 修饰符，并设置在 x 轴和 y 轴的偏移量。偏移量可以是正数，也可以是非正数。padding 和 offset 之间的区别在于，向可组合项添加 offset 不会改变其测量结果：</p><div class="tabs" id="z7hqr8m_583" data-group="languages" data-anchors="[z7hqr8m_586,z7hqr8m_589,z7hqr8m_592,z7hqr8m_595,z7hqr8m_598,z7hqr8m_601,z7hqr8m_604,z7hqr8m_607]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_586" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+                setModifier {
+                    // 这里加个背景色是为了更好的展示效果
+                    background({ setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                        .offset { it.createOffset(it.fromInt(10), it.fromInt(0)) }
+                }
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_589" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            modifier.size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+                text.setModifier { modifier -&gt;
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background({ it.setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                            .offset { it.createOffset(it.fromInt(10), it.fromInt(0)) }
+                }
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_592" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_595" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    // 垂直方向上显示两个文本组件
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+            modifier.size(it =&gt; it.createSize(it.fromInt(200), it.fromInt(100)));
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+                text.setModifier(modifier =&gt; {
+                    // 这里加个背景色是为了更好的展示效果
+                    modifier.background(it =&gt; it.setBlue(255), shapes =&gt; shapes.getRectangleShape())
+                        .offset(it =&gt; it.createOffset(it.fromInt(10), it.fromInt(0)));
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_598" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- import com.m8test.script.core.api.ui.compose.modifier.Modifier
+-- import com.m8test.script.core.api.ui.compose.slot.Slot
+
+-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end,  function(shapes) return shapes:getRectangleShape() end)
+            modifier:size(function(it) return it:createSize(it:fromInt(200), it:fromInt(100)) end)
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+                text:setModifier(function(modifier)
+                    -- 这里加个背景色是为了更好的展示效果
+                    modifier:background(function(it) it:setBlue(255) end,  function(shapes) return shapes:getRectangleShape() end)
+                            :offset(function(it) return it:createOffset(it:fromInt(10), it:fromInt(0)) end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_601" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+            $modifier-&gt;size(function ($it) {
+                return $it-&gt;createSize($it-&gt;fromInt(200), $it-&gt;fromInt(100));
+            });
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+                $text-&gt;setModifier(function ($modifier) {
+                    // 这里加个背景色是为了更好的展示效果
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setBlue(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    )-&gt;offset(function ($it) {
+                        return $it-&gt;createOffset($it-&gt;fromInt(10), $it-&gt;fromInt(0));
+                    });
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_604" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape()),
+            modifier.size(lambda it: it.createSize(it.fromInt(200), it.fromInt(100)))
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name),
+                text.setModifier(lambda modifier: (
+                    # 这里加个背景色是为了更好的展示效果
+                    # 链式调用在lambda中是一个单一表达式，所以不需要元组
+                    modifier.background(lambda it: it.setBlue(255), lambda shapes: shapes.getRectangleShape())
+                    .offset(lambda it: it.createOffset(it.fromInt(10), it.fromInt(0)))
+                ))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_607" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+      modifier.size { |it| it.createSize(it.fromInt(200), it.fromInt(100)) }
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+        text.setModifier do |modifier|
+          # 这里加个背景色是为了更好的展示效果
+          modifier.background(lambda { |it| it.setBlue(255) }, lambda { |shapes| shapes.getRectangleShape() })
+                  .offset { |it| it.createOffset(it.fromInt(10), it.fromInt(0)) }
+        end
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_579"><img alt="437" src="/437.png" title="437" width="447" height="192"></figure><p id="z7hqr8m_580">offset 修饰符根据布局方向水平应用。在从左到右的上下文中，正 offset 会将元素向右移，而在从右到左的上下文中，它会将元素向左移。如果您需要设置偏移量，而不考虑布局方向，请参阅 absoluteOffset 修饰符，该修饰符中的正偏移值一律会将元素向右移。</p></section></section><section class="chapter"><h2 id="compose" data-toc="compose">Compose 中的作用域安全</h2><p id="z7hqr8m_656">在 Compose 中，有一些修饰符只能应用于某些可组合项的子项。Compose 通过自定义作用域强制实施此安全机制。</p><p id="z7hqr8m_657">例如，如果您希望使某个子项与父项 Box 同样大，而不影响 Box 尺寸，请使用 matchParentSize 修饰符。matchParentSize 仅适用于 BoxScope，因此只能对 Box 父级中的子级使用。</p><p id="z7hqr8m_658">作用域安全机制可防止您添加在其他可组合项和作用域中不起作用的修饰符，还可节省试错的时间。</p><aside class="prompt" data-type="tip" data-title="" id="z7hqr8m_659"><p id="z7hqr8m_663">注意：在 Android View 系统中，未实施任何作用域安全机制。开发者通常会尝试不同的布局参数，以找出应考虑的参数及其在特定父项上下文中的意义。</p></aside><p id="z7hqr8m_660">限定作用域的修饰符会将父项应知晓的关于子项的一些信息告知父项。这些修饰符通常称为&ldquo;父项数据修饰符&rdquo;。它们的内部构件与通用修饰符不同，但从使用角度来看，这些差异并不重要。</p><section class="chapter"><h3 id="matchparentsize-box" data-toc="matchparentsize-box">matchParentSize（在 Box 中）</h3><p id="z7hqr8m_664">如上所述，如果您希望子布局与父项 Box 尺寸相同而不影响 Box 的尺寸，请使用 matchParentSize 修饰符。</p><p id="z7hqr8m_665">请注意，matchParentSize 仅在 Box 作用域内可用，这意味着它仅适用于 Box 可组合项的直接子项。</p><p id="z7hqr8m_666">在以下示例中，子项 Spacer 从其父项 Box 获取自己的尺寸，在这种情况下，后者又会从其最大的子项 ArtistCard 中获取自己的尺寸。</p><div class="tabs" id="z7hqr8m_674" data-group="languages" data-anchors="[z7hqr8m_680,z7hqr8m_683,z7hqr8m_686,z7hqr8m_689,z7hqr8m_692,z7hqr8m_695,z7hqr8m_698,z7hqr8m_701]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_680" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Box {
+        // 设置 Box 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+        }
+        setContent {
+            Spacer {
+                setModifier {
+                    matchParentSize()
+                    background({ setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+                setModifier {
+                    size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+                }
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_683" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Box { box -&gt;
+        // 设置 Box 的修饰符
+        box.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+        }
+        box.setContent { boxSlot -&gt;
+            boxSlot.Spacer { spacer -&gt;
+                spacer.setModifier { modifier -&gt;
+                    modifier.matchParentSize()
+                    modifier.background({ it.setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+            boxSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+                text.setModifier { modifier -&gt;
+                    modifier.size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+                }
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_686" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_689" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Box(box =&gt; {
+        // 设置 Box 的修饰符
+        box.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+        });
+        box.setContent(boxSlot =&gt; {
+            boxSlot.Spacer(spacer =&gt; {
+                spacer.setModifier(modifier =&gt; {
+                    modifier.matchParentSize();
+                    modifier.background(it =&gt; it.setBlue(255), shapes =&gt; shapes.getRectangleShape());
+                });
+            });
+            boxSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+                text.setModifier(modifier =&gt; {
+                    modifier.size(it =&gt; it.createSize(it.fromInt(200), it.fromInt(100)));
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_692" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Box(function(box)
+        -- 设置 Box 的修饰符
+        box:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end,  function(shapes) return shapes:getRectangleShape() end)
+        end)
+        box:setContent(function(boxSlot)
+            boxSlot:Spacer(function(spacer)
+                spacer:setModifier(function(modifier)
+                    modifier:matchParentSize()
+                    modifier:background(function(it) it:setBlue(255) end,  function(shapes) return shapes:getRectangleShape() end)
+                end)
+            end)
+            boxSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+                text:setModifier(function(modifier)
+                    modifier:size(function(it) return it:createSize(it:fromInt(200), it:fromInt(100)) end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_695" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Box(function ($box) use ($name) {
+        // 设置 Box 的修饰符
+        $box-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+        });
+        $box-&gt;setContent(function ($boxSlot) use ($name) {
+            $boxSlot-&gt;Spacer(function ($spacer) {
+                $spacer-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;matchParentSize();
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setBlue(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                });
+            });
+            $boxSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+                $text-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;size(function ($it) {
+                        return $it-&gt;createSize($it-&gt;fromInt(200), $it-&gt;fromInt(100));
+                    });
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_698" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Box(lambda box: (
+        # 设置 Box 的修饰符
+        box.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape())
+        )),
+        box.setContent(lambda boxSlot: (
+            boxSlot.Spacer(lambda spacer: (
+                spacer.setModifier(lambda modifier: (
+                    modifier.matchParentSize(),
+                    modifier.background(lambda it: it.setBlue(255), lambda shapes: shapes.getRectangleShape())
+                ))
+            )),
+            boxSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name),
+                text.setModifier(lambda modifier: (
+                    modifier.size(lambda it: it.createSize(it.fromInt(200), it.fromInt(100)))
+                ))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_701" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Box do |box|
+    # 设置 Box 的修饰符
+    box.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+    end
+    box.setContent do |boxSlot|
+      boxSlot.Spacer do |spacer|
+        spacer.setModifier do |modifier|
+          modifier.matchParentSize()
+          modifier.background(lambda { |it| it.setBlue(255) }, lambda { |shapes| shapes.getRectangleShape() })
+        end
+      end
+      boxSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+        text.setModifier do |modifier|
+          modifier.size { |it| it.createSize(it.fromInt(200), it.fromInt(100)) }
+        end
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_668"><img alt="438" src="/438.png" title="438" width="442" height="264"></figure><p id="z7hqr8m_669">如果使用 fillMaxSize 代替 matchParentSize，Spacer 将占用父项允许的所有可用空间，反过来使父项展开并填满所有可用空间。</p><div class="tabs" id="z7hqr8m_677" data-group="languages" data-anchors="[z7hqr8m_752,z7hqr8m_755,z7hqr8m_758,z7hqr8m_761,z7hqr8m_764,z7hqr8m_767,z7hqr8m_770,z7hqr8m_773]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_752" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Box {
+        // 设置 Box 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+        }
+        setContent {
+            Spacer {
+                setModifier {
+                    fillMaxSize(1.0f)
+                    background({ setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+                setModifier {
+                    size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+                }
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_755" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Box { box -&gt;
+        // 设置 Box 的修饰符
+        box.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+        }
+        box.setContent { boxSlot -&gt;
+            boxSlot.Spacer { spacer -&gt;
+                spacer.setModifier { modifier -&gt;
+                    modifier.fillMaxSize(1.0f)
+                    modifier.background({ it.setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+            boxSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+                text.setModifier { modifier -&gt;
+                    modifier.size { it.createSize(it.fromInt(200), it.fromInt(100)) }
+                }
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_758" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_761" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Box(box =&gt; {
+        // 设置 Box 的修饰符
+        box.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+        });
+        box.setContent(boxSlot =&gt; {
+            boxSlot.Spacer(spacer =&gt; {
+                spacer.setModifier(modifier =&gt; {
+                    modifier.fillMaxSize(1.0);
+                    modifier.background(it =&gt; it.setBlue(255), shapes =&gt; shapes.getRectangleShape());
+                });
+            });
+            boxSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+                text.setModifier(modifier =&gt; {
+                    modifier.size(it =&gt; it.createSize(it.fromInt(200), it.fromInt(100)));
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_764" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- import com.m8test.script.core.api.ui.compose.modifier.Modifier
+-- import com.m8test.script.core.api.ui.compose.slot.Slot
+-- (在 Lua 中，通常不需要像 Groovy/Java 那样显式 import 类型，它们通过 require 机制或由宿主环境提供)
+
+-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Box(function(box)
+        -- 设置 Box 的修饰符
+        box:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end,  function(shapes) return shapes:getRectangleShape() end)
+        end)
+        box:setContent(function(boxSlot)
+            boxSlot:Spacer(function(spacer)
+                spacer:setModifier(function(modifier)
+                    modifier:fillMaxSize(1.0)
+                    modifier:background(function(it) it:setBlue(255) end,  function(shapes) return shapes:getRectangleShape() end)
+                end)
+            end)
+            boxSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+                text:setModifier(function(modifier)
+                    modifier:size(function(it) return it:createSize(it:fromInt(200), it:fromInt(100)) end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_767" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Box(function ($box) use ($name) {
+        // 设置 Box 的修饰符
+        $box-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+        });
+        $box-&gt;setContent(function ($boxSlot) use ($name) {
+            $boxSlot-&gt;Spacer(function ($spacer) {
+                $spacer-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;fillMaxSize(1.0);
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setBlue(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                });
+            });
+            $boxSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+                $text-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;size(function ($it) {
+                        return $it-&gt;createSize($it-&gt;fromInt(200), $it-&gt;fromInt(100));
+                    });
+                });
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_770" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Box(lambda box: (
+        # 设置 Box 的修饰符
+        box.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            modifier.background(lambda it: it.setRed(255),  lambda shapes: shapes.getRectangleShape())
+        )),
+        box.setContent(lambda boxSlot: (
+            boxSlot.Spacer(lambda spacer: (
+                spacer.setModifier(lambda modifier: (
+                    # Groovy的 1.0f 对应 Python 的 1.0
+                    modifier.fillMaxSize(1.0),
+                    modifier.background(lambda it: it.setBlue(255),  lambda shapes: shapes.getRectangleShape())
+                ))
+            )),
+            boxSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name),
+                text.setModifier(lambda modifier: (
+                    modifier.size(lambda it: it.createSize(it.fromInt(200), it.fromInt(100)))
+                ))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_773" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Box do |box|
+    # 设置 Box 的修饰符
+    box.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+    end
+    box.setContent do |boxSlot|
+      boxSlot.Spacer do |spacer|
+        spacer.setModifier do |modifier|
+          modifier.fillMaxSize(1.0)
+          modifier.background(lambda { |it| it.setBlue(255) }, lambda { |shapes| shapes.getRectangleShape() })
+        end
+      end
+      boxSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+        text.setModifier do |modifier|
+          modifier.size { |it| it.createSize(it.fromInt(200), it.fromInt(100)) }
+        end
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_671"><img alt="439" src="/439.png" title="439" width="445" height="839"></figure></section><section class="chapter"><h3 id="row-column-weight" data-toc="row-column-weight">Row 和 Column 中的 weight</h3><p id="z7hqr8m_822">如前文的内边距和尺寸部分所述，默认情况下，可组合项的尺寸由其封装的内容定义。您可以使用仅可在 RowScope 和 ColumnScope 中使用的 weight 修饰符，将可组合项的尺寸设置为可在其父项内灵活调整。</p><p id="z7hqr8m_823">让我们以包含两个 Box 可组合项的 Row 为例。第一个框的 weight 是第二个框的两倍，因此其宽度也相差两倍。由于 Row 的宽度为 210.dp，因此第一个 Box 的宽度为 140.dp，第二个的宽度为 70.dp：</p><div class="tabs" id="z7hqr8m_828" data-group="languages" data-anchors="[z7hqr8m_831,z7hqr8m_834,z7hqr8m_837,z7hqr8m_840,z7hqr8m_843,z7hqr8m_846,z7hqr8m_849,z7hqr8m_852]"><div class="tabs__content" data-gtm="tab" id="z7hqr8m_831" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Row {
+            // 设置 Row 的修饰符
+            setModifier {
+                // 这里加个背景色是为了更好的展示效果
+                background({ setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                size { it.createSize(it.fromInt(210), it.fromInt(100)) }
+            }
+            setContent {
+                Box {
+                    setModifier {
+                        fillMaxHeight(1f)
+                        weight(2.0f, true)
+                        background({ setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                    }
+                }
+                Box {
+                    setModifier {
+                        fillMaxHeight(1f)
+                        weight(1.0f, true)
+                        background({ setGreen(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                    }
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_834" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot.Row { row -&gt;
+        // 设置 Row 的修饰符
+        row.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) },  { shapes -&gt; shapes.getRectangleShape() })
+            modifier.size { it.createSize(it.fromInt(210), it.fromInt(100)) }
+        }
+        row.setContent { rowSlot -&gt;
+            rowSlot.Box { box -&gt;
+                box.setModifier { modifier -&gt;
+                    modifier.fillMaxHeight(1f)
+                    modifier.weight(2.0f, true)
+                    modifier.background({ it.setBlue(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+            rowSlot.Box { box -&gt;
+                box.setModifier { modifier -&gt;
+                    modifier.fillMaxHeight(1f)
+                    modifier.weight(1.0f, true)
+                    modifier.background({ it.setGreen(255) },  { shapes -&gt; shapes.getRectangleShape() })
+                }
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_837" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_840" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot.Row(row =&gt; {
+        // 设置 Row 的修饰符
+        row.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+            modifier.size(it =&gt; it.createSize(it.fromInt(210), it.fromInt(100)));
+        });
+        row.setContent(rowSlot =&gt; {
+            rowSlot.Box(box =&gt; {
+                box.setModifier(modifier =&gt; {
+                    modifier.fillMaxHeight(1.0);
+                    modifier.weight(2.0, true);
+                    modifier.background(it =&gt; it.setBlue(255), shapes =&gt; shapes.getRectangleShape());
+                });
+            });
+            rowSlot.Box(box =&gt; {
+                box.setModifier(modifier =&gt; {
+                    modifier.fillMaxHeight(1.0);
+                    modifier.weight(1.0, true);
+                    modifier.background(it =&gt; it.setGreen(255), shapes =&gt; shapes.getRectangleShape());
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_843" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot:Row(function(row)
+        -- 设置 Row 的修饰符
+        row:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end,  function(shapes) return shapes:getRectangleShape() end)
+            modifier:size(function(it) return it:createSize(it:fromInt(210), it:fromInt(100)) end)
+        end)
+        row:setContent(function(rowSlot)
+            rowSlot:Box(function(box)
+                box:setModifier(function(modifier)
+                    modifier:fillMaxHeight(1.0)
+                    modifier:weight(2.0, true)
+                    modifier:background(function(it) it:setBlue(255) end,  function(shapes) return shapes:getRectangleShape() end)
+                end)
+            end)
+            rowSlot:Box(function(box)
+                box:setModifier(function(modifier)
+                    modifier:fillMaxHeight(1.0)
+                    modifier:weight(1.0, true)
+                    modifier:background(function(it) it:setGreen(255) end,  function(shapes) return shapes:getRectangleShape() end)
+                end)
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_846" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    $slot-&gt;Row(function ($row) {
+        // 设置 Row 的修饰符
+        $row-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+            $modifier-&gt;size(function ($it) {
+                return $it-&gt;createSize($it-&gt;fromInt(210), $it-&gt;fromInt(100));
+            });
+        });
+        $row-&gt;setContent(function ($rowSlot) {
+            $rowSlot-&gt;Box(function ($box) {
+                $box-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;fillMaxHeight(1.0);
+                    $modifier-&gt;weight(2.0, true);
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setBlue(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                });
+            });
+            $rowSlot-&gt;Box(function ($box) {
+                $box-&gt;setModifier(function ($modifier) {
+                    $modifier-&gt;fillMaxHeight(1.0);
+                    $modifier-&gt;weight(1.0, true);
+                    $modifier-&gt;background(
+                        function ($it) { $it-&gt;setGreen(255); },
+                        function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+                    );
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_849" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    slot.Row(lambda row: (
+        # 设置 Row 的修uschina-pro修饰符
+        row.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape()),
+            modifier.size(lambda it: it.createSize(it.fromInt(210), it.fromInt(100)))
+        )),
+        row.setContent(lambda rowSlot: (
+            rowSlot.Box(lambda box: (
+                box.setModifier(lambda modifier: (
+                    modifier.fillMaxHeight(1.0),
+                    modifier.weight(2.0, True),
+                    modifier.background(lambda it: it.setBlue(255), lambda shapes: shapes.getRectangleShape())
+                ))
+            )),
+            rowSlot.Box(lambda box: (
+                box.setModifier(lambda modifier: (
+                    modifier.fillMaxHeight(1.0),
+                    modifier.weight(1.0, True),
+                    modifier.background(lambda it: it.setGreen(255), lambda shapes: shapes.getRectangleShape())
+                ))
+            ))
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z7hqr8m_852" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  slot.Row do |row|
+    # 设置 Row 的修饰符
+    row.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+      modifier.size { |it| it.createSize(it.fromInt(210), it.fromInt(100)) }
+    end
+    row.setContent do |rowSlot|
+      rowSlot.Box do |box|
+        box.setModifier do |modifier|
+          modifier.fillMaxHeight(1.0)
+          modifier.weight(2.0, true)
+          modifier.background(lambda { |it| it.setBlue(255) }, lambda { |shapes| shapes.getRectangleShape() })
+        end
+      end
+      rowSlot.Box do |box|
+        box.setModifier do |modifier|
+          modifier.fillMaxHeight(1.0)
+          modifier.weight(1.0, true)
+          modifier.background(lambda { |it| it.setGreen(255) }, lambda { |shapes| shapes.getRectangleShape() })
+        end
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="z7hqr8m_825"><img alt="440" src="/440.png" title="440" width="440" height="202"></figure></section></section><section class="chapter"><h2 id="z7hqr8m_15" data-toc="z7hqr8m_15">约束条件和修饰符顺序</h2><p id="z7hqr8m_901">在 Compose 中，您可以将多个修饰符串联在一起，以更改可组合项的外观和风格。这些修饰符链可能会影响传递给可组合函数的约束条件，这些约束条件定义了宽度和高度边界。</p><p id="z7hqr8m_902">本页介绍了串联的修饰符如何影响限制，进而影响可组合项的测量和放置。</p><section class="chapter"><h3 id="z7hqr8m_903" data-toc="z7hqr8m_903">界面树中的修饰符</h3></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="declarative-ui-state.html" class="navigation-links__prev">状态</a><a href="declarative-ui-architecture.html" class="navigation-links__next">架构</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

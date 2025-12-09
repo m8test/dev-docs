@@ -1,0 +1,58 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:33:02.325910913"><title>requireComponent | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="requireComponent | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/buildscriptconfig-requirecomponent.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="requireComponent | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/buildscriptconfig-requirecomponent.html#webpage",
+    "url": "writerside-documentation/buildscriptconfig-requirecomponent.html",
+    "name": "requireComponent | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="BuildScriptConfig.requireComponent" data-main-title="requireComponent" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="project-based.md|项目化///builder-api.md|构建脚本 Api///BuildScriptConfig.md|BuildScriptConfig"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="BuildScriptConfig.requireComponent" id="BuildScriptConfig.requireComponent.md">requireComponent</h1><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_9"><p id="-ivy11w_13">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.builder.api/-build-script-config/require-component.html" id="-ivy11w_14" data-external="true" rel="noopener noreferrer" target="_blank">BuildScriptConfig.requireComponent()</a></p></aside><div class="tabs" id="-ivy11w_12" data-group="languages" data-anchors="[-ivy11w_17,-ivy11w_20,-ivy11w_23,-ivy11w_26,-ivy11w_29,-ivy11w_32,-ivy11w_35]"><div class="tabs__content" data-gtm="tab" id="-ivy11w_17" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">_console.log(&quot;init.build.kts run&quot;)
+_buildScriptConfig.requireComponent {
+    setName(&quot;Storage&quot;)
+    setUrl(&quot;https://github.com/m8test/Plugins/releases/download/0.1.0/storage-release-unsigned.apk&quot;)
+    setVersion(&quot;0.1.0&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_41"><p id="-ivy11w_42"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/builder//BuildScriptConfig/requireComponent/init.build.kts" id="-ivy11w_43" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/builder//BuildScriptConfig/requireComponent/init.build.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ivy11w_20" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$console.log(&quot;init.build.groovy run&quot;)
+$buildScriptConfig.requireComponent {
+    setName(&quot;Storage&quot;)
+    setUrl(&quot;https://github.com/m8test/Plugins/releases/download/0.1.0/storage-release-unsigned.apk&quot;)
+    setVersion(&quot;0.1.0&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_49"><p id="-ivy11w_50"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/builder//BuildScriptConfig/requireComponent/init.build.groovy" id="-ivy11w_51" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/builder//BuildScriptConfig/requireComponent/init.build.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ivy11w_23" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$console.log(&quot;init.build.js run&quot;)
+$buildScriptConfig.requireComponent((component) =&gt; {
+    component.setName(&quot;Storage&quot;)
+    component.setUrl(&quot;https://github.com/m8test/Plugins/releases/download/0.1.0/storage-release-unsigned.apk&quot;)
+    component.setVersion(&quot;0.1.0&quot;)
+})</div><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_57"><p id="-ivy11w_58"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/builder//BuildScriptConfig/requireComponent/init.build.js" id="-ivy11w_59" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/builder//BuildScriptConfig/requireComponent/init.build.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ivy11w_26" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_console:log(&quot;init.build.lua run&quot;)
+_buildScriptConfig:requireComponent(function(component)
+    component:setName(&quot;Storage&quot;)
+    component:setUrl(&quot;https://github.com/m8test/Plugins/releases/download/0.1.0/storage-release-unsigned.apk&quot;)
+    component:setVersion(&quot;0.1.0&quot;)
+end)</div><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_65"><p id="-ivy11w_66"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/builder//BuildScriptConfig/requireComponent/init.build.lua" id="-ivy11w_67" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/builder//BuildScriptConfig/requireComponent/init.build.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ivy11w_29" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$console-&gt;log(&quot;init.build.php run&quot;);
+$buildScriptConfig-&gt;requireComponent(function ($component) {
+    $component-&gt;setName(&quot;Storage&quot;);
+    $component-&gt;setUrl(&quot;https://github.com/m8test/Plugins/releases/download/0.1.0/storage-release-unsigned.apk&quot;);
+    $component-&gt;setVersion(&quot;0.1.0&quot;);
+});</div><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_73"><p id="-ivy11w_74"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/builder//BuildScriptConfig/requireComponent/init.build.php" id="-ivy11w_75" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/builder//BuildScriptConfig/requireComponent/init.build.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ivy11w_32" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">_console.log(&quot;init.build.py run&quot;)
+
+
+def fn(component):
+    component.setName(&quot;Storage&quot;)
+    component.setUrl(&quot;https://github.com/m8test/Plugins/releases/download/0.1.0/storage-release-unsigned.apk&quot;)
+    component.setVersion(&quot;0.1.0&quot;)
+
+
+_buildScriptConfig.requireComponent(fn)
+</div><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_81"><p id="-ivy11w_82"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/builder//BuildScriptConfig/requireComponent/init.build.py" id="-ivy11w_83" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/builder//BuildScriptConfig/requireComponent/init.build.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-ivy11w_35" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$console.log(&quot;init.build.rb run&quot;)
+$buildScriptConfig.requireComponent { |component|
+  component.setName(&quot;Storage&quot;)
+  component.setUrl(&quot;https://github.com/m8test/Plugins/releases/download/0.1.0/storage-release-unsigned.apk&quot;)
+  component.setVersion(&quot;0.1.0&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-ivy11w_89"><p id="-ivy11w_90"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/builder//BuildScriptConfig/requireComponent/init.build.rb" id="-ivy11w_91" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/builder//BuildScriptConfig/requireComponent/init.build.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="buildscriptconfig.html" class="navigation-links__prev">BuildScriptConfig</a><a href="buildscriptconfig-requireplugin.html" class="navigation-links__next">requirePlugin</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

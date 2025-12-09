@@ -1,0 +1,261 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:25.129948177"><title>多文件项目 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="多文件项目 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/multi-file-project.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="多文件项目 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/multi-file-project.html#webpage",
+    "url": "writerside-documentation/multi-file-project.html",
+    "name": "多文件项目 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="multi-file-project" data-main-title="多文件项目" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="languages.md|编程语言"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="multi-file-project" id="multi-file-project.md">多文件项目</h1><p id="z5evp4r_3">M8Test 支持多文件项目，即一个项目可以包含多个脚本源文件，但必须有且仅有一个<a href="using-gradle-project-template.html#config-project" id="z5evp4r_25" data-tooltip="在模板项目中，与编程语言同名的文件夹内有一个 build.gradle.kts 文件，用于配置项目。">入口文件</a> 。只有在入口文件中才能直接使用<a href="global-variables.html" id="z5evp4r_26" data-tooltip="TIPS: 只有在脚本入口文件或初始化脚本文件中才能使用全局变量。通过入口文件引用的其他脚本文件无法直接使用全局变量，需要将其作为参数传递到这些脚本文件中。">全局变量</a> ，而非入口文件中的脚本若需要使用全局变量，则必须通过方法参数传递的方式获取。也就是说，在入口文件中调用非入口脚本时，需要将全局变量作为参数传递进去。</p><p id="z5evp4r_4">多文件项目的优势在于可以将代码分散到不同的文件中，每个文件各自实现特定功能，避免所有逻辑堆积在入口文件中，从而减轻维护难度。</p><p id="z5evp4r_5">下面展示一个简单的多文件项目，目录结构如下：</p><div class="tabs" id="z5evp4r_15" data-group="languages" data-anchors="[z5evp4r_28,z5evp4r_30,z5evp4r_32,z5evp4r_34,z5evp4r_36,z5evp4r_38,z5evp4r_40,z5evp4r_42]"><div class="tabs__content" data-gtm="tab" id="z5evp4r_28" data-sync-tabs="kotlin" data-title="kotlin"><figure id="z5evp4r_43"><img alt="Kotlin 11" src="/kotlin-11.png" title="Kotlin 11" width="531" height="613"></figure></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_30" data-sync-tabs="groovy" data-title="groovy"><figure id="z5evp4r_44"><img alt="Groovy 11" src="/groovy-11.png" title="Groovy 11" width="545" height="623"></figure></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_32" data-sync-tabs="java" data-title="java"><figure id="z5evp4r_45"><img alt="Java 11" src="/java-11.png" title="Java 11" width="538" height="642"></figure></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_34" data-sync-tabs="javascript" data-title="javascript"><figure id="z5evp4r_46"><img alt="Javascript 11" src="/javascript-11.png" title="Javascript 11" width="537" height="715"></figure></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_36" data-sync-tabs="lua" data-title="lua"><figure id="z5evp4r_47"><img alt="Lua 11" src="/lua-11.png" title="Lua 11" width="525" height="543"></figure></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_38" data-sync-tabs="php" data-title="php"><figure id="z5evp4r_48"><img alt="Php 11" src="/php-11.png" title="Php 11" width="526" height="533"></figure></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_40" data-sync-tabs="python" data-title="python"><figure id="z5evp4r_49"><img alt="Python 11" src="/python-11.png" title="Python 11" width="538" height="641"></figure></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_42" data-sync-tabs="ruby" data-title="ruby"><figure id="z5evp4r_50"><img alt="Ruby 11" src="/ruby-11.png" title="Ruby 11" width="539" height="719"></figure></div></div><p id="z5evp4r_7">其中，ToolB 会调用 ToolA，而入口文件则会调用 ToolB。这样一来，在入口文件中通过调用 ToolB 也间接使用了 ToolA。通过将代码拆分至不同文件并相互调用，最终实现所需的功能。</p><p id="z5evp4r_8">首先是 ToolA 文件，内容如下：</p><div class="tabs" id="z5evp4r_18" data-group="languages" data-anchors="[z5evp4r_53,z5evp4r_56,z5evp4r_59,z5evp4r_62,z5evp4r_65,z5evp4r_68,z5evp4r_71,z5evp4r_74]"><div class="tabs__content" data-gtm="tab" id="z5evp4r_53" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.tool
+
+import com.m8test.script.core.api.console.Console
+
+class ToolA {
+    // 此方法只是使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在 ToolB 中调用
+    fun methodA(console: Console) {
+        console.log(&quot;Method A in ToolA called.&quot;)
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_56" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">package com.example.tool
+
+import com.m8test.script.core.api.console.Console
+
+class ToolA {
+    // 此方法只是使用全局变量(参数传递的方式接收)简单输出日志，会在 ToolB 中调用
+    void methodA(Console console) {
+        console.log(&quot;Method A in ToolA called.&quot;)
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_59" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">package com.example.tool;
+
+import com.m8test.script.core.api.console.Console;
+
+public class ToolA {
+    // 此方法只是使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在 ToolB 中调用
+    public void methodA(Console console) {
+        console.log(&quot;Method A in ToolA called.&quot;);
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_62" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 定义 ToolA 类
+function ToolA() {
+    // 此方法只是使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在 ToolB 中调用
+    /**
+     * @param {Packages.com.m8test.script.core.api.console.Console} console
+     */
+    this.methodA = function (console) {
+        console.log(&quot;Method A in ToolA called.&quot;);
+    };
+}
+
+// 导出 ToolA 类
+module.exports = ToolA;</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_65" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local ToolA = {}
+-- 此方法只是使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在 ToolB 中调用
+
+function ToolA.methodA(console)
+    console:log(&quot;Method A in ToolA called.&quot;)
+end
+
+return ToolA
+</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_68" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+// 声明命名空间，和当前文件所在文件夹的相对src的路径一样
+namespace com\example\tool;
+
+class ToolA
+{
+    // 此方法只是使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在 ToolB 中调用
+    public static function methodA($console)
+    {
+        $console-&gt;log(&quot;Method A in ToolA called.&quot;);
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_71" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.core.api.console.Console import Console
+
+
+class ToolA:
+    # 此方法只是使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在 ToolB 中调用
+    def methodA(self, console: Console):
+        console.log(&quot;Method A in ToolA called.&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_74" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">java_import &quot;com.m8test.script.core.api.console.Console&quot;
+
+class ToolA
+  # 此方法只是使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在 ToolB 中调用
+  # @param console [Console]
+  def methodA(console)
+    console.log(&quot;Method A in ToolA called.&quot;)
+  end
+end</div></div></div><p id="z5evp4r_10">接着是 ToolB 文件，内容如下：</p><div class="tabs" id="z5evp4r_21" data-group="languages" data-anchors="[z5evp4r_125,z5evp4r_128,z5evp4r_131,z5evp4r_134,z5evp4r_137,z5evp4r_140,z5evp4r_143,z5evp4r_146]"><div class="tabs__content" data-gtm="tab" id="z5evp4r_125" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.tool
+
+import com.m8test.script.core.api.console.Console
+
+class ToolB {
+    // 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+    fun methodB(console: Console) {
+        val toolA = ToolA()
+        toolA.methodA(console)
+        console.log(&quot;Method B in ToolB called.&quot;)
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_128" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">package com.example.tool
+
+import com.m8test.script.core.api.console.Console
+
+class ToolB {
+    // 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+    void methodB(Console console) {
+        def toolA = new ToolA()
+        toolA.methodA(console)
+        console.log(&quot;Method B in ToolB called.&quot;)
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_131" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">package com.example.tool;
+
+import com.m8test.script.core.api.console.Console;
+
+public class ToolB {
+    // 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+    public void methodB(Console console) {
+        ToolA toolA = new ToolA();
+        toolA.methodA(console);
+        console.log(&quot;Method B in ToolB called.&quot;);
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_134" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 假设 ToolA 已经被定义在另一个模块中
+// 不能使用./, 需要使用相对于src目录的路径
+// const ToolA = require('./ToolA'); // 错误示例
+const ToolA = require('com/example/tool/ToolA');
+
+// 定义 ToolB 类
+function ToolB() {
+    // 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+    /**
+     * @param {Packages.com.m8test.script.core.api.console.Console} console
+     */
+    this.methodB = function (console) {
+        // ToolB 调用 ToolA 的方法
+        const toolA = new ToolA();
+        toolA.methodA(console);
+        console.log(&quot;Method B in ToolB called.&quot;);
+    };
+}
+
+// 导出 ToolB 类
+module.exports = ToolB;</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_137" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入 ToolA , 必须相对于 src 目录, 将目录中的 / 改成 '.', 不需要加后缀 '.lua'
+local ToolA = require(&quot;com.example.tool.ToolA&quot;)
+local ToolB = {}
+-- 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+function ToolB.methodB(console)
+    ToolA.methodA(console)
+    console:log(&quot;Method B in ToolB called.&quot;)
+end
+
+return ToolB
+</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_140" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+// 声明命名空间，和当前文件所在文件夹的相对src的路径一样
+namespace com\example\tool;
+// 引入 ToolA , 必须是相对于src目录的路径
+require_once 'com/example/tool/ToolA.php';
+
+class ToolB
+{
+    // 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+    public static function methodB($console)
+    {
+        ToolA::methodA($console);
+        $console-&gt;log(&quot;Method B in ToolB called.&quot;);
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_143" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.core.api.console.Console import Console
+# 引入 ToolA, from 需要相对于 src 目录的路径
+from python.com.example.tool.ToolA import ToolA
+
+
+class ToolB:
+    # 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+    def methodB(self, console: Console):
+        toolA = ToolA()
+        toolA.methodA(console)
+        console.log(&quot;Method B in ToolB called.&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_146" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># 引入 ToolA ， 必须是相对于 src 目录的路径
+require 'com/example/tool/ToolA'
+java_import &quot;com.m8test.script.core.api.console.Console&quot;
+
+class ToolB
+  # 此方法只是简单调用ToolA中的方法并且使用全局变量(参数传递的方式接收)简单输出日志以标识方法正确执行，会在入口文件中调用
+  # @param console [Console]
+  def methodB(console)
+    toolA = ToolA.new
+    toolA.methodA(console)
+    console.log(&quot;Method B in ToolB called.&quot;)
+  end
+end</div></div></div><p id="z5evp4r_12">最后是入口文件（primary），内容如下：</p><div class="tabs" id="z5evp4r_24" data-group="languages" data-anchors="[z5evp4r_197,z5evp4r_200,z5evp4r_203,z5evp4r_206,z5evp4r_209,z5evp4r_212,z5evp4r_215,z5evp4r_218]"><div class="tabs__content" data-gtm="tab" id="z5evp4r_197" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.script
+
+// 引入 ToolB
+import com.example.tool.ToolB
+import com.m8test.script.GlobalVariables._console
+
+fun run() {
+    // 创建 ToolB 实例
+    val tool = ToolB()
+    // 调用 ToolB 的方法并肩全局变量作为参数传递
+    tool.methodB(_console)
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_200" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">package com.example.script
+
+
+// 引入 ToolB
+import com.example.tool.ToolB
+
+// 创建 ToolB 对象
+ToolB tool = new ToolB()
+// 调用 ToolB 的方法并肩全局变量作为参数传递
+tool.methodB($console)</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_203" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">package com.example.script;
+
+// 引入 ToolB
+
+import com.example.tool.ToolB;
+
+import static com.m8test.script.GlobalVariables.$console;
+
+class MyScript {
+    public static void run() {
+        // 创建 ToolB 对象
+        ToolB tool = new ToolB();
+        // 调用 ToolB 的方法并肩全局变量作为参数传递
+        tool.methodB($console);
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_206" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 引入 ToolB 类，相对于src目录的路径
+let ToolB = require('com/example/tool/ToolB');
+// 创建 ToolB 实例
+const toolBInstance = new ToolB();
+// 调用 ToolB 的方法并肩全局变量作为参数传递
+toolBInstance.methodB($console);</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_209" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入 ToolB , 必须相对于 src 目录, 将目录中的 / 改成 '.', 不需要加后缀 '.lua'
+local ToolB = require(&quot;com.example.tool.ToolB&quot;)
+-- 调用 ToolB 的方法并肩全局变量作为参数传递
+ToolB.methodB(_console)
+</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_212" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// 引入 ToolB , 必须是相对于src目录的路径
+require_once 'com/example/tool/ToolB.php';
+
+// 命名空间不同使用 use 来引入 ToolB.php 中的 ToolB 类
+use com\example\tool\ToolB;
+
+/** 通过use使用java中的类, 不能使用 use xxx as xxx 只能使use,因为下面这句话会被替换为 import android.widget.Button, 这样写的目的是有代码提示 **/
+
+// 声明全局变量, 如果不声明的话也可以但是没有代码提示
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+ToolB::methodB($console);</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_215" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+# 引入 ToolB, from 需要相对于 src 目录的路径
+from python.com.example.tool.ToolB import ToolB
+
+# 创建 ToolB 实例
+toolB = ToolB()
+# 调用 ToolB 的方法并肩全局变量作为参数传递
+toolB.methodB(_console)
+</div></div><div class="tabs__content" data-gtm="tab" id="z5evp4r_218" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># 引入 ToolB ， 必须是相对于 src 目录的路径
+require 'com/example/tool/ToolB'
+# 创建 ToolB 实例
+toolB = ToolB.new
+# 调用 ToolB 的方法并肩全局变量作为参数传递
+toolB.methodB($console)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="type-mapping.html" class="navigation-links__prev">类型映射</a><a href="utility-tools.html" class="navigation-links__next">实用工具</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

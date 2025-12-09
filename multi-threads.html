@@ -1,0 +1,421 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:11.350660533"><title>多线程 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"h8xjni_8","level":0,"title":"定时器","anchor":"#h8xjni_8"},{"id":"h8xjni_9","level":0,"title":"创建子线程","anchor":"#h8xjni_9"},{"id":"ui","level":0,"title":"使用UI线程","anchor":"#ui"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="多线程 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/multi-threads.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="多线程 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/multi-threads.html#webpage",
+    "url": "writerside-documentation/multi-threads.html",
+    "name": "多线程 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="multi-threads" data-main-title="多线程" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="script-introduction.md|脚本介绍"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="multi-threads" id="multi-threads.md">多线程</h1><aside class="prompt" data-type="tip" data-title="" id="h8xjni_3"><p id="h8xjni_11">更多线程相关api可以参考 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.thread/index.html" id="h8xjni_12" data-external="true" rel="noopener noreferrer" target="_blank">Sdk文档</a></p></aside><p id="h8xjni_4">在 M8Test 中，每个脚本可创建多个子线程，但部分语言（如 PHP、Python、Ruby）的脚本除外。</p><p id="h8xjni_5">每个脚本运行时，都会先创建一个脚本线程来执行脚本代码，这是脚本创建的第一个线程，称为主线程；后续通过 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.thread/-threads/start.html" id="h8xjni_13" data-external="true" rel="noopener noreferrer" target="_blank">Threads.start</a> 方法在脚本中创建的线程则为子线程。</p><p id="h8xjni_6">脚本主线程与Android的UI线程类似，建议不要阻塞脚本主线程，因为它会涉及一些UI操作（例如脚本端与网页交互时，回调函数需在脚本主线程中执行）。</p><p id="h8xjni_7">脚本主线程会在脚本中其他所有子线程停止后才停止。脚本与线程的关系为一对多，不支持多线程的语言（如 PHP、Python、Ruby）则为一对一。</p><section class="chapter"><h2 id="h8xjni_8" data-toc="h8xjni_8">定时器</h2><p id="h8xjni_14">定时器用于添加定时任务，每个线程都有且仅有一个定时器。请注意，只有通过 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.thread/-threads/start.html" id="h8xjni_22" data-external="true" rel="noopener noreferrer" target="_blank">Threads.start</a> 创建的线程才具备定时器，可通过 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.thread/-new-script-thread/get-timer.html" id="h8xjni_23" data-external="true" rel="noopener noreferrer" target="_blank">getTimer</a> 方法获取。</p><p id="h8xjni_15">定时器添加的任务将按时间顺序执行，且仅当前一个任务执行完毕后，才会执行下一个任务，所有任务均在定时器所属的线程中运行, 只有所有定时任务执行完成后，脚本线程才会停止。</p><p id="h8xjni_16">当然，若你使用 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.thread/-new-script-thread/set-background.html" id="h8xjni_24" data-external="true" rel="noopener noreferrer" target="_blank">setBackground</a> 设置线程在后台运行，那么即使所有任务执行完毕，脚本线程也不会停止，除非再次调用 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.thread/-new-script-thread/set-background.html" id="h8xjni_25" data-external="true" rel="noopener noreferrer" target="_blank">setBackground</a> 取消后台运行状态。</p><div class="tabs" id="h8xjni_21" data-group="languages" data-anchors="[h8xjni_28,h8xjni_31,h8xjni_34,h8xjni_37,h8xjni_40,h8xjni_43,h8xjni_46,h8xjni_49]"><div class="tabs__content" data-gtm="tab" id="h8xjni_28" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._threads
+
+// 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+// 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+val mainThread = _threads.getMain()
+// 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+// 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+// 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+// 3. setImmediate() : 立即执行任务，只执行一次
+// 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+val mainTimer = mainThread.getTimer()
+// 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+mainTimer.setImmediate({
+    _console.log(&quot;2 主线程添加的定时任务&quot;)
+})
+var intervalId = -1
+var times = 5
+intervalId = mainTimer.setInterval({
+    if (times &lt;= 0) {
+        _console.log(&quot;4 结束运行周期任务&quot;)
+        mainTimer.clearInterval(intervalId)
+    } else {
+        _console.log(&quot;3 周期任务执行&quot;, times)
+    }
+    times--
+}, 1000)
+// 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+_console.log(&quot;1 主线程启动的第一个定时任务&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_31" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+// 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+def mainThread = $threads.getMain()
+// 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+// 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+// 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+// 3. setImmediate() : 立即执行任务，只执行一次
+// 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+def mainTimer = mainThread.getTimer()
+// 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+mainTimer.setImmediate({
+    $console.log(&quot;2 主线程添加的定时任务&quot;)
+})
+int intervalId = -1
+int times = 5
+intervalId = mainTimer.setInterval({
+    if (times &lt;= 0) {
+        $console.log(&quot;4 结束运行周期任务&quot;)
+        mainTimer.clearInterval(intervalId)
+    } else {
+        $console.log(&quot;3 周期任务执行&quot;, times)
+    }
+    times--
+}, 1000)
+// 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+$console.log(&quot;1 主线程启动的第一个定时任务&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_34" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.thread.NewScriptThread;
+import com.m8test.script.core.api.thread.Timer;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$threads;
+
+// 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+// 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+NewScriptThread mainThread = $threads.getMain();
+// 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+// 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+// 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+// 3. setImmediate() : 立即执行任务，只执行一次
+// 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+final Timer mainTimer = mainThread.getTimer();
+// 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+mainTimer.setImmediate(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        $console.log(&quot;2 主线程添加的定时任务&quot;);
+        return null;
+    }
+});
+final int[] intervalId = {-1}; // 使用数组来包装 intervalId
+final int[] times = {5};      // 使用数组来包装 times
+intervalId[0] = mainTimer.setInterval(new Function1() {
+    @Override
+    public Object invoke(Object objects) {
+        if (times[0] &lt;= 0) {
+            $console.log(&quot;4 结束运行周期任务&quot;);
+            mainTimer.clearInterval(intervalId[0]);
+        } else {
+            $console.log(&quot;3 周期任务执行&quot;, times[0]);
+        }
+        times[0]--;
+        return null;
+    }
+}, 1000);
+// 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+$console.log(&quot;1 主线程启动的第一个定时任务&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_37" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+// 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+let mainThread = $threads.getMain()
+// 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+// 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+// 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+// 3. setImmediate() : 立即执行任务，只执行一次
+// 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+let mainTimer = mainThread.getTimer()
+// 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+mainTimer.setImmediate(function (p) {
+    $console.log(&quot;2 主线程添加的定时任务&quot;)
+})
+let intervalId = -1
+let times = 5
+intervalId = mainTimer.setInterval(function (p) {
+    if (times &lt;= 0) {
+        $console.log(&quot;4 结束运行周期任务&quot;)
+        mainTimer.clearInterval(intervalId)
+    } else {
+        $console.log(&quot;3 周期任务执行&quot;, times)
+    }
+    times--
+}, 1000)
+// 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+$console.log(&quot;1 主线程启动的第一个定时任务&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_40" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+-- 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+local mainThread = _threads:getMain()
+-- 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+-- 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+-- 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+-- 3. setImmediate() : 立即执行任务，只执行一次
+-- 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+local mainTimer = mainThread:getTimer()
+-- 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+mainTimer:setImmediate(function(p)
+    _console:log(&quot;2 主线程添加的定时任务&quot;)
+end)
+local intervalId = -1
+local times = 5
+intervalId = mainTimer:setInterval(function(p)
+    if (times &lt;= 0) then
+        _console:log(&quot;4 结束运行周期任务&quot;)
+        mainTimer:clearInterval(intervalId)
+    else
+        _console:log(&quot;3 周期任务执行&quot;, times)
+    end
+    times = times - 1
+end, 1000)
+-- 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+_console:log(&quot;1 主线程启动的第一个定时任务&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_43" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+// 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+$mainThread = $threads-&gt;getMain();
+// 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+// 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+// 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+// 3. setImmediate() : 立即执行任务，只执行一次
+// 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+$mainTimer = $mainThread-&gt;getTimer();
+// 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+$mainTimer-&gt;setImmediate(function () use ($console) {
+    $console-&gt;log(javaString(&quot;2 主线程添加的定时任务&quot;));
+});
+$intervalId = -1;
+$times = 5;
+$intervalId = $mainTimer-&gt;setInterval(function () use (&amp;$times, $console, &amp;$intervalId, $mainTimer) {
+    if ($times &lt;= 0) {
+        $console-&gt;log(javaString(&quot;4 结束运行周期任务&quot;));
+        $mainTimer-&gt;clearInterval($intervalId);
+    } else {
+        $console-&gt;log(javaString(&quot;3 周期任务执行&quot;), $times);
+    }
+    $times--;
+}, 1000);
+// 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+$console-&gt;log(javaString(&quot;1 主线程启动的第一个定时任务&quot;));
+</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_46" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+# 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+mainThread = _threads.getMain()
+# 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+# 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+# 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+# 3. setImmediate() : 立即执行任务，只执行一次
+# 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+mainTimer = mainThread.getTimer()
+# 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+mainTimer.setImmediate(lambda p: _console.log(&quot;2 主线程添加的定时任务&quot;))
+intervalId = -1
+times = 5
+
+
+def fn(p):
+    global times
+    if times &lt;= 0:
+        _console.log(&quot;4 结束运行周期任务&quot;)
+        mainTimer.clearInterval(intervalId)
+    else:
+        _console.log(&quot;3 周期任务执行&quot;, times)
+    times = times - 1
+
+
+intervalId = mainTimer.setInterval(fn, 1000)
+# 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+_console.log(&quot;1 主线程启动的第一个定时任务&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_49" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 脚本主线程，也就是脚本第一个启动的线程，该线程会在所有当前脚本的其他线程结束后才会结束
+# 请不要在脚本主线程执行阻塞任务，可以类比于android的ui线程
+mainThread = $threads.getMain()
+# 获取线程定时器，可以通过定时器添加定时任务, 注意，定时器启动的定时任务不会阻塞脚本线程，推荐使用定时器添加任务
+# 1. setTimeout() : 延时任务，只执行一次，可以指定延时时间
+# 2. setInterval() : 周期任务，会重复执行，可以指定执行周期
+# 3. setImmediate() : 立即执行任务，只执行一次
+# 通过线程定时器添加的定时任务会在该线程运行，也就是说添加的定时任务会按照执行的时间顺序执行，只有前一个定时任务执行完毕时才会执行下一个定时任务
+mainTimer = mainThread.getTimer()
+# 添加一个立即执行的定时任务，但是该任务添加后依旧不会被执行，只有前一个任务执行完成后才会执行该任务
+mainTimer.setImmediate(lambda { |p|
+  $console.log(&quot;2 主线程添加的定时任务&quot;)
+})
+intervalId = -1
+times = 5
+intervalId = mainTimer.setInterval(lambda { |p|
+  if times &lt;= 0
+    $console.log(&quot;4 结束运行周期任务&quot;)
+    mainTimer.clearInterval(intervalId)
+  else
+    $console.log(&quot;3 周期任务执行&quot;, times)
+    times = times - 1
+  end
+}, 1000)
+# 实际上脚本执行时就是启动一个立即执行的定时任务来执行代码的
+$console.log(&quot;1 主线程启动的第一个定时任务&quot;)
+</div></div></div><figure id="h8xjni_18"><img alt="428" src="/428.png" title="428" width="444" height="984"></figure></section><section class="chapter"><h2 id="h8xjni_9" data-toc="h8xjni_9">创建子线程</h2><p id="h8xjni_98">M8Test执行脚本时可创建多个子线程，但部分语言（如PHP、Python、Ruby）不支持多线程。若在这些不支持多线程的语言中尝试创建子线程，很可能会导致脚本崩溃。</p><div class="tabs" id="h8xjni_103" data-group="languages" data-anchors="[h8xjni_106,h8xjni_109,h8xjni_112,h8xjni_115,h8xjni_118,h8xjni_121,h8xjni_124,h8xjni_127]"><div class="tabs__content" data-gtm="tab" id="h8xjni_106" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._threads
+
+// 启动一个子线程，第一个参数为子线程名称，第二个参数为子线程需要的执行的代码，也就是一个定时任务，子线程启动时第一个执行的就是这个定时任务
+val thread = _threads.start(&quot;test-sub-thread&quot;) {
+    // 输出日志
+    _console.log(&quot;1 子线程代码执行了&quot;, _threads.getCurrent())
+    // 如果这里执行的代码耗时短，并且你想在其他线程使用当前子线程的定时器，那么最好这里添加一个定时任务
+    val t = it.getTimer()
+    // 防止子线程直接结束从而导致其他线程通过定时器添加的任务无法执行, 这可以保证1秒钟内当前线程不会结束(子线程)
+    t.setTimeout({}, 1000)
+}
+// 获取子线程对应定时器
+val timer = thread.getTimer()
+// 添加定时任务到子线程, 两秒钟后执行
+timer.setTimeout({
+    // 输出日志
+    _console.log(&quot;2 子线程定时任务执行了&quot;, _threads.getCurrent())
+}, 2000)
+// 到这里主线程的定时任务全部执行完成，但是还不会结束，他会等待所有子线程的所有定时任务执行完成
+_console.log(&quot;脚本主线程日志&quot;, _threads.getCurrent())</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_109" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 启动一个子线程，第一个参数为子线程名称，第二个参数为子线程需要的执行的代码，也就是一个定时任务，子线程启动时第一个执行的就是这个定时任务
+def thread = $threads.start(&quot;test-sub-thread&quot;) {
+    // 输出日志
+    $console.log(&quot;1 子线程代码执行了&quot;, $threads.getCurrent())
+    // 如果这里执行的代码耗时短，并且你想在其他线程使用当前子线程的定时器，那么最好这里添加一个定时任务
+    def t = it.getTimer()
+    // 防止子线程直接结束从而导致其他线程通过定时器添加的任务无法执行, 这可以保证1秒钟内当前线程不会结束(子线程)
+    t.setTimeout({}, 1000)
+}
+// 获取子线程对应定时器
+def timer = thread.getTimer()
+// 添加定时任务到子线程, 两秒钟后执行
+timer.setTimeout({
+    // 输出日志
+    $console.log(&quot;2 子线程定时任务执行了&quot;, $threads.getCurrent())
+}, 2000)
+// 到这里主线程的定时任务全部执行完成，但是还不会结束，他会等待所有子线程的所有定时任务执行完成
+$console.log(&quot;脚本主线程日志&quot;, $threads.getCurrent())</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_112" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.thread.NewScriptThread;
+import com.m8test.script.core.api.thread.Timer;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$threads;
+
+// 启动一个子线程，第一个参数为子线程名称，第二个参数为子线程需要的执行的代码，也就是一个定时任务，子线程启动时第一个执行的就是这个定时任务
+NewScriptThread thread = $threads.start(&quot;test-sub-thread&quot;, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        NewScriptThread it = (NewScriptThread) o;
+        // 输出日志
+        $console.log(&quot;1 子线程代码执行了&quot;, $threads.getCurrent());
+        // 如果这里执行的代码耗时短，并且你想在其他线程使用当前子线程的定时器，那么最好这里添加一个定时任务
+        Timer t = it.getTimer();
+        // 防止子线程直接结束从而导致其他线程通过定时器添加的任务无法执行, 这可以保证1秒钟内当前线程不会结束(子线程)
+        t.setTimeout(new Function1() {
+            @Override
+            public Object invoke(Object o) {
+                return null;
+            }
+        }, 1000);
+        return null;
+    }
+});
+// 获取子线程对应定时器
+Timer timer = thread.getTimer();
+// 添加定时任务到子线程, 两秒钟后执行
+timer.setTimeout(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        // 输出日志
+        $console.log(&quot;2 子线程定时任务执行了&quot;, $threads.getCurrent());
+        return null;
+    }
+}, 2000);
+// 到这里主线程的定时任务全部执行完成，但是还不会结束，他会等待所有子线程的所有定时任务执行完成
+$console.log(&quot;脚本主线程日志&quot;, $threads.getCurrent());</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_115" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 启动一个子线程，第一个参数为子线程名称，第二个参数为子线程需要的执行的代码，也就是一个定时任务，子线程启动时第一个执行的就是这个定时任务
+let thread = $threads.start(&quot;test-sub-thread&quot;, function (it) {
+    // 输出日志
+    $console.log(&quot;1 子线程代码执行了&quot;, $threads.getCurrent())
+    // 如果这里执行的代码耗时短，并且你想在其他线程使用当前子线程的定时器，那么最好这里添加一个定时任务
+    let t = it.getTimer()
+    // 防止子线程直接结束从而导致其他线程通过定时器添加的任务无法执行, 这可以保证1秒钟内当前线程不会结束(子线程)
+    t.setTimeout({}, 1000)
+})
+// 获取子线程对应定时器
+let timer = thread.getTimer()
+// 添加定时任务到子线程, 两秒钟后执行
+timer.setTimeout(function () {
+    // 输出日志
+    $console.log(&quot;2 子线程定时任务执行了&quot;, $threads.getCurrent())
+}, 2000)
+// 到这里主线程的定时任务全部执行完成，但是还不会结束，他会等待所有子线程的所有定时任务执行完成
+$console.log(&quot;脚本主线程日志&quot;, $threads.getCurrent())</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_118" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 启动一个子线程，第一个参数为子线程名称，第二个参数为子线程需要的执行的代码，也就是一个定时任务，子线程启动时第一个执行的就是这个定时任务
+local thread = _threads:start(&quot;test-sub-thread&quot;, function(it)
+    -- 输出日志
+    _console:log(&quot;1 子线程代码执行了&quot;, _threads:getCurrent())
+    -- 如果这里执行的代码耗时短，并且你想在其他线程使用当前子线程的定时器，那么最好这里添加一个定时任务
+    local t = it:getTimer()
+    -- 防止子线程直接结束从而导致其他线程通过定时器添加的任务无法执行, 这可以保证1秒钟内当前线程不会结束(子线程)
+    t:setTimeout(function() end, 1000)
+end)
+-- 获取子线程对应定时器
+local timer = thread:getTimer()
+-- 添加定时任务到子线程, 两秒钟后执行
+timer:setTimeout(function()
+    -- 输出日志
+    _console:log(&quot;2 子线程定时任务执行了&quot;, _threads:getCurrent())
+end, 2000)
+-- 到这里主线程的定时任务全部执行完成，但是还不会结束，他会等待所有子线程的所有定时任务执行完成
+_console:log(&quot;脚本主线程日志&quot;, _threads:getCurrent())
+</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_121" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// php脚本不允许创建子线程, 如果创建子线程可能会导致脚本直接崩溃
+</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_124" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># python脚本不允许创建子线程, 如果创建子线程可能会导致脚本直接崩溃
+</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_127" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># ruby脚本不允许创建子线程, 如果创建子线程可能会导致脚本直接崩溃
+</div></div></div><figure id="h8xjni_100"><img alt="429" src="/429.png" title="429" width="444" height="984"></figure></section><section class="chapter"><h2 id="ui" data-toc="ui">使用UI线程</h2><p id="h8xjni_176">你可以在脚本中将定时任务添加到 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.thread/-threads/get-u-i.html" id="h8xjni_181" data-external="true" rel="noopener noreferrer" target="_blank">UI线程</a> 中执行。有些操作（例如Toast）可能需要在Android UI线程中才能正确执行。 如果没有必要，最好不要使用UI线程执行定时任务，因为耗时过长的任务可能会导致界面卡顿。</p><div class="tabs" id="h8xjni_180" data-group="languages" data-anchors="[h8xjni_184,h8xjni_187,h8xjni_190,h8xjni_193,h8xjni_196,h8xjni_199,h8xjni_202,h8xjni_205]"><div class="tabs__content" data-gtm="tab" id="h8xjni_184" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._threads
+
+// 在 android ui线程中添加延时任务
+_threads.getUI().getTimer().setTimeout({
+    _console.log(&quot;在android ui线程10秒钟后执行的代码&quot;)
+}, 10000)
+// 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+_console.log(&quot;脚本主线程执行的代码&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_187" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 在 android ui线程中添加延时任务
+$threads.getUI().getTimer().setTimeout({
+    $console.log(&quot;在android ui线程10秒钟后执行的代码&quot;)
+}, 10000)
+// 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+$console.log(&quot;脚本主线程执行的代码&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_190" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$threads;
+
+// 在 android ui线程中添加延时任务
+$threads.getUI().getTimer().setTimeout(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        $console.log(&quot;在android ui线程10秒钟后执行的代码&quot;);
+        return null;
+    }
+}, 10000);
+// 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+$console.log(&quot;脚本主线程执行的代码&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_193" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 在 android ui线程中添加延时任务
+$threads.getUI().getTimer().setTimeout(function () {
+    $console.log(&quot;在android ui线程10秒钟后执行的代码&quot;)
+}, 10000)
+// 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+$console.log(&quot;脚本主线程执行的代码&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_196" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 在 android ui线程中添加延时任务
+_threads:getUI():getTimer():setTimeout(function()
+    _console:log(&quot;在android ui线程10秒钟后执行的代码&quot;)
+end, 10000)
+-- 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+_console:log(&quot;脚本主线程执行的代码&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_199" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+// 在 android ui线程中添加延时任务
+$threads-&gt;getUI()-&gt;getTimer()-&gt;setTimeout(function ($p) use ($console) {
+    $console-&gt;log(javaString(&quot;在android ui线程10秒钟后执行的代码&quot;));
+}, 10000);
+// 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+$console-&gt;log(javaString(&quot;脚本主线程执行的代码&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_202" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 在 android ui线程中添加延时任务
+_threads.getUI().getTimer().setTimeout(lambda p: _console.log(&quot;在android ui线程10秒钟后执行的代码&quot;), 10000)
+# 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+_console.log(&quot;脚本主线程执行的代码&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="h8xjni_205" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 在 android ui线程中添加延时任务
+$threads.getUI().getTimer().setTimeout(lambda { |p|
+  $console.log(&quot;在android ui线程10秒钟后执行的代码&quot;)
+}, 10000)
+# 到这里主线程所有任务都执行完成了，但是需要等待android ui 线程的任务执行完成才会停止
+$console.log(&quot;脚本主线程执行的代码&quot;)</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="script-communication.html" class="navigation-links__prev">脚本通信</a><a href="webview-automation.html" class="navigation-links__next">网页自动化</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:11.237938649"><title>脚本通信 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"q8mzgj_8","level":0,"title":"事件订阅端","anchor":"#q8mzgj_8"},{"id":"q8mzgj_9","level":0,"title":"事件发布端","anchor":"#q8mzgj_9"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="脚本通信 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/script-communication.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="脚本通信 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/script-communication.html#webpage",
+    "url": "writerside-documentation/script-communication.html",
+    "name": "脚本通信 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="script-communication" data-main-title="脚本通信" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="script-introduction.md|脚本介绍"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="script-communication" id="script-communication.md">脚本通信</h1><aside class="prompt" data-type="tip" data-title="" id="q8mzgj_3"><p id="q8mzgj_10">更多的API请参考<a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.event/index.html" id="q8mzgj_11" data-external="true" rel="noopener noreferrer" target="_blank">事件SDK</a></p></aside><p id="q8mzgj_4">在M8Test中，脚本之间通过事件实现通信，采用订阅-发布模式：</p><ul class="list _bullet" id="q8mzgj_5"><li class="list__item" id="q8mzgj_12"><p id="q8mzgj_14">接收事件的脚本需先订阅相应事件</p></li><li class="list__item" id="q8mzgj_13"><p id="q8mzgj_15">发送事件的脚本通过发布操作触发事件</p></li></ul><p id="q8mzgj_6">事件分为两种类型：</p><ul class="list _bullet" id="q8mzgj_7"><li class="list__item" id="q8mzgj_16"><p id="q8mzgj_18">全局事件：可被所有脚本订阅</p></li><li class="list__item" id="q8mzgj_17"><p id="q8mzgj_19">本地事件：仅允许与当前脚本共享同一脚本引擎的其他脚本订阅</p></li></ul><section class="chapter"><h2 id="q8mzgj_8" data-toc="q8mzgj_8">事件订阅端</h2><div class="tabs" id="q8mzgj_23" data-group="languages" data-anchors="[q8mzgj_26,q8mzgj_29,q8mzgj_32,q8mzgj_35,q8mzgj_38,q8mzgj_41,q8mzgj_44,q8mzgj_47]"><div class="tabs__content" data-gtm="tab" id="q8mzgj_26" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.script.side1
+
+import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // 获取事件订阅器，用于订阅事件
+    val subscriber = _events.getSubscriber()
+    // 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+    subscriber.subscribeLocally({
+        // 设置本地订阅的频道
+        setChannel(&quot;subscription-channel&quot;)
+        // 设置本地订阅的id
+        setId(&quot;subscription-id&quot;)
+    }) {
+        // 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+        _console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+    }
+    // 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+    subscriber.subscribeGlobally({
+        // 设置全局订阅的频道
+        setChannel(&quot;subscription-channel&quot;)
+        // 设置全局订阅的id
+        setId(&quot;subscription-id&quot;)
+    }) {
+        // 当收到其他脚本发送的事件时，会执行下面的逻辑
+        _console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+    }
+    // 获取脚本主线程
+    val mainThread = _script.getThreads().getMain()
+    // 获取定时器
+    val timer = mainThread.getTimer()
+    // 添加一个延时任务，为了防止脚本过早结束
+    timer.setTimeout({
+        // 保持脚本3秒钟不结束
+    }, 3000)
+}
+// 下面的语句中的 '//-m8test-remove' 在实际编译时会被删除，也就是将会改成 'side1Run();', 但是不能省略，否则 side1Run 方法不会被执行
+//-m8test-remove side1Run();
+</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_29" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 获取事件订阅器，用于订阅事件
+def subscriber = $events.getSubscriber()
+// 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+subscriber.subscribeLocally({
+    // 设置本地订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置本地订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}) {
+    // 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+    $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+}
+// 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+subscriber.subscribeGlobally({
+    // 设置全局订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置全局订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}) {
+    // 当收到其他脚本发送的事件时，会执行下面的逻辑
+    $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+}
+// 获取脚本主线程
+def mainThread = $script.getThreads().getMain()
+// 获取定时器
+def timer = mainThread.getTimer()
+// 添加一个延时任务，为了防止脚本过早结束
+timer.setTimeout({
+    // 保持脚本3秒钟不结束
+}, 3000)</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_32" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.event.Event;
+import com.m8test.script.core.api.event.GlobalSubscription;
+import com.m8test.script.core.api.event.LocalSubscription;
+import com.m8test.script.core.api.event.Subscriber;
+import com.m8test.script.core.api.thread.NewScriptThread;
+import com.m8test.script.core.api.thread.Timer;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.*;
+
+class test {
+    public static void run() {
+        // 获取事件订阅器，用于订阅事件
+        Subscriber subscriber = $events.getSubscriber();
+        // 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+        subscriber.subscribeLocally(new Function1() {
+            @Override
+            public Object invoke(Object localSubscription) {
+                LocalSubscription it = (LocalSubscription) localSubscription;
+                // 设置本地订阅的频道
+                it.setChannel(&quot;subscription-channel&quot;);
+                // 设置本地订阅的id
+                it.setId(&quot;subscription-id&quot;);
+                return null;
+            }
+        }, new Function1() {
+            @Override
+            public Object invoke(Object event) {
+                Event it = (Event) event;
+                // 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+                $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel());
+                return null;
+            }
+        });
+        // 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+        subscriber.subscribeGlobally(new Function1() {
+            @Override
+            public Object invoke(Object globalSubscription) {
+                GlobalSubscription it = (GlobalSubscription) globalSubscription;
+                // 设置全局订阅的频道
+                it.setChannel(&quot;subscription-channel&quot;);
+                // 设置全局订阅的id
+                it.setId(&quot;subscription-id&quot;);
+                return null;
+            }
+        }, new Function1() {
+            @Override
+            public Object invoke(Object event) {
+                Event it = (Event) event;
+                // 当收到其他脚本发送的事件时，会执行下面的逻辑
+                $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel());
+                return null;
+            }
+        });
+        // 获取脚本主线程
+        NewScriptThread mainThread = $script.getThreads().getMain();
+        // 获取定时器
+        Timer timer = mainThread.getTimer();
+        // 添加一个延时任务，为了防止脚本过早结束
+        timer.setTimeout(new Function1() {
+            @Override
+            public Object invoke(Object objects) {
+                // 保持脚本3秒钟不结束
+                return null;
+            }
+        }, 3000);
+    }
+}
+// 下面的语句中的 '//-m8test-remove' 在实际编译时会被删除，也就是将会改成 'test.run();', 但是不能省略，否则 run 方法不会被执行
+//-m8test-remove test.run();
+</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_35" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 获取事件订阅器，用于订阅事件
+let subscriber = $events.getSubscriber();
+// 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+subscriber.subscribeLocally(function (it) {
+    // 设置本地订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置本地订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}, function (it) {
+    // 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+    $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+})
+// 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+subscriber.subscribeGlobally(function (it) {
+    // 设置全局订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置全局订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}, function (it) {
+    // 当收到其他脚本发送的事件时，会执行下面的逻辑
+    $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+})
+// 获取脚本主线程
+let mainThread = $script.getThreads().getMain()
+// 获取定时器
+let timer = mainThread.getTimer()
+// 添加一个延时任务，为了防止脚本过早结束
+timer.setTimeout(function (it) {
+    // 保持脚本3秒钟不结束
+}, 3000)</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_38" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取事件订阅器，用于订阅事件
+local subscriber = _events:getSubscriber()
+-- 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+subscriber:subscribeLocally(function(it)
+    -- 设置本地订阅的频道
+    it:setChannel(&quot;subscription-channel&quot;)
+    -- 设置本地订阅的id
+    it:setId(&quot;subscription-id&quot;)
+end, function(it)
+    -- 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+    _console:log(&quot;收到事件&quot;, it:getData(), it:getTime(), it:getChannel())
+end)
+-- 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+subscriber:subscribeGlobally(function(it)
+    -- 设置全局订阅的频道
+    it:setChannel(&quot;subscription-channel&quot;)
+    -- 设置全局订阅的id
+    it:setId(&quot;subscription-id&quot;)
+end, function(it)
+    -- 当收到其他脚本发送的事件时，会执行下面的逻辑
+    _console:log(&quot;收到事件&quot;, it:getData(), it:getTime(), it:getChannel())
+end)
+-- 获取脚本主线程
+local mainThread = _script:getThreads():getMain()
+-- 获取定时器
+local timer = mainThread:getTimer()
+-- 添加一个延时任务，为了防止脚本过早结束
+timer:setTimeout(function()
+    -- 保持脚本3秒钟不结束
+end, 3000)
+</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_41" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+/** @var m8test_java\com\m8test\script\core\api\event\Events $events */
+// 获取事件订阅器，用于订阅事件
+$subscriber = $events-&gt;getSubscriber();
+// 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+$subscriber-&gt;subscribeLocally(function ($it) {
+    // 设置本地订阅的频道
+    $it-&gt;setChannel(&quot;subscription-channel&quot;);
+    // 设置本地订阅的id
+    $it-&gt;setId(&quot;subscription-id&quot;);
+}, function ($it) use ($console) {
+    // 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+    $console-&gt;log(javaString(&quot;收到事件&quot;), $it-&gt;getData(), $it-&gt;getTime(), $it-&gt;getChannel());
+});
+// 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+$subscriber-&gt;subscribeGlobally(function ($it) {
+    // 设置全局订阅的频道
+    $it-&gt;setChannel(&quot;subscription-channel&quot;);
+    // 设置全局订阅的id
+    $it-&gt;setId(&quot;subscription-id&quot;);
+}, function ($it) use ($console) {
+    // 当收到其他脚本发送的事件时，会执行下面的逻辑
+    $console-&gt;log(javaString(&quot;收到事件&quot;), $it-&gt;getData(), $it-&gt;getTime(), $it-&gt;getChannel());
+});
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+// 获取脚本主线程
+$mainThread = $script-&gt;getThreads()-&gt;getMain();
+// 获取定时器
+$timer = $mainThread-&gt;getTimer();
+// 添加一个延时任务，为了防止脚本过早结束
+$timer-&gt;setTimeout(function ($it) {
+    // 保持脚本3秒钟不结束
+}, 3000);</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_44" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _events
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+# 获取事件订阅器，用于订阅事件
+subscriber = _events.getSubscriber()
+# 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+subscriber.subscribeLocally(lambda it:
+                            # 设置本地订阅的频道
+                            (it.setChannel(&quot;subscription-channel&quot;),
+                             # 设置本地订阅的id
+                             it.setId(&quot;subscription-id&quot;)),
+                            lambda it:
+                            # 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+                            _console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+                            )
+# 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+subscriber.subscribeGlobally(lambda it:
+                             # 设置全局订阅的频道
+                             (it.setChannel(&quot;subscription-channel&quot;),
+                              # 设置全局订阅的id
+                              it.setId(&quot;subscription-id&quot;)
+                              ), lambda it:
+                             # 当收到其他脚本发送的事件时，会执行下面的逻辑
+                             _console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+                             )
+# 获取脚本主线程
+mainThread = _script.getThreads().getMain()
+# 获取定时器
+timer = mainThread.getTimer()
+# 添加一个延时任务，为了防止脚本过早结束
+timer.setTimeout(lambda it: it
+                 # 保持脚本3秒钟不结束
+                 , 3000)</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_47" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 获取事件订阅器，用于订阅事件
+subscriber = $events.getSubscriber()
+java_import &quot;com.m8test.script.core.api.event.LocalSubscription&quot;
+java_import &quot;com.m8test.script.core.api.event.Event&quot;
+# 通过订阅器订阅本地事件，本地事件指的是由和当前脚本具有同一个脚本引擎的脚本发送的事件
+subscriber.subscribeLocally(lambda {
+  # @type it [LocalSubscription]
+  |it|
+  # 设置本地订阅的频道
+  it.setChannel(&quot;subscription-channel&quot;)
+  # 设置本地订阅的id
+  it.setId(&quot;subscription-id&quot;)
+}) {
+  # @type it [Event]
+  |it|
+  # 当收到同一个引擎中的其他脚本发送的事件时，会执行下面的逻辑
+  $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+}
+java_import &quot;com.m8test.script.core.api.event.GlobalSubscription&quot;
+# 通过订阅器订阅全局事件，全局事件指的是所有其他脚本发送的事件
+subscriber.subscribeGlobally(lambda {
+  # @type it [GlobalSubscription]
+  |it|
+  # 设置全局订阅的频道
+  it.setChannel(&quot;subscription-channel&quot;)
+  # 设置全局订阅的id
+  it.setId(&quot;subscription-id&quot;)
+}) {
+  # @type it [Event]
+  |it|
+  # 当收到其他脚本发送的事件时，会执行下面的逻辑
+  $console.log(&quot;收到事件&quot;, it.getData(), it.getTime(), it.getChannel())
+}
+# 获取脚本主线程
+mainThread = $script.getThreads().getMain()
+# 获取定时器
+timer = mainThread.getTimer()
+# 添加一个延时任务，为了防止脚本过早结束
+timer.setTimeout(lambda { |it|
+  # 保持脚本3秒钟不结束
+}, 3000)</div></div></div></section><section class="chapter"><h2 id="q8mzgj_9" data-toc="q8mzgj_9">事件发布端</h2><div class="tabs" id="q8mzgj_99" data-group="languages" data-anchors="[q8mzgj_102,q8mzgj_105,q8mzgj_108,q8mzgj_111,q8mzgj_114,q8mzgj_117,q8mzgj_120,q8mzgj_123]"><div class="tabs__content" data-gtm="tab" id="q8mzgj_102" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._events
+
+fun side2Run() {
+    // 获取事件发布器，用于发布事件
+    val publisher = _events.getPublisher()
+    // 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+    publisher.publishLocally({
+        // 设置本地订阅的频道
+        setChannel(&quot;subscription-channel&quot;)
+        // 设置本地订阅的id
+        setId(&quot;subscription-id&quot;)
+    }) {
+        // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+        setData(&quot;本地事件&quot;)
+    }
+    // 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+    publisher.publishGlobally({
+        // 设置全局订阅的频道
+        setChannel(&quot;subscription-channel&quot;)
+        // 设置全局订阅的id
+        setId(&quot;subscription-id&quot;)
+    }) {
+        // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+        setData(&quot;全局事件&quot;)
+    }
+}
+// 下面的语句中的 '//-m8test-remove' 在实际编译时会被删除，也就是将会改成 'side2Run();', 但是不能省略，否则 side2Run 方法不会被执行
+//-m8test-remove side2Run();</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_105" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 获取事件发布器，用于发布事件
+def publisher = $events.getPublisher()
+// 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+publisher.publishLocally({
+    // 设置本地订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置本地订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}) {
+    // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    it.setData(&quot;本地事件&quot;)
+}
+// 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+publisher.publishGlobally({
+    // 设置全局订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置全局订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}) {
+    // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    it.setData(&quot;全局事件&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_108" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.event.Event;
+import com.m8test.script.core.api.event.GlobalSubscription;
+import com.m8test.script.core.api.event.LocalSubscription;
+import com.m8test.script.core.api.event.Publisher;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$events;
+
+class test1 {
+    public static void run() {
+        // 获取事件发布器，用于发布事件
+        Publisher publisher = $events.getPublisher();
+// 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+        publisher.publishLocally(new Function1() {
+            @Override
+            public Object invoke(Object localSubscription) {
+                LocalSubscription it = (LocalSubscription) localSubscription;
+                // 设置本地订阅的频道
+                it.setChannel(&quot;subscription-channel&quot;);
+                // 设置本地订阅的id
+                it.setId(&quot;subscription-id&quot;);
+                return null;
+            }
+        }, new Function1() {
+            @Override
+            public Object invoke(Object event) {
+                Event it = (Event) event;
+                // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+                it.setData(&quot;本地事件&quot;);
+                return null;
+            }
+        });
+        // 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+        publisher.publishGlobally(new Function1() {
+            @Override
+            public Object invoke(Object globalSubscription) {
+                GlobalSubscription it = (GlobalSubscription) globalSubscription;
+                // 设置全局订阅的频道
+                it.setChannel(&quot;subscription-channel&quot;);
+                // 设置全局订阅的id
+                it.setId(&quot;subscription-id&quot;);
+                return null;
+            }
+        }, new Function1() {
+            @Override
+            public Object invoke(Object event) {
+                Event it = (Event) event;
+                // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+                it.setData(&quot;全局事件&quot;);
+                return null;
+            }
+        });
+    }
+}
+// 下面的语句中的 '//-m8test-remove' 在实际编译时会被删除，也就是将会改成 'test1.run();', 但是不能省略，否则 run 方法不会被执行
+//-m8test-remove test1.run();</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_111" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 获取事件发布器，用于发布事件
+let publisher = $events.getPublisher()
+// 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+publisher.publishLocally(function (it) {
+    // 设置本地订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置本地订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}, function (it) {
+    // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    it.setData(&quot;本地事件&quot;)
+})
+// 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+publisher.publishGlobally(function (it) {
+    // 设置全局订阅的频道
+    it.setChannel(&quot;subscription-channel&quot;)
+    // 设置全局订阅的id
+    it.setId(&quot;subscription-id&quot;)
+}, function (it) {
+    // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    it.setData(&quot;全局事件&quot;)
+})</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_114" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取事件发布器，用于发布事件
+local publisher = _events:getPublisher()
+-- 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+publisher:publishLocally(function(it)
+    -- 设置本地订阅的频道
+    it:setChannel(&quot;subscription-channel&quot;)
+    -- 设置本地订阅的id
+    it:setId(&quot;subscription-id&quot;)
+end, function(it)
+    -- 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    it:setData(&quot;本地事件&quot;)
+end)
+-- 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+publisher:publishGlobally(function(it)
+    -- 设置全局订阅的频道
+    it:setChannel(&quot;subscription-channel&quot;)
+    -- 设置全局订阅的id
+    it:setId(&quot;subscription-id&quot;)
+end, function(it)
+    -- 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    it:setData(&quot;全局事件&quot;)
+end)
+</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_117" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\event\Events $events */
+// 获取事件发布器，用于发布事件
+$publisher = $events-&gt;getPublisher();
+// 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+$publisher-&gt;publishLocally(function ($it) {
+    // 设置本地订阅的频道
+    $it-&gt;setChannel(&quot;subscription-channel&quot;);
+    // 设置本地订阅的id
+    $it-&gt;setId(&quot;subscription-id&quot;);
+}, function ($it) {
+    // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    $it-&gt;setData(javaString(&quot;本地事件&quot;));
+});
+// 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+$publisher-&gt;publishGlobally(function ($it) {
+    // 设置全局订阅的频道
+    $it-&gt;setChannel(&quot;subscription-channel&quot;);
+    // 设置全局订阅的id
+    $it-&gt;setId(&quot;subscription-id&quot;);
+}, function ($it) {
+    // 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+    $it-&gt;setData(javaString(&quot;全局事件&quot;));
+});</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_120" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _events
+
+# 获取事件发布器，用于发布事件
+publisher = _events.getPublisher()
+# 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+publisher.publishLocally(lambda it:
+                         # 设置本地订阅的频道
+                         (it.setChannel(&quot;subscription-channel&quot;),
+                          # 设置本地订阅的id
+                          it.setId(&quot;subscription-id&quot;)
+                          ), lambda it:
+                         # 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+                         it.setData(&quot;本地事件&quot;)
+                         )
+# 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+publisher.publishGlobally(lambda it:
+                          # 设置全局订阅的频道
+                          (it.setChannel(&quot;subscription-channel&quot;),
+                           # 设置全局订阅的id
+                           it.setId(&quot;subscription-id&quot;)
+                           ), lambda it:
+                          # 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+                          it.setData(&quot;全局事件&quot;)
+                          )</div></div><div class="tabs__content" data-gtm="tab" id="q8mzgj_123" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 获取事件发布器，用于发布事件
+publisher = $events.getPublisher()
+java_import &quot;com.m8test.script.core.api.event.LocalSubscription&quot;
+java_import &quot;com.m8test.script.core.api.event.Event&quot;
+# 发送本地事件，只有同一个脚本引擎启动的脚本并且本地订阅的频道和id都相同时才能收到
+publisher.publishLocally(lambda {
+  # @type it [LocalSubscription]
+  |it|
+  # 设置本地订阅的频道
+  it.setChannel(&quot;subscription-channel&quot;)
+  # 设置本地订阅的id
+  it.setId(&quot;subscription-id&quot;)
+}) {
+  # @type it [Event]
+  |it|
+  # 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+  it.setData(&quot;本地事件&quot;)
+}
+java_import &quot;com.m8test.script.core.api.event.GlobalSubscription&quot;
+# 发送全局事件，只有全局订阅的频道和id都相同时才能收到
+publisher.publishGlobally(lambda {
+  # @type it [GlobalSubscription]
+  |it|
+  # 设置全局订阅的频道
+  it.setChannel(&quot;subscription-channel&quot;)
+  # 设置全局订阅的id
+  it.setId(&quot;subscription-id&quot;)
+}) {
+  # @type it [Event]
+  |it|
+  # 需要发送的数据，这里发送简单的字符串，如果需要复杂结构，推荐使用json格式的字符串
+  it.setData(&quot;全局事件&quot;)
+}</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="script-types.html" class="navigation-links__prev">脚本类型</a><a href="multi-threads.html" class="navigation-links__next">多线程</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

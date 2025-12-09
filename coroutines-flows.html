@@ -1,0 +1,2005 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.657288185"><title>Flow 使用指南 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"flow","level":0,"title":"Flow 的创建与基础消费","anchor":"#flow"},{"id":"transform-flow","level":0,"title":"转换 Flow (中间操作符)","anchor":"#transform-flow"},{"id":"flow-error-handler","level":0,"title":"Flow 的错误处理","anchor":"#flow-error-handler"},{"id":"flow-context","level":0,"title":"Flow 的并发与上下文","anchor":"#flow-context"},{"id":"api-fromcallback","level":0,"title":"高级创建：桥接回调 API (fromCallback)","anchor":"#api-fromcallback"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Flow 使用指南 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/coroutines-flows.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Flow 使用指南 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/coroutines-flows.html#webpage",
+    "url": "writerside-documentation/coroutines-flows.html",
+    "name": "Flow 使用指南 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="coroutines-flows" data-main-title="Flow 使用指南" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="coroutines.md|协程"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="coroutines-flows" id="coroutines-flows.md">Flow 使用指南</h1><p id="z8rk59g_3">Flow 是协程中用于处理异步数据流的核心组件。它就像一个可以异步、按需生产一系列值的&ldquo;管道&rdquo;。与一次性返回单个结果的 Deferred 不同，Flow 可以随时间发出零个、一个或多个值。 本指南将通过一系列可运行的 脚本示例，带您了解如何创建、转换和消费 Flow。</p><section class="chapter"><h2 id="flow" data-toc="flow">Flow 的创建与基础消费</h2><p id="z8rk59g_9">Flow 的所有创建操作都始于 $coroutines.getFlows()。一个 Flow 在被&ldquo;消费&rdquo;（或称&ldquo;收集&rdquo;）之前，是冷的&mdash;&mdash;它内部的代码不会执行。只有当调用终端操作符（如 collect）时，数据才会开始流动。</p><section class="chapter"><h3 id="flow-of" data-toc="flow-of">从固定元素创建 Flow (of)</h3><p id="z8rk59g_13">这是创建 Flow 最简单的方式，适用于你已经知道所有要发出的值的情况。</p><div class="tabs" id="z8rk59g_17" data-group="languages" data-anchors="[z8rk59g_20,z8rk59g_23,z8rk59g_26,z8rk59g_29,z8rk59g_32,z8rk59g_35,z8rk59g_38,z8rk59g_41]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_20" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行以等待协程完成
+_threads.getMain().setBackground(true)
+
+// 创建一个新的协程作用域
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 1.1：从固定元素创建 Flow ---&quot;)
+
+// 使用 of 创建一个发出 1, 2, 3, 4, 5 的 Flow
+val numberFlow = _coroutines.getFlows().of(1, 2, 3, 4, 5)
+
+_console.log(&quot;Flow 已创建，但尚未执行。&quot;)
+
+// 使用 collect 消费 Flow，这是终端操作符，会触发 Flow 的执行
+// collect 的回调函数接收 (CoroutineScope, value) 两个参数
+// 并需要返回一个 Job 来表示对该值的处理状态
+val collectJob = numberFlow.collect(scope) { collectScope, value -&gt;
+    _console.log(&quot;接收到值: ${value}&quot;)
+    // 对于简单的同步处理，返回一个已完成的 Deferred 即可
+    collectScope.resolve(null)
+}
+
+// 当收集完成时打印日志
+collectJob.invokeOnCompletion { error -&gt;
+    if (error == null) {
+        _console.info(&quot;Flow 消费完成！&quot;)
+    } else {
+        _console.error(&quot;Flow 消费出错: ${error.getMessage()}&quot;)
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_23" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行以等待协程完成
+$threads.getMain().setBackground(true)
+
+// 创建一个新的协程作用域
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 1.1：从固定元素创建 Flow ---&quot;)
+
+// 使用 of 创建一个发出 1, 2, 3, 4, 5 的 Flow
+def numberFlow = $coroutines.getFlows().of(1, 2, 3, 4, 5)
+
+$console.log(&quot;Flow 已创建，但尚未执行。&quot;)
+
+// 使用 collect 消费 Flow，这是终端操作符，会触发 Flow 的执行
+// collect 的回调函数接收 (CoroutineScope, value) 两个参数
+// 并需要返回一个 Job 来表示对该值的处理状态
+def collectJob = numberFlow.collect(scope, { collectScope, value -&gt;
+    $console.log(&quot;接收到值: ${value}&quot;)
+    // 对于简单的同步处理，返回一个已完成的 Deferred 即可
+    return collectScope.resolve(null)
+})
+
+// 当收集完成时打印日志
+collectJob.invokeOnCompletion({ error -&gt;
+    if (error == null) {
+        $console.info(&quot;Flow 消费完成！&quot;)
+    } else {
+        $console.error(&quot;Flow 消费出错: ${error.getMessage()}&quot;)
+    }
+})</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_26" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_29" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行以等待协程完成
+$threads.getMain().setBackground(true);
+
+// 创建一个新的协程作用域
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 1.1：从固定元素创建 Flow ---&quot;);
+
+// 使用 of 创建一个发出 1, 2, 3, 4, 5 的 Flow
+const numberFlow = $coroutines.getFlows().of(1, 2, 3, 4, 5);
+
+$console.log(&quot;Flow 已创建，但尚未执行。&quot;);
+
+// 使用 collect 消费 Flow，这是终端操作符，会触发 Flow 的执行
+// collect 的回调函数接收 (CoroutineScope, value) 两个参数
+// 并需要返回一个 Job 来表示对该值的处理状态
+const collectJob = numberFlow.collect(scope, (collectScope, value) =&gt; {
+    $console.log(`接收到值: ${value}`);
+    // 对于简单的同步处理，返回一个已完成的 Deferred 即可
+    return collectScope.resolve(null);
+});
+
+// 当收集完成时打印日志
+collectJob.invokeOnCompletion(error =&gt; {
+    if (error == null) {
+        $console.info(&quot;Flow 消费完成！&quot;);
+    } else {
+        $console.error(`Flow 消费出错: ${error.getMessage()}`);
+    }
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_32" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行以等待协程完成
+_threads:getMain():setBackground(true)
+
+-- 创建一个新的协程作用域
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 1.1：从固定元素创建 Flow ---&quot;)
+
+-- 使用 of 创建一个发出 1, 2, 3, 4, 5 的 Flow
+local numberFlow = _coroutines:getFlows():of(1, 2, 3, 4, 5)
+
+_console:log(&quot;Flow 已创建，但尚未执行。&quot;)
+
+-- 使用 collect 消费 Flow，这是终端操作符，会触发 Flow 的执行
+-- collect 的回调函数接收 (CoroutineScope, value) 两个参数
+-- 并需要返回一个 Job 来表示对该值的处理状态
+local collectJob = numberFlow:collect(scope, function(collectScope, value)
+    _console:log(&quot;接收到值: &quot; .. tostring(value))
+    -- 对于简单的同步处理，返回一个已完成的 Deferred 即可
+    return collectScope:resolve(nil)
+end)
+
+-- 当收集完成时打印日志
+collectJob:invokeOnCompletion(function(error)
+    if error == nil then
+        _console:info(&quot;Flow 消费完成！&quot;)
+    else
+        _console:error(&quot;Flow 消费出错: &quot; .. error:getMessage())
+    end
+end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_35" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行以等待协程完成
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+// 创建一个新的协程作用域
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 1.1：从固定元素创建 Flow ---&quot;));
+
+// 使用 of 创建一个发出 1, 2, 3, 4, 5 的 Flow
+$numberFlow = $coroutines-&gt;getFlows()-&gt;of(1, 2, 3, 4, 5);
+
+$console-&gt;log(javaString(&quot;Flow 已创建，但尚未执行。&quot;));
+
+// 使用 collect 消费 Flow，这是终端操作符，会触发 Flow 的执行
+// collect 的回调函数接收 (CoroutineScope, value) 两个参数
+// 并需要返回一个 Job 来表示对该值的处理状态
+$collectJob = $numberFlow-&gt;collect($scope, function ($collectScope, $value) {
+    global $console;
+    $console-&gt;log(javaString(&quot;接收到值: {$value}&quot;));
+    // 对于简单的同步处理，返回一个已完成的 Deferred 即可
+    return $collectScope-&gt;resolve(null);
+});
+
+// 当收集完成时打印日志
+$collectJob-&gt;invokeOnCompletion(function ($error) {
+    global $console;
+    if ($error == null) {
+        $console-&gt;info(javaString(&quot;Flow 消费完成！&quot;));
+    } else {
+        $console-&gt;error(javaString(&quot;Flow 消费出错: {$error-&gt;getMessage()}&quot;));
+    }
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_38" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行以等待协程完成
+_threads.getMain().setBackground(True)
+
+# 创建一个新的协程作用域
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 1.1：从固定元素创建 Flow ---&quot;)
+
+# 使用 of 创建一个发出 1, 2, 3, 4, 5 的 Flow
+numberFlow = _coroutines.getFlows().of(1, 2, 3, 4, 5)
+
+_console.log(&quot;Flow 已创建，但尚未执行。&quot;)
+
+# 使用 collect 消费 Flow，这是终端操作符，会触发 Flow 的执行
+# collect 的回调函数接收 (CoroutineScope, value) 两个参数
+# 并需要返回一个 Job 来表示对该值的处理状态
+collectJob = numberFlow.collect(scope, lambda collectScope, value: (
+    _console.log(&quot;接收到值: &quot; + str(value)),
+    # 对于简单的同步处理，返回一个已完成的 Deferred 即可
+    collectScope.resolve(None)
+)[-1])
+
+# 当收集完成时打印日志
+collectJob.invokeOnCompletion(lambda error: (
+    _console.info(&quot;Flow 消费完成！&quot;) if error is None else
+    _console.error(&quot;Flow 消费出错: &quot; + str(error.getMessage()))
+))</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_41" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行以等待协程完成
+$threads.getMain().setBackground(true)
+
+# 创建一个新的协程作用域
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 1.1：从固定元素创建 Flow ---&quot;)
+
+# 使用 of 创建一个发出 1, 2, 3, 4, 5 的 Flow
+numberFlow = $coroutines.getFlows().of(1, 2, 3, 4, 5)
+
+$console.log(&quot;Flow 已创建，但尚未执行。&quot;)
+
+# 使用 collect 消费 Flow，这是终端操作符，会触发 Flow 的执行
+# collect 的回调函数接收 (CoroutineScope, value) 两个参数
+# 并需要返回一个 Job 来表示对该值的处理状态
+collectJob = numberFlow.collect(scope) do |collectScope, value|
+  $console.log(&quot;接收到值: #{value}&quot;)
+  # 对于简单的同步处理，返回一个已完成的 Deferred 即可
+  collectScope.resolve(nil) # Ruby 默认返回最后一行，所以这里 return 可以省略
+end
+
+# 当收集完成时打印日志
+collectJob.invokeOnCompletion do |error|
+  if error == nil
+    $console.info(&quot;Flow 消费完成！&quot;)
+  else
+    $console.error(&quot;Flow 消费出错: #{error.getMessage()}&quot;)
+  end
+end</div></div></div></section><section class="chapter"><h3 id="flow-from" data-toc="flow-from">从集合创建 Flow (from)</h3><p id="z8rk59g_90">你可以轻易地将任何 Iterable 对象（如 List 或 Set）转换为一个 Flow。</p><div class="tabs" id="z8rk59g_94" data-group="languages" data-anchors="[z8rk59g_100,z8rk59g_103,z8rk59g_106,z8rk59g_109,z8rk59g_112,z8rk59g_115,z8rk59g_118,z8rk59g_97]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_97" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 1.2：从集合创建 Flow ---&quot;)
+
+val fruitList = _iterables.listOf(&quot;苹果&quot;, &quot;香蕉&quot;, &quot;橙子&quot;)
+val fruitFlow = _coroutines.getFlows().from(fruitList)
+
+fruitFlow.collect(scope) { s, fruit -&gt;
+    _console.log(&quot;今天的水果: ${fruit}&quot;)
+    s.resolve(null)
+}.invokeOnCompletion {
+    _console.info(&quot;水果 Flow 消费完成。&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_100" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 1.2：从集合创建 Flow ---&quot;)
+
+def fruitList = $iterables.listOf(&quot;苹果&quot;, &quot;香蕉&quot;, &quot;橙子&quot;)
+def fruitFlow = $coroutines.getFlows().from(fruitList)
+
+fruitFlow.collect(scope, { s, fruit -&gt;
+    $console.log(&quot;今天的水果: ${fruit}&quot;)
+    s.resolve(null)
+}).invokeOnCompletion({
+    $console.info(&quot;水果 Flow 消费完成。&quot;)
+})</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_103" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_106" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 1.2：从集合创建 Flow ---&quot;);
+
+const fruitList = $iterables.listOf(&quot;苹果&quot;, &quot;香蕉&quot;, &quot;橙子&quot;);
+const fruitFlow = $coroutines.getFlows().from(fruitList);
+
+fruitFlow.collect(scope, (s, fruit) =&gt; {
+    $console.log(`今天的水果: ${fruit}`);
+    return s.resolve(null);
+}).invokeOnCompletion(() =&gt; {
+    $console.info(&quot;水果 Flow 消费完成。&quot;);
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_109" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 1.2：从集合创建 Flow ---&quot;)
+
+local fruitList = _iterables:listOf(&quot;苹果&quot;, &quot;香蕉&quot;, &quot;橙子&quot;)
+local fruitFlow = _coroutines:getFlows():from(fruitList)
+
+fruitFlow:collect(scope, function(s, fruit)
+    _console:log(&quot;今天的水果: &quot; .. fruit)
+    return s:resolve(nil)
+end):invokeOnCompletion(function()
+    _console:info(&quot;水果 Flow 消费完成。&quot;)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_112" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 1.2：从集合创建 Flow ---&quot;));
+
+$fruitList = $iterables-&gt;listOf(javaString(&quot;苹果&quot;), javaString(&quot;香蕉&quot;), javaString(&quot;橙子&quot;));
+$fruitFlow = $coroutines-&gt;getFlows()-&gt;from($fruitList);
+
+$fruitFlow-&gt;collect($scope, function ($s, $fruit) {
+    global $console;
+    $console-&gt;log(javaString(&quot;今天的水果: {$fruit}&quot;));
+    return $s-&gt;resolve(null);
+})-&gt;invokeOnCompletion(function() {
+    global $console;
+    $console-&gt;info(javaString(&quot;水果 Flow 消费完成。&quot;));
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_115" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 1.2：从集合创建 Flow ---&quot;)
+
+fruitList = _iterables.listOf(&quot;苹果&quot;, &quot;香蕉&quot;, &quot;橙子&quot;)
+fruitFlow = _coroutines.getFlows()._from(fruitList)  # 在Python中，from是关键字，API可能会使用from_
+
+(fruitFlow.collect(scope, lambda s, fruit: (
+    _console.log(&quot;今天的水果: {}&quot;.format(fruit)),
+    s.resolve(None)
+)[-1])
+ .invokeOnCompletion(lambda _: _console.info(&quot;水果 Flow 消费完成。&quot;)))
+</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_118" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 1.2：从集合创建 Flow ---&quot;)
+
+fruitList = $iterables.listOf(&quot;苹果&quot;, &quot;香蕉&quot;, &quot;橙子&quot;)
+fruitFlow = $coroutines.getFlows().from(fruitList)
+
+fruitFlow.collect(scope) do |s, fruit|
+  $console.log(&quot;今天的水果: #{fruit}&quot;)
+  s.resolve(nil)
+end.invokeOnCompletion do |error|
+  $console.info(&quot;水果 Flow 消费完成。&quot;)
+end</div></div></div></section><section class="chapter"><h3 id="flow-interval" data-toc="flow-interval">创建一个定时发射的 Flow (interval)</h3><p id="z8rk59g_167">interval 可以创建一个按指定周期无限发出递增数字的 Flow。这对于模拟定时任务或事件流非常有用。由于它是无限的，我们需要手动管理其生命周期。</p><div class="tabs" id="z8rk59g_171" data-group="languages" data-anchors="[z8rk59g_174,z8rk59g_177,z8rk59g_180,z8rk59g_183,z8rk59g_186,z8rk59g_189,z8rk59g_192,z8rk59g_195]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_174" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 1.3：创建定时 Flow ---&quot;)
+
+// 创建一个 Flow，延迟 1 秒后开始，之后每 2 秒发出一个递增的数字 (0, 1, 2, ...)
+val intervalFlow = _coroutines.getFlows().interval(1000, 2000)
+
+_console.log(&quot;定时 Flow 已创建，将在 1 秒后开始发射。&quot;)
+
+// 使用 launchIn 在后台启动 Flow 的收集，它是一个“即发即忘”的终端操作符
+val intervalJob = intervalFlow.launchIn(scope)
+
+// 监听 Flow 中每个发出的值（使用 onEach 操作符，详见后续章节）
+intervalFlow.onEach { s, tick -&gt;
+    _console.log(&quot;Tick: ${tick}&quot;)
+    s.resolve(null)
+}.launchIn(scope)
+
+_console.log(&quot;脚本将在 7 秒后取消协程作用域，停止定时 Flow。&quot;)
+
+// 延迟 7 秒后取消整个作用域
+scope.delay(7000).then { s, _ -&gt;
+    _console.warn(&quot;正在取消作用域...&quot;)
+    // 取消 scope 会自动取消所有在其内部启动的协程和 Flow
+    scope.cancel(&quot;测试结束&quot;)
+    _console.info(&quot;作用域已取消，定时 Flow 停止。&quot;)
+    s.resolve(null)
+}</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_177" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 1.3：创建定时 Flow ---&quot;)
+
+// 创建一个 Flow，延迟 1 秒后开始，之后每 2 秒发出一个递增的数字 (0, 1, 2, ...)
+def intervalFlow = $coroutines.getFlows().interval(1000, 2000)
+
+$console.log(&quot;定时 Flow 已创建，将在 1 秒后开始发射。&quot;)
+
+// 使用 launchIn 在后台启动 Flow 的收集，它是一个“即发即忘”的终端操作符
+def intervalJob = intervalFlow.launchIn(scope)
+
+// 监听 Flow 中每个发出的值（使用 onEach 操作符，详见后续章节）
+intervalFlow.onEach({ s, tick -&gt;
+    $console.log(&quot;Tick: ${tick}&quot;)
+    s.resolve(null)
+}).launchIn(scope)
+
+$console.log(&quot;脚本将在 7 秒后取消协程作用域，停止定时 Flow。&quot;)
+
+// 延迟 7 秒后取消整个作用域
+scope.delay(7000).then({ s, _ -&gt;
+    $console.warn(&quot;正在取消作用域...&quot;)
+    // 取消 scope 会自动取消所有在其内部启动的协程和 Flow
+    scope.cancel(&quot;测试结束&quot;)
+    $console.info(&quot;作用域已取消，定时 Flow 停止。&quot;)
+})</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_180" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_183" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 1.3：创建定时 Flow ---&quot;);
+
+// 创建一个 Flow，延迟 1 秒后开始，之后每 2 秒发出一个递增的数字 (0, 1, 2, ...)
+const intervalFlow = $coroutines.getFlows().interval(1000, 2000);
+
+$console.log(&quot;定时 Flow 已创建，将在 1 秒后开始发射。&quot;);
+
+// 使用 launchIn 在后台启动 Flow 的收集，它是一个“即发即忘”的终端操作符
+const intervalJob = intervalFlow.launchIn(scope);
+
+// 监听 Flow 中每个发出的值（使用 onEach 操作符，详见后续章节）
+intervalFlow.onEach((s, tick) =&gt; {
+    $console.log(`Tick: ${tick}`);
+    return s.resolve(null);
+}).launchIn(scope);
+
+$console.log(&quot;脚本将在 7 秒后取消协程作用域，停止定时 Flow。&quot;);
+
+// 延迟 7 秒后取消整个作用域
+scope.delay(7000).then((s, _) =&gt; {
+    $console.warn(&quot;正在取消作用域...&quot;);
+    // 取消 scope 会自动取消所有在其内部启动的协程和 Flow
+    scope.cancel(&quot;测试结束&quot;);
+    $console.info(&quot;作用域已取消，定时 Flow 停止。&quot;);
+    // then 链的末端最好也返回一个 Deferred
+    return s.resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_186" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 1.3：创建定时 Flow ---&quot;)
+
+-- 创建一个 Flow，延迟 1 秒后开始，之后每 2 秒发出一个递增的数字 (0, 1, 2, ...)
+local intervalFlow = _coroutines:getFlows():interval(1000, 2000)
+
+_console:log(&quot;定时 Flow 已创建，将在 1 秒后开始发射。&quot;)
+
+-- 使用 launchIn 在后台启动 Flow 的收集，它是一个“即发即忘”的终端操作符
+local intervalJob = intervalFlow:launchIn(scope)
+
+-- 监听 Flow 中每个发出的值（使用 onEach 操作符，详见后续章节）
+intervalFlow:onEach(function(s, tick)
+    _console:log(&quot;Tick: &quot; .. tostring(tick))
+    return s:resolve(nil)
+end):launchIn(scope)
+
+_console:log(&quot;脚本将在 7 秒后取消协程作用域，停止定时 Flow。&quot;)
+
+-- 延迟 7 秒后取消整个作用域
+scope:delay(7000):_then(function(s, _)
+    _console:warn(&quot;正在取消作用域...&quot;)
+    -- 取消 scope 会自动取消所有在其内部启动的协程和 Flow
+    scope:cancel(&quot;测试结束&quot;)
+    _console:info(&quot;作用域已取消，定时 Flow 停止。&quot;)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_189" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 1.3：创建定时 Flow ---&quot;));
+
+// 创建一个 Flow，延迟 1 秒后开始，之后每 2 秒发出一个递增的数字 (0, 1, 2, ...)
+$intervalFlow = $coroutines-&gt;getFlows()-&gt;interval(1000, 2000);
+
+$console-&gt;log(javaString(&quot;定时 Flow 已创建，将在 1 秒后开始发射。&quot;));
+
+// 使用 launchIn 在后台启动 Flow 的收集，它是一个“即发即忘”的终端操作符
+$intervalJob = $intervalFlow-&gt;launchIn($scope);
+
+// 监听 Flow 中每个发出的值（使用 onEach 操作符，详见后续章节）
+$intervalFlow-&gt;onEach(function ($s, $tick) {
+    global $console;
+    $console-&gt;log(javaString(&quot;Tick: {$tick}&quot;));
+    return $s-&gt;resolve(null);
+})-&gt;launchIn($scope);
+
+$console-&gt;log(javaString(&quot;脚本将在 7 秒后取消协程作用域，停止定时 Flow。&quot;));
+
+// 延迟 7 秒后取消整个作用域
+$scope-&gt;delay(7000)-&gt;then(function ($s, $_) use ($scope) {
+    global $console;
+    $console-&gt;warn(javaString(&quot;正在取消作用域...&quot;));
+    // 取消 scope 会自动取消所有在其内部启动的协程和 Flow
+    $scope-&gt;cancel(javaString(&quot;测试结束&quot;));
+    $console-&gt;info(javaString(&quot;作用域已取消，定时 Flow 停止。&quot;));
+    return $s-&gt;resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_192" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 1.3：创建定时 Flow ---&quot;)
+
+# 创建一个 Flow，延迟 1 秒后开始，之后每 2 秒发出一个递增的数字 (0, 1, 2, ...)
+intervalFlow = _coroutines.getFlows().interval(1000, 2000)
+
+_console.log(&quot;定时 Flow 已创建，将在 1 秒后开始发射。&quot;)
+
+# 使用 launchIn 在后台启动 Flow 的收集，它是一个“即发即忘”的终端操作符
+intervalJob = intervalFlow.launchIn(scope)
+
+# 监听 Flow 中每个发出的值（使用 onEach 操作符，详见后续章节）
+intervalFlow.onEach(lambda s, tick: (
+    _console.log(&quot;Tick: {}&quot;.format(tick)),
+    s.resolve(None)
+)[-1]).launchIn(scope)
+
+_console.log(&quot;脚本将在 7 秒后取消协程作用域，停止定时 Flow。&quot;)
+
+# 延迟 7 秒后取消整个作用域
+scope.delay(7000).then(lambda s, _: (
+    _console.warn(&quot;正在取消作用域...&quot;),
+    # 取消 scope 会自动取消所有在其内部启动的协程和 Flow
+    scope.cancel(&quot;测试结束&quot;),
+    _console.info(&quot;作用域已取消，定时 Flow 停止。&quot;),
+    s.resolve(None)
+)[-1])</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_195" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 1.3：创建定时 Flow ---&quot;)
+
+# 创建一个 Flow，延迟 1 秒后开始，之后每 2 秒发出一个递增的数字 (0, 1, 2, ...)
+intervalFlow = $coroutines.getFlows().interval(1000, 2000)
+
+$console.log(&quot;定时 Flow 已创建，将在 1 秒后开始发射。&quot;)
+
+# 使用 launchIn 在后台启动 Flow 的收集，它是一个“即发即忘”的终端操作符
+intervalJob = intervalFlow.launchIn(scope)
+
+# 监听 Flow 中每个发出的值（使用 onEach 操作符，详见后续章节）
+intervalFlow.onEach(lambda do |s, tick|
+  $console.log(&quot;Tick: #{tick}&quot;)
+  s.resolve(nil)
+end).launchIn(scope)
+
+$console.log(&quot;脚本将在 7 秒后取消协程作用域，停止定时 Flow。&quot;)
+
+# 延迟 7 秒后取消整个作用域
+scope.delay(7000).then do |s, _|
+  $console.warn(&quot;正在取消作用域...&quot;)
+  # 取消 scope 会自动取消所有在其内部启动的协程和 Flow
+  scope.cancel(&quot;测试结束&quot;)
+  $console.info(&quot;作用域已取消，定时 Flow 停止。&quot;)
+end</div></div></div></section></section><section class="chapter"><h2 id="transform-flow" data-toc="transform-flow">转换 Flow (中间操作符)</h2><p id="z8rk59g_244">中间操作符允许你像操作集合一样，对 Flow 发出的数据进行转换、过滤和处理。这些操作符本身也是冷的，它们返回一个新的 Flow 实例，并且只有在最终被消费时才会执行。</p><section class="chapter"><h3 id="map" data-toc="map">映射值(map)</h3><p id="z8rk59g_248">map 操作符会对 Flow 中的每个元素应用一个转换函数。</p><div class="tabs" id="z8rk59g_252" data-group="languages" data-anchors="[z8rk59g_255,z8rk59g_258,z8rk59g_261,z8rk59g_264,z8rk59g_267,z8rk59g_270,z8rk59g_273,z8rk59g_276]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_255" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 2.1：使用 map 转换值 ---&quot;)
+
+_coroutines.getFlows().of(1, 2, 3)
+    .map { s, value -&gt;
+        // map 的转换函数需要返回一个 Deferred
+        s.resolve(&quot;数字 ${value} 的平方是 ${value * value}&quot;)
+    }
+    .collect(scope) { s, resultString -&gt;
+        _console.log(resultString)
+        s.resolve(null)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_258" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 2.1：使用 map 转换值 ---&quot;)
+
+$coroutines.getFlows().of(1, 2, 3)
+        .map({ s, value -&gt;
+            // map 的转换函数需要返回一个 Deferred
+            s.resolve(&quot;数字 ${value} 的平方是 ${value * value}&quot;)
+        })
+        .collect(scope, { s, resultString -&gt;
+            $console.log(resultString)
+            s.resolve(null)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_261" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_264" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 2.1：使用 map 转换值 ---&quot;);
+
+$coroutines.getFlows().of(1, 2, 3)
+    .map((s, value) =&gt; {
+        // map 的转换函数需要返回一个 Deferred
+        return s.resolve(`数字 ${value} 的平方是 ${value * value}`);
+    })
+    .collect(scope, (s, resultString) =&gt; {
+        $console.log(resultString);
+        return s.resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_267" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 2.1：使用 map 转换值 ---&quot;)
+
+_coroutines:getFlows():of(1, 2, 3)
+        :map(function(s, value)
+            -- map 的转换函数需要返回一个 Deferred
+            return s:resolve(&quot;数字 &quot; .. tostring(value) .. &quot; 的平方是 &quot; .. tostring(value * value))
+        end)
+        :collect(scope, function(s, resultString)
+            _console:log(resultString)
+            return s:resolve(nil)
+        end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_270" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 2.1：使用 map 转换值 ---&quot;));
+
+$coroutines-&gt;getFlows()-&gt;of(1, 2, 3)
+    -&gt;map(function ($s, $value) {
+        // map 的转换函数需要返回一个 Deferred
+        return $s-&gt;resolve(javaString(&quot;数字 {$value} 的平方是 &quot; . ($value * $value)));
+    })
+    -&gt;collect($scope, function ($s, $resultString) {
+        global $console;
+        $console-&gt;log($resultString);
+        return $s-&gt;resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_273" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 2.1：使用 map 转换值 ---&quot;)
+
+_coroutines.getFlows().of(1, 2, 3).map(
+    # map 的转换函数需要返回一个 Deferred, 这是单个表达式，直接返回
+    lambda s, value: s.resolve(&quot;数字 {} 的平方是 {}&quot;.format(value, value * value))
+).collect(scope, lambda s, resultString: (
+    _console.log(resultString),
+    s.resolve(None)
+)[-1])</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_276" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 2.1：使用 map 转换值 ---&quot;)
+
+$coroutines.getFlows().of(1, 2, 3)
+           .map { |s, value|
+             # map 的转换函数需要返回一个 Deferred
+             s.resolve(&quot;数字 #{value} 的平方是 #{value * value}&quot;)
+           }
+           .collect(scope) { |s, resultString|
+             $console.log(resultString)
+             s.resolve(nil)
+           }</div></div></div></section><section class="chapter"><h3 id="filter" data-toc="filter">过滤值 (filter)</h3><p id="z8rk59g_325">filter 操作符只允许满足条件的元素通过。</p><div class="tabs" id="z8rk59g_329" data-group="languages" data-anchors="[z8rk59g_332,z8rk59g_335,z8rk59g_338,z8rk59g_341,z8rk59g_344,z8rk59g_347,z8rk59g_350,z8rk59g_353]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_332" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 2.2：使用 filter 过滤值 ---&quot;)
+
+// Kotlin 的 Range 1..10 也是 Iterable
+_coroutines.getFlows().from(1..10)
+    .filter { s, number -&gt;
+        // filter 的判断函数需要返回一个 Deferred&lt;Boolean&gt;
+        s.resolve(number % 2 == 0) // 只保留偶数
+    }
+    .map { s, evenNumber -&gt;
+        s.resolve(&quot;发现一个偶数: ${evenNumber}&quot;)
+    }
+    .collect(scope) { s, result -&gt;
+        _console.log(result)
+        s.resolve(null)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_335" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 2.2：使用 filter 过滤值 ---&quot;)
+
+$coroutines.getFlows().from(1..10)
+        .filter({ s, number -&gt;
+            // filter 的判断函数需要返回一个 Deferred&lt;Boolean&gt;
+            s.resolve(number % 2 == 0) // 只保留偶数
+        })
+        .map({ s, evenNumber -&gt;
+            s.resolve(&quot;发现一个偶数: ${evenNumber}&quot;)
+        })
+        .collect(scope, { s, result -&gt;
+            $console.log(result)
+            s.resolve(null)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_338" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_341" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 2.2：使用 filter 过滤值 ---&quot;);
+
+// Groovy 的 1..10 范围转换为 JS 数组
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+$coroutines.getFlows().from(numbers)
+    .filter((s, number) =&gt; {
+        // filter 的判断函数需要返回一个 Deferred&lt;Boolean&gt;
+        return s.resolve(number % 2 === 0); // 只保留偶数
+    })
+    .map((s, evenNumber) =&gt; {
+        return s.resolve(`发现一个偶数: ${evenNumber}`);
+    })
+    .collect(scope, (s, result) =&gt; {
+        $console.log(result);
+        return s.resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_344" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 2.2：使用 filter 过滤值 ---&quot;)
+
+_coroutines:getFlows():from(_iterables:listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+        :filter(function(s, number)
+            -- filter 的判断函数需要返回一个 Deferred&lt;Boolean&gt;
+            return s:resolve(number % 2 == 0) -- 只保留偶数
+        end)
+        :map(function(s, evenNumber)
+            return s:resolve(&quot;发现一个偶数: &quot; .. tostring(evenNumber))
+        end)
+        :collect(scope, function(s, result)
+            _console:log(result)
+            return s:resolve(nil)
+        end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_347" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 2.2：使用 filter 过滤值 ---&quot;));
+global $iterables;
+$coroutines-&gt;getFlows()-&gt;from($iterables-&gt;listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+    -&gt;filter(function ($s, $number) {
+        // filter 的判断函数需要返回一个 Deferred&lt;Boolean&gt;
+        return $s-&gt;resolve($number % 2 == 0); // 只保留偶数
+    })
+    -&gt;map(function ($s, $evenNumber) {
+        return $s-&gt;resolve(javaString(&quot;发现一个偶数: {$evenNumber}&quot;));
+    })
+    -&gt;collect($scope, function ($s, $result) {
+        global $console;
+        $console-&gt;log($result);
+        return $s-&gt;resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_350" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 2.2：使用 filter 过滤值 ---&quot;)
+
+# Groovy的 1..10 对应 Python的 range(1, 11)
+_coroutines.getFlows()._from(_iterables.listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)).filter(
+    # filter 的判断函数需要返回一个 Deferred&lt;Boolean&gt;, 单个表达式，直接返回
+    lambda s, number: s.resolve(number % 2 == 0)  # 只保留偶数
+).map(
+    # map 的转换函数，单个表达式，直接返回
+    lambda s, evenNumber: s.resolve(&quot;发现一个偶数: {}&quot;.format(evenNumber))
+).collect(scope, lambda s, result: (
+    _console.log(result),
+    s.resolve(None)
+)[-1])
+</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_353" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 2.2：使用 filter 过滤值 ---&quot;)
+
+# 修复说明：
+# 1. 使用 (1..10).to_a 将 Range 转换为 Array (对应 Java List)，避免类型推断问题。
+# 2. 使用 proc { ... } 替代 lambda { ... }。在 Android JRuby 环境中，proc 更容易通过 Proxy 机制实现 Java 接口，避免类加载错误。
+
+$coroutines.getFlows().from((1..10).to_a)
+           .filter(proc { |s, number|
+             # filter 的判断函数需要返回一个 Deferred&lt;Boolean&gt;
+             # 这里的 number 是 Fixnum，可以直接进行模运算
+             s.resolve(number % 2 == 0) # 只保留偶数
+           })
+           .map(proc { |s, evenNumber|
+             s.resolve(&quot;发现一个偶数: #{evenNumber}&quot;)
+           })
+           .collect(scope, proc { |s, result|
+             $console.log(result)
+             s.resolve(nil)
+           })</div></div></div></section><section class="chapter"><h3 id="oneach" data-toc="oneach">执行副作用 (onEach)</h3><p id="z8rk59g_402">onEach 可以在不改变 Flow 内容的情况下，对每个元素执行一个操作，非常适合用于调试或日志记录。</p><div class="tabs" id="z8rk59g_406" data-group="languages" data-anchors="[z8rk59g_409,z8rk59g_412,z8rk59g_415,z8rk59g_418,z8rk59g_421,z8rk59g_424,z8rk59g_427,z8rk59g_430]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_409" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 2.3：使用 onEach 执行副作用 ---&quot;)
+
+_coroutines.getFlows().of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+    .onEach { s, item -&gt;
+        _console.log(&quot;onEach - 正在处理: ${item}&quot;)
+        s.resolve(null)
+    }
+    .map { s, item -&gt;
+        s.resolve(&quot;转换后的值: [${item}]&quot;)
+    }
+    .collect(scope) { s, result -&gt;
+        _console.log(&quot;collect - 最终结果: ${result}&quot;)
+        s.resolve(null)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_412" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 2.3：使用 onEach 执行副作用 ---&quot;)
+
+$coroutines.getFlows().of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+        .onEach({ s, item -&gt;
+            $console.log(&quot;onEach - 正在处理: ${item}&quot;)
+            s.resolve(null)
+        })
+        .map({ s, item -&gt;
+            s.resolve(&quot;转换后的值: [${item}]&quot;)
+        })
+        .collect(scope, { s, result -&gt;
+            $console.log(&quot;collect - 最终结果: ${result}&quot;)
+            s.resolve(null)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_415" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_418" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 2.3：使用 onEach 执行副作用 ---&quot;);
+
+$coroutines.getFlows().of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+    .onEach((s, item) =&gt; {
+        $console.log(`onEach - 正在处理: ${item}`);
+        return s.resolve(null);
+    })
+    .map((s, item) =&gt; {
+        return s.resolve(`转换后的值: [${item}]`);
+    })
+    .collect(scope, (s, result) =&gt; {
+        $console.log(`collect - 最终结果: ${result}`);
+        return s.resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_421" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 2.3：使用 onEach 执行副作用 ---&quot;)
+
+_coroutines:getFlows():of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+        :onEach(function(s, item)
+            _console:log(&quot;onEach - 正在处理: &quot; .. item)
+            return s:resolve(nil)
+        end)
+        :map(function(s, item)
+            return s:resolve(&quot;转换后的值: [&quot; .. item .. &quot;]&quot;)
+        end)
+        :collect(scope, function(s, result)
+            _console:log(&quot;collect - 最终结果: &quot; .. result)
+            return s:resolve(nil)
+        end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_424" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 2.3：使用 onEach 执行副作用 ---&quot;));
+
+$coroutines-&gt;getFlows()-&gt;of(javaString(&quot;A&quot;), javaString(&quot;B&quot;), javaString(&quot;C&quot;))
+    -&gt;onEach(function ($s, $item) {
+        global $console;
+        $console-&gt;log(javaString(&quot;onEach - 正在处理: {$item}&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;map(function ($s, $item) {
+        return $s-&gt;resolve(javaString(&quot;转换后的值: [{$item}]&quot;));
+    })
+    -&gt;collect($scope, function ($s, $result) {
+        global $console;
+        $console-&gt;log(javaString(&quot;collect - 最终结果: {$result}&quot;));
+        return $s-&gt;resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_427" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 2.3：使用 onEach 执行副作用 ---&quot;)
+
+_coroutines.getFlows().of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;).onEach(
+    lambda s, item: (
+        _console.log(&quot;onEach - 正在处理: {}&quot;.format(item)),
+        s.resolve(None)
+    )[-1]
+).map(
+    # 单个表达式，直接返回
+    lambda s, item: s.resolve(&quot;转换后的值: [{}]&quot;.format(item))
+).collect(scope, lambda s, result: (
+    _console.log(&quot;collect - 最终结果: {}&quot;.format(result)),
+    s.resolve(None)
+)[-1])</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_430" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 2.3：使用 onEach 执行副作用 ---&quot;)
+
+$coroutines.getFlows().of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+           .onEach(lambda do |s, item|
+             $console.log(&quot;onEach - 正在处理: #{item}&quot;)
+             s.resolve(nil)
+           end)
+           .map(lambda do |s, item|
+             s.resolve(&quot;转换后的值: [#{item}]&quot;)
+           end)
+           .collect(scope, lambda do |s, result|
+             $console.log(&quot;collect - 最终结果: #{result}&quot;)
+             s.resolve(nil)
+           end)</div></div></div></section></section><section class="chapter"><h2 id="flow-error-handler" data-toc="flow-error-handler">Flow 的错误处理</h2><p id="z8rk59g_479">异步流中可能会发生异常。Flow 提供了类似 try-catch-finally 的机制来优雅地处理这些错误。</p><section class="chapter"><h3 id="catch" data-toc="catch">捕获异常 (catch)</h3><p id="z8rk59g_482">catch 操作符可以捕获其上游（即 catch 调用之前的所有操作）发生的异常。它不会捕获下游（collect 内部）的异常。</p><div class="tabs" id="z8rk59g_486" data-group="languages" data-anchors="[z8rk59g_489,z8rk59g_492,z8rk59g_495,z8rk59g_498,z8rk59g_501,z8rk59g_504,z8rk59g_507,z8rk59g_510]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_489" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 3.1：使用 catch 捕获异常 ---&quot;)
+
+_coroutines.getFlows().of(1, 2, 3, 4, 5)
+    .map { s, value -&gt;
+        if (value == 4) {
+            // 模拟一个处理错误
+            throw Exception(&quot;处理值 4 时发生错误！&quot;)
+        }
+        s.resolve(&quot;成功处理: ${value}&quot;)
+    }
+    .catch { s, collector, error -&gt;
+        _console.error(&quot;Flow 捕获到异常: ${error.getMessage()}&quot;)
+        // 在捕获异常后，可以选择发射一个备用值
+        collector.emit(s, &quot;发生错误，使用备用值&quot;)
+        s.resolve(null) // catch 块本身也需要返回一个 Job
+    }
+    .collect(scope) { s, result -&gt;
+        _console.log(result)
+        s.resolve(null)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_492" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 3.1：使用 catch 捕获异常 ---&quot;)
+
+$coroutines.getFlows().of(1, 2, 3, 4, 5)
+        .map({ s, value -&gt;
+            if (value == 4) {
+                // 模拟一个处理错误
+                throw new Exception(&quot;处理值 4 时发生错误！&quot;)
+            }
+            s.resolve(&quot;成功处理: ${value}&quot;)
+        })
+        .catch({ s, collector, error -&gt;
+            $console.error(&quot;Flow 捕获到异常: ${error.getMessage()}&quot;)
+            // 在捕获异常后，可以选择发射一个备用值
+            collector.emit(s, &quot;发生错误，使用备用值&quot;)
+            s.resolve(null) // catch 块本身也需要返回一个 Job
+        })
+        .collect(scope, { s, result -&gt;
+            $console.log(result)
+            s.resolve(null)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_495" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_498" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 3.1：使用 catch 捕获异常 ---&quot;);
+
+$coroutines.getFlows().of(1, 2, 3, 4, 5)
+    .map((s, value) =&gt; {
+        if (value === 4) {
+            // 模拟一个处理错误
+            throw new Error(&quot;处理值 4 时发生错误！&quot;);
+        }
+        return s.resolve(`成功处理: ${value}`);
+    })
+    .catch((s, collector, error) =&gt; {
+        $console.error(`Flow 捕获到异常: ${error.getMessage()}`);
+        // 在捕获异常后，可以选择发射一个备用值
+        collector.emit(s, &quot;发生错误，使用备用值&quot;);
+        // catch 块本身也需要返回一个 Job
+        return s.resolve(null);
+    })
+    .collect(scope, (s, result) =&gt; {
+        $console.log(result);
+        return s.resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_501" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 3.1：使用 catch 捕获异常 ---&quot;)
+
+_coroutines:getFlows():of(1, 2, 3, 4, 5)
+        :map(function(s, value)
+            if value == 4 then
+                -- 模拟一个处理错误
+                error(&quot;处理值 4 时发生错误！&quot;)
+            end
+            return s:resolve(&quot;成功处理: &quot; .. tostring(value))
+        end)
+        :catch(function(s, collector, error)
+            _console:error(&quot;Flow 捕获到异常: &quot; .. error:getMessage())
+            -- 在捕获异常后，可以选择发射一个备用值
+            collector:emit(s, &quot;发生错误，使用备用值&quot;)
+            return s:resolve(nil) -- catch 块本身也需要返回一个 Job
+        end)
+        :collect(scope, function(s, result)
+            _console:log(result)
+            return s:resolve(nil)
+        end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_504" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 3.1：使用 catch 捕获异常 ---&quot;));
+
+$coroutines-&gt;getFlows()-&gt;of(1, 2, 3, 4, 5)
+    -&gt;map(function ($s, $value) {
+        if ($value == 4) {
+            global $exceptions;
+            // 模拟一个处理错误
+            return $s-&gt;reject($exceptions-&gt;newThrowable(function ($eb) {
+                $eb-&gt;setMessageAndClassName(javaString(&quot;处理值 4 时发生错误！&quot;), null);
+            }));
+        }
+        return $s-&gt;resolve(javaString(&quot;成功处理: {$value}&quot;));
+    })
+    -&gt;catch(function ($s, $collector, $error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;Flow 捕获到异常: {$error-&gt;getMessage()}&quot;));
+        // 在捕获异常后，可以选择发射一个备用值
+        $collector-&gt;emit($s, javaString(&quot;发生错误，使用备用值&quot;));
+        return $s-&gt;resolve(null); // catch 块本身也需要返回一个 Job
+    })
+    -&gt;collect($scope, function ($s, $result) {
+        global $console;
+        $console-&gt;log($result);
+        return $s-&gt;resolve(null);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_507" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _exceptions
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 3.1：使用 catch 捕获异常 ---&quot;)
+
+_coroutines.getFlows().of(1, 2, 3, 4, 5).map(
+    # 使用条件表达式处理 if/else
+    lambda s, value:
+    s.reject(
+        _exceptions.newThrowable(lambda b: b.setMessageAndClassName(&quot;处理值 4 时发生错误！&quot;, &quot;java.lang.Exception&quot;)))
+    if value == 4 else
+    s.resolve(&quot;成功处理: {}&quot;.format(value))
+).catch(  # 在Python中，catch是关键字，API可能会使用catch_
+    lambda s, collector, error: (
+        _console.error(&quot;Flow 捕获到异常: {}&quot;.format(error.getMessage())),
+        # 在捕获异常后，可以选择发射一个备用值
+        collector.emit(s, &quot;发生错误，使用备用值&quot;),
+        s.resolve(None)  # catch 块本身也需要返回一个 Job
+    )[-1]
+).collect(scope, lambda s, result: (
+    _console.log(result),
+    s.resolve(None)
+)[-1])
+</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_510" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 3.1：使用 catch 捕获异常 ---&quot;)
+
+$coroutines.getFlows().of(1, 2, 3, 4, 5)
+           .map(lambda do |s, value|
+             if value == 4
+               # 模拟一个处理错误
+               raise Exception.new(&quot;处理值 4 时发生错误！&quot;)
+             end
+             s.resolve(&quot;成功处理: #{value}&quot;)
+           end)
+           .catch(lambda do |s, collector, error|
+             $console.error(&quot;Flow 捕获到异常: #{error.getMessage()}&quot;)
+             # 在捕获异常后，可以选择发射一个备用值
+             collector.emit(s, &quot;发生错误，使用备用值&quot;)
+             s.resolve(nil) # catch 块本身也需要返回一个 Job
+           end)
+           .collect(scope, lambda do |s, result|
+             $console.log(result)
+             s.resolve(nil)
+           end)</div></div></div></section><section class="chapter"><h3 id="oncompletion" data-toc="oncompletion">最终清理 (onCompletion)</h3><p id="z8rk59g_559">onCompletion 类似于 finally 块，无论 Flow 是正常完成还是因异常终止，它都会被执行。</p><div class="tabs" id="z8rk59g_563" data-group="languages" data-anchors="[z8rk59g_566,z8rk59g_569,z8rk59g_572,z8rk59g_575,z8rk59g_578,z8rk59g_581,z8rk59g_584,z8rk59g_587]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_566" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 3.2：使用 onCompletion 进行清理 ---&quot;)
+
+val flowWithPotentialError = _coroutines.getFlows().create { s, collector -&gt;
+    _console.log(&quot;Flow 开始执行...&quot;)
+    collector.emit(s, &quot;数据1&quot;)
+    collector.emit(s, &quot;数据2&quot;)
+    // 模拟一个可能发生的错误
+    if (Math.random() &gt; 0.5) {
+        throw Exception(&quot;随机错误发生了！&quot;)
+    }
+    s.resolve(null)
+}
+
+flowWithPotentialError
+    .catch { s, collector, error -&gt;
+        _console.error(&quot;在 catch 块中处理了异常: ${error.getMessage()}&quot;)
+        s.resolve(null)
+    }
+    .onCompletion { s, cause -&gt;
+        if (cause != null) {
+            _console.warn(&quot;Flow 完成，但有异常: ${cause.getMessage()}&quot;)
+        } else {
+            _console.info(&quot;Flow 正常完成。&quot;)
+        }
+        _console.log(&quot;执行清理操作，如关闭资源...&quot;)
+        s.resolve(null)
+    }
+    .launchIn(scope) // 使用 launchIn 启动，不关心具体值</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_569" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 3.2：使用 onCompletion 进行清理 ---&quot;)
+
+def flowWithPotentialError = $coroutines.getFlows().create({ s, collector -&gt;
+    $console.log(&quot;Flow 开始执行...&quot;)
+    collector.emit(s, &quot;数据1&quot;)
+    collector.emit(s, &quot;数据2&quot;)
+    // 模拟一个可能发生的错误
+    if (Math.random() &gt; 0.5) {
+        throw new Exception(&quot;随机错误发生了！&quot;)
+    }
+    s.resolve(null)
+})
+
+flowWithPotentialError
+        .catch({ s, collector, error -&gt;
+            $console.error(&quot;在 catch 块中处理了异常: ${error.getMessage()}&quot;)
+            s.resolve(null)
+        })
+        .onCompletion({ s, cause -&gt;
+            if (cause != null) {
+                $console.warn(&quot;Flow 完成，但有异常: ${cause.getMessage()}&quot;)
+            } else {
+                $console.info(&quot;Flow 正常完成。&quot;)
+            }
+            $console.log(&quot;执行清理操作，如关闭资源...&quot;)
+            s.resolve(null)
+        })
+        .launchIn(scope) // 使用 launchIn 启动，不关心具体值</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_572" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_575" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 3.2：使用 onCompletion 进行清理 ---&quot;);
+
+const flowWithPotentialError = $coroutines.getFlows().create((s, collector) =&gt; {
+    $console.log(&quot;Flow 开始执行...&quot;);
+    collector.emit(s, &quot;数据1&quot;);
+    collector.emit(s, &quot;数据2&quot;);
+    // 模拟一个可能发生的错误
+    if (Math.random() &gt; 0.5) {
+        throw new Error(&quot;随机错误发生了！&quot;);
+    }
+    return s.resolve(null);
+});
+
+flowWithPotentialError
+    .catch((s, collector, error) =&gt; {
+        $console.error(`在 catch 块中处理了异常: ${error.getMessage()}`);
+        return s.resolve(null);
+    })
+    .onCompletion((s, cause) =&gt; {
+        if (cause != null) {
+            $console.warn(`Flow 完成，但有异常: ${cause.getMessage()}`);
+        } else {
+            $console.info(&quot;Flow 正常完成。&quot;);
+        }
+        $console.log(&quot;执行清理操作，如关闭资源...&quot;);
+        return s.resolve(null);
+    })
+    .launchIn(scope); // 使用 launchIn 启动，不关心具体值</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_578" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 3.2：使用 onCompletion 进行清理 ---&quot;)
+
+local flowWithPotentialError = _coroutines:getFlows():create(function(s, collector)
+    _console:log(&quot;Flow 开始执行...&quot;)
+    collector:emit(s, &quot;数据1&quot;)
+    collector:emit(s, &quot;数据2&quot;)
+    -- 模拟一个可能发生的错误
+    if math.random() &gt; 0.5 then
+        error(&quot;随机错误发生了！&quot;)
+    end
+    return s:resolve(nil)
+end)
+
+flowWithPotentialError
+        :catch(function(s, collector, error)
+            _console:error(&quot;在 catch 块中处理了异常: &quot; .. error:getMessage())
+            return s:resolve(nil)
+        end)
+        :onCompletion(function(s, cause)
+            if cause ~= nil then
+                _console:warn(&quot;Flow 完成，但有异常: &quot; .. cause:getMessage())
+            else
+                _console:info(&quot;Flow 正常完成。&quot;)
+            end
+            _console:log(&quot;执行清理操作，如关闭资源...&quot;)
+            return s:resolve(nil)
+        end)
+        :launchIn(scope) -- 使用 launchIn 启动，不关心具体值</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_581" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 3.2：使用 onCompletion 进行清理 ---&quot;));
+
+$flowWithPotentialError = $coroutines-&gt;getFlows()-&gt;create(function ($s, $collector) {
+    global $console;
+    $console-&gt;log(javaString(&quot;Flow 开始执行...&quot;));
+    $collector-&gt;emit($s, javaString(&quot;数据1&quot;));
+    $collector-&gt;emit($s, javaString(&quot;数据2&quot;));
+    // 模拟一个可能发生的错误
+    if ((mt_rand() / mt_getrandmax()) &gt; 0.5) {
+        global $exceptions;
+        return $s-&gt;reject($exceptions-&gt;newThrowable(function ($eb) {
+            $eb-&gt;setMessageAndClassName(javaString(&quot;随机错误发生了！&quot;), null);
+        }));
+    }
+    return $s-&gt;resolve(null);
+});
+
+$flowWithPotentialError
+    -&gt;catch(function ($s, $collector, $error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;在 catch 块中处理了异常: {$error-&gt;getMessage()}&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;onCompletion(function ($s, $cause) {
+        global $console;
+        if ($cause != null) {
+            $console-&gt;warn(javaString(&quot;Flow 完成，但有异常: {$cause-&gt;getMessage()}&quot;));
+        } else {
+            $console-&gt;info(javaString(&quot;Flow 正常完成。&quot;));
+        }
+        $console-&gt;log(javaString(&quot;执行清理操作，如关闭资源...&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;launchIn($scope); // 使用 launchIn 启动，不关心具体值</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_584" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入Python标准库
+import random
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 3.2：使用 onCompletion 进行清理 ---&quot;)
+
+
+def throw_error():
+    raise RuntimeError(&quot;随机错误发生了！&quot;)
+
+
+flowWithPotentialError = _coroutines.getFlows().create(lambda s, collector: (
+    _console.log(&quot;Flow 开始执行...&quot;),
+    collector.emit(s, &quot;数据1&quot;),
+    collector.emit(s, &quot;数据2&quot;),
+    # 使用条件表达式处理 if 逻辑
+    (throw_error() if random.random() &gt; 0.5 else s.resolve(None))
+)[-1])
+
+flowWithPotentialError.catch(
+    lambda s, collector, error: (
+        _console.error(&quot;在 catch 块中处理了异常: {}&quot;.format(error.getMessage())),
+        s.resolve(None)
+    )[-1]
+).onCompletion(
+    lambda s, cause: (
+        (_console.warn(&quot;Flow 完成，但有异常: {}&quot;.format(cause.getMessage()))
+         if cause is not None else
+         _console.info(&quot;Flow 正常完成。&quot;)),
+        _console.log(&quot;执行清理操作，如关闭资源...&quot;),
+        s.resolve(None)
+    )[-1]
+).launchIn(scope)  # 使用 launchIn 启动，不关心具体值
+</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_587" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 3.2：使用 onCompletion 进行清理 ---&quot;)
+
+flowWithPotentialError = $coroutines.getFlows().create do |s, collector|
+  $console.log(&quot;Flow 开始执行...&quot;)
+  collector.emit(s, &quot;数据1&quot;)
+  collector.emit(s, &quot;数据2&quot;)
+  # 模拟一个可能发生的错误
+  if Java::JavaLang::Math.random() &gt; 0.5
+    raise Exception.new(&quot;随机错误发生了！&quot;)
+  end
+  s.resolve(nil)
+end
+
+flowWithPotentialError
+  .catch(lambda do |s, collector, error|
+    $console.error(&quot;在 catch 块中处理了异常: #{error.getMessage()}&quot;)
+    s.resolve(nil)
+  end)
+  .onCompletion(lambda do |s, cause|
+    if cause != nil
+      $console.warn(&quot;Flow 完成，但有异常: #{cause.getMessage()}&quot;)
+    else
+      $console.info(&quot;Flow 正常完成。&quot;)
+    end
+    $console.log(&quot;执行清理操作，如关闭资源...&quot;)
+    s.resolve(nil)
+  end)
+  .launchIn(scope) # 使用 launchIn 启动，不关心具体值</div></div></div></section></section><section class="chapter"><h2 id="flow-context" data-toc="flow-context">Flow 的并发与上下文</h2><p id="z8rk59g_636">默认情况下，Flow 的代码在收集它的协程的上下文中执行。flowOn 操作符是改变 Flow 上游执行线程的唯一正确方式。</p><div class="tabs" id="z8rk59g_640" data-group="languages" data-anchors="[z8rk59g_643,z8rk59g_646,z8rk59g_649,z8rk59g_652,z8rk59g_655,z8rk59g_658,z8rk59g_661,z8rk59g_664]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_643" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope {
+    setDispatcher { dispatchers -&gt; dispatchers.getScriptMain() }
+}
+
+_console.info(&quot;--- 章节 4：使用 flowOn 切换执行上下文 ---&quot;)
+
+val logThread = { tag: String -&gt;
+    _console.log(&quot;[${tag}] 当前线程: ${Thread.currentThread().name}&quot;)
+}
+
+_coroutines.getFlows().of(&quot;任务A&quot;, &quot;任务B&quot;)
+    .onEach { s, task -&gt;
+        logThread(&quot;1. Flow 创建后 (上游)&quot;)
+        s.resolve(null)
+    }
+// flowOn 将其上面的所有操作切换到 IO 线程池执行
+    .flowOn {
+        setDispatcher { it.getIO() }
+    }
+    .onEach { s, task -&gt;
+        logThread(&quot;2. flowOn 之后 (下游)&quot;)
+        s.resolve(null)
+    }
+    .collect(scope) { s, task -&gt;
+        logThread(&quot;3. collect 内部 (收集器)&quot;)
+        s.resolve(null)
+    }
+    .invokeOnCompletion {
+        _console.info(&quot;可以看到，'上游'部分在IO线程执行，而'下游'和'收集器'在启动 collect 的主脚本线程执行。&quot;)
+    }</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_646" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope {
+    it.setDispatcher { dispatchers -&gt; dispatchers.getScriptMain() }
+}
+
+$console.info(&quot;--- 章节 4：使用 flowOn 切换执行上下文 ---&quot;)
+
+def logThread = { tag -&gt;
+    $console.log(&quot;[${tag}] 当前线程: ${Thread.currentThread().getName()}&quot;)
+}
+
+$coroutines.getFlows().of(&quot;任务A&quot;, &quot;任务B&quot;)
+        .onEach({ s, task -&gt;
+            logThread(&quot;1. Flow 创建后 (上游)&quot;)
+            s.resolve(null)
+        })
+// flowOn 将其上面的所有操作切换到 IO 线程池执行
+        .flowOn({
+            it.setDispatcher({ it.getIO() })
+        })
+        .onEach({ s, task -&gt;
+            logThread(&quot;2. flowOn 之后 (下游)&quot;)
+            s.resolve(null)
+        })
+        .collect(scope, { s, task -&gt;
+            logThread(&quot;3. collect 内部 (收集器)&quot;)
+            s.resolve(null)
+        })
+        .invokeOnCompletion({
+            $console.info(&quot;可以看到，'上游'部分在IO线程执行，而'下游'和'收集器'在启动 collect 的主脚本线程执行。&quot;)
+        })</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_649" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_652" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(it =&gt; {
+    it.setDispatcher(dispatchers =&gt; dispatchers.getScriptMain());
+});
+
+$console.info(&quot;--- 章节 4：使用 flowOn 切换执行上下文 ---&quot;);
+
+/** @param {string} tag */
+const logThread = tag =&gt; {
+    $console.log(`[${tag}] 当前线程: ${Packages.java.lang.Thread.currentThread().getName()}`);
+};
+
+$coroutines.getFlows().of(&quot;任务A&quot;, &quot;任务B&quot;)
+    .onEach((s, task) =&gt; {
+        logThread(&quot;1. Flow 创建后 (上游)&quot;);
+        return s.resolve(null);
+    })
+    // flowOn 将其上面的所有操作切换到 IO 线程池执行
+    .flowOn(context =&gt; {
+        context.setDispatcher(dispatchers =&gt; dispatchers.getIO());
+    })
+    .onEach((s, task) =&gt; {
+        logThread(&quot;2. flowOn 之后 (下游)&quot;);
+        return s.resolve(null);
+    })
+    .collect(scope, (s, task) =&gt; {
+        logThread(&quot;3. collect 内部 (收集器)&quot;);
+        return s.resolve(null);
+    })
+    .invokeOnCompletion(() =&gt; {
+        $console.info(&quot;可以看到，'上游'部分在IO线程执行，而'下游'和'收集器'在启动 collect 的主脚本线程执行。&quot;);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_655" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local Thread = require(&quot;m8test_java.java.lang.Thread&quot;)
+-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(function(it)
+    it:setDispatcher(function(dispatchers) return dispatchers:getScriptMain() end)
+end)
+
+_console:info(&quot;--- 章节 4：使用 flowOn 切换执行上下文 ---&quot;)
+
+local logThread = function(tag)
+    _console:log(&quot;[&quot; .. tag .. &quot;] 当前线程: &quot; .. Thread:currentThread():getName())
+end
+
+_coroutines:getFlows():of(&quot;任务A&quot;, &quot;任务B&quot;)
+        :onEach(function(s, task)
+            logThread(&quot;1. Flow 创建后 (上游)&quot;)
+            return s:resolve(nil)
+        end)
+-- flowOn 将其上面的所有操作切换到 IO 线程池执行
+        :flowOn(function(it)
+            it:setDispatcher(function(disp) return disp:getIO() end)
+        end)
+        :onEach(function(s, task)
+            logThread(&quot;2. flowOn 之后 (下游)&quot;)
+            return s:resolve(nil)
+        end)
+        :collect(scope, function(s, task)
+            logThread(&quot;3. collect 内部 (收集器)&quot;)
+            return s:resolve(nil)
+        end)
+        :invokeOnCompletion(function()
+            _console:info(&quot;可以看到，'上游'部分在IO线程执行，而'下游'和'收集器'在启动 collect 的主脚本线程执行。&quot;)
+        end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_658" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+use m8test_java\java\lang\Thread;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 4：使用 flowOn 切换执行上下文 ---&quot;));
+
+$logThread = function ($tag) {
+    global $console;
+    $console-&gt;log(javaString(&quot;[{$tag}] 当前线程: &quot;) . Thread::currentThread()-&gt;getName());
+};
+
+$coroutines-&gt;getFlows()-&gt;of(javaString(&quot;任务A&quot;), javaString(&quot;任务B&quot;))
+    -&gt;onEach(function ($s, $task) use ($logThread) {
+        $logThread(javaString(&quot;1. Flow 创建后 (上游)&quot;));
+        return $s-&gt;resolve(null);
+    })
+    // flowOn 将其上面的所有操作切换到 IO 线程池执行
+    -&gt;flowOn(function ($context) {
+        $context-&gt;setDispatcher(function ($dispatchers) {
+            return $dispatchers-&gt;getScriptMain();
+        });
+    })
+    -&gt;onEach(function ($s, $task) use ($logThread) {
+        $logThread(javaString(&quot;2. flowOn 之后 (下游)&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;collect($scope, function ($s, $task) use ($logThread) {
+        $logThread(javaString(&quot;3. collect 内部 (收集器)&quot;));
+        return $s-&gt;resolve(null);
+    })
+    -&gt;invokeOnCompletion(function () {
+        global $console;
+        $console-&gt;info(javaString(&quot;可以看到，'上游'部分在IO线程执行，而'下游'和'收集器'在启动 collect 的主脚本线程执行。&quot;));
+    });</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_661" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入Python标准库
+import threading
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 4：使用 flowOn 切换执行上下文 ---&quot;)
+
+logThread = lambda tag: _console.log(&quot;[{}] 当前线程: {}&quot;.format(tag, threading.current_thread().name))
+
+_coroutines.getFlows().of(&quot;任务A&quot;, &quot;任务B&quot;).onEach(
+    lambda s, task: (
+        logThread(&quot;1. Flow 创建后 (上游)&quot;),
+        s.resolve(None)
+    )[-1]
+    # flowOn 将其上面的所有操作切换到 IO 线程池执行
+).flowOn(
+    # flowOn 的配置lambda, python 只能用 getScriptMain
+    lambda context: context.setDispatcher(lambda d: d.getScriptMain())
+).onEach(
+    lambda s, task: (
+        logThread(&quot;2. flowOn 之后 (下游)&quot;),
+        s.resolve(None)
+    )[-1]
+).collect(scope, lambda s, task: (
+    logThread(&quot;3. collect 内部 (收集器)&quot;),
+    s.resolve(None)
+)[-1]).invokeOnCompletion(lambda _:
+                          _console.info(&quot;可以看到，'上游'部分在IO线程执行，而'下游'和'收集器'在启动 collect 的主脚本线程执行。&quot;)
+                          )</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_664" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope do |it|
+  it.setDispatcher { |dispatchers| dispatchers.getScriptMain() }
+end
+
+$console.info(&quot;--- 章节 4：使用 flowOn 切换执行上下文 ---&quot;)
+
+logThread = lambda do |tag|
+  $console.log(&quot;[#{tag}] 当前线程: #{Java::JavaLang::Thread.currentThread().getName()}&quot;)
+end
+
+$coroutines.getFlows().of(&quot;任务A&quot;, &quot;任务B&quot;).
+  onEach(lambda do |s, task|
+    logThread.call(&quot;1. Flow 创建后 (上游)&quot;)
+    s.resolve(nil)
+  end).
+  # flowOn 将其上面的所有操作切换到 IO 线程池执行
+  flowOn(lambda do |it|
+    it.setDispatcher(lambda { |d| d.getIO() })
+  end).
+  onEach(lambda do |s, task|
+    logThread.call(&quot;2. flowOn 之后 (下游)&quot;)
+    s.resolve(nil)
+  end).
+  collect(scope, lambda do |s, task|
+    logThread.call(&quot;3. collect 内部 (收集器)&quot;)
+    s.resolve(nil)
+  end).
+  invokeOnCompletion do |error|
+  $console.info(&quot;可以看到，'上游'部分在IO线程执行，而'下游'和'收集器'在启动 collect 的主脚本线程执行。&quot;)
+end</div></div></div></section><section class="chapter"><h2 id="api-fromcallback" data-toc="api-fromcallback">高级创建：桥接回调 API (fromCallback)</h2><p id="z8rk59g_713">fromCallback 是一个强大的构建器，用于将传统的回调式 API（如事件监听器）转换为现代的 Flow。关键在于使用 producer.send() 发送数据，并必须在 producer.awaitClose() 中注销监听器以防止内存泄漏。</p><div class="tabs" id="z8rk59g_717" data-group="languages" data-anchors="[z8rk59g_720,z8rk59g_723,z8rk59g_726,z8rk59g_729,z8rk59g_732,z8rk59g_735,z8rk59g_738,z8rk59g_741]"><div class="tabs__content" data-gtm="tab" id="z8rk59g_720" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.info(&quot;--- 章节 5：使用 fromCallback 桥接回调 ---&quot;)
+
+// 使用 fromCallback 创建一个 Flow
+val eventFlow = _coroutines.getFlows().fromCallback { cbScope, producer -&gt;
+    _console.log(&quot;fromCallback: 开始设置模拟监听器...&quot;)
+    var intervalId = -1
+    var i = 0
+    intervalId = _threads.getMain().getTimer().setInterval({
+        if (!producer.isClosedForSend()) {
+            val event = &quot;事件 ${i}&quot;
+            _console.log(&quot;模拟监听器: 产生 -&gt; ${event}&quot;)
+            // 通过 producer.send() 将数据发送到 Flow
+            producer.send(cbScope, event)
+            i++
+        } else {
+            _threads.getMain().getTimer().clearInterval(intervalId)
+        }
+    }, 1000)
+
+    // 这是关键！当 Flow 被取消或完成时，此代码块会被执行
+    producer.awaitClose {
+        _console.warn(&quot;awaitClose: Flow 结束，正在注销监听器...&quot;)
+        _console.info(&quot;awaitClose: 清理完成！&quot;)
+    }
+
+    // fromCallback 的 block 也需要返回一个 Job
+    cbScope.resolve(null)
+}
+
+
+// 启动对 eventFlow 的收集
+val collectionJob = eventFlow
+    .take(5) // 我们只取前5个事件，这会导致 Flow 正常完成
+    .collect(scope) { s, event -&gt;
+        _console.log(&quot;收集器: 收到 &lt;- ${event}&quot;)
+        s.resolve(null)
+    }
+
+collectionJob.invokeOnCompletion {
+    _console.info(&quot;Flow 收集完成。awaitClose 应该已经被调用了。&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_723" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.info(&quot;--- 章节 5：使用 fromCallback 桥接回调 ---&quot;)
+
+// 使用 fromCallback 创建一个 Flow
+def eventFlow = $coroutines.getFlows().fromCallback({ cbScope, producer -&gt;
+    $console.log(&quot;fromCallback: 开始设置模拟监听器...&quot;)
+    def intervalId = -1
+    def i = 0
+    intervalId = $threads.getMain().getTimer().setInterval({
+        if (!producer.isClosedForSend()) {
+            def event = &quot;事件 ${i}&quot;
+            $console.log(&quot;模拟监听器: 产生 -&gt; ${event}&quot;)
+            // 通过 producer.send() 将数据发送到 Flow
+            producer.send(cbScope, event)
+            i++
+        } else {
+            $threads.getMain().getTimer().clearInterval(intervalId)
+        }
+    }, 1000)
+
+    // 这是关键！当 Flow 被取消或完成时，此代码块会被执行
+    producer.awaitClose({
+        $console.warn(&quot;awaitClose: Flow 结束，正在注销监听器...&quot;)
+        $console.info(&quot;awaitClose: 清理完成！&quot;)
+    })
+
+    // fromCallback 的 block 也需要返回一个 Job
+    cbScope.resolve(null)
+})
+
+
+// 启动对 eventFlow 的收集
+def collectionJob = eventFlow
+        .take(5) // 我们只取前5个事件，这会导致 Flow 正常完成
+        .collect(scope, { s, event -&gt;
+            $console.log(&quot;收集器: 收到 &lt;- ${event}&quot;)
+            s.resolve(null)
+        })
+
+collectionJob.invokeOnCompletion({
+    $console.info(&quot;Flow 收集完成。awaitClose 应该已经被调用了。&quot;)
+})</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_726" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_729" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.info(&quot;--- 章节 5：使用 fromCallback 桥接回调 ---&quot;);
+
+// 使用 fromCallback 创建一个 Flow
+const eventFlow = $coroutines.getFlows().fromCallback((cbScope, producer) =&gt; {
+    $console.log(&quot;fromCallback: 开始设置模拟监听器...&quot;);
+    let intervalId = -1;
+    let i = 0;
+    intervalId = $threads.getMain().getTimer().setInterval(() =&gt; {
+        if (producer.isClosedForSend() == false) {
+            const event = `事件 ${i}`;
+            $console.log(`模拟监听器: 产生 -&gt; ${event}`);
+// 通过 producer.send() 将数据发送到 Flow
+            producer.send(cbScope, event);
+            i++;
+        } else {
+            $threads.getMain().getTimer().clearInterval(intervalId);
+        }
+    }, 1000);
+
+    // 这是关键！当 Flow 被取消或完成时，此代码块会被执行
+    producer.awaitClose(() =&gt; {
+        $console.warn(&quot;awaitClose: Flow 结束，正在注销监听器...&quot;);
+        // 确保即使在 producer 关闭后，定时器也能被清除
+        if (intervalId !== -1) {
+            $threads.getMain().getTimer().clearInterval(intervalId);
+        }
+        $console.info(&quot;awaitClose: 清理完成！&quot;);
+    });
+
+    // fromCallback 的 block 也需要返回一个 Job
+    return cbScope.resolve(null);
+});
+
+
+// 启动对 eventFlow 的收集
+const collectionJob = eventFlow
+    .take(5) // 我们只取前5个事件，这会导致 Flow 正常完成
+    .collect(scope, (s, event) =&gt; {
+        $console.log(`收集器: 收到 &lt;- ${event}`);
+        return s.resolve(null);
+    });
+
+collectionJob.invokeOnCompletion(() =&gt; {
+    $console.info(&quot;Flow 收集完成。awaitClose 应该已经被调用了。&quot;);
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_732" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:info(&quot;--- 章节 5：使用 fromCallback 桥接回调 ---&quot;)
+
+-- 使用 fromCallback 创建一个 Flow
+local eventFlow = _coroutines:getFlows():fromCallback(function(cbScope, producer)
+    _console:log(&quot;fromCallback: 开始设置模拟监听器...&quot;)
+    local intervalId = -1
+    local i = 0
+    intervalId = _threads:getMain():getTimer():setInterval(function()
+        if not producer:isClosedForSend() then
+            local event = &quot;事件 &quot; .. i
+            _console:log(&quot;模拟监听器: 产生 -&gt; &quot; .. event)
+            -- 通过 producer:send() 将数据发送到 Flow
+            producer:send(cbScope, event)
+            i = i + 1
+        else
+            _threads:getMain():getTimer():clearInterval(intervalId)
+        end
+    end, 1000)
+
+    -- 这是关键！当 Flow 被取消或完成时，此代码块会被执行
+    producer:awaitClose(function()
+        _console:warn(&quot;awaitClose: Flow 结束，正在注销监听器...&quot;)
+        _console:info(&quot;awaitClose: 清理完成！&quot;)
+    end)
+
+    -- fromCallback 的 block 也需要返回一个 Job
+    return cbScope:resolve(nil)
+end)
+
+
+-- 启动对 eventFlow 的收集
+local collectionJob = eventFlow
+        :take(5) -- 我们只取前5个事件，这会导致 Flow 正常完成
+        :collect(scope, function(s, event)
+            _console:log(&quot;收集器: 收到 &lt;- &quot; .. event)
+            return s:resolve(nil)
+        end)
+
+collectionJob:invokeOnCompletion(function()
+    _console:info(&quot;Flow 收集完成。awaitClose 应该已经被调用了。&quot;)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_735" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;info(javaString(&quot;--- 章节 5：使用 fromCallback 桥接回调 ---&quot;));
+
+// 使用 fromCallback 创建一个 Flow
+$eventFlow = $coroutines-&gt;getFlows()-&gt;fromCallback(function ($cbScope, $producer) {
+    global $console, $threads;
+    $console-&gt;log(javaString(&quot;fromCallback: 开始设置模拟监听器...&quot;));
+    $intervalId = -1;
+    $i = 0;
+    $intervalId = $threads-&gt;getMain()-&gt;getTimer()-&gt;setInterval(function() use ($producer, $cbScope, &amp;$i, &amp;$intervalId) {
+        global $threads, $console;
+        if (!$producer-&gt;isClosedForSend()) {
+            $event = javaString(&quot;事件 {$i}&quot;);
+            $console-&gt;log(javaString(&quot;模拟监听器: 产生 -&gt; {$event}&quot;));
+            // 通过 producer.send() 将数据发送到 Flow
+            $producer-&gt;send($cbScope, $event);
+            $i++;
+        } else {
+            $threads-&gt;getMain()-&gt;getTimer()-&gt;clearInterval($intervalId);
+        }
+    }, 1000);
+
+    // 这是关键！当 Flow 被取消或完成时，此代码块会被执行
+    $producer-&gt;awaitClose(function() use (&amp;$intervalId) { // intervalId by reference to ensure it's cleared
+        global $console;
+        $console-&gt;warn(javaString(&quot;awaitClose: Flow 结束，正在注销监听器...&quot;));
+        $console-&gt;info(javaString(&quot;awaitClose: 清理完成！&quot;));
+    });
+
+    // fromCallback 的 block 也需要返回一个 Job
+    return $cbScope-&gt;resolve(null);
+});
+
+
+// 启动对 eventFlow 的收集
+$collectionJob = $eventFlow
+    -&gt;take(5) // 我们只取前5个事件，这会导致 Flow 正常完成
+    -&gt;collect($scope, function ($s, $event) {
+        global $console;
+        $console-&gt;log(javaString(&quot;收集器: 收到 &lt;- {$event}&quot;));
+        return $s-&gt;resolve(null);
+    });
+
+$collectionJob-&gt;invokeOnCompletion(function() {
+    global $console;
+    $console-&gt;info(javaString(&quot;Flow 收集完成。awaitClose 应该已经被调用了。&quot;));
+});</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_738" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.info(&quot;--- 章节 5：使用 fromCallback 桥接回调 ---&quot;)
+
+# 使用 fromCallback 创建一个 Flow
+def create_event_flow():
+    def callback(cbScope, producer):
+        _console.log(&quot;fromCallback: 开始设置模拟监听器...&quot;)
+        i = [0]  # 用列表包装模拟可变变量
+        interval_id = [None]  # 同样包装
+
+        def on_tick(_):
+            if not producer.isClosedForSend():
+                event = &quot;事件 {}&quot;.format(i[0])
+                _console.log(&quot;模拟监听器: 产生 -&gt; {}&quot;.format(event))
+                producer.send(cbScope, event)
+                i[0] += 1
+            else:
+                _threads.getMain().getTimer().clearInterval(interval_id[0])
+
+        interval_id[0] = _threads.getMain().getTimer().setInterval(on_tick, 1000)
+
+        # 注册清理逻辑
+        producer.awaitClose(lambda: (
+            _console.warn(&quot;awaitClose: Flow 结束，正在注销监听器...&quot;),
+            _console.info(&quot;awaitClose: 清理完成！&quot;)
+        ))
+
+        return cbScope.resolve(None)
+
+    return _coroutines.getFlows().fromCallback(callback)
+
+eventFlow = create_event_flow()
+
+# 启动对 eventFlow 的收集
+collectionJob = eventFlow.take(5).collect(scope, lambda s, event: (
+    _console.log(&quot;收集器: 收到 &lt;- {}&quot;.format(event)),
+    s.resolve(None)
+)[-1])
+
+collectionJob.invokeOnCompletion(lambda _: _console.info(&quot;Flow 收集完成。awaitClose 应该已经被调用了。&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="z8rk59g_741" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.info(&quot;--- 章节 5：使用 fromCallback 桥接回调 ---&quot;)
+
+# 使用 fromCallback 创建一个 Flow
+eventFlow = $coroutines.getFlows().fromCallback do |cbScope, producer|
+  $console.log(&quot;fromCallback: 开始设置模拟监听器...&quot;)
+  intervalId = -1
+  i = 0
+  intervalId = $threads.getMain().getTimer().setInterval(lambda { |p|
+    if !producer.isClosedForSend()
+      event = &quot;事件 #{i}&quot;
+      $console.log(&quot;模拟监听器: 产生 -&gt; #{event}&quot;)
+      # 通过 producer.send() 将数据发送到 Flow
+      producer.send(cbScope, event)
+      i += 1
+    else
+      $threads.getMain().getTimer().clearInterval(intervalId)
+    end
+  }, 1000)
+
+  # 这是关键！当 Flow 被取消或完成时，此代码块会被执行
+  producer.awaitClose do
+    $console.warn(&quot;awaitClose: Flow 结束，正在注销监听器...&quot;)
+    $console.info(&quot;awaitClose: 清理完成！&quot;)
+  end
+
+  # fromCallback 的 block 也需要返回一个 Job
+  cbScope.resolve(nil)
+end
+
+
+# 启动对 eventFlow 的收集
+collectionJob = eventFlow
+                  .take(5) # 我们只取前5个事件，这会导致 Flow 正常完成
+                  .collect(scope, lambda do |s, event|
+                    $console.log(&quot;收集器: 收到 &lt;- #{event}&quot;)
+                    s.resolve(nil)
+                  end)
+
+collectionJob.invokeOnCompletion do |error|
+  $console.info(&quot;Flow 收集完成。awaitClose 应该已经被调用了。&quot;)
+end</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="coroutines-advanced-topics.html" class="navigation-links__prev">高级主题</a><a href="http.html" class="navigation-links__next">网络请求</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

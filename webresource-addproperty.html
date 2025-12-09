@@ -1,0 +1,284 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:37:23.770833898"><title>addProperty | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="addProperty | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/webresource-addproperty.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="addProperty | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/webresource-addproperty.html#webpage",
+    "url": "writerside-documentation/webresource-addproperty.html",
+    "name": "addProperty | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="WebResource.addProperty" data-main-title="addProperty" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///WebResource.md|WebResource"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="WebResource.addProperty" id="WebResource.addProperty.md">addProperty</h1><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_7"><p id="-e42y8n_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.resource/-web-resource/add-property.html" id="-e42y8n_12" data-external="true" rel="noopener noreferrer" target="_blank">WebResource.addProperty()</a></p></aside><div class="tabs" id="-e42y8n_10" data-group="languages" data-anchors="[-e42y8n_15,-e42y8n_18,-e42y8n_21,-e42y8n_24,-e42y8n_27,-e42y8n_30,-e42y8n_33]"><div class="tabs__content" data-gtm="tab" id="-e42y8n_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val resourceName = &quot;test-download&quot;
+_webResources.afterDownload { webResource, scriptFile, throwable -&gt;
+    if (webResource.getName() == resourceName) {
+        if (scriptFile != null) {
+            _console.log(&quot;afterDownload&quot;, webResource, &quot;下载成功&quot;, scriptFile)
+        } else if (throwable != null) {
+            _console.error(&quot;afterDownload&quot;, webResource, &quot;下载失败&quot;, throwable)
+        }
+    }
+}
+_webResources.beforeDownload { webResource -&gt;
+    if (webResource.getName() == resourceName) {
+        webResource.setUrl(webResource.getUrl().replace(&quot;172.16.0.238&quot;, &quot;172.16.0.235&quot;))
+        _console.log(&quot;beforeDownload&quot;, webResource)
+        _console.assertTrue(webResource.getProperty(&quot;p1&quot;) == &quot;v11&quot;, &quot;p1 == v11&quot;)
+        _console.log(webResource.getProperties())
+        // 这里可以根据 property 执行其他操作
+    }
+    null
+}
+_webResources.download {
+    setName(resourceName)
+    setUrl(&quot;https://github.com/m8test/runtime-release/raw/refs/heads/main/frameworks/android-34.jar&quot;)
+    setVersion(&quot;34&quot;)
+    // p1 = v1
+    addProperty(&quot;p1&quot;, &quot;v1&quot;, true)
+    // p1 = v11
+    addProperty(&quot;p1&quot;, &quot;v11&quot;, true)
+    // p1 = v11
+    addProperty(&quot;p1&quot;, &quot;v111&quot;, false)
+    // p2 = v2
+    addProperty(&quot;p2&quot;, &quot;v2&quot;, false)
+    // p3 = v3
+    addProperty(&quot;p3&quot;, &quot;v3&quot;, false)
+    // p3 = null
+    removeProperty(&quot;p3&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_39"><p id="-e42y8n_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/WebResource/addProperty.kts" id="-e42y8n_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/WebResource/addProperty.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-e42y8n_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def resourceName = &quot;test-download&quot;
+$webResources.afterDownload { webResource, scriptFile, throwable -&gt;
+    if (webResource.getName() == resourceName) {
+        if (scriptFile != null) {
+            $console.log(&quot;afterDownload&quot;, webResource, &quot;下载成功&quot;, scriptFile)
+        } else if (throwable != null) {
+            $console.error(&quot;afterDownload&quot;, webResource, &quot;下载失败&quot;, throwable)
+        }
+    }
+}
+$webResources.beforeDownload { webResource -&gt;
+    if (webResource.getName() == resourceName) {
+        webResource.setUrl(webResource.getUrl().replace(&quot;172.16.0.238&quot;, &quot;172.16.0.235&quot;))
+        $console.log(&quot;beforeDownload&quot;, webResource)
+        $console.assertTrue(webResource.getProperty(&quot;p1&quot;) == &quot;v11&quot;, &quot;p1 == v11&quot;)
+        $console.log(webResource.getProperties())
+        // 这里可以根据 property 执行其他操作
+    }
+    null
+}
+$webResources.download {
+    setName(resourceName)
+    setUrl(&quot;https://github.com/m8test/runtime-release/raw/refs/heads/main/frameworks/android-34.jar&quot;)
+    setVersion(&quot;34&quot;)
+    // p1 = v1
+    addProperty(&quot;p1&quot;, &quot;v1&quot;, true)
+    // p1 = v11
+    addProperty(&quot;p1&quot;, &quot;v11&quot;, true)
+    // p1 = v11
+    addProperty(&quot;p1&quot;, &quot;v111&quot;, false)
+    // p2 = v2
+    addProperty(&quot;p2&quot;, &quot;v2&quot;, false)
+    // p3 = v3
+    addProperty(&quot;p3&quot;, &quot;v3&quot;, false)
+    // p3 = null
+    removeProperty(&quot;p3&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_47"><p id="-e42y8n_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/WebResource/addProperty.groovy" id="-e42y8n_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/WebResource/addProperty.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-e42y8n_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let resourceName = &quot;test-download&quot;
+$webResources.afterDownload((webResource, scriptFile, throwable) =&gt; {
+    if (webResource.getName() == resourceName) {
+        if (scriptFile != null) {
+            $console.log(&quot;afterDownload&quot;, webResource, &quot;下载成功&quot;, scriptFile)
+        } else if (throwable != null) {
+            $console.error(&quot;afterDownload&quot;, webResource, &quot;下载失败&quot;, throwable)
+        }
+    }
+})
+$webResources.beforeDownload((webResource) =&gt; {
+    if (webResource.getName() == resourceName) {
+        webResource.setUrl(webResource.getUrl().replace(&quot;172.16.0.238&quot;, &quot;172.16.0.235&quot;))
+        $console.log(&quot;beforeDownload&quot;, webResource)
+        $console.assertTrue(webResource.getProperty(&quot;p1&quot;) == &quot;v11&quot;, &quot;p1 == v11&quot;)
+        $console.log(webResource.getProperties())
+        // 这里可以根据 property 执行其他操作
+    }
+    return null
+})
+$webResources.download((webResource) =&gt; {
+    webResource.setName(resourceName)
+    webResource.setUrl(&quot;https://github.com/m8test/runtime-release/raw/refs/heads/main/frameworks/android-34.jar&quot;)
+    webResource.setVersion(&quot;34&quot;)
+    // p1 = v1
+    webResource.addProperty(&quot;p1&quot;, &quot;v1&quot;, true)
+    // p1 = v11
+    webResource.addProperty(&quot;p1&quot;, &quot;v11&quot;, true)
+    // p1 = v11
+    webResource.addProperty(&quot;p1&quot;, &quot;v111&quot;, false)
+    // p2 = v2
+    webResource.addProperty(&quot;p2&quot;, &quot;v2&quot;, false)
+    // p3 = v3
+    webResource.addProperty(&quot;p3&quot;, &quot;v3&quot;, false)
+    // p3 = null
+    webResource.removeProperty(&quot;p3&quot;)
+})</div><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_55"><p id="-e42y8n_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/WebResource/addProperty.js" id="-e42y8n_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/WebResource/addProperty.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-e42y8n_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local resourceName = &quot;test-download&quot;
+_webResources:afterDownload(function(webResource, scriptFile, throwable)
+    if (webResource:getName() == resourceName) then
+        if (scriptFile ~= nil) then
+            _console:log(&quot;afterDownload&quot;, webResource, &quot;下载成功&quot;, scriptFile)
+        elseif (throwable ~= nil) then
+            _console:error(&quot;afterDownload&quot;, webResource, &quot;下载失败&quot;, throwable)
+        end
+    end
+end)
+_webResources:beforeDownload(function(webResource)
+    if (webResource:getName() == resourceName) then
+        local RegexUtils = _java:loadClass(&quot;com.blankj.utilcode.util.RegexUtils&quot;)
+        webResource:setUrl(RegexUtils:getReplaceFirst(webResource:getUrl(), &quot;172.16.0.238&quot;, &quot;172.16.0.235&quot;))
+        _console:log(&quot;beforeDownload&quot;, webResource)
+        _console:assertTrue(webResource:getProperty(&quot;p1&quot;) == &quot;v11&quot;, &quot;p1 == v11&quot;)
+        _console:log(webResource:getProperties())
+        -- 这里可以根据 property 执行其他操作
+    end
+    return nil
+end)
+_webResources:download(function(webResource)
+    webResource:setName(resourceName)
+    webResource:setUrl(&quot;https://github.com/m8test/runtime-release/raw/refs/heads/main/frameworks/android-34.jar&quot;)
+    webResource:setVersion(&quot;34&quot;)
+    -- p1 = v1
+    webResource:addProperty(&quot;p1&quot;, &quot;v1&quot;, true)
+    -- p1 = v11
+    webResource:addProperty(&quot;p1&quot;, &quot;v11&quot;, true)
+    -- p1 = v11
+    webResource:addProperty(&quot;p1&quot;, &quot;v111&quot;, false)
+    -- p2 = v2
+    webResource:addProperty(&quot;p2&quot;, &quot;v2&quot;, false)
+    -- p3 = v3
+    webResource:addProperty(&quot;p3&quot;, &quot;v3&quot;, false)
+    -- p3 = nil
+    webResource:removeProperty(&quot;p3&quot;)
+end)</div><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_63"><p id="-e42y8n_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/WebResource/addProperty.lua" id="-e42y8n_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/WebResource/addProperty.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-e42y8n_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$resourceName = &quot;test-download&quot;;
+$webResources-&gt;afterDownload(function ($webResource, $scriptFile, $throwable) use ($console, $resourceName) {
+    if ($webResource-&gt;getName() == $resourceName) {
+        if ($scriptFile != null) {
+            $console-&gt;log(&quot;afterDownload&quot;, $webResource, &quot;下载成功&quot;, $scriptFile);
+        } else if ($throwable != null) {
+            $console-&gt;error(&quot;afterDownload&quot;, $webResource, &quot;下载失败&quot;, $throwable);
+        }
+    }
+});
+$webResources-&gt;beforeDownload(function ($webResource) use ($plugins, $console, $resourceName) {
+    if ($webResource-&gt;getName() == $resourceName) {
+        $RegexUtils = java_class(&quot;com.blankj.utilcode.util.RegexUtils&quot;);
+        $webResource-&gt;setUrl($RegexUtils-&gt;getReplaceFirst($webResource-&gt;getUrl(), &quot;172.16.0.238&quot;, &quot;172.16.0.235&quot;));
+        $console-&gt;log(&quot;beforeDownload&quot;, $webResource);
+        $console-&gt;assertTrue($webResource-&gt;getProperty(&quot;p1&quot;) == &quot;v11&quot;, &quot;p1 == v11&quot;);
+        $console-&gt;log($webResource-&gt;getProperties());
+        // 这里可以根据 property 执行其他操作
+    }
+    return null;
+});
+$webResources-&gt;download(function ($webResource) use ($resourceName) {
+    $webResource-&gt;setName($resourceName);
+    $webResource-&gt;setUrl(&quot;https://github.com/m8test/runtime-release/raw/refs/heads/main/frameworks/android-34.jar&quot;);
+    $webResource-&gt;setVersion(&quot;34&quot;);
+    // p1 = v1
+    $webResource-&gt;addProperty(&quot;p1&quot;, &quot;v1&quot;, true);
+    // p1 = v11
+    $webResource-&gt;addProperty(&quot;p1&quot;, &quot;v11&quot;, true);
+    // p1 = v11
+    $webResource-&gt;addProperty(&quot;p1&quot;, &quot;v111&quot;, false);
+    // p2 = v2
+    $webResource-&gt;addProperty(&quot;p2&quot;, &quot;v2&quot;, false);
+    // p3 = v3
+    $webResource-&gt;addProperty(&quot;p3&quot;, &quot;v3&quot;, false);
+    // p3 = null
+    $webResource-&gt;removeProperty(&quot;p3&quot;);
+});</div><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_71"><p id="-e42y8n_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/WebResource/addProperty.php" id="-e42y8n_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/WebResource/addProperty.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-e42y8n_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">resourceName = &quot;test-download&quot;
+
+
+def fn1(webResource, scriptFile, throwable):
+    if webResource.getName() == resourceName:
+        if scriptFile != None:
+            _console.log(&quot;afterDownload&quot;, webResource, &quot;下载成功&quot;, scriptFile)
+        elif throwable != None:
+            _console.error(&quot;afterDownload&quot;, webResource, &quot;下载失败&quot;, throwable)
+
+
+_webResources.afterDownload(fn1)
+
+
+def fn3(webResource):
+    if webResource.getName() == resourceName:
+        webResource.setUrl(webResource.getUrl().replace(&quot;172.16.0.238&quot;, &quot;172.16.0.235&quot;))
+        _console.log(&quot;beforeDownload&quot;, webResource)
+        _console.assertTrue(webResource.getProperty(&quot;p1&quot;) == &quot;v11&quot;, &quot;p1 == v11&quot;)
+        _console.log(webResource.getProperties())
+        # 这里可以根据 property 执行其他操作
+    return None
+
+
+_webResources.beforeDownload(fn3)
+
+
+def fn2(webResource):
+    webResource.setName(resourceName)
+    webResource.setUrl(&quot;https://github.com/m8test/runtime-release/raw/refs/heads/main/frameworks/android-34.jar&quot;)
+    webResource.setVersion(&quot;34&quot;)
+    # p1 = v1
+    webResource.addProperty(&quot;p1&quot;, &quot;v1&quot;, True)
+    # p1 = v11
+    webResource.addProperty(&quot;p1&quot;, &quot;v11&quot;, True)
+    # p1 = v11
+    webResource.addProperty(&quot;p1&quot;, &quot;v111&quot;, False)
+    # p2 = v2
+    webResource.addProperty(&quot;p2&quot;, &quot;v2&quot;, False)
+    # p3 = v3
+    webResource.addProperty(&quot;p3&quot;, &quot;v3&quot;, False)
+    # p3 = null
+    webResource.removeProperty(&quot;p3&quot;)
+
+
+_webResources.download(fn2)
+</div><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_79"><p id="-e42y8n_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/WebResource/addProperty.py" id="-e42y8n_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/WebResource/addProperty.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-e42y8n_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+resourceName = &quot;test-download&quot;
+$webResources.afterDownload { |webResource, scriptFile, throwable|
+  if webResource.getName() == resourceName
+    if scriptFile != nil
+      $console.log(&quot;afterDownload&quot;, webResource, &quot;下载成功&quot;, scriptFile)
+    elsif throwable != nil
+      $console.error(&quot;afterDownload&quot;, webResource, &quot;下载失败&quot;, throwable)
+    end
+  end
+}
+$webResources.beforeDownload { |webResource|
+  if webResource.getName() == resourceName
+    java_import &quot;com.blankj.utilcode.util.RegexUtils&quot;
+    webResource.setUrl(RegexUtils.getReplaceFirst(webResource.getUrl(), &quot;172.16.0.238&quot;, &quot;172.16.0.235&quot;))
+    $console.log(&quot;beforeDownload&quot;, webResource)
+    $console.assertTrue(webResource.getProperty(&quot;p1&quot;) == &quot;v11&quot;, &quot;p1 == v11&quot;)
+    $console.log(webResource.getProperties())
+    # 这里可以根据 property 执行其他操作
+  end
+  nil
+}
+$webResources.download { |webResource|
+  webResource.setName(resourceName)
+  webResource.setUrl(&quot;https://github.com/m8test/runtime-release/raw/refs/heads/main/frameworks/android-34.jar&quot;)
+  webResource.setVersion(&quot;34&quot;)
+  # p1 = v1
+  webResource.addProperty(&quot;p1&quot;, &quot;v1&quot;, true)
+  # p1 = v11
+  webResource.addProperty(&quot;p1&quot;, &quot;v11&quot;, true)
+  # p1 = v11
+  webResource.addProperty(&quot;p1&quot;, &quot;v111&quot;, false)
+  # p2 = v2
+  webResource.addProperty(&quot;p2&quot;, &quot;v2&quot;, false)
+  # p3 = v3
+  webResource.addProperty(&quot;p3&quot;, &quot;v3&quot;, false)
+  # p3 = null
+  webResource.removeProperty(&quot;p3&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-e42y8n_87"><p id="-e42y8n_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/WebResource/addProperty.rb" id="-e42y8n_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/WebResource/addProperty.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="webresource.html" class="navigation-links__prev">WebResource</a><a href="webresource-getname.html" class="navigation-links__next">getName</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

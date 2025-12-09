@@ -1,0 +1,153 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:11.607907539"><title>入门指南 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"deferred","level":0,"title":"异步与 Deferred","anchor":"#deferred"},{"id":"then","level":0,"title":"使用 .then() 进行链式调用","anchor":"#then"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="入门指南 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/webview-automation-getting-started.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="入门指南 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/webview-automation-getting-started.html#webpage",
+    "url": "writerside-documentation/webview-automation-getting-started.html",
+    "name": "入门指南 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="webview-automation-getting-started" data-main-title="入门指南" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="webview-automation.md|网页自动化"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="webview-automation-getting-started" id="webview-automation-getting-started.md">入门指南</h1><p id="-tgp1j3_3">M8Test 实现了强大的网页自动化框架，允许您使用自动化脚本来测试网页。</p><section class="chapter"><h2 id="deferred" data-toc="deferred">异步与 Deferred</h2><p id="-tgp1j3_6">Controller 的所有方法都是异步的。这意味着调用一个方法（如 controller.click(...)）不会立即执行点击操作，而是会安排这个操作在未来某个时间点执行。 这些方法会立即返回一个 Deferred 对象，可以理解为&ldquo;一个对未来结果的承诺&rdquo;。T 是结果的类型（例如，Deferred 表示未来会有一个字符串结果）。</p></section><section class="chapter"><h2 id="then" data-toc="then">使用 .then() 进行链式调用</h2><ul class="list _bullet" id="-tgp1j3_9"><li class="list__item" id="-tgp1j3_15"><p id="-tgp1j3_19">它会注册一个回调函数。</p></li><li class="list__item" id="-tgp1j3_16"><p id="-tgp1j3_20">当 deferred 成功完成时，这个回调函数会被执行。</p></li><li class="list__item" id="-tgp1j3_17"><p id="-tgp1j3_21">result 参数是上一步 deferred 的结果。</p></li><li class="list__item" id="-tgp1j3_18"><p id="-tgp1j3_22">最重要的是，.then 块必须返回一个新的 Deferred 对象，以继续这个链条。</p></li></ul><div class="tabs" id="-tgp1j3_14" data-group="languages" data-anchors="[-tgp1j3_25,-tgp1j3_28,-tgp1j3_31,-tgp1j3_34,-tgp1j3_37,-tgp1j3_40,-tgp1j3_43,-tgp1j3_46]"><div class="tabs__content" data-gtm="tab" id="-tgp1j3_25" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 步骤1: 开始一个异步操作
+// 假设 controller 在此上下文可用
+// controller.asyncOperation1()
+// 步骤2: 当操作1完成后，使用其结果来开始操作2
+//    .then { scope, result1 -&gt;
+//        _console.log(&quot;操作1完成，结果:&quot;, result1)
+//        // 返回操作2的 Deferred
+//        // Kotlin lambda 中最后一行是返回值
+//        controller.asyncOperation2(result1)
+//    }
+// 步骤3: 当操作2完成后...
+//    .then { scope, result2 -&gt;
+//        _console.log(&quot;操作2完成，结果:&quot;, result2)
+//        // 如果没有更多异步操作，可以用 scope.resolve() 来结束链条
+//        scope.resolve(null)
+//    }
+// 统一的错误处理
+//    .onError { e -&gt;
+//        _console.error(&quot;链条中任何一步发生错误:&quot;, e)
+//    }</div></div><div class="tabs__content" data-gtm="tab" id="-tgp1j3_28" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 步骤1: 开始一个异步操作
+controller.asyncOperation1()
+// 步骤2: 当操作1完成后，使用其结果来开始操作2
+        .then { scope, result1 -&gt;
+            $console.log(&quot;操作1完成，结果:&quot;, result1)
+            // 返回操作2的 Deferred
+            return controller.asyncOperation2(result1)
+        }
+// 步骤3: 当操作2完成后...
+        .then { scope, result2 -&gt;
+            $console.log(&quot;操作2完成，结果:&quot;, result2)
+            // 如果没有更多异步操作，可以用 scope.resolve() 来结束链条
+            return scope.resolve(null)
+        }
+// 统一的错误处理
+        .onError { e -&gt;
+            $console.error(&quot;链条中任何一步发生错误:&quot;, e)
+        }</div></div><div class="tabs__content" data-gtm="tab" id="-tgp1j3_31" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-tgp1j3_34" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 步骤1: 开始一个异步操作
+controller.asyncOperation1()
+    // 步骤2: 当操作1完成后，使用其结果来开始操作2
+    .then((scope, result1) =&gt; {
+        $console.log(&quot;操作1完成，结果:&quot;, result1);
+        // 返回操作2的 Deferred
+        return controller.asyncOperation2(result1);
+    })
+    // 步骤3: 当操作2完成后...
+    .then((scope, result2) =&gt; {
+        $console.log(&quot;操作2完成，结果:&quot;, result2);
+        // 如果没有更多异步操作，可以用 scope.resolve() 来结束链条
+        return scope.resolve(null);
+    })
+    // 统一的错误处理
+    .onError(e =&gt; {
+        $console.error(&quot;链条中任何一步发生错误:&quot;, e);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-tgp1j3_37" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 步骤1: 开始一个异步操作
+controller:asyncOperation1()
+-- 步骤2: 当操作1完成后，使用其结果来开始操作2
+        :_then(function(scope, result1)
+            _console:log(&quot;操作1完成，结果:&quot;, result1)
+            -- 返回操作2的 Deferred
+            return controller:asyncOperation2(result1)
+        end)
+-- 步骤3: 当操作2完成后...
+        :_then(function(scope, result2)
+            _console:log(&quot;操作2完成，结果:&quot;, result2)
+            -- 如果没有更多异步操作，可以用 scope.resolve() 来结束链条
+            return scope:resolve(nil)
+        end)
+-- 统一的错误处理
+        :onError(function(e)
+            _console:error(&quot;链条中任何一步发生错误:&quot;, e)
+        end)</div></div><div class="tabs__content" data-gtm="tab" id="-tgp1j3_40" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 步骤1: 开始一个异步操作
+$controller-&gt;asyncOperation1()
+// 步骤2: 当操作1完成后，使用其结果来开始操作2
+    -&gt;then(function ($scope, $result1) {
+        global $console;
+        $console-&gt;log(javaString(&quot;操作1完成，结果:&quot;), $result1);
+        // 返回操作2的 Deferred
+        return $controller-&gt;asyncOperation2($result1);
+    })
+// 步骤3: 当操作2完成后...
+    -&gt;then(function ($scope, $result2) {
+        global $console;
+        $console-&gt;log(javaString(&quot;操作2完成，结果:&quot;), $result2);
+        // 如果没有更多异步操作，可以用 scope.resolve() 来结束链条
+        return $scope-&gt;resolve(null);
+    })
+// 统一的错误处理
+    -&gt;onError(function ($e) {
+        global $console;
+        $console-&gt;error(javaString(&quot;链条中任何一步发生错误:&quot;), $e);
+    });</div></div><div class="tabs__content" data-gtm="tab" id="-tgp1j3_43" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+# 步骤1: 开始一个异步操作
+# 假设 'controller' 是一个已定义的变量
+# controller.asyncOperation1()
+
+# 步骤2: 当操作1完成后，使用其结果来开始操作2
+#         .then(lambda scope, result1: (
+#             _console.log(&quot;操作1完成，结果:&quot;, str(result1)),
+#             # 返回操作2的 Deferred
+#             controller.asyncOperation2(result1)
+#         )[-1])
+# # 步骤3: 当操作2完成后...
+#         .then(lambda scope, result2: (
+#             _console.log(&quot;操作2完成，结果:&quot;, str(result2)),
+#             # 如果没有更多异步操作，可以用 scope.resolve() 来结束链条
+#             scope.resolve(None)
+#         )[-1])
+# # 统一的错误处理
+#         .onError(lambda e:
+#             _console.error(&quot;链条中任何一步发生错误:&quot;, e)
+#         )</div></div><div class="tabs__content" data-gtm="tab" id="-tgp1j3_46" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 步骤1: 开始一个异步操作
+controller.asyncOperation1().
+  # 步骤2: 当操作1完成后，使用其结果来开始操作2
+  then { |scope, result1|
+    $console.log(&quot;操作1完成，结果:&quot;, result1)
+    # 返回操作2的 Deferred
+    controller.asyncOperation2(result1)
+  }.
+  # 步骤3: 当操作2完成后...
+  then { |scope, result2|
+    $console.log(&quot;操作2完成，结果:&quot;, result2)
+    # 如果没有更多异步操作，可以用 scope.resolve() 来结束链条
+    scope.resolve(nil)
+  }.
+  # 统一的错误处理
+  onError { |e|
+    $console.error(&quot;链条中任何一步发生错误:&quot;, e)
+  }</div></div></div><p id="-tgp1j3_11">这种模式确保了您的代码始终保持非阻塞，响应迅速。</p></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="webview-automation.html" class="navigation-links__prev">网页自动化</a><a href="webview-automation-controller.html" class="navigation-links__next">使用 Controller</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

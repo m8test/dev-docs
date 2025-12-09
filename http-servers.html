@@ -1,0 +1,1915 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.952359571"><title>HTTP 服务器 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"dmd3fw_4","level":0,"title":"启动和停止服务器","anchor":"#dmd3fw_4"},{"id":"dmd3fw_5","level":0,"title":"高级路由和请求处理","anchor":"#dmd3fw_5"},{"id":"websocket","level":0,"title":"搭建 WebSocket 服务器","anchor":"#websocket"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="HTTP 服务器 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/http-servers.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="HTTP 服务器 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/http-servers.html#webpage",
+    "url": "writerside-documentation/http-servers.html",
+    "name": "HTTP 服务器 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="http-servers" data-main-title="HTTP 服务器" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="http.md|网络请求"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="http-servers" id="http-servers.md">HTTP 服务器</h1><p id="dmd3fw_3">您可以在脚本中启动一个本地 HTTP 服务器，用于接收外部请求，这在模拟 API、搭建临时 Web 服务等场景中非常有用。</p><section class="chapter"><h2 id="dmd3fw_4" data-toc="dmd3fw_4">启动和停止服务器</h2><div class="tabs" id="dmd3fw_10" data-group="languages" data-anchors="[dmd3fw_13,dmd3fw_16,dmd3fw_19,dmd3fw_22,dmd3fw_25,dmd3fw_28,dmd3fw_31,dmd3fw_34]"><div class="tabs__content" data-gtm="tab" id="dmd3fw_13" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val port = 8080
+
+// 启动一个服务器
+val httpServer = _httpServers.startServer(port) {
+    routing {
+        // get 的处理器是 HttpServerCall.(CoroutineScope) -&gt; Job
+        // 所以 lambda 只有一个参数 s (CoroutineScope)，HttpServerCall 是 this
+        get(&quot;/&quot;) { s -&gt;
+            val request = getRequest() // 使用 this.getRequest()
+            _console.log(&quot;[服务器] 收到来自 ${request.getOriginConnectionPoint().getRemoteHost()} 的根路径请求&quot;)
+
+            // respondText 返回一个 Job
+            getResponse().respondText(s, &quot;你好，世界！来自 M8Test HTTP 服务器.&quot;) { it.getTextPlain() }
+        }
+
+        get(&quot;/json&quot;) { s -&gt;
+            _console.log(&quot;[服务器] 收到 /json 路径请求&quot;)
+            val jsonResponse = &quot;&quot;&quot;{&quot;status&quot;: &quot;ok&quot;, &quot;timestamp&quot;: ${System.currentTimeMillis()}}&quot;&quot;&quot;
+            getResponse().respondText(s, jsonResponse) { it.getApplicationJson() }
+        }
+    }
+}
+
+_console.log(&quot;HTTP 服务器已在 http://127.0.0.1:$port 启动&quot;)
+
+// 创建客户端进行测试
+val httpClient = _httpClients.newClient(null)
+
+// 延迟1秒确保服务器已完全启动
+scope.delay(1000).then { s, v -&gt;
+    _console.log(&quot;[客户端] 开始测试服务器...&quot;)
+    val req1 = httpClient.get(s, &quot;http://127.0.0.1:$port/&quot;, null, null)
+    val req2 = httpClient.get(s, &quot;http://127.0.0.1:$port/json&quot;, null, null)
+    // 等待所有请求完成
+    s.awaitAll(listOf(req1, req2))
+}.then { s, responses -&gt;
+    val resp1Text = responses[0].getTextBody(s)
+    val resp2Text = responses[1].getTextBody(s)
+    s.awaitAll(listOf(resp1Text, resp2Text))
+}.then { s, bodies -&gt;
+    _console.log(&quot;[客户端] 根路径响应:&quot;, bodies[0])
+    _console.log(&quot;[客户端] /json 路径响应:&quot;, bodies[1])
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;[客户端] 测试失败:&quot;, error)
+}.onComplete {
+    _console.log(&quot;测试完成，正在关闭服务器...&quot;)
+    _httpServers.stopServer(httpServer)
+}</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_16" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def port = 8080
+
+// 启动一个服务器
+def httpServer = $httpServers.startServer(port, { config -&gt;
+    config.routing({ route -&gt;
+        route.get(&quot;/&quot;, { call, s -&gt;
+            def request = call.getRequest()
+            $console.log(&quot;[服务器] 收到来自 ${request.getOriginConnectionPoint().getRemoteHost()} 的根路径请求&quot;)
+            // respondText 现在返回一个 Job，这成为 get 处理器块的返回值
+            call.getResponse().respondText(s, &quot;你好，世界！来自 M8Test HTTP 服务器。&quot;, { it.getTextPlain() })
+        })
+
+        route.get(&quot;/json&quot;, { call, s -&gt;
+            $console.log(&quot;[服务器] 收到 /json 路径请求&quot;)
+            def jsonResponse = '{&quot;status&quot;: &quot;ok&quot;, &quot;timestamp&quot;: ' + System.currentTimeMillis() + '}'
+            call.getResponse().respondText(s, jsonResponse, { it.getApplicationJson() })
+        })
+    })
+})
+
+$console.log(&quot;HTTP 服务器已在 http://127.0.0.1:${port} 启动&quot;)
+
+// 创建客户端进行测试
+def httpClient = $httpClients.newClient(null)
+
+// 延迟1秒确保服务器已完全启动
+scope.delay(1000).then({ s, v -&gt;
+    $console.log(&quot;[客户端] 开始测试服务器...&quot;)
+    def req1 = httpClient.get(s, &quot;http://127.0.0.1:${port}/&quot;, null, null)
+    def req2 = httpClient.get(s, &quot;http://127.0.0.1:${port}/json&quot;, null, null)
+    // 等待所有请求完成
+    s.awaitAll([req1, req2])
+}).then({ s, responses -&gt;
+    def resp1Text = responses[0].getTextBody(s)
+    def resp2Text = responses[1].getTextBody(s)
+    s.awaitAll([resp1Text, resp2Text])
+}).then({ s, bodies -&gt;
+    $console.log(&quot;[客户端] 根路径响应:&quot;, bodies[0])
+    $console.log(&quot;[客户端] /json 路径响应:&quot;, bodies[1])
+    s.resolve(null)
+}).onError({ error -&gt;
+    $console.error(&quot;[客户端] 测试失败:&quot;, error)
+}).onComplete({
+    $console.log(&quot;测试完成，正在关闭服务器...&quot;)
+    $httpServers.stopServer(httpServer)
+})</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_19" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_22" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const port = 8080;
+
+// 启动一个服务器
+const httpServer = $httpServers.startServer(port, config =&gt; {
+    config.routing(route =&gt; {
+        route.get(&quot;/&quot;, (call, s) =&gt; {
+            const request = call.getRequest();
+            $console.log(&quot;[服务器] 收到来自 &quot; + request.getOriginConnectionPoint().getRemoteHost() + &quot; 的根路径请求&quot;);
+            // respondText 现在返回一个 Job，这成为 get 处理器块的返回值，必须返回
+            return call.getResponse().respondText(s, &quot;你好，世界！来自 M8Test HTTP 服务器。&quot;, it =&gt; it.getTextPlain());
+        });
+
+        route.get(&quot;/json&quot;, (call, s) =&gt; {
+            $console.log(&quot;[服务器] 收到 /json 路径请求&quot;);
+            const jsonResponse = '{&quot;status&quot;: &quot;ok&quot;, &quot;timestamp&quot;: ' + Date.now() + '}';
+            return call.getResponse().respondText(s, jsonResponse, it =&gt; it.getApplicationJson());
+        });
+    });
+});
+
+$console.log(&quot;HTTP 服务器已在 http://127.0.0.1:&quot; + port + &quot; 启动&quot;);
+
+// 创建客户端进行测试
+const httpClient = $httpClients.newClient(null);
+
+// 延迟1秒确保服务器已完全启动
+scope.delay(1000).then((s, v) =&gt; {
+    $console.log(&quot;[客户端] 开始测试服务器...&quot;);
+    const req1 = httpClient.get(s, &quot;http://127.0.0.1:&quot; + port + &quot;/&quot;, null, null);
+    const req2 = httpClient.get(s, &quot;http://127.0.0.1:&quot; + port + &quot;/json&quot;, null, null);
+    // 等待所有请求完成
+    return s.awaitAll([req1, req2]);
+}).then((s, responses) =&gt; {
+    const resp1Text = responses[0].getTextBody(s);
+    const resp2Text = responses[1].getTextBody(s);
+    return s.awaitAll([resp1Text, resp2Text]);
+}).then((s, bodies) =&gt; {
+    $console.log(&quot;[客户端] 根路径响应:&quot;, bodies[0]);
+    $console.log(&quot;[客户端] /json 路径响应:&quot;, bodies[1]);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;[客户端] 测试失败:&quot;, error);
+}).onComplete(() =&gt; {
+    $console.log(&quot;测试完成，正在关闭服务器...&quot;);
+    $httpServers.stopServer(httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_25" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local port = 8080
+
+-- 引入 System 类用于获取时间戳
+local System = require(&quot;m8test_java.java.lang.System&quot;)
+
+-- 启动一个服务器
+local httpServer = _httpServers:startServer(port, function(config)
+    config:routing(function(route)
+        route:get(&quot;/&quot;, function(call, s)
+            local request = call:getRequest()
+            _console:log(&quot;[服务器] 收到来自 &quot; .. request:getOriginConnectionPoint():getRemoteHost() .. &quot; 的根路径请求&quot;)
+            -- respondText 现在返回一个 Job，这成为 get 处理器块的返回值
+            return call:getResponse():respondText(s, &quot;你好，世界！来自 M8Test HTTP 服务器。&quot;, function(it) return it:getTextPlain() end)
+        end)
+
+        route:get(&quot;/json&quot;, function(call, s)
+            _console:log(&quot;[服务器] 收到 /json 路径请求&quot;)
+            local jsonResponse = '{&quot;status&quot;: &quot;ok&quot;, &quot;timestamp&quot;: ' .. tostring(System:currentTimeMillis()) .. '}'
+            return call:getResponse():respondText(s, jsonResponse, function(it) return it:getApplicationJson() end)
+        end)
+    end)
+end)
+
+_console:log(&quot;HTTP 服务器已在 http://127.0.0.1:&quot; .. tostring(port) .. &quot; 启动&quot;)
+
+-- 创建客户端进行测试
+local httpClient = _httpClients:newClient(nil)
+
+-- 延迟1秒确保服务器已完全启动
+scope:delay(1000):_then(function(s, v)
+    _console:log(&quot;[客户端] 开始测试服务器...&quot;)
+    local req1 = httpClient:get(s, &quot;http://127.0.0.1:&quot; .. tostring(port) .. &quot;/&quot;, nil, nil)
+    local req2 = httpClient:get(s, &quot;http://127.0.0.1:&quot; .. tostring(port) .. &quot;/json&quot;, nil, nil)
+    -- 等待所有请求完成
+    return s:awaitAll(_iterables:listOf(req1, req2))
+end):_then(function(s, responses)
+    -- 修正：Java List 是 0-based 索引。第一个元素是 get(0)，第二个是 get(1)。
+    local resp1Text = responses:get(0):getTextBody(s)
+    local resp2Text = responses:get(1):getTextBody(s)
+    -- 同样，这里也需要一个 Java List
+    return s:awaitAll(_iterables:listOf(resp1Text, resp2Text))
+end):_then(function(s, bodies)
+    -- 修正：Java List 是 0-based 索引。
+    _console:log(&quot;[客户端] 根路径响应:&quot;, bodies:get(0))
+    _console:log(&quot;[客户端] /json 路径响应:&quot;, bodies:get(1))
+    return s:resolve(nil)
+end):onError(function(error)
+    if error ~= nil then
+        _console:error(&quot;[客户端] 测试失败:&quot;, error:stackTraceToString())
+    else
+        _console:error(&quot;[客户端] 测试失败，但未提供错误详情。&quot;)
+    end
+end):onComplete(function()
+    _console:log(&quot;测试完成，正在关闭服务器...&quot;)
+    _httpServers:stopServer(httpServer)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_28" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpServers $httpServers */
+global $httpServers;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+/** @var m8test_java\java\lang\System $System */
+use m8test_java\java\lang\System;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$port = 8080;
+
+// 启动一个服务器
+$httpServer = $httpServers-&gt;startServer($port, function ($config) {
+    $config-&gt;routing(function ($route) {
+        $route-&gt;get(javaString(&quot;/&quot;), function ($call, $s) {
+            global $console;
+            $request = $call-&gt;getRequest();
+            $console-&gt;log(javaString(&quot;[服务器] 收到来自 &quot;) . $request-&gt;getOriginConnectionPoint()-&gt;getRemoteHost() . javaString(&quot; 的根路径请求&quot;));
+            // respondText 现在返回一个 Job，这成为 get 处理器块的返回值
+            return $call-&gt;getResponse()-&gt;respondText($s, javaString(&quot;你好，世界！来自 M8Test HTTP 服务器。&quot;), function ($it) {
+                return $it-&gt;getTextPlain();
+            });
+        });
+
+        $route-&gt;get(javaString(&quot;/json&quot;), function ($call, $s) {
+            global $console;
+            $console-&gt;log(javaString(&quot;[服务器] 收到 /json 路径请求&quot;));
+            $jsonResponse = javaString('{&quot;status&quot;: &quot;ok&quot;, &quot;timestamp&quot;: ') . System::currentTimeMillis() . '}';
+            return $call-&gt;getResponse()-&gt;respondText($s, $jsonResponse, function ($it) {
+                return $it-&gt;getApplicationJson();
+            });
+        });
+    });
+});
+
+$console-&gt;log(javaString(&quot;HTTP 服务器已在 http://127.0.0.1:${port} 启动&quot;));
+
+// 创建客户端进行测试
+$httpClient = $httpClients-&gt;newClient(null);
+
+// 延迟1秒确保服务器已完全启动
+$scope-&gt;delay(1000)-&gt;then(function ($s, $v) use ($httpClient, $port) {
+    global $console, $iterables;
+    $console-&gt;log(javaString(&quot;[客户端] 开始测试服务器...&quot;));
+    $req1 = $httpClient-&gt;get($s, javaString(&quot;http://127.0.0.1:${port}/&quot;), null, null);
+    $req2 = $httpClient-&gt;get($s, javaString(&quot;http://127.0.0.1:${port}/json&quot;), null, null);
+    // 等待所有请求完成 (修正点1: 添加 return, 修正点2: 使用 listOf)
+    return $s-&gt;awaitAll($iterables-&gt;listOf($req1, $req2));
+})-&gt;then(function ($s, $responses) {
+    global $iterables;
+    $resp1Text = $responses-&gt;get(0)-&gt;getTextBody($s);
+    $resp2Text = $responses-&gt;get(1)-&gt;getTextBody($s);
+    // 修正点3: 同样使用 listOf 以保持一致和稳健
+    return $s-&gt;awaitAll($iterables-&gt;listOf($resp1Text, $resp2Text));
+})-&gt;then(function ($s, $bodies) {
+    global $console;
+    $console-&gt;log(javaString(&quot;[客户端] 根路径响应:&quot;), $bodies-&gt;get(0));
+    $console-&gt;log(javaString(&quot;[客户端] /json 路径响应:&quot;), $bodies-&gt;get(1));
+    return $s-&gt;resolve(null);
+})-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;error(javaString(&quot;[客户端] 测试失败:&quot;), $error);
+})-&gt;onComplete(function () use ($httpServer) {
+    global $console, $httpServers;
+    $console-&gt;log(javaString(&quot;测试完成，正在关闭服务器...&quot;));
+    $httpServers-&gt;stopServer($httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_31" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入Python标准库
+import time
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _httpServers
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+port = 8080
+
+# 启动一个服务器
+httpServer = _httpServers.startServer(port, lambda config:
+config.routing(lambda route: (
+    route.get(&quot;/&quot;, lambda call, s: (
+        (request := call.getRequest()),
+        _console.log(f&quot;[服务器] 收到来自 {request.getOriginConnectionPoint().getRemoteHost()} 的根路径请求&quot;),
+        # respondText 现在返回一个 Job，这成为 get 处理器块的返回值
+        call.getResponse().respondText(s, &quot;你好，世界！来自 M8Test HTTP 服务器。&quot;, lambda it: it.getTextPlain())
+    )[-1]),
+
+    route.get(&quot;/json&quot;, lambda call, s: (
+        _console.log(&quot;[服务器] 收到 /json 路径请求&quot;),
+        # 使用 f-string 和 time.time() 来构造JSON
+        (jsonResponse := f'{{&quot;status&quot;: &quot;ok&quot;, &quot;timestamp&quot;: {int(time.time() * 1000)}}}'),
+        call.getResponse().respondText(s, jsonResponse, lambda it: it.getApplicationJson())
+    )[-1])
+))
+                                      )
+
+_console.log(f&quot;HTTP 服务器已在 http://127.0.0.1:{port} 启动&quot;)
+
+# 创建客户端进行测试
+httpClient = _httpClients.newClient(None)
+
+# 延迟1秒确保服务器已完全启动
+scope.delay(1000).then(lambda s, v: (
+    _console.log(&quot;[客户端] 开始测试服务器...&quot;),
+    (req1 := httpClient.get(s, f&quot;http://127.0.0.1:{port}/&quot;, None, None)),
+    (req2 := httpClient.get(s, f&quot;http://127.0.0.1:{port}/json&quot;, None, None)),
+    # 等待所有请求完成
+    s.awaitAll([req1, req2])
+)[-1]).then(lambda s, responses: (
+    (resp1Text := responses[0].getTextBody(s)),
+    (resp2Text := responses[1].getTextBody(s)),
+    s.awaitAll([resp1Text, resp2Text])
+)[-1]).then(lambda s, bodies: (
+    _console.log(&quot;[客户端] 根路径响应: &quot; + str(bodies[0])),
+    _console.log(&quot;[客户端] /json 路径响应: &quot; + str(bodies[1])),
+    s.resolve(None)
+)[-1]).onError(lambda error: (
+    _console.error(&quot;[客户端] 测试失败: &quot; + str(error))
+)).onComplete(lambda: (  # 使用 lambda _: 以安全地接收可能存在的参数
+    _console.log(&quot;测试完成，正在关闭服务器...&quot;),
+    _httpServers.stopServer(httpServer)
+))
+</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_34" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+port = 8080
+
+# 启动一个服务器
+httpServer = $httpServers.startServer(port) do |config|
+  config.routing do |route|
+    route.get(&quot;/&quot;) do |call, s|
+      request = call.getRequest
+      $console.log(&quot;[服务器] 收到来自 #{request.getOriginConnectionPoint.getRemoteHost} 的根路径请求&quot;)
+      # respondText 现在返回一个 Job，这成为 get 处理器块的返回值
+      call.getResponse.respondText(s, &quot;你好，世界！来自 M8Test HTTP 服务器.&quot;) do |it|
+        it.getTextPlain
+      end
+    end
+
+    route.get(&quot;/json&quot;) do |call, s|
+      $console.log(&quot;[服务器] 收到 /json 路径请求&quot;)
+      # 使用静态方法调用 System.currentTimeMillis
+      jsonResponse = '{&quot;status&quot;: &quot;ok&quot;, &quot;timestamp&quot;: ' + M8testJava::Java::Lang::System::N__currentTimeMillis().to_s + '}'
+      call.getResponse.respondText(s, jsonResponse) do |it|
+        it.getApplicationJson
+      end
+    end
+  end
+end
+
+$console.log(&quot;HTTP 服务器已在 http://127.0.0.1:#{port} 启动&quot;)
+
+# 创建客户端进行测试
+httpClient = $httpClients.newClient(nil)
+
+# 延迟1秒确保服务器已完全启动
+scope.delay(1000).then do |s, v|
+  $console.log(&quot;[客户端] 开始测试服务器...&quot;)
+  req1 = httpClient.get(s, &quot;http://127.0.0.1:#{port}/&quot;, nil, nil)
+  req2 = httpClient.get(s, &quot;http://127.0.0.1:#{port}/json&quot;, nil, nil)
+  # 等待所有请求完成
+  s.awaitAll([req1, req2])
+end.then do |s, responses|
+  resp1Text = responses[0].getTextBody(s)
+  resp2Text = responses[1].getTextBody(s)
+  s.awaitAll([resp1Text, resp2Text])
+end.then do |s, bodies|
+  $console.log(&quot;[客户端] 根路径响应:&quot;, bodies[0])
+  $console.log(&quot;[客户端] /json 路径响应:&quot;, bodies[1])
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;[客户端] 测试失败:&quot;, error)
+end.onComplete do
+  $console.log(&quot;测试完成，正在关闭服务器...&quot;)
+  $httpServers.stopServer(httpServer)
+end</div></div></div></section><section class="chapter"><h2 id="dmd3fw_5" data-toc="dmd3fw_5">高级路由和请求处理</h2><section class="chapter"><h3 id="dmd3fw_83" data-toc="dmd3fw_83">处理路径参数和查询参数</h3><div class="tabs" id="dmd3fw_89" data-group="languages" data-anchors="[dmd3fw_101,dmd3fw_104,dmd3fw_107,dmd3fw_110,dmd3fw_113,dmd3fw_92,dmd3fw_95,dmd3fw_98]"><div class="tabs__content" data-gtm="tab" id="dmd3fw_92" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val port = 8081
+
+val httpServer = _httpServers.startServer(port) {
+    routing {
+        // 同样移除 call 参数，使用 this
+        get(&quot;/users/{name}&quot;) { s -&gt;
+            val request = getRequest()
+            val name = request.getPathParameters()[&quot;name&quot;]?.get(0)
+            val role = request.getQueryParameters()[&quot;role&quot;]?.get(0) ?: &quot;guest&quot;
+            val responseText = &quot;你好, $name! 你的角色是: $role&quot;
+            _console.log(&quot;[服务器] 正在响应: $responseText&quot;)
+
+            getResponse().respondText(s, responseText, null)
+        }
+    }
+}
+
+_console.log(&quot;服务器已在 http://127.0.0.1:$port 启动&quot;)
+
+// 客户端测试
+val httpClient = _httpClients.newClient(null)
+scope.delay(1000).then { s, v -&gt;
+    httpClient.get(s, &quot;http://127.0.0.1:$port/users/M8Test?role=developer&quot;, null, null)
+}.then { s, response -&gt;
+    response.getTextBody(s)
+}.then { s, body -&gt;
+    _console.log(&quot;[客户端] 收到响应:&quot;, body)
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;[客户端] 测试失败:&quot;, error)
+}.onComplete {
+    _httpServers.stopServer(httpServer)
+}</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_95" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def port = 8081
+
+def httpServer = $httpServers.startServer(port, { config -&gt;
+    config.routing({ route -&gt;
+        route.get(&quot;/users/{name}&quot;, { call, s -&gt;
+            def request = call.getRequest()
+            def name = request.getPathParameters()[&quot;name&quot;]?.get(0)
+            def role = request.getQueryParameters()[&quot;role&quot;]?.get(0) ?: &quot;guest&quot;
+            def responseText = &quot;你好, ${name}! 你的角色是: ${role}&quot;
+            $console.log(&quot;[服务器] 正在响应: ${responseText}&quot;)
+            // 返回 respondText 返回的 Job
+            call.getResponse().respondText(s, responseText, null)
+        })
+    })
+})
+
+$console.log(&quot;服务器已在 http://127.0.0.1:${port} 启动&quot;)
+
+// 客户端测试
+def httpClient = $httpClients.newClient(null)
+scope.delay(1000).then({ s, v -&gt;
+    httpClient.get(s, &quot;http://127.0.0.1:${port}/users/M8Test?role=developer&quot;, null, null)
+}).then({ s, response -&gt;
+    response.getTextBody(s)
+}).then({ s, body -&gt;
+    $console.log(&quot;[客户端] 收到响应:&quot;, body)
+    s.resolve(null)
+}).onError({ error -&gt;
+    $console.error(&quot;[客户端] 测试失败:&quot;, error)
+}).onComplete({
+    $httpServers.stopServer(httpServer)
+})</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_98" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_101" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const port = 8081;
+
+const httpServer = $httpServers.startServer(port, config =&gt; {
+    config.routing(route =&gt; {
+        route.get(&quot;/users/{name}&quot;, (call, s) =&gt; {
+            const request = call.getRequest();
+            const name = request.getPathParameters().get(&quot;name&quot;)?.get(0);
+            const role = request.getQueryParameters().get(&quot;role&quot;)?.get(0) ?? &quot;guest&quot;;
+            const responseText = &quot;你好, &quot; + name + &quot;! 你的角色是: &quot; + role;
+            $console.log(&quot;[服务器] 正在响应: &quot; + responseText);
+            // respondText 返回 Job，必须返回
+            return call.getResponse().respondText(s, responseText, null);
+        });
+    });
+});
+
+$console.log(&quot;服务器已在 http://127.0.0.1:&quot; + port + &quot; 启动&quot;);
+
+// 客户端测试
+const httpClient = $httpClients.newClient(null);
+scope.delay(1000).then((s, v) =&gt; {
+    return httpClient.get(s, &quot;http://127.0.0.1:&quot; + port + &quot;/users/M8Test?role=developer&quot;, null, null);
+}).then((s, response) =&gt; {
+    return response.getTextBody(s);
+}).then((s, body) =&gt; {
+    $console.log(&quot;[客户端] 收到响应:&quot;, body);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;[客户端] 测试失败:&quot;, error);
+}).onComplete(() =&gt; {
+    $httpServers.stopServer(httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_104" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local port = 8081
+
+local httpServer = _httpServers:startServer(port, function(config)
+    config:routing(function(route)
+        route:get(&quot;/users/{name}&quot;, function(call, s)
+            local request = call:getRequest()
+            -- ?. 安全调用转换为 'and' 逻辑
+            local nameList = request:getPathParameters():get(&quot;name&quot;)
+            local name = nameList and nameList:get(1) -- Lua 列表/数组索引从 1 开始
+
+            -- ?. 和 ?: (Elvis) 运算符的转换
+            local roleList = request:getQueryParameters():get(&quot;role&quot;)
+            local role = (roleList and roleList:get(1)) or &quot;guest&quot;
+
+            local responseText = &quot;你好, &quot; .. tostring(name) .. &quot;! 你的角色是: &quot; .. tostring(role)
+            _console:log(&quot;[服务器] 正在响应: &quot; .. responseText)
+            -- 返回 respondText 返回的 Job
+            return call:getResponse():respondText(s, responseText, nil)
+        end)
+    end)
+end)
+
+_console:log(&quot;服务器已在 http://127.0.0.1:&quot; .. tostring(port) .. &quot; 启动&quot;)
+
+-- 客户端测试
+local httpClient = _httpClients:newClient(nil)
+scope:delay(1000):_then(function(s, v)
+    return httpClient:get(s, &quot;http://127.0.0.1:&quot; .. tostring(port) .. &quot;/users/M8Test?role=developer&quot;, nil, nil)
+end):_then(function(s, response)
+    return response:getTextBody(s)
+end):_then(function(s, body)
+    _console:log(&quot;[客户端] 收到响应:&quot;, body)
+    return s:resolve(nil)
+end):onError(function(error)
+    if error ~= nil then
+        _console:error(&quot;[客户端] 测试失败:&quot;, error:stackTraceToString())
+    else
+        _console:error(&quot;[客户端] 测试失败，但未提供错误详情。&quot;)
+    end
+end):onComplete(function()
+    _httpServers:stopServer(httpServer)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_107" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\http\HttpServers $httpServers */
+global $httpServers;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\http\HttpClients $httpClients */
+global $httpClients;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$port = 8081;
+
+$httpServer = $httpServers-&gt;startServer($port, function ($config) {
+    $config-&gt;routing(function ($route) {
+        $route-&gt;get(javaString(&quot;/users/{name}&quot;), function ($call, $s) {
+            global $console;
+            $request = $call-&gt;getRequest();
+            $name = $request-&gt;getPathParameters()[javaString(&quot;name&quot;)]-&gt;get(0);
+
+            // --- 修正点: 使用 isset 和三元运算符替代 '??' ---
+            $queryParams = $request-&gt;getQueryParameters();
+            $roleParam = isset($queryParams[javaString(&quot;role&quot;)]) ? $queryParams[javaString(&quot;role&quot;)]-&gt;get(0) : null;
+            $role = ($roleParam !== null) ? $roleParam : javaString(&quot;guest&quot;);
+            // --- 修正结束 ---
+
+            $responseText = javaString(&quot;你好, {$name}! 你的角色是: {$role}&quot;);
+            $console-&gt;log(javaString(&quot;[服务器] 正在响应: {$responseText}&quot;));
+            // 返回 respondText 返回的 Job
+            return $call-&gt;getResponse()-&gt;respondText($s, $responseText, null);
+        });
+    });
+});
+
+$console-&gt;log(javaString(&quot;服务器已在 http://127.0.0.1:{$port} 启动&quot;));
+
+// 客户端测试
+$httpClient = $httpClients-&gt;newClient(null);
+$scope-&gt;delay(1000)-&gt;then(function ($s, $v) use ($httpClient, $port) {
+    return $httpClient-&gt;get($s, javaString(&quot;http://127.0.0.1:{$port}/users/M8Test?role=developer&quot;), null, null);
+})-&gt;then(function ($s, $response) {
+    return $response-&gt;getTextBody($s);
+})-&gt;then(function ($s, $body) {
+    global $console;
+    $console-&gt;log(javaString(&quot;[客户端] 收到响应:&quot;), $body);
+    return $s-&gt;resolve(null);
+})-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;error(javaString(&quot;[客户端] 测试失败:&quot;), $error);
+})-&gt;onComplete(function () use ($httpServers, $httpServer) {
+    $httpServers-&gt;stopServer($httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_110" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _httpServers
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+port = 8081
+
+httpServer = _httpServers.startServer(port, lambda config:
+config.routing(lambda route:
+               route.get(&quot;/users/{name}&quot;, lambda call, s: (
+                   (request := call.getRequest()),
+                   # 安全地获取路径和查询参数
+                   (path_params := request.getPathParameters()),
+                   (name_list := path_params.get(&quot;name&quot;)),
+                   (name := name_list[0] if name_list else None),
+                   (query_params := request.getQueryParameters()),
+                   (role_list := query_params.get(&quot;role&quot;)),
+                   (role_from_param := role_list[0] if role_list else None),
+                   (role := role_from_param if role_from_param is not None else &quot;guest&quot;),
+                   # 使用 f-string 进行字符串格式化
+                   (responseText := f&quot;你好, {name}! 你的角色是: {role}&quot;),
+                   _console.log(f&quot;[服务器] 正在响应: {responseText}&quot;),
+                   # 返回 respondText 返回的 Job
+                   call.getResponse().respondText(s, responseText, None)
+               )[-1])
+               )
+                                      )
+
+_console.log(f&quot;服务器已在 http://127.0.0.1:{port} 启动&quot;)
+
+# 客户端测试
+httpClient = _httpClients.newClient(None)
+(scope.delay(1000).then(
+    lambda s, v: httpClient.get(s, f&quot;http://127.0.0.1:{port}/users/M8Test?role=developer&quot;, None, None))
+ .then(lambda s, response: response.getTextBody(s))
+ .then(lambda s, body: (
+    _console.log(&quot;[客户端] 收到响应:&quot;, body),
+    s.resolve(None)
+)[-1])
+ .onError(lambda error: _console.error(&quot;[客户端] 测试失败:&quot;, error))
+ .onComplete(lambda: _httpServers.stopServer(httpServer)))
+</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_113" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+port = 8081
+
+httpServer = $httpServers.startServer(port) do |config|
+  config.routing do |route|
+    route.get(&quot;/users/{name}&quot;) do |call, s|
+      request = call.getRequest
+
+      # 修复: 替换 &amp;. 操作符
+      path_params_name = request.getPathParameters[&quot;name&quot;]
+      name = path_params_name ? path_params_name.get(0) : nil
+
+      query_params_role = request.getQueryParameters[&quot;role&quot;]
+      role_val = query_params_role ? query_params_role.get(0) : nil
+      role = role_val || &quot;guest&quot;
+
+      responseText = &quot;你好, #{name}! 你的角色是: #{role}&quot;
+      $console.log(&quot;[服务器] 正在响应: #{responseText}&quot;)
+      # 返回 respondText 返回的 Job
+      call.getResponse.respondText(s, responseText, nil)
+    end
+  end
+end
+
+$console.log(&quot;服务器已在 http://127.0.0.1:#{port} 启动&quot;)
+
+# 客户端测试
+httpClient = $httpClients.newClient(nil)
+scope.delay(1000).then do |s, v|
+  httpClient.get(s, &quot;http://127.0.0.1:#{port}/users/M8Test?role=developer&quot;, nil, nil)
+end.then do |s, response|
+  response.getTextBody(s)
+end.then do |s, body|
+  $console.log(&quot;[客户端] 收到响应:&quot;, body)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;[客户端] 测试失败:&quot;, error)
+end.onComplete do
+  $httpServers.stopServer(httpServer)
+end</div></div></div></section><section class="chapter"><h3 id="post" data-toc="post">处理 POST 请求体</h3><div class="tabs" id="dmd3fw_165" data-group="languages" data-anchors="[dmd3fw_168,dmd3fw_171,dmd3fw_174,dmd3fw_177,dmd3fw_180,dmd3fw_183,dmd3fw_186,dmd3fw_189]"><div class="tabs__content" data-gtm="tab" id="dmd3fw_168" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val port = 8082
+val httpServer = _httpServers.startServer(port) {
+    routing {
+        // post 处理器: HttpServerCall.(CoroutineScope) -&gt; Job
+        post(&quot;/submit&quot;) { s -&gt;
+            // getRequest() 是 HttpServerCall (this) 的方法
+            // getJsonBody 返回 Deferred&lt;T&gt;
+            getRequest().getJsonBody(scope).then { s2, body -&gt;
+                _console.log(&quot;[服务器] 收到的 JSON Body:&quot;, body)
+                val responseJson = &quot;&quot;&quot;{&quot;message&quot;: &quot;数据已收到&quot;, &quot;received&quot;: $body}&quot;&quot;&quot;
+
+                // respondText 返回 Job, 而 then 的 lambda 需要返回 Deferred
+                // 使用 toDeferred() 将 Job 转换为 Deferred&lt;Unit&gt;
+                getResponse().respondText(s2, responseJson) { it.getApplicationJson() }.toDeferred()
+            }.onError { error -&gt;
+                // 移除显式类型注解，让编译器自动推断为 com.m8test.script.core.api.exception.Throwable
+                _console.error(&quot;[服务器] 处理请求体失败:&quot;, error)
+
+                // onError 的 lambda 返回 Unit，但在异步链中我们通常只是执行副作用
+                // 这里直接响应错误信息
+                getResponse().respondText(s, &quot;错误的请求体&quot;, null)
+            }
+            // 整个链式调用的结果是 Deferred (实现了 Job)，符合 post 处理器的返回值要求
+        }
+    }
+}
+
+_console.log(&quot;服务器已在 http://127.0.0.1:$port 启动&quot;)
+
+// 客户端测试
+val httpClient = _httpClients.newClient(null)
+val postData = &quot;&quot;&quot;{&quot;user&quot;: &quot;test&quot;, &quot;id&quot;: 123}&quot;&quot;&quot;
+scope.delay(1000).then { s, v -&gt;
+    httpClient.postJson(s, &quot;http://127.0.0.1:$port/submit&quot;, postData, null)
+}.then { s, response -&gt;
+    _console.log(&quot;[客户端] 响应状态码:&quot;, response.getStatusCode().getValue())
+    response.getTextBody(s)
+}.then { s, body -&gt;
+    _console.log(&quot;[客户端] 收到响应:&quot;, body)
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;[客户端] 测试失败:&quot;, error)
+}.onComplete {
+    _httpServers.stopServer(httpServer)
+}</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_171" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def port = 8082
+def httpServer = $httpServers.startServer(port, { config -&gt;
+    config.routing({ route -&gt;
+        route.post(&quot;/submit&quot;, { call, s1 -&gt;
+            // post 处理器需要返回一个 Job。
+            // 整个 Deferred 链就是一个 Job，所以我们返回它。
+            call.getRequest().getJsonBody(scope).then({ s, body -&gt;
+                $console.log(&quot;[服务器] 收到的 JSON Body:&quot;, body)
+                def responseJson = '{&quot;message&quot;: &quot;数据已收到&quot;, &quot;received&quot;: ' + body.toString() + '}'
+                call.getResponse().respondText(s, responseJson, { it.getApplicationJson() })
+            }).onError({ error -&gt;
+                $console.error(&quot;[服务器] 处理请求体失败:&quot;, error)
+                call.getResponse().respondText(s1, &quot;错误的请求体&quot;, null)
+            })
+        })
+    })
+})
+
+$console.log(&quot;服务器已在 http://127.0.0.1:${port} 启动&quot;)
+
+// 客户端测试
+def httpClient = $httpClients.newClient(null)
+def postData = '{&quot;user&quot;: &quot;test&quot;, &quot;id&quot;: 123}'
+scope.delay(1000).then({ s, v -&gt;
+    httpClient.postJson(s, &quot;http://127.0.0.1:${port}/submit&quot;, postData, null)
+}).then({ s, response -&gt;
+    $console.log(&quot;[客户端] 响应状态码:&quot;, response.getStatusCode().value)
+    response.getTextBody(s)
+}).then({ s, body -&gt;
+    $console.log(&quot;[客户端] 收到响应:&quot;, body)
+    s.resolve(null)
+}).onError({ error -&gt;
+    $console.error(&quot;[客户端] 测试失败:&quot;, error)
+}).onComplete({
+    $httpServers.stopServer(httpServer)
+})</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_174" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_177" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const port = 8082;
+const httpServer = $httpServers.startServer(port, config =&gt; {
+    config.routing(route =&gt; {
+        route.post(&quot;/submit&quot;, (call, s1) =&gt; {
+            // post 处理器需要返回一个 Job。
+            // 整个 Deferred 链就是一个 Job，所以我们直接返回它。
+            return call.getRequest().getJsonBody(scope).then((s, body) =&gt; {
+                $console.log(&quot;[服务器] 收到的 JSON Body:&quot;, body);
+                const responseJson = '{&quot;message&quot;: &quot;数据已收到&quot;, &quot;received&quot;: ' + body.toString() + '}';
+                return call.getResponse().respondText(s, responseJson, it =&gt; it.getApplicationJson());
+            }).onError(error =&gt; {
+                $console.error(&quot;[服务器] 处理请求体失败:&quot;, error);
+                return call.getResponse().respondText(s1, &quot;错误的请求体&quot;, null);
+            });
+        });
+    });
+});
+
+$console.log(&quot;服务器已在 http://127.0.0.1:&quot; + port + &quot; 启动&quot;);
+
+// 客户端测试
+const httpClient = $httpClients.newClient(null);
+const postData = '{&quot;user&quot;: &quot;test&quot;, &quot;id&quot;: 123}';
+scope.delay(1000).then((s, v) =&gt; {
+    return httpClient.postJson(s, &quot;http://127.0.0.1:&quot; + port + &quot;/submit&quot;, postData, null);
+}).then((s, response) =&gt; {
+    $console.log(&quot;[客户端] 响应状态码:&quot;, response.getStatusCode().getValue());
+    return response.getTextBody(s);
+}).then((s, body) =&gt; {
+    $console.log(&quot;[客户端] 收到响应:&quot;, body);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;[客户端] 测试失败:&quot;, error);
+}).onComplete(() =&gt; {
+    $httpServers.stopServer(httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_180" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local port = 8082
+local httpServer = _httpServers:startServer(port, function(config)
+    config:routing(function(route)
+        route:post(&quot;/submit&quot;, function(call, s1)
+            -- post 处理器需要返回一个 Job。
+            -- 整个 Deferred 链就是一个 Job，所以我们返回它。
+            return call:getRequest():getJsonBody(scope):_then(function(s, body)
+                _console:log(&quot;[服务器] 收到的 JSON Body:&quot;, body)
+                local responseJson = '{&quot;message&quot;: &quot;数据已收到&quot;, &quot;received&quot;: ' .. tostring(body) .. '}'
+                return call:getResponse():respondText(s, responseJson, function(it) return it:getApplicationJson() end)
+            end):onError(function(error)
+                if error ~= nil then
+                    _console:error(&quot;[服务器] 处理请求体失败:&quot;, error:stackTraceToString())
+                else
+                    _console:error(&quot;[服务器] 处理请求体失败，但未提供错误详情。&quot;)
+                end
+                return call:getResponse():respondText(s1, &quot;错误的请求体&quot;, nil)
+            end)
+        end)
+    end)
+end)
+
+_console:log(&quot;服务器已在 http://127.0.0.1:&quot; .. tostring(port) .. &quot; 启动&quot;)
+
+-- 客户端测试
+local httpClient = _httpClients:newClient(nil)
+local postData = '{&quot;user&quot;: &quot;test&quot;, &quot;id&quot;: 123}'
+scope:delay(1000):_then(function(s, v)
+    return httpClient:postJson(s, &quot;http://127.0.0.1:&quot; .. tostring(port) .. &quot;/submit&quot;, postData, nil)
+end):_then(function(s, response)
+    _console:log(&quot;[客户端] 响应状态码:&quot;, response:getStatusCode().value)
+    return response:getTextBody(s)
+end):_then(function(s, body)
+    _console:log(&quot;[客户端] 收到响应:&quot;, body)
+    return s:resolve(nil)
+end):onError(function(error)
+    if error ~= nil then
+        _console:error(&quot;[客户端] 测试失败:&quot;, error:stackTraceToString())
+    else
+        _console:error(&quot;[客户端] 测试失败，但未提供错误详情。&quot;)
+    end
+end):onComplete(function()
+    _httpServers:stopServer(httpServer)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_183" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpServers $httpServers */
+global $httpServers;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$port = 8082;
+$httpServer = $httpServers-&gt;startServer($port, function ($config) use ($scope) {
+    $config-&gt;routing(function ($route) use ($scope) {
+        $route-&gt;post(javaString(&quot;/submit&quot;), function ($call, $s1) use ($scope) {
+            // post 处理器需要返回一个 Job。
+            // 整个 Deferred 链就是一个 Job，所以我们返回它。
+            return $call-&gt;getRequest()-&gt;getJsonBody($scope)-&gt;then(function ($s, $body) use ($call) {
+                global $console;
+                $console-&gt;log(javaString(&quot;[服务器] 收到的 JSON Body:&quot;), $body);
+                $responseJson = javaString('{&quot;message&quot;: &quot;数据已收到&quot;, &quot;received&quot;: ') . $body . '}';
+                return $call-&gt;getResponse()-&gt;respondText($s, $responseJson, function ($it) {
+                    return $it-&gt;getApplicationJson();
+                });
+            })-&gt;onError(function ($error) use ($call, $s1) {
+                global $console;
+                $console-&gt;error(javaString(&quot;[服务器] 处理请求体失败:&quot;), $error);
+                return $call-&gt;getResponse()-&gt;respondText($s1, javaString(&quot;错误的请求体&quot;), null);
+            });
+        });
+    });
+});
+
+// 修正点: 修复字符串拼接
+$console-&gt;log(javaString(&quot;服务器已在 http://127.0.0.1:&quot; . $port . &quot; 启动&quot;));
+
+// 客户端测试
+$httpClient = $httpClients-&gt;newClient(null);
+$postData = javaString('{&quot;user&quot;: &quot;test&quot;, &quot;id&quot;: 123}');
+$scope-&gt;delay(1000)-&gt;then(function ($s, $v) use ($httpClient, $port, $postData) {
+    return $httpClient-&gt;postJson($s, javaString(&quot;http://127.0.0.1:&quot; . $port . &quot;/submit&quot;), $postData, null);
+})-&gt;then(function ($s, $response) {
+    global $console;
+    $console-&gt;log(javaString(&quot;[客户端] 响应状态码:&quot;), $response-&gt;getStatusCode()-&gt;value);
+    return $response-&gt;getTextBody($s);
+})-&gt;then(function ($s, $body) {
+    global $console;
+    $console-&gt;log(javaString(&quot;[客户端] 收到响应:&quot;), $body);
+    return $s-&gt;resolve(null);
+})-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;error(javaString(&quot;[客户端] 测试失败:&quot;), $error);
+})-&gt;onComplete(function () use ($httpServer) {
+    global $httpServers;
+    $httpServers-&gt;stopServer($httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_186" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _httpServers
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+port = 8082
+httpServer = _httpServers.startServer(port, lambda config:
+config.routing(lambda route:
+               # post 处理器需要返回一个 Job。
+               # 整个 Deferred 链就是一个 Job，所以我们返回它。
+               route.post(&quot;/submit&quot;, lambda call, s1:
+               call.getRequest().getJsonBody(scope).then(lambda s, body: (
+                   _console.log(&quot;[服务器] 收到的 JSON Body:&quot;, body),
+                   (responseJson := f'{{&quot;message&quot;: &quot;数据已收到&quot;, &quot;received&quot;: {str(body)}}}'),
+                   call.getResponse().respondText(s, responseJson, lambda it: it.getApplicationJson())
+               )[-1]).onError(lambda error: (
+                   _console.error(&quot;[服务器] 处理请求体失败:&quot;, error),
+                   call.getResponse().respondText(s1, &quot;错误的请求体&quot;, None)
+               )[-1])
+                          )
+               )
+                                      )
+
+_console.log(f&quot;服务器已在 http://127.0.0.1:{port} 启动&quot;)
+
+# 客户端测试
+httpClient = _httpClients.newClient(None)
+postData = '{&quot;user&quot;: &quot;test&quot;, &quot;id&quot;: 123}'
+(scope.delay(1000).then(lambda s, v: httpClient.postJson(s, f&quot;http://127.0.0.1:{port}/submit&quot;, postData, None))
+ .then(lambda s, response: (
+    _console.log(&quot;[客户端] 响应状态码:&quot;, response.getStatusCode().getValue()),
+    response.getTextBody(s)
+)[-1])
+ .then(lambda s, body: (
+    _console.log(&quot;[客户端] 收到响应:&quot;, body),
+    s.resolve(None)
+)[-1])
+ .onError(lambda error: _console.error(&quot;[客户端] 测试失败:&quot;, error))
+ .onComplete(lambda: _httpServers.stopServer(httpServer)))
+</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_189" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+port = 8082
+httpServer = $httpServers.startServer(port) do |config|
+  config.routing do |route|
+    route.post(&quot;/submit&quot;) do |call, s1|
+      # post 处理器需要返回一个 Job。
+      # 整个 Deferred 链就是一个 Job，所以我们返回它。
+      call.getRequest.getJsonBody(scope).then do |s, body|
+        $console.log(&quot;[服务器] 收到的 JSON Body:&quot;, body)
+        responseJson = '{&quot;message&quot;: &quot;数据已收到&quot;, &quot;received&quot;: ' + body.to_s + '}'
+        call.getResponse.respondText(s, responseJson) do |it|
+          it.getApplicationJson
+        end
+      end.onError do |error|
+        $console.error(&quot;[服务器] 处理请求体失败:&quot;, error)
+        call.getResponse.respondText(s1, &quot;错误的请求体&quot;, nil)
+      end
+    end
+  end
+end
+
+$console.log(&quot;服务器已在 http://127.0.0.1:#{port} 启动&quot;)
+
+# 客户端测试
+httpClient = $httpClients.newClient(nil)
+postData = '{&quot;user&quot;: &quot;test&quot;, &quot;id&quot;: 123}'
+scope.delay(1000).then do |s, v|
+  httpClient.postJson(s, &quot;http://127.0.0.1:#{port}/submit&quot;, postData, nil)
+end.then do |s, response|
+  $console.log(&quot;[客户端] 响应状态码:&quot;, response.getStatusCode.value)
+  response.getTextBody(s)
+end.then do |s, body|
+  $console.log(&quot;[客户端] 收到响应:&quot;, body)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;[客户端] 测试失败:&quot;, error)
+end.onComplete do
+  $httpServers.stopServer(httpServer)
+end</div></div></div></section><section class="chapter"><h3 id="dmd3fw_85" data-toc="dmd3fw_85">托管静态文件</h3><p id="dmd3fw_238">您可以轻松地将一个文件夹的内容作为静态网站托管。</p><div class="tabs" id="dmd3fw_242" data-group="languages" data-anchors="[dmd3fw_245,dmd3fw_248,dmd3fw_251,dmd3fw_254,dmd3fw_257,dmd3fw_260,dmd3fw_263,dmd3fw_266]"><div class="tabs__content" data-gtm="tab" id="dmd3fw_245" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+
+// 1. 创建一个用于托管的文件夹和文件
+val staticDir = _files.buildFile { setPath(_files.getFilesDir(), &quot;www&quot;) }
+staticDir.mkdirs()
+
+val indexFile = _files.buildFile { setPath(staticDir.getAbsolutePath(), &quot;index.html&quot;) }
+indexFile.writeText(&quot;&lt;h1&gt;欢迎来到我的静态网站&lt;/h1&gt;&lt;p&gt;这是一个由 M8Test 脚本托管的页面。&lt;/p&gt;&quot;, &quot;UTF-8&quot;)
+
+val aboutFile = _files.buildFile { setPath(staticDir.getAbsolutePath(), &quot;about.html&quot;) }
+aboutFile.writeText(&quot;&lt;h1&gt;关于我们&lt;/h1&gt;&quot;, &quot;UTF-8&quot;)
+
+_console.log(&quot;静态文件已创建于:&quot;, staticDir.getAbsolutePath())
+
+val port = 8083
+
+val httpServer = _httpServers.startServer(port) {
+    routing {
+        staticFiles(&quot;/&quot;, staticDir, &quot;index.html&quot;, null)
+    }
+}
+
+_console.log(&quot;静态文件服务器已在 http://127.0.0.1:$port 启动&quot;)
+
+// 客户端测试
+val httpClient = _httpClients.newClient(null)
+scope.delay(1000).then { s, v -&gt;
+    val req1 = httpClient.get(s, &quot;http://127.0.0.1:$port/&quot;, null, null)
+    val req2 = httpClient.get(s, &quot;http://127.0.0.1:$port/about.html&quot;, null, null)
+    s.awaitAll(listOf(req1, req2))
+}.then { s, responses -&gt;
+    val body1 = responses[0].getTextBody(s)
+    val body2 = responses[1].getTextBody(s)
+    s.awaitAll(listOf(body1, body2))
+}.then { s, bodies -&gt;
+    _console.log(&quot;[客户端] / 响应:&quot;, bodies[0])
+    _console.log(&quot;[客户端] /about.html 响应:&quot;, bodies[1])
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;[客户端] 测试失败:&quot;, error)
+}.onComplete {
+    _httpServers.stopServer(httpServer)
+    staticDir.deleteRecursively()
+    _console.log(&quot;服务器已关闭，临时文件已清理。&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_248" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+
+// 1. 创建一个用于托管的文件夹和文件
+def staticDir = $files.buildFile({ it.setPath($files.getFilesDir(), &quot;www&quot;) })
+staticDir.mkdirs()
+
+def indexFile = $files.buildFile({ it.setPath(staticDir.getAbsolutePath(), &quot;index.html&quot;) })
+indexFile.writeText(&quot;&lt;h1&gt;欢迎来到我的静态网站&lt;/h1&gt;&lt;p&gt;这是一个由 M8Test 脚本托管的页面。&lt;/p&gt;&quot;, &quot;UTF-8&quot;)
+
+def aboutFile = $files.buildFile({ it.setPath(staticDir.getAbsolutePath(), &quot;about.html&quot;) })
+aboutFile.writeText(&quot;&lt;h1&gt;关于我们&lt;/h1&gt;&quot;, &quot;UTF-8&quot;)
+
+$console.log(&quot;静态文件已创建于:&quot;, staticDir.getAbsolutePath())
+
+def port = 8083
+
+def httpServer = $httpServers.startServer(port, { config -&gt;
+    config.routing({ route -&gt;
+        route.staticFiles(&quot;/&quot;, staticDir, &quot;index.html&quot;, null)
+    })
+})
+
+$console.log(&quot;静态文件服务器已在 http://127.0.0.1:${port} 启动&quot;)
+
+// 客户端测试
+def httpClient = $httpClients.newClient(null)
+scope.delay(1000).then({ s, v -&gt;
+    def req1 = httpClient.get(s, &quot;http://127.0.0.1:${port}/&quot;, null, null)
+    def req2 = httpClient.get(s, &quot;http://127.0.0.1:${port}/about.html&quot;, null, null)
+    s.awaitAll([req1, req2])
+}).then({ s, responses -&gt;
+    def body1 = responses[0].getTextBody(s)
+    def body2 = responses[1].getTextBody(s)
+    s.awaitAll([body1, body2])
+}).then({ s, bodies -&gt;
+    $console.log(&quot;[客户端] / 响应:&quot;, bodies[0])
+    $console.log(&quot;[客户端] /about.html 响应:&quot;, bodies[1])
+    s.resolve(null)
+}).onError({ error -&gt;
+    $console.error(&quot;[客户端] 测试失败:&quot;, error)
+}).onComplete({
+    $httpServers.stopServer(httpServer)
+    staticDir.deleteRecursively()
+    $console.log(&quot;服务器已关闭，临时文件已清理。&quot;)
+})</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_251" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_254" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+
+// 1. 创建一个用于托管的文件夹和文件
+const staticDir = $files.buildFile(it =&gt; { it.setPath($files.getFilesDir(), &quot;www&quot;); });
+staticDir.mkdirs();
+
+const indexFile = $files.buildFile(it =&gt; { it.setPath(staticDir.getAbsolutePath(), &quot;index.html&quot;); });
+indexFile.writeText(&quot;&lt;h1&gt;欢迎来到我的静态网站&lt;/h1&gt;&lt;p&gt;这是一个由 M8Test 脚本托管的页面。&lt;/p&gt;&quot;, &quot;UTF-8&quot;);
+
+const aboutFile = $files.buildFile(it =&gt; { it.setPath(staticDir.getAbsolutePath(), &quot;about.html&quot;); });
+aboutFile.writeText(&quot;&lt;h1&gt;关于我们&lt;/h1&gt;&quot;, &quot;UTF-8&quot;);
+
+$console.log(&quot;静态文件已创建于:&quot;, staticDir.getAbsolutePath());
+
+const port = 8083;
+
+const httpServer = $httpServers.startServer(port, config =&gt; {
+    config.routing(route =&gt; {
+        route.staticFiles(&quot;/&quot;, staticDir, &quot;index.html&quot;, null);
+    });
+});
+
+$console.log(&quot;静态文件服务器已在 http://127.0.0.1:&quot; + port + &quot; 启动&quot;);
+
+// 客户端测试
+const httpClient = $httpClients.newClient(null);
+scope.delay(1000).then((s, v) =&gt; {
+    const req1 = httpClient.get(s, &quot;http://127.0.0.1:&quot; + port + &quot;/&quot;, null, null);
+    const req2 = httpClient.get(s, &quot;http://127.0.0.1:&quot; + port + &quot;/about.html&quot;, null, null);
+    return s.awaitAll([req1, req2]);
+}).then((s, responses) =&gt; {
+    const body1 = responses[0].getTextBody(s);
+    const body2 = responses[1].getTextBody(s);
+    return s.awaitAll([body1, body2]);
+}).then((s, bodies) =&gt; {
+    $console.log(&quot;[客户端] / 响应:&quot;, bodies[0]);
+    $console.log(&quot;[客户端] /about.html 响应:&quot;, bodies[1]);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;[客户端] 测试失败:&quot;, error);
+}).onComplete(() =&gt; {
+    $httpServers.stopServer(httpServer);
+    staticDir.deleteRecursively();
+    $console.log(&quot;服务器已关闭，临时文件已清理。&quot;);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_257" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+
+-- 1. 创建一个用于托管的文件夹和文件
+local staticDir = _files:buildFile(function(it) it:setPath(_files:getFilesDir(), &quot;www&quot;) end)
+staticDir:mkdirs()
+
+local indexFile = _files:buildFile(function(it) it:setPath(staticDir:getAbsolutePath(), &quot;index.html&quot;) end)
+indexFile:writeText(&quot;&lt;h1&gt;欢迎来到我的静态网站&lt;/h1&gt;&lt;p&gt;这是一个由 M8Test 脚本托管的页面。&lt;/p&gt;&quot;, &quot;UTF-8&quot;)
+
+local aboutFile = _files:buildFile(function(it) it:setPath(staticDir:getAbsolutePath(), &quot;about.html&quot;) end)
+aboutFile:writeText(&quot;&lt;h1&gt;关于我们&lt;/h1&gt;&quot;, &quot;UTF-8&quot;)
+
+_console:log(&quot;静态文件已创建于:&quot;, staticDir:getAbsolutePath())
+
+local port = 8083
+
+local httpServer = _httpServers:startServer(port, function(config)
+    config:routing(function(route)
+        route:staticFiles(&quot;/&quot;, staticDir, &quot;index.html&quot;, nil)
+    end)
+end)
+
+_console:log(&quot;静态文件服务器已在 http://127.0.0.1:&quot; .. tostring(port) .. &quot; 启动&quot;)
+
+-- 客户端测试
+local httpClient = _httpClients:newClient(nil)
+scope:delay(1000):_then(function(s, v)
+    local req1 = httpClient:get(s, &quot;http://127.0.0.1:&quot; .. tostring(port) .. &quot;/&quot;, nil, nil)
+    local req2 = httpClient:get(s, &quot;http://127.0.0.1:&quot; .. tostring(port) .. &quot;/about.html&quot;, nil, nil)
+    -- 修正1：awaitAll 需要一个 Java List, 而不是 Lua table。
+    return s:awaitAll(_iterables:listOf(req1, req2))
+end):_then(function(s, responses)
+    -- 修正2：Java List 是 0-based 索引。
+    local body1 = responses:get(0):getTextBody(s)
+    local body2 = responses:get(1):getTextBody(s)
+    -- 修正1：同样，这里也需要一个 Java List
+    return s:awaitAll(_iterables:listOf(body1, body2))
+end):_then(function(s, bodies)
+    -- 修正2：Java List 是 0-based 索引。
+    _console:log(&quot;[客户端] / 响应:&quot;, bodies:get(0))
+    _console:log(&quot;[客户端] /about.html 响应:&quot;, bodies:get(1))
+    return s:resolve(nil)
+end):onError(function(error)
+    if error ~= nil then
+        _console:error(&quot;[客户端] 测试失败:&quot;, error:stackTraceToString())
+    else
+        _console:error(&quot;[客户端] 测试失败，但未提供错误详情。&quot;)
+    end
+end):onComplete(function()
+    _httpServers:stopServer(httpServer)
+    staticDir:deleteRecursively()
+    _console:log(&quot;服务器已关闭，临时文件已清理。&quot;)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_260" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\file\Files $files */
+global $files;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpServers $httpServers */
+global $httpServers;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 1. 创建一个用于托管的文件夹和文件
+$staticDir = $files-&gt;buildFile(function ($it) use ($files) {
+    $it-&gt;setPath($files-&gt;getFilesDir(), javaString(&quot;www&quot;));
+});
+$staticDir-&gt;mkdirs();
+
+$indexFile = $files-&gt;buildFile(function ($it) use ($staticDir) {
+    $it-&gt;setPath($staticDir-&gt;getAbsolutePath(), javaString(&quot;index.html&quot;));
+});
+$indexFile-&gt;writeText(javaString(&quot;&lt;h1&gt;欢迎来到我的静态网站&lt;/h1&gt;&lt;p&gt;这是一个由 M8Test 脚本托管的页面。&lt;/p&gt;&quot;), javaString(&quot;UTF-8&quot;));
+
+$aboutFile = $files-&gt;buildFile(function ($it) use ($staticDir) {
+    $it-&gt;setPath($staticDir-&gt;getAbsolutePath(), javaString(&quot;about.html&quot;));
+});
+$aboutFile-&gt;writeText(javaString(&quot;&lt;h1&gt;关于我们&lt;/h1&gt;&quot;), javaString(&quot;UTF-8&quot;));
+
+$console-&gt;log(javaString(&quot;静态文件已创建于:&quot;), $staticDir-&gt;getAbsolutePath());
+
+$port = 8083;
+
+$httpServer = $httpServers-&gt;startServer($port, function ($config) use ($staticDir) {
+    $config-&gt;routing(function ($route) use ($staticDir) {
+        $route-&gt;staticFiles(javaString(&quot;/&quot;), $staticDir, javaString(&quot;index.html&quot;), null);
+    });
+});
+
+// 修正点: 修复字符串拼接
+$console-&gt;log(javaString(&quot;静态文件服务器已在 http://127.0.0.1:&quot; . $port . &quot; 启动&quot;));
+
+// 客户端测试
+$httpClient = $httpClients-&gt;newClient(null);
+$scope-&gt;delay(1000)-&gt;then(function ($s, $v) use ($httpClient, $port) {
+    global $iterables;
+    $req1 = $httpClient-&gt;get($s, javaString(&quot;http://127.0.0.1:&quot; . $port . &quot;/&quot;), null, null);
+    $req2 = $httpClient-&gt;get($s, javaString(&quot;http://127.0.0.1:&quot; . $port . &quot;/about.html&quot;), null, null);
+    return $s-&gt;awaitAll($iterables-&gt;listOf($req1, $req2));
+})-&gt;then(function ($s, $responses) {
+    global $iterables;
+    $body1 = $responses-&gt;get(0)-&gt;getTextBody($s);
+    $body2 = $responses-&gt;get(1)-&gt;getTextBody($s);
+    return $s-&gt;awaitAll($iterables-&gt;listOf($body1, $body2));
+})-&gt;then(function ($s, $bodies) {
+    global $console;
+    $console-&gt;log(javaString(&quot;[客户端] / 响应:&quot;), $bodies-&gt;get(0));
+    $console-&gt;log(javaString(&quot;[客户端] /about.html 响应:&quot;), $bodies-&gt;get(1));
+    return $s-&gt;resolve(null);
+})-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;error(javaString(&quot;[客户端] 测试失败:&quot;), $error);
+})-&gt;onComplete(function () use ($httpServer, $staticDir) {
+    global $console, $httpServers;
+    $httpServers-&gt;stopServer($httpServer);
+    $staticDir-&gt;deleteRecursively();
+    $console-&gt;log(javaString(&quot;服务器已关闭，临时文件已清理。&quot;));
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_263" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _files
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _httpServers
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+# 1. 创建一个用于托管的文件夹和文件
+staticDir = _files.buildFile(lambda it: it.setPath(_files.getFilesDir(), &quot;www&quot;))
+staticDir.mkdirs()
+
+indexFile = _files.buildFile(lambda it: it.setPath(staticDir.getAbsolutePath(), &quot;index.html&quot;))
+indexFile.writeText(&quot;&lt;h1&gt;欢迎来到我的静态网站&lt;/h1&gt;&lt;p&gt;这是一个由 M8Test 脚本托管的页面。&lt;/p&gt;&quot;, &quot;UTF-8&quot;)
+
+aboutFile = _files.buildFile(lambda it: it.setPath(staticDir.getAbsolutePath(), &quot;about.html&quot;))
+aboutFile.writeText(&quot;&lt;h1&gt;关于我们&lt;/h1&gt;&quot;, &quot;UTF-8&quot;)
+
+_console.log(&quot;静态文件已创建于:&quot;, staticDir.getAbsolutePath())
+
+port = 8083
+
+httpServer = _httpServers.startServer(port, lambda config:
+config.routing(lambda route: route.staticFiles(&quot;/&quot;, staticDir, &quot;index.html&quot;, None))
+                                      )
+
+_console.log(f&quot;静态文件服务器已在 http://127.0.0.1:{port} 启动&quot;)
+
+# 客户端测试
+httpClient = _httpClients.newClient(None)
+scope.delay(1000).then(lambda s, v: (
+    (req1 := httpClient.get(s, f&quot;http://127.0.0.1:{port}/&quot;, None, None)),
+    (req2 := httpClient.get(s, f&quot;http://127.0.0.1:{port}/about.html&quot;, None, None)),
+    s.awaitAll([req1, req2])
+)[-1]).then(lambda s, responses: (
+    (body1 := responses[0].getTextBody(s)),
+    (body2 := responses[1].getTextBody(s)),
+    s.awaitAll([body1, body2])
+)[-1]).then(lambda s, bodies: (
+    _console.log(&quot;[客户端] / 响应:&quot;, bodies[0]),
+    _console.log(&quot;[客户端] /about.html 响应:&quot;, bodies[1]),
+    s.resolve(None)
+)[-1]).onError(lambda error:
+               _console.error(&quot;[客户端] 测试失败:&quot;, error)
+               ).onComplete(lambda: (
+    _httpServers.stopServer(httpServer),
+    staticDir.deleteRecursively(),
+    _console.log(&quot;服务器已关闭，临时文件已清理。&quot;)
+))
+</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_266" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+
+# 1. 创建一个用于托管的文件夹和文件
+staticDir = $files.buildFile do |it|
+  it.setPath($files.getFilesDir, &quot;www&quot;)
+end
+staticDir.mkdirs
+
+indexFile = $files.buildFile do |it|
+  it.setPath(staticDir.getAbsolutePath, &quot;index.html&quot;)
+end
+indexFile.writeText(&quot;&lt;h1&gt;欢迎来到我的静态网站&lt;/h1&gt;&lt;p&gt;这是一个由 M8Test 脚本托管的页面。&lt;/p&gt;&quot;, &quot;UTF-8&quot;)
+
+aboutFile = $files.buildFile do |it|
+  it.setPath(staticDir.getAbsolutePath, &quot;about.html&quot;)
+end
+aboutFile.writeText(&quot;&lt;h1&gt;关于我们&lt;/h1&gt;&quot;, &quot;UTF-8&quot;)
+
+$console.log(&quot;静态文件已创建于:&quot;, staticDir.getAbsolutePath)
+
+port = 8083
+
+httpServer = $httpServers.startServer(port) do |config|
+  config.routing do |route|
+    route.staticFiles(&quot;/&quot;, staticDir, &quot;index.html&quot;, nil)
+  end
+end
+
+$console.log(&quot;静态文件服务器已在 http://127.0.0.1:#{port} 启动&quot;)
+
+# 客户端测试
+httpClient = $httpClients.newClient(nil)
+scope.delay(1000).then do |s, v|
+  req1 = httpClient.get(s, &quot;http://127.0.0.1:#{port}/&quot;, nil, nil)
+  req2 = httpClient.get(s, &quot;http://127.0.0.1:#{port}/about.html&quot;, nil, nil)
+  s.awaitAll([req1, req2])
+end.then do |s, responses|
+  body1 = responses[0].getTextBody(s)
+  body2 = responses[1].getTextBody(s)
+  s.awaitAll([body1, body2])
+end.then do |s, bodies|
+  $console.log(&quot;[客户端] / 响应:&quot;, bodies[0])
+  $console.log(&quot;[客户端] /about.html 响应:&quot;, bodies[1])
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;[客户端] 测试失败:&quot;, error)
+end.onComplete do
+  $httpServers.stopServer(httpServer)
+  staticDir.deleteRecursively
+  $console.log(&quot;服务器已关闭，临时文件已清理。&quot;)
+end</div></div></div></section></section><section class="chapter"><h2 id="websocket" data-toc="websocket">搭建 WebSocket 服务器</h2><p id="dmd3fw_315">创建一个 WebSocket 端点来处理实时双向通信。</p><div class="tabs" id="dmd3fw_319" data-group="languages" data-anchors="[dmd3fw_322,dmd3fw_325,dmd3fw_328,dmd3fw_331,dmd3fw_334,dmd3fw_337,dmd3fw_340,dmd3fw_343]"><div class="tabs__content" data-gtm="tab" id="dmd3fw_322" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+// 确保脚本在后台运行
+_threads.getMain().setBackground(true)
+
+val scope = _coroutines.newScope(null)
+val port = 8084
+val httpServer = _httpServers.startServer(port) {
+    routing {
+        // webSocket 处理器: WebSocketSession.(CoroutineScope) -&gt; Job
+        webSocket(&quot;/echo&quot;) { s1 -&gt;
+            _console.log(&quot;[服务器] 一个新的 WebSocket 客户端已连接！&quot;)
+
+            // this 是 WebSocketSession
+            setOnText { s, text -&gt;
+                _console.log(&quot;[服务器] 收到消息:&quot;, text)
+                val reply = &quot;服务器回显: $text&quot;
+                // sendText 返回 Job，满足 setOnText 要求
+                sendText(s, reply)
+            }
+
+            setOnClose { s, reason -&gt;
+                _console.warn(&quot;[服务器] 一个客户端已断开连接:&quot;, reason?.getMessage())
+                // resolve 返回 Deferred (也是 Job)，满足 setOnClose 要求
+                s.resolve(null)
+            }
+
+            // 处理器本身返回一个 Job
+            s1.resolve(null)
+        }
+    }
+}
+
+_console.log(&quot;WebSocket 服务器已在 ws://127.0.0.1:$port/echo 启动&quot;)
+
+// 客户端测试
+val httpClient = _httpClients.newClient(null)
+
+scope.delay(1000).then { s, v -&gt;
+    // 这里的 then 期望返回 Deferred
+    // httpClient.webSocket 返回 Job，需要转换为 Deferred
+    httpClient.webSocket(s, &quot;ws://127.0.0.1:$port/echo&quot;, null) {
+        // this 是 WebSocketSession
+        setOnOpen { ss -&gt;
+            _console.log(&quot;[客户端] WebSocket 已连接，发送消息...&quot;)
+            sendText(ss, &quot;Hello Echo Server!&quot;)
+        }
+
+        setOnText { ss, text -&gt;
+            _console.log(&quot;[客户端] 收到回显:&quot;, text)
+            // 收到回显后关闭连接
+            // setOnText 需要返回 Job
+            scope.delay(1000).then { sss, _ -&gt;
+                // close 返回 Job，但 then 需要 Deferred，所以要转换
+                close(sss, 1000, &quot;测试完成&quot;).toDeferred()
+            }
+        }
+
+        setOnClose { ss, reason -&gt;
+            _console.log(&quot;[客户端] 连接已关闭。&quot;)
+            ss.resolve(null)
+        }
+    }.toDeferred() // 将 webSocket 返回的 Job 转为 Deferred
+}.then { s, v -&gt;
+    _console.log(&quot;客户端 WebSocket 会话结束。&quot;)
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;[客户端] WebSocket 测试失败:&quot;, error)
+}.onComplete {
+    _console.log(&quot;测试完成，关闭服务器。&quot;)
+    _httpServers.stopServer(httpServer)
+}</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_325" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true)
+
+def scope = $coroutines.newScope(null)
+def port = 8084
+def httpServer = $httpServers.startServer(port, { config -&gt;
+    config.routing({ route -&gt;
+        // webSocket 处理器需要返回一个 Job
+        route.webSocket(&quot;/echo&quot;, { session, s1 -&gt;
+            $console.log(&quot;[服务器] 一个新的 WebSocket 客户端已连接！&quot;)
+
+            session.setOnText({ s, text -&gt;
+                $console.log(&quot;[服务器] 收到消息:&quot;, text)
+                def reply = &quot;服务器回显: ${text}&quot;
+                // sendText 返回 Job，满足监听器要求
+                session.sendText(s, reply)
+            })
+
+            session.setOnClose({ s, reason -&gt;
+                $console.warn(&quot;[服务器] 一个客户端已断开连接:&quot;, reason?.getMessage())
+                s.resolve(null) // 返回一个完成的 Job
+            })
+
+            // 处理器本身返回一个完成的 Job，表示设置已完成
+            s1.resolve(null)
+        })
+    })
+})
+
+$console.log(&quot;WebSocket 服务器已在 ws://127.0.0.1:${port}/echo 启动&quot;)
+
+// 客户端测试
+def httpClient = $httpClients.newClient(null)
+
+scope.delay(1000).then({ s, v -&gt;
+    httpClient.webSocket(s, &quot;ws://127.0.0.1:${port}/echo&quot;, null, { session -&gt;
+        session.setOnOpen({ ss -&gt;
+            $console.log(&quot;[客户端] WebSocket 已连接，发送消息...&quot;)
+            session.sendText(ss, &quot;Hello Echo Server!&quot;)
+        })
+
+        session.setOnText({ ss, text -&gt;
+            $console.log(&quot;[客户端] 收到回显:&quot;, text)
+            // 收到回显后关闭连接
+            session.close(ss, 1000, &quot;测试完成&quot;)
+        })
+
+        session.setOnClose({ ss, reason -&gt;
+            $console.log(&quot;[客户端] 连接已关闭。&quot;)
+            ss.resolve(null)
+        })
+    })
+}).then({ s, v -&gt;
+    $console.log(&quot;客户端 WebSocket 会话结束。&quot;)
+    s.resolve(null)
+}).onError({ error -&gt;
+    $console.error(&quot;[客户端] WebSocket 测试失败:&quot;, error)
+}).onComplete({
+    $console.log(&quot;测试完成，关闭服务器。&quot;)
+    $httpServers.stopServer(httpServer)
+})</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_328" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_331" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 确保脚本在后台运行
+$threads.getMain().setBackground(true);
+
+const scope = $coroutines.newScope(null);
+const port = 8084;
+const httpServer = $httpServers.startServer(port, config =&gt; {
+    config.routing(route =&gt; {
+        // webSocket 处理器需要返回一个 Job
+        route.webSocket(&quot;/echo&quot;, session =&gt; {
+            $console.log(&quot;[服务器] 一个新的 WebSocket 客户端已连接！&quot;);
+
+            session.setOnText((s, text) =&gt; {
+                $console.log(&quot;[服务器] 收到消息:&quot;, text);
+                const reply = &quot;服务器回显: &quot; + text;
+                // sendText 返回 Job，满足监听器要求，必须返回
+                return session.sendText(s, reply);
+            });
+
+            session.setOnClose((s, reason) =&gt; {
+                $console.warn(&quot;[服务器] 一个客户端已断开连接:&quot;, reason?.getMessage());
+                // 返回一个完成的 Job
+                return s.resolve(null);
+            });
+
+            // 处理器本身返回一个完成的 Job，表示设置已完成
+            return scope.resolve(null);
+        });
+    });
+});
+
+$console.log(&quot;WebSocket 服务器已在 ws://127.0.0.1:&quot; + port + &quot;/echo 启动&quot;);
+
+// 客户端测试
+const httpClient = $httpClients.newClient(null);
+
+scope.delay(1000).then((s, v) =&gt; {
+    // httpClient.webSocket 返回一个 Job
+    httpClient.webSocket(s, &quot;ws://127.0.0.1:&quot; + port + &quot;/echo&quot;, null, (session, s1) =&gt; {
+        session.setOnOpen(ss =&gt; {
+            $console.log(&quot;[客户端] WebSocket 已连接，发送消息...&quot;);
+            return session.sendText(ss, &quot;Hello Echo Server!&quot;);
+        });
+
+        session.setOnText((ss, text) =&gt; {
+            $console.log(&quot;[客户端] 收到回显:&quot;, text);
+            // 收到回显后关闭连接，close 返回 Job
+            return session.close(ss, 1000, &quot;测试完成&quot;);
+        });
+
+        session.setOnClose((ss, reason) =&gt; {
+            $console.log(&quot;[客户端] 连接已关闭。&quot;);
+            return ss.resolve(null);
+        });
+    });
+    return s.resolve(null);
+}).then((s, v) =&gt; {
+    $console.log(&quot;客户端 WebSocket 会话结束。&quot;);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;[客户端] WebSocket 测试失败:&quot;, error);
+}).onComplete(() =&gt; {
+    $console.log(&quot;测试完成，关闭服务器。&quot;);
+    $httpServers.stopServer(httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_334" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 确保脚本在后台运行
+_threads:getMain():setBackground(true)
+
+local scope = _coroutines:newScope(nil)
+local port = 8084
+local httpServer = _httpServers:startServer(port, function(config)
+    config:routing(function(route)
+        -- webSocket 处理器需要返回一个 Job
+        route:webSocket(&quot;/echo&quot;, function(session, s1)
+            _console:log(&quot;[服务器] 一个新的 WebSocket 客户端已连接！&quot;)
+
+            session:setOnText(function(s, text)
+                _console:log(&quot;[服务器] 收到消息:&quot;, text)
+                local reply = &quot;服务器回显: &quot; .. text
+                -- sendText 返回 Job，满足监听器要求
+                return session:sendText(s, reply)
+            end)
+
+            session:setOnClose(function(s, reason)
+                _console:warn(&quot;[服务器] 一个客户端已断开连接:&quot;, reason and reason:getMessage())
+                return s:resolve(nil) -- 返回一个完成的 Job
+            end)
+
+            -- 处理器本身返回一个完成的 Job，表示设置已完成
+            return s1:resolve(nil)
+        end)
+    end)
+end)
+
+_console:log(&quot;WebSocket 服务器已在 ws://127.0.0.1:&quot; .. tostring(port) .. &quot;/echo 启动&quot;)
+
+-- 客户端测试
+local httpClient = _httpClients:newClient(nil)
+
+scope:delay(1000):_then(function(s, v)
+    return httpClient:webSocket(s, &quot;ws://127.0.0.1:&quot; .. tostring(port) .. &quot;/echo&quot;, nil, function(session)
+        session:setOnOpen(function(ss)
+            _console:log(&quot;[客户端] WebSocket 已连接，发送消息...&quot;)
+            return session:sendText(ss, &quot;Hello Echo Server!&quot;)
+        end)
+
+        session:setOnText(function(ss, text)
+            _console:log(&quot;[客户端] 收到回显:&quot;, text)
+            -- 收到回显后关闭连接
+            return session:close(ss, 1000, &quot;测试完成&quot;)
+        end)
+
+        session:setOnClose(function(ss, reason)
+            _console:log(&quot;[客户端] 连接已关闭。&quot;)
+            return ss:resolve(nil)
+        end)
+    end)
+end):_then(function(s, v)
+    _console:log(&quot;客户端 WebSocket 会话结束。&quot;)
+    return s:resolve(nil)
+end):onError(function(error)
+    if error ~= nil then
+        _console:error(&quot;[客户端] WebSocket 测试失败:&quot;, error:stackTraceToString())
+    else
+        _console:error(&quot;[客户端] WebSocket 测试失败，但未提供错误详情。&quot;)
+    end
+end):onComplete(function()
+    _console:log(&quot;测试完成，关闭服务器。&quot;)
+    _httpServers:stopServer(httpServer)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_337" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpServers $httpServers */
+global $httpServers;
+/** @var m8test_java\com\m8test\script\core\api\net\http\HttpClients $httpClients */
+global $httpClients;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+// 确保脚本在后台运行
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+$port = 8084;
+$httpServer = $httpServers-&gt;startServer($port, function ($config) {
+    $config-&gt;routing(function ($route) {
+        // webSocket 处理器需要返回一个 Job
+        $route-&gt;webSocket(javaString(&quot;/echo&quot;), function ($session, $s1) {
+            global $console;
+            $console-&gt;log(javaString(&quot;[服务器] 一个新的 WebSocket 客户端已连接！&quot;));
+
+            $session-&gt;setOnText(function ($s, $text) use ($session) {
+                global $console;
+                $console-&gt;log(javaString(&quot;[服务器] 收到消息:&quot;), $text);
+                $reply = javaString(&quot;服务器回显: ${text}&quot;);
+                // sendText 返回 Job，满足监听器要求
+                // [修正] 必须返回 Job 对象
+                return $session-&gt;sendText($s, $reply);
+            });
+
+            $session-&gt;setOnClose(function ($s, $reason) {
+                global $console;
+                $console-&gt;warn(javaString(&quot;[服务器] 一个客户端已断开连接:&quot;), $reason ? $reason-&gt;getMessage() : null);
+                // [修正] 必须返回 Job 对象
+                return $s-&gt;resolve(null);
+            });
+
+            // 处理器本身返回一个完成的 Job，表示设置已完成
+            return $s1-&gt;resolve(null);
+        });
+    });
+});
+
+$console-&gt;log(javaString(&quot;WebSocket 服务器已在 ws://127.0.0.1:${port}/echo 启动&quot;));
+
+// 客户端测试
+$httpClient = $httpClients-&gt;newClient(null);
+
+$scope-&gt;delay(1000)-&gt;then(function ($s, $v) use ($httpClient, $port) {
+    return $httpClient-&gt;webSocket($s, javaString(&quot;ws://127.0.0.1:${port}/echo&quot;), null, function ($session) {
+        $session-&gt;setOnOpen(function ($ss) use ($session) {
+            global $console;
+            $console-&gt;log(javaString(&quot;[客户端] WebSocket 已连接，发送消息...&quot;));
+            // [修正] 必须返回 Job 对象
+            return $session-&gt;sendText($ss, javaString(&quot;Hello Echo Server!&quot;));
+        });
+
+        $session-&gt;setOnText(function ($ss, $text) use ($session) {
+            global $console;
+            $console-&gt;log(javaString(&quot;[客户端] 收到回显:&quot;), $text);
+            // 收到回显后关闭连接
+            // [修正] 必须返回 Job 对象
+            return $session-&gt;close($ss, 1000, javaString(&quot;测试完成&quot;));
+        });
+
+        $session-&gt;setOnClose(function ($ss, $reason) {
+            global $console;
+            $console-&gt;log(javaString(&quot;[客户端] 连接已关闭。&quot;));
+            // [修正] 必须返回 Job 对象
+            return $ss-&gt;resolve(null);
+        });
+    });
+})-&gt;then(function ($s, $v) {
+    global $console;
+    $console-&gt;log(javaString(&quot;客户端 WebSocket 会话结束。&quot;));
+    return $s-&gt;resolve(null);
+})-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;error(javaString(&quot;[客户端] WebSocket 测试失败:&quot;), $error);
+})-&gt;onComplete(function () use ($httpServer) {
+    global $console, $httpServers;
+    $console-&gt;log(javaString(&quot;测试完成，关闭服务器。&quot;));
+    $httpServers-&gt;stopServer($httpServer);
+});</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_340" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _httpClients
+from m8test_java.com.m8test.script.GlobalVariables import _httpServers
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+# 确保脚本在后台运行
+_threads.getMain().setBackground(True)
+
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+port = 8084
+httpServer = _httpServers.startServer(port, lambda config:
+config.routing(lambda route:
+               # webSocket 处理器需要返回一个 Job
+               route.webSocket(&quot;/echo&quot;, lambda session, s1: (
+                   _console.log(&quot;[服务器] 一个新的 WebSocket 客户端已连接！&quot;),
+                   session.setOnText(lambda s, text: (
+                       _console.log(&quot;[服务器] 收到消息:&quot;, text),
+                       (reply := f&quot;服务器回显: {text}&quot;),
+                       # sendText 返回 Job，满足监听器要求
+                       session.sendText(s, reply)
+                   )[-1]),
+                   session.setOnClose(lambda s, reason: (
+                       # reason 可能为 null，所以进行检查
+                       _console.warn(&quot;[服务器] 一个客户端已断开连接:&quot;,
+                                     reason.getMessage() if reason else &quot;No reason given&quot;),
+                       s.resolve(None)  # 返回一个完成的 Job
+                   )[-1]),
+                   # 处理器本身返回一个完成的 Job，表示设置已完成
+                   s1.resolve(None)
+               )[-1])
+               )
+                                      )
+
+_console.log(f&quot;WebSocket 服务器已在 ws://127.0.0.1:{port}/echo 启动&quot;)
+
+# 客户端测试
+httpClient = _httpClients.newClient(None)
+
+(scope.delay(1000)
+ .then(lambda s, v: httpClient.webSocket(s, f&quot;ws://127.0.0.1:{port}/echo&quot;, None, lambda session: (
+    session.setOnOpen(lambda ss: (
+        _console.log(&quot;[客户端] WebSocket 已连接，发送消息...&quot;),
+        session.sendText(ss, &quot;Hello Echo Server!&quot;)
+    )[-1]),
+    session.setOnText(lambda ss, text: (
+        _console.log(&quot;[客户端] 收到回显:&quot;, text),
+        # 收到回显后关闭连接
+        session.close(ss, 1000, &quot;测试完成&quot;)
+    )[-1]),
+    session.setOnClose(lambda ss, reason: (
+        _console.log(&quot;[客户端] 连接已关闭。&quot;),
+        ss.resolve(None)
+    )[-1])
+)))
+ .then(lambda s, v: (
+    _console.log(&quot;客户端 WebSocket 会话结束。&quot;),
+    s.resolve(None)
+)[-1])
+ .onError(lambda error: _console.error(&quot;[客户端] WebSocket 测试失败:&quot;, error))
+ .onComplete(lambda: (
+    _console.log(&quot;测试完成，关闭服务器。&quot;),
+    _httpServers.stopServer(httpServer)
+)))
+</div></div><div class="tabs__content" data-gtm="tab" id="dmd3fw_343" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 确保脚本在后台运行
+$threads.getMain.setBackground(true)
+
+scope = $coroutines.newScope(nil)
+port = 8084
+httpServer = $httpServers.startServer(port) do |config|
+  config.routing do |route|
+    # webSocket 处理器需要返回一个 Job
+    route.webSocket(&quot;/echo&quot;) do |session, s1|
+      $console.log(&quot;[服务器] 一个新的 WebSocket 客户端已连接！&quot;)
+
+      session.setOnText do |s, text|
+        $console.log(&quot;[服务器] 收到消息:&quot;, text)
+        reply = &quot;服务器回显: #{text}&quot;
+        # sendText 返回 Job，满足监听器要求
+        session.sendText(s, reply)
+      end
+
+      session.setOnClose do |s, reason|
+        # 修复: 替换 &amp;. 操作符
+        msg = reason ? reason.getMessage : nil
+        $console.warn(&quot;[服务器] 一个客户端已断开连接:&quot;, msg)
+        s.resolve(nil) # 返回一个完成的 Job
+      end
+
+      # 处理器本身返回一个完成的 Job，表示设置已完成
+      s1.resolve(nil)
+    end
+  end
+end
+
+$console.log(&quot;WebSocket 服务器已在 ws://127.0.0.1:#{port}/echo 启动&quot;)
+
+# 客户端测试
+httpClient = $httpClients.newClient(nil)
+
+scope.delay(1000).then do |s, v|
+  httpClient.webSocket(s, &quot;ws://127.0.0.1:#{port}/echo&quot;, nil) do |session|
+    session.setOnOpen do |ss|
+      $console.log(&quot;[客户端] WebSocket 已连接，发送消息...&quot;)
+      session.sendText(ss, &quot;Hello Echo Server!&quot;)
+    end
+
+    session.setOnText do |ss, text|
+      $console.log(&quot;[客户端] 收到回显:&quot;, text)
+      # 收到回显后关闭连接
+      session.close(ss, 1000, &quot;测试完成&quot;)
+    end
+
+    session.setOnClose do |ss, reason|
+      $console.log(&quot;[客户端] 连接已关闭。&quot;)
+      ss.resolve(nil)
+    end
+  end
+end.then do |s, v|
+  $console.log(&quot;客户端 WebSocket 会话结束。&quot;)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;[客户端] WebSocket 测试失败:&quot;, error)
+end.onComplete do
+  $console.log(&quot;测试完成，关闭服务器。&quot;)
+  $httpServers.stopServer(httpServer)
+end</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="http-clients.html" class="navigation-links__prev">Http客户端</a><a href="script-ui.html" class="navigation-links__next">脚本界面</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

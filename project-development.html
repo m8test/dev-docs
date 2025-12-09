@@ -1,0 +1,594 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:30.578901121"><title>开发项目 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-dxl8j8_4","level":0,"title":"简单项目","anchor":"#-dxl8j8_4"},{"id":"ui","level":0,"title":"带UI的项目","anchor":"#ui"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="开发项目 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/project-development.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="开发项目 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/project-development.html#webpage",
+    "url": "writerside-documentation/project-development.html",
+    "name": "开发项目 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="project-development" data-main-title="开发项目" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="project-based.md|项目化"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="project-development" id="project-development.md">开发项目</h1><p id="-dxl8j8_3">本页面介绍如何一步步开发一个M8Test脚本项目。</p><section class="chapter"><h2 id="-dxl8j8_4" data-toc="-dxl8j8_4">简单项目</h2><ol class="list _decimal" id="-dxl8j8_6" type="1"><li class="list__item" id="-dxl8j8_29"><p id="-dxl8j8_30">创建 <code class="code" id="-dxl8j8_31">settings.config.yaml</code> 文件，内容如下</p></li></ol><div class="tabs" id="-dxl8j8_22" data-anchors="[groovy-settings.config.yaml-Basic,javascript-settings.config.yaml-Basic,kotlin-settings.config.yaml-Basic,lua-settings.config.yaml-Basic,php-settings.config.yaml-Basic,python-settings.config.yaml-Basic,ruby-settings.config.yaml-Basic]"><div class="tabs__content" data-gtm="tab" id="kotlin-settings.config.yaml-Basic" data-title="kotlin"><div class="code-block" data-lang="yaml" data-title="yaml" data-disable-link-processing="true">language:
+  name: &quot;Kotlin&quot;
+  url: &quot;https://github.com/m8test/language-release/releases/download/kotlin-0.1.0/com.m8test.kotlin-release_0.1.0.apk&quot;
+  version: &quot;0.1.0&quot;
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_51"><p id="-dxl8j8_52"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic/settings.config.yaml" id="-dxl8j8_53" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic/settings.config.yaml</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="groovy-settings.config.yaml-Basic" data-title="groovy"><div class="code-block" data-lang="yaml" data-title="yaml" data-disable-link-processing="true">language:
+  name: &quot;Groovy&quot;
+  url: &quot;https://github.com/m8test/language-release/releases/download/groovy-0.1.0/com.m8test.groovy-release_0.1.0.apk&quot;
+  version: &quot;0.1.0&quot;
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_59"><p id="-dxl8j8_60"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic/settings.config.yaml" id="-dxl8j8_61" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic/settings.config.yaml</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="javascript-settings.config.yaml-Basic" data-title="javascript"><div class="code-block" data-lang="yaml" data-title="yaml" data-disable-link-processing="true">language:
+  name: &quot;Javascript&quot;
+  url: &quot;https://github.com/m8test/language-release/releases/download/javascript-0.1.0/com.m8test.javascript.v8-release_0.1.0.apk&quot;
+  version: &quot;0.1.0&quot;
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_67"><p id="-dxl8j8_68"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic/settings.config.yaml" id="-dxl8j8_69" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic/settings.config.yaml</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="lua-settings.config.yaml-Basic" data-title="lua"><div class="code-block" data-lang="yaml" data-title="yaml" data-disable-link-processing="true">language:
+  name: &quot;Lua&quot;
+  url: &quot;https://github.com/m8test/language-release/releases/download/lua-0.1.0/com.m8test.lua-release_0.1.0.apk&quot;
+  version: &quot;0.1.0&quot;
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_75"><p id="-dxl8j8_76"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic/settings.config.yaml" id="-dxl8j8_77" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic/settings.config.yaml</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="php-settings.config.yaml-Basic" data-title="php"><div class="code-block" data-lang="yaml" data-title="yaml" data-disable-link-processing="true">language:
+  name: &quot;Php&quot;
+  url: &quot;https://github.com/m8test/language-release/releases/download/php-0.1.0/com.m8test.php-release_0.1.0.apk&quot;
+  version: &quot;0.1.0&quot;
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_83"><p id="-dxl8j8_84"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic/settings.config.yaml" id="-dxl8j8_85" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic/settings.config.yaml</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="python-settings.config.yaml-Basic" data-title="python"><div class="code-block" data-lang="yaml" data-title="yaml" data-disable-link-processing="true">language:
+  name: &quot;Python&quot;
+  url: &quot;https://github.com/m8test/language-release/releases/download/python-0.1.0/com.m8test.python-release_0.1.0.apk&quot;
+  version: &quot;0.1.0&quot;
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_91"><p id="-dxl8j8_92"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic/settings.config.yaml" id="-dxl8j8_93" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic/settings.config.yaml</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="ruby-settings.config.yaml-Basic" data-title="ruby"><div class="code-block" data-lang="yaml" data-title="yaml" data-disable-link-processing="true">language:
+  name: &quot;Ruby&quot;
+  url: &quot;https://github.com/m8test/language-release/releases/download/ruby-0.1.0/com.m8test.ruby-release_0.1.0.apk&quot;
+  version: &quot;0.1.0&quot;
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_99"><p id="-dxl8j8_100"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic/settings.config.yaml" id="-dxl8j8_101" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic/settings.config.yaml</a></p></aside></div></div><p id="-dxl8j8_8">其中指定了执行<code class="code" id="-dxl8j8_102">settings</code>和<code class="code" id="-dxl8j8_103">init.settings</code>文件的脚本语言名称、下载地址及版本。</p><ol class="list _decimal" id="-dxl8j8_9" type="1" start="2"><li class="list__item" id="-dxl8j8_104"><p id="-dxl8j8_105">创建 <code class="code" id="-dxl8j8_106">settings</code> 文件，每种语言所需的扩展名不同</p></li></ol><div class="tabs" id="-dxl8j8_24" data-group="languages" data-anchors="[-dxl8j8_109,-dxl8j8_112,-dxl8j8_115,-dxl8j8_118,-dxl8j8_121,-dxl8j8_124,-dxl8j8_127]"><div class="tabs__content" data-gtm="tab" id="-dxl8j8_109" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">_console.log(&quot;settings.kts run&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_134"><p id="-dxl8j8_135"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic//settings.kts" id="-dxl8j8_136" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic//settings.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_112" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$console.log(&quot;settings.groovy run&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_143"><p id="-dxl8j8_144"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic//settings.groovy" id="-dxl8j8_145" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic//settings.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_115" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$console.log(&quot;settings.js run&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_152"><p id="-dxl8j8_153"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic//settings.js" id="-dxl8j8_154" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic//settings.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_118" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_console:log(&quot;settings.lua run&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_161"><p id="-dxl8j8_162"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic//settings.lua" id="-dxl8j8_163" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic//settings.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_121" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$console-&gt;log(&quot;settings.php run&quot;);
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_170"><p id="-dxl8j8_171"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic//settings.php" id="-dxl8j8_172" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic//settings.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_124" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">_console.log(&quot;settings.py run&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_179"><p id="-dxl8j8_180"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic//settings.py" id="-dxl8j8_181" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic//settings.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_127" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$console.log(&quot;settings.rb run&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_188"><p id="-dxl8j8_189"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic//settings.rb" id="-dxl8j8_190" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic//settings.rb</a></p></aside></div></div><p id="-dxl8j8_11">这里简单打印一句话。若包含子项目，可在此文件中配置。一个项目只需一个 <code class="code" id="-dxl8j8_191">settings</code> 文件，子项目中无需该文件。</p><ol class="list _decimal" id="-dxl8j8_12" type="1" start="3"><li class="list__item" id="-dxl8j8_192"><p id="-dxl8j8_193">创建 <code class="code" id="-dxl8j8_194">build</code> 文件，每种语言所需的扩展名不同</p></li></ol><div class="tabs" id="-dxl8j8_26" data-group="languages" data-anchors="[-dxl8j8_197,-dxl8j8_200,-dxl8j8_203,-dxl8j8_206,-dxl8j8_209,-dxl8j8_212,-dxl8j8_215]"><div class="tabs__content" data-gtm="tab" id="-dxl8j8_197" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">_project.getPlugins().apply(&quot;kotlin&quot;)
+_project.setConfig {
+    setEntry(&quot;com/example/script/primary.kts&quot;)
+    setPackageName(&quot;com.example.script.kotlin&quot;)
+    setLogo(&quot;logo.png&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_222"><p id="-dxl8j8_223"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic//build.kts" id="-dxl8j8_224" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic//build.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_200" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$project.getPlugins().apply(&quot;groovy&quot;)
+$project.setConfig {
+    setEntry(&quot;com/example/script/primary.groovy&quot;)
+    setPackageName(&quot;com.example.script.groovy&quot;)
+    setLogo(&quot;logo.png&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_231"><p id="-dxl8j8_232"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic//build.groovy" id="-dxl8j8_233" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic//build.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_203" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$project.getPlugins().apply(&quot;javascript&quot;)
+$project.setConfig(config =&gt; {
+    config.setEntry(&quot;com/example/script/primary.js&quot;)
+    config.setPackageName(&quot;com.example.script.js&quot;)
+    config.setLogo(&quot;logo.png&quot;)
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_240"><p id="-dxl8j8_241"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic//build.js" id="-dxl8j8_242" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic//build.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_206" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_project:getPlugins():apply(&quot;lua&quot;)
+_project:setConfig(function(c)
+    c:setEntry(&quot;com/example/script/primary.lua&quot;)
+    c:setPackageName(&quot;com.example.script.lua&quot;)
+    c:setLogo(&quot;logo.png&quot;)
+end)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_249"><p id="-dxl8j8_250"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic//build.lua" id="-dxl8j8_251" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic//build.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_209" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$project-&gt;getPlugins()-&gt;apply(&quot;php&quot;);
+$project-&gt;setConfig(function ($config) {
+    $config-&gt;setEntry(&quot;com/example/script/primary.php&quot;);
+    $config-&gt;setPackageName(&quot;com.example.script.php&quot;);
+    $config-&gt;setLogo(&quot;logo.png&quot;);
+});</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_258"><p id="-dxl8j8_259"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic//build.php" id="-dxl8j8_260" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic//build.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_212" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">_project.getPlugins().apply(&quot;python&quot;)
+
+
+def configuration(config):
+    config.setEntry(&quot;com/example/script/primary.py&quot;)
+    config.setPackageName(&quot;com.example.script.py&quot;)
+    config.setLogo(&quot;logo.png&quot;)
+
+
+_project.setConfig(configuration)
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_267"><p id="-dxl8j8_268"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic//build.py" id="-dxl8j8_269" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic//build.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_215" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$project.getPlugins().apply(&quot;ruby&quot;)
+$project.setConfig { |config|
+  config.setEntry(&quot;com/example/script/primary.rb&quot;)
+  config.setPackageName(&quot;com.example.script.rb&quot;)
+  config.setLogo(&quot;logo.png&quot;)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_276"><p id="-dxl8j8_277"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic//build.rb" id="-dxl8j8_278" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic//build.rb</a></p></aside></div></div><p id="-dxl8j8_14">其中配置语言插件及项目基本信息（脚本入口文件、包名及logo）。</p><ol class="list _decimal" id="-dxl8j8_15" type="1" start="4"><li class="list__item" id="-dxl8j8_279"><p id="-dxl8j8_280">创建 <code class="code" id="-dxl8j8_281">src</code> 目录用于存放脚本源码，新建上一步骤配置的入口文件</p></li></ol><div class="tabs" id="-dxl8j8_28" data-group="languages" data-anchors="[-dxl8j8_284,-dxl8j8_287,-dxl8j8_290,-dxl8j8_293,-dxl8j8_296,-dxl8j8_299,-dxl8j8_302]"><div class="tabs__content" data-gtm="tab" id="-dxl8j8_284" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.script
+
+_console.log(&quot;kotlin&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_309"><p id="-dxl8j8_310"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic/src/com/example/script/primary.kts" id="-dxl8j8_311" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/Basic/src/com/example/script/primary.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_287" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">package com.example.script
+
+$console.log(&quot;groovy&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_318"><p id="-dxl8j8_319"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic/src/com/example/script/primary.groovy" id="-dxl8j8_320" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/Basic/src/com/example/script/primary.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_290" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$console.log(&quot;javascript&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_327"><p id="-dxl8j8_328"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic/src/com/example/script/primary.js" id="-dxl8j8_329" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/Basic/src/com/example/script/primary.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_293" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_console:log(&quot;lua&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_336"><p id="-dxl8j8_337"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic/src/com/example/script/primary.lua" id="-dxl8j8_338" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/Basic/src/com/example/script/primary.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_296" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$console-&gt;log(&quot;php&quot;);</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_345"><p id="-dxl8j8_346"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic/src/com/example/script/primary.php" id="-dxl8j8_347" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/Basic/src/com/example/script/primary.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_299" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">_console.log(&quot;python&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_354"><p id="-dxl8j8_355"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic/src/com/example/script/primary.py" id="-dxl8j8_356" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/Basic/src/com/example/script/primary.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_302" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$console.log(&quot;ruby&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_363"><p id="-dxl8j8_364"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic/src/com/example/script/primary.rb" id="-dxl8j8_365" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/Basic/src/com/example/script/primary.rb</a></p></aside></div></div><ol class="list _decimal" id="-dxl8j8_17" type="1" start="5"><li class="list__item" id="-dxl8j8_366"><p id="-dxl8j8_367">创建 <code class="code" id="-dxl8j8_368">res</code> 目录，并添加第3步配置的logo文件，即可完成最简单的项目。</p></li></ol></section><section class="chapter"><h2 id="ui" data-toc="ui">带UI的项目</h2><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_369"><p id="-dxl8j8_394">Tips: 带UI的项目在简单项目基础上开发，此处省略简单项目的开发步骤</p></aside><ol class="list _decimal" id="-dxl8j8_370" type="1"><li class="list__item" id="-dxl8j8_395"><p id="-dxl8j8_396">创建 <code class="code" id="-dxl8j8_397">webview</code> 目录用于存放UI相关文件，该目录实际用于存放静态网站内容。可显示任意前端框架（vue、angular、react等）的编译产物，也可以是简单的 <code class="code" id="-dxl8j8_398">index.html</code> 文件。这里演示简单网站，仅包含两个文件： <code class="code" id="-dxl8j8_399">index.html</code> 和 <code class="code" id="-dxl8j8_400">index.js</code></p></li></ol><p id="-dxl8j8_371"><code class="code" id="-dxl8j8_401">index.html</code> 内容如下，非常简单，仅引用了 <code class="code" id="-dxl8j8_402">index.js</code> 文件：</p><div class="tabs" id="-dxl8j8_385" data-group="languages" data-anchors="[-dxl8j8_405,-dxl8j8_408,-dxl8j8_411,-dxl8j8_414,-dxl8j8_417,-dxl8j8_420,-dxl8j8_423]"><div class="tabs__content" data-gtm="tab" id="-dxl8j8_405" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_429"><p id="-dxl8j8_430"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main/WebViewBridge/callHandler/webview/index.html" id="-dxl8j8_431" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main/WebViewBridge/callHandler/webview/index.html</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_408" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_437"><p id="-dxl8j8_438"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main/WebViewBridge/callHandler/webview/index.html" id="-dxl8j8_439" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main/WebViewBridge/callHandler/webview/index.html</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_411" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_445"><p id="-dxl8j8_446"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main/WebViewBridge/callHandler/webview/index.html" id="-dxl8j8_447" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main/WebViewBridge/callHandler/webview/index.html</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_414" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_453"><p id="-dxl8j8_454"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main/WebViewBridge/callHandler/webview/index.html" id="-dxl8j8_455" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main/WebViewBridge/callHandler/webview/index.html</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_417" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_461"><p id="-dxl8j8_462"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main/WebViewBridge/callHandler/webview/index.html" id="-dxl8j8_463" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main/WebViewBridge/callHandler/webview/index.html</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_420" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_469"><p id="-dxl8j8_470"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main/WebViewBridge/callHandler/webview/index.html" id="-dxl8j8_471" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main/WebViewBridge/callHandler/webview/index.html</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_423" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;WebView UI&lt;/title&gt;
+    &lt;link href=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot;
+          rel=&quot;stylesheet&quot;
+          integrity=&quot;sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM&quot;
+          crossorigin=&quot;anonymous&quot;&gt;
+    &lt;script src=&quot;https://fastly.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js&quot;
+            integrity=&quot;sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;button id=&quot;button&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot;&gt;Primary&lt;/button&gt;
+&lt;script src=&quot;./index.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_477"><p id="-dxl8j8_478"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main/WebViewBridge/callHandler/webview/index.html" id="-dxl8j8_479" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main/WebViewBridge/callHandler/webview/index.html</a></p></aside></div></div><p id="-dxl8j8_373"><code class="code" id="-dxl8j8_480">index.js</code> 内容如下：</p><div class="tabs" id="-dxl8j8_389" data-group="languages" data-anchors="[-dxl8j8_483,-dxl8j8_486,-dxl8j8_489,-dxl8j8_492,-dxl8j8_495,-dxl8j8_498,-dxl8j8_501]"><div class="tabs__content" data-gtm="tab" id="-dxl8j8_483" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 为脚本端调用处理器时传递过来的参数
+            // responseCallback 用于返回处理结果到脚本端
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                //do your work here
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器，参数一为处理器名，参数二为需要传递给处理器的参数，参数三为回调函数用于接收脚本端的返回值
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_507"><p id="-dxl8j8_508"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main/WebViewBridge/callHandler/webview/index.js" id="-dxl8j8_509" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main/WebViewBridge/callHandler/webview/index.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_486" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 为脚本端调用处理器时传递过来的参数
+            // responseCallback 用于返回处理结果到脚本端
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                //do your work here
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器，参数一为处理器名，参数二为需要传递给处理器的参数，参数三为回调函数用于接收脚本端的返回值
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_515"><p id="-dxl8j8_516"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main/WebViewBridge/callHandler/webview/index.js" id="-dxl8j8_517" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main/WebViewBridge/callHandler/webview/index.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_489" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 为脚本端调用处理器时传递过来的参数
+            // responseCallback 用于返回处理结果到脚本端
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                //do your work here
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器，参数一为处理器名，参数二为需要传递给处理器的参数，参数三为回调函数用于接收脚本端的返回值
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_523"><p id="-dxl8j8_524"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main/WebViewBridge/callHandler/webview/index.js" id="-dxl8j8_525" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main/WebViewBridge/callHandler/webview/index.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_492" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 为脚本端调用处理器时传递过来的参数
+            // responseCallback 用于返回处理结果到脚本端
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                //do your work here
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器，参数一为处理器名，参数二为需要传递给处理器的参数，参数三为回调函数用于接收脚本端的返回值
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_531"><p id="-dxl8j8_532"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main/WebViewBridge/callHandler/webview/index.js" id="-dxl8j8_533" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main/WebViewBridge/callHandler/webview/index.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_495" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 为脚本端调用处理器时传递过来的参数
+            // responseCallback 用于返回处理结果到脚本端
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                //do your work here
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器，参数一为处理器名，参数二为需要传递给处理器的参数，参数三为回调函数用于接收脚本端的返回值
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_539"><p id="-dxl8j8_540"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main/WebViewBridge/callHandler/webview/index.js" id="-dxl8j8_541" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main/WebViewBridge/callHandler/webview/index.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_498" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 为脚本端调用处理器时传递过来的参数
+            // responseCallback 用于返回处理结果到脚本端
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                //do your work here
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器，参数一为处理器名，参数二为需要传递给处理器的参数，参数三为回调函数用于接收脚本端的返回值
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_547"><p id="-dxl8j8_548"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main/WebViewBridge/callHandler/webview/index.js" id="-dxl8j8_549" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main/WebViewBridge/callHandler/webview/index.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_501" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">(function () {
+    function init() {
+        // $webViewBridge.registerHandler() 用于设置供脚本端调用的处理器，第一个参数是处理器名，第二个参数是一个函数，会在处理器被调用时执行
+        $webViewBridge.registerHandler(&quot;functionForScriptToCall&quot;, function (data, responseCallback) {
+            // data 为脚本端调用处理器时传递过来的参数
+            // responseCallback 用于返回处理结果到脚本端
+            if (responseCallback) {
+                var responseData = &quot;I am from Javascript &quot; + data
+                responseCallback(responseData)
+            }
+        })
+    }
+
+    if (window.$webViewBridge) {
+        init();
+    } else {
+        document.addEventListener(
+            'WebViewBridgeReady',
+            function () {
+                //do your work here
+                init();
+            },
+            false
+        );
+    }
+})()
+
+document.getElementById(&quot;button&quot;).addEventListener(&quot;click&quot;, function (e) {
+    // $webViewBridge.callHandler() 用于调用脚本端注册的处理器，参数一为处理器名，参数二为需要传递给处理器的参数，参数三为回调函数用于接收脚本端的返回值
+    $webViewBridge.callHandler(&quot;handlerForWebView&quot;, &quot;params from js&quot;, function (p) {
+        alert(p)
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_555"><p id="-dxl8j8_556"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main/WebViewBridge/callHandler/webview/index.js" id="-dxl8j8_557" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main/WebViewBridge/callHandler/webview/index.js</a></p></aside></div></div><p id="-dxl8j8_375">需要注意以下几点：</p><ul class="list _bullet" id="-dxl8j8_376"><li class="list__item" id="-dxl8j8_558"><p id="-dxl8j8_560">$webViewBridge.registerHandler：在网页端注册处理器，注册后脚本端可调用已注册的处理器</p></li><li class="list__item" id="-dxl8j8_559"><p id="-dxl8j8_561">$webViewBridge.callHandler：用于调用脚本端注册的处理器</p></li></ul><ol class="list _decimal" id="-dxl8j8_377" type="1" start="2"><li class="list__item" id="-dxl8j8_562"><p id="-dxl8j8_563">脚本端（<code class="code" id="-dxl8j8_564">src</code> ）内容如下：</p></li></ol><div class="tabs" id="-dxl8j8_393" data-group="languages" data-anchors="[-dxl8j8_567,-dxl8j8_570,-dxl8j8_573,-dxl8j8_576,-dxl8j8_579,-dxl8j8_582,-dxl8j8_585]"><div class="tabs__content" data-gtm="tab" id="-dxl8j8_567" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.script
+
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+val bridge = _webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    val handledParams = it + &quot; return from script&quot;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams) { i -&gt;
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        _console.log(i)
+    }
+    handledParams
+}
+// Activity.start() 用于启动Android系统的Activity
+_activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_591"><p id="-dxl8j8_592"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main/WebViewBridge/callHandler/src/com/example/script/primary.kts" id="-dxl8j8_593" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/main/WebViewBridge/callHandler/src/com/example/script/primary.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_570" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">package com.example.script
+
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+def bridge = $webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    def handledParams = &quot;$it return from script&quot;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams) {
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        $console.log(it)
+    }
+    handledParams
+}
+// Activity.start() 用于启动Android系统的Activity
+$activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_599"><p id="-dxl8j8_600"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main/WebViewBridge/callHandler/src/com/example/script/primary.groovy" id="-dxl8j8_601" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/main/WebViewBridge/callHandler/src/com/example/script/primary.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_573" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+let bridge = $webView.getBridge()
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;, (it) =&gt; {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 null
+    let handledParams = it + &quot; return from script&quot;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams, (it) =&gt; {
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        $console.log(it)
+    })
+    return handledParams
+})
+// Activity.start() 用于启动Android系统的Activity
+$activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_607"><p id="-dxl8j8_608"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main/WebViewBridge/callHandler/src/com/example/script/primary.js" id="-dxl8j8_609" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/main/WebViewBridge/callHandler/src/com/example/script/primary.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_576" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+local bridge = _webView:getBridge()
+-- WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge:registerHandler(&quot;handlerForWebView&quot;, function(it)
+    -- it -&gt; String
+    -- it 表示从 WebView 端传来的参数,如果没有则为 nil
+    local handledParams = it .. &quot;return from script&quot;
+    -- WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge:callHandler(&quot;functionForScriptToCall&quot;, handledParams, function(i)
+        -- it -&gt; String
+        -- it 为 WebView 端js函数返回值
+        _console:log(i)
+    end)
+    return handledParams
+end)
+-- Activity.start() 用于启动Android系统的Activity
+_activity:start()
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_615"><p id="-dxl8j8_616"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main/WebViewBridge/callHandler/src/com/example/script/primary.lua" id="-dxl8j8_617" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/main/WebViewBridge/callHandler/src/com/example/script/primary.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_579" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+$bridge = $webView-&gt;getBridge();
+// WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+$bridge-&gt;registerHandler(&quot;handlerForWebView&quot;, function ($it) use ($console, $bridge) {
+    // it -&gt; String
+    // it 表示从 WebView 端传来的参数,如果没有则为 nil
+    $handledParams = $it . &quot;return from script&quot;;
+    // WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    $bridge-&gt;callHandler(&quot;functionForScriptToCall&quot;, $handledParams, function ($i) use ($console) {
+        // it -&gt; String
+        // it 为 WebView 端js函数返回值
+        $console-&gt;log($i);
+    });
+    return $handledParams;
+});
+// Activity.start() 用于启动Android系统的Activity
+$activity-&gt;start();
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_623"><p id="-dxl8j8_624"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main/WebViewBridge/callHandler/src/com/example/script/primary.php" id="-dxl8j8_625" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/main/WebViewBridge/callHandler/src/com/example/script/primary.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_582" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+bridge = _webView.getBridge()
+
+
+def fn1(it):
+    # it -&gt; String
+    # it 表示从 WebView 端传来的参数,如果没有则为 null
+    handledParams = it + &quot; return from script&quot;
+
+    def fn2(i):
+        # it -&gt; String
+        # it 为 WebView 端js函数返回值
+        _console.log(i)
+
+    # WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+    bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams, fn2)
+    return handledParams
+
+
+# WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;, fn1)
+# Activity.start() 用于启动Android系统的Activity
+_activity.start()
+</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_631"><p id="-dxl8j8_632"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main/WebViewBridge/callHandler/src/com/example/script/primary.py" id="-dxl8j8_633" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/main/WebViewBridge/callHandler/src/com/example/script/primary.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-dxl8j8_585" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># WebViewActivity.getBridge() 用于获取 WebViewBridge 对象
+bridge = $webView.getBridge()
+# WebViewBridge.registerHandler() 用于注册处理器供 WebView 端调用
+bridge.registerHandler(&quot;handlerForWebView&quot;) { |it|
+  # it -&gt; String
+  # it 表示从 WebView 端传来的参数,如果没有则为 null
+  handledParams = it + &quot;return from script&quot;
+  # WebViewBridge.callHandler() 用于调用 WebView 端注册的处理器
+  bridge.callHandler(&quot;functionForScriptToCall&quot;, handledParams) { |i|
+    # it -&gt; String
+    # it 为 WebView 端js函数返回值
+    $console.log(i)
+  }
+  handledParams
+}
+# Activity.start() 用于启动Android系统的Activity
+$activity.start()</div><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_639"><p id="-dxl8j8_640"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main/WebViewBridge/callHandler/src/com/example/script/primary.rb" id="-dxl8j8_641" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/main/WebViewBridge/callHandler/src/com/example/script/primary.rb</a></p></aside></div></div><p id="-dxl8j8_379">需要注意以下几点：</p><ul class="list _bullet" id="-dxl8j8_380"><li class="list__item" id="-dxl8j8_642"><p id="-dxl8j8_644">bridge.registerHandler：用于在脚本端注册处理器，注册的处理器可在网页端调用</p></li><li class="list__item" id="-dxl8j8_643"><p id="-dxl8j8_645">bridge.callHandler：用于调用网页端已注册的处理器</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="-dxl8j8_381"><p id="-dxl8j8_646">Tips: 脚本端和网页端通过处理器进行交互。网页端注册的处理器可在脚本端调用，脚本端注册的处理器可在网页端调用。</p></aside></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="directory-structure.html" class="navigation-links__prev">目录结构</a><a href="build-project.html" class="navigation-links__next">构建项目</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

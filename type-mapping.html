@@ -1,0 +1,471 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:23.904198946"><title>类型映射 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="类型映射 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/type-mapping.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="类型映射 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/type-mapping.html#webpage",
+    "url": "writerside-documentation/type-mapping.html",
+    "name": "类型映射 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="type-mapping" data-main-title="类型映射" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="languages.md|编程语言"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="type-mapping" id="type-mapping.md">类型映射</h1><div class="tabs" id="-m0ftxg_8" data-group="languages" data-anchors="[-m0ftxg_11,-m0ftxg_14,-m0ftxg_17,-m0ftxg_20,-m0ftxg_23,-m0ftxg_26,-m0ftxg_29]"><div class="tabs__content" data-gtm="tab" id="-m0ftxg_11" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.core.impl.JavaTypeTester
+
+JavaTypeTester.setBytePrimitive(12.toByte())
+_console.log(JavaTypeTester.getBytePrimitive())
+JavaTypeTester.setByteWrapper(34.toByte())
+_console.log(JavaTypeTester.getByteWrapper())
+
+JavaTypeTester.setShortPrimitive(56.toShort())
+_console.log(JavaTypeTester.getShortPrimitive())
+JavaTypeTester.setShortWrapper(78.toShort())
+_console.log(JavaTypeTester.getShortWrapper())
+
+JavaTypeTester.setIntPrimitive(78)
+_console.log(JavaTypeTester.getIntPrimitive())
+JavaTypeTester.setIntWrapper(90)
+_console.log(JavaTypeTester.getIntWrapper())
+
+JavaTypeTester.setLongPrimitive(100L)
+_console.log(JavaTypeTester.getLongPrimitive())
+JavaTypeTester.setLongWrapper(200L)
+_console.log(JavaTypeTester.getLongWrapper())
+
+JavaTypeTester.setFloatPrimitive(300f)
+_console.log(JavaTypeTester.getFloatPrimitive())
+JavaTypeTester.setFloatWrapper(400f)
+_console.log(JavaTypeTester.getFloatWrapper())
+
+JavaTypeTester.setDoublePrimitive(500.toDouble())
+_console.log(JavaTypeTester.getDoublePrimitive())
+JavaTypeTester.setDoubleWrapper(600.toDouble())
+_console.log(JavaTypeTester.getDoubleWrapper())
+
+JavaTypeTester.setBooleanPrimitive(true)
+_console.log(JavaTypeTester.getBooleanPrimitive())
+JavaTypeTester.setBooleanWrapper(false)
+_console.log(JavaTypeTester.getBooleanWrapper())
+
+JavaTypeTester.setCharPrimitive('a')
+_console.log(JavaTypeTester.getCharPrimitive())
+JavaTypeTester.setCharWrapper('A')
+_console.log(JavaTypeTester.getCharWrapper())
+
+JavaTypeTester.setStringList(listOf(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;))
+_console.log(JavaTypeTester.getStringList())
+
+JavaTypeTester.setStringSet(setOf(&quot;11&quot;, &quot;22&quot;, &quot;33&quot;))
+_console.log(JavaTypeTester.getStringSet())
+
+JavaTypeTester.setStringStringMap(mapOf(&quot;11&quot; to &quot;11&quot;, &quot;22&quot; to &quot;22&quot;, &quot;33&quot; to &quot;33&quot;))
+_console.log(JavaTypeTester.getStringStringMap())
+
+JavaTypeTester.setIntArray(intArrayOf(111, 222, 333))
+_console.log(JavaTypeTester.getIntArray())
+
+JavaTypeTester.setObject(intArrayOf(1111, 2222, 3333))
+_console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setObject(null)
+_console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setVarargs(1, 2, 3, 4)
+_console.log(JavaTypeTester.getVarargs())
+</div><aside class="prompt" data-type="tip" data-title="" id="-m0ftxg_35"><p id="-m0ftxg_36"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/TypeMapping/mapping.kts" id="-m0ftxg_37" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/TypeMapping/mapping.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-m0ftxg_14" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.impl.JavaTypeTester
+
+JavaTypeTester.setBytePrimitive((byte) 12)
+$console.log(JavaTypeTester.getBytePrimitive())
+JavaTypeTester.setByteWrapper(new Byte(&quot;34&quot;))
+$console.log(JavaTypeTester.getByteWrapper())
+
+JavaTypeTester.setShortPrimitive((short) 56)
+$console.log(JavaTypeTester.getShortPrimitive())
+JavaTypeTester.setShortWrapper(new Short(&quot;78&quot;))
+$console.log(JavaTypeTester.getShortWrapper())
+
+JavaTypeTester.setIntPrimitive(78)
+$console.log(JavaTypeTester.getIntPrimitive())
+JavaTypeTester.setIntWrapper(new Integer(&quot;90&quot;))
+$console.log(JavaTypeTester.getIntWrapper())
+
+JavaTypeTester.setLongPrimitive(100)
+$console.log(JavaTypeTester.getLongPrimitive())
+JavaTypeTester.setLongWrapper(new Long(&quot;200&quot;))
+$console.log(JavaTypeTester.getLongWrapper())
+
+JavaTypeTester.setFloatPrimitive(300)
+$console.log(JavaTypeTester.getFloatPrimitive())
+JavaTypeTester.setFloatWrapper(new Float(&quot;400&quot;))
+$console.log(JavaTypeTester.getFloatWrapper())
+
+JavaTypeTester.setDoublePrimitive(500)
+$console.log(JavaTypeTester.getDoublePrimitive())
+JavaTypeTester.setDoubleWrapper(new Double(&quot;600&quot;))
+$console.log(JavaTypeTester.getDoubleWrapper())
+
+JavaTypeTester.setBooleanPrimitive(true)
+$console.log(JavaTypeTester.getBooleanPrimitive())
+JavaTypeTester.setBooleanWrapper(new Boolean(false))
+$console.log(JavaTypeTester.getBooleanWrapper())
+
+JavaTypeTester.setCharPrimitive('a' as char)
+$console.log(JavaTypeTester.getCharPrimitive())
+JavaTypeTester.setCharWrapper(new Character('A' as char))
+$console.log(JavaTypeTester.getCharWrapper())
+
+JavaTypeTester.setStringList([1, 2, 3])
+$console.log(JavaTypeTester.getStringList())
+
+JavaTypeTester.setStringSet(['11', '22', '33'] as Set)
+$console.log(JavaTypeTester.getStringSet())
+
+JavaTypeTester.setStringStringMap(['11': '11', '22': '22', '33': '33'])
+$console.log(JavaTypeTester.getStringStringMap())
+
+JavaTypeTester.setIntArray([111, 222, 333] as int[])
+$console.log(JavaTypeTester.getIntArray())
+
+JavaTypeTester.setObject([1111, 2222, 3333] as int[])
+$console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setObject(null)
+$console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setVarargs(1, 2, 3, 4)
+$console.log(JavaTypeTester.getVarargs())</div><aside class="prompt" data-type="tip" data-title="" id="-m0ftxg_43"><p id="-m0ftxg_44"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/TypeMapping/mapping.groovy" id="-m0ftxg_45" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/TypeMapping/mapping.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-m0ftxg_17" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let JavaTypeTester = $java.loadClass(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+
+JavaTypeTester.setBytePrimitive(12)
+$console.log(JavaTypeTester.getBytePrimitive())
+JavaTypeTester.setByteWrapper(34)
+$console.log(JavaTypeTester.getByteWrapper())
+
+JavaTypeTester.setShortPrimitive(56)
+$console.log(JavaTypeTester.getShortPrimitive())
+JavaTypeTester.setShortWrapper(78)
+$console.log(JavaTypeTester.getShortWrapper())
+
+JavaTypeTester.setIntPrimitive(78)
+$console.log(JavaTypeTester.getIntPrimitive())
+JavaTypeTester.setIntWrapper(90)
+$console.log(JavaTypeTester.getIntWrapper())
+
+JavaTypeTester.setLongPrimitive(100)
+$console.log(JavaTypeTester.getLongPrimitive())
+JavaTypeTester.setLongWrapper(200)
+$console.log(JavaTypeTester.getLongWrapper())
+
+JavaTypeTester.setFloatPrimitive(300)
+$console.log(JavaTypeTester.getFloatPrimitive())
+JavaTypeTester.setFloatWrapper(400)
+$console.log(JavaTypeTester.getFloatWrapper())
+
+JavaTypeTester.setDoublePrimitive(500)
+$console.log(JavaTypeTester.getDoublePrimitive())
+JavaTypeTester.setDoubleWrapper(600)
+$console.log(JavaTypeTester.getDoubleWrapper())
+
+JavaTypeTester.setBooleanPrimitive(true)
+$console.log(JavaTypeTester.getBooleanPrimitive())
+JavaTypeTester.setBooleanWrapper(false)
+$console.log(JavaTypeTester.getBooleanWrapper())
+
+JavaTypeTester.setCharPrimitive('a')
+$console.log(JavaTypeTester.getCharPrimitive())
+JavaTypeTester.setCharWrapper('A')
+$console.log(JavaTypeTester.getCharWrapper())
+
+JavaTypeTester.setStringList([1, 2, 3])
+$console.log(JavaTypeTester.getStringList())
+
+JavaTypeTester.setStringSet(new Set(['11', '22', '33']))
+$console.log(JavaTypeTester.getStringSet())
+
+JavaTypeTester.setStringStringMap(new Map([['11', '11'], ['22', '22'], ['33', '33']]))
+$console.log(JavaTypeTester.getStringStringMap())
+
+JavaTypeTester.setIntArray([111, 222, 333])
+$console.log(JavaTypeTester.getIntArray())
+
+JavaTypeTester.setObject([1111, 2222, 3333])
+$console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setObject(null)
+$console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setVarargs(1, 2, 3, 4)
+$console.log(JavaTypeTester.getVarargs())
+</div><aside class="prompt" data-type="tip" data-title="" id="-m0ftxg_51"><p id="-m0ftxg_52"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/TypeMapping/mapping.js" id="-m0ftxg_53" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/TypeMapping/mapping.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-m0ftxg_20" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local JavaTypeTester = _java:loadClass(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+
+JavaTypeTester:setBytePrimitive(12)
+_console:log(JavaTypeTester:getBytePrimitive())
+JavaTypeTester:setByteWrapper(34)
+_console:log(JavaTypeTester:getByteWrapper())
+
+JavaTypeTester:setShortPrimitive(56)
+_console:log(JavaTypeTester:getShortPrimitive())
+JavaTypeTester:setShortWrapper(78)
+_console:log(JavaTypeTester:getShortWrapper())
+
+JavaTypeTester:setIntPrimitive(78)
+_console:log(JavaTypeTester:getIntPrimitive())
+JavaTypeTester:setIntWrapper(90)
+_console:log(JavaTypeTester:getIntWrapper())
+
+JavaTypeTester:setLongPrimitive(100)
+_console:log(JavaTypeTester:getLongPrimitive())
+JavaTypeTester:setLongWrapper(200)
+_console:log(JavaTypeTester:getLongWrapper())
+
+JavaTypeTester:setFloatPrimitive(300)
+_console:log(JavaTypeTester:getFloatPrimitive())
+JavaTypeTester:setFloatWrapper(400)
+_console:log(JavaTypeTester:getFloatWrapper())
+
+JavaTypeTester:setDoublePrimitive(500)
+_console:log(JavaTypeTester:getDoublePrimitive())
+JavaTypeTester:setDoubleWrapper(600)
+_console:log(JavaTypeTester:getDoubleWrapper())
+
+JavaTypeTester:setBooleanPrimitive(true)
+_console:log(JavaTypeTester:getBooleanPrimitive())
+JavaTypeTester:setBooleanWrapper(false)
+_console:log(JavaTypeTester:getBooleanWrapper())
+
+JavaTypeTester:setCharPrimitive(97)
+_console:log(JavaTypeTester:getCharPrimitive())
+JavaTypeTester:setCharWrapper(65)
+_console:log(JavaTypeTester:getCharWrapper())
+
+local al = _java:loadClass(&quot;java.util.ArrayList&quot;)()
+al:add(1)
+al:add(2)
+al:add(3)
+JavaTypeTester:setStringList(al)
+_console:log(JavaTypeTester:getStringList())
+
+local hs = _java:loadClass(&quot;java.util.HashSet&quot;)()
+hs:add(&quot;11&quot;)
+hs:add(&quot;22&quot;)
+hs:add(&quot;33&quot;)
+JavaTypeTester:setStringSet(hs)
+_console:log(JavaTypeTester:getStringSet())
+
+local hm = _java:loadClass(&quot;java.util.HashMap&quot;)()
+hm:put(&quot;11&quot;, &quot;11&quot;)
+hm:put(&quot;22&quot;, &quot;22&quot;)
+hm:put(&quot;33&quot;, &quot;33&quot;)
+JavaTypeTester:setStringStringMap(hm)
+_console:log(JavaTypeTester:getStringStringMap())
+
+JavaTypeTester:setIntArray({ 1, 2, 3 })
+_console:log(JavaTypeTester:getIntArray())
+
+JavaTypeTester:setObject(&quot;1234&quot;)
+_console:log(JavaTypeTester:getObject())
+
+JavaTypeTester:setObject(nil)
+_console:log(JavaTypeTester:getObject())
+
+JavaTypeTester:setVarargs(1, 2, 3, 4)
+_console:log(JavaTypeTester:getVarargs())
+</div><aside class="prompt" data-type="tip" data-title="" id="-m0ftxg_59"><p id="-m0ftxg_60"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/TypeMapping/mapping.lua" id="-m0ftxg_61" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/TypeMapping/mapping.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-m0ftxg_23" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$JavaTypeTester = java_class(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;);
+
+$JavaTypeTester-&gt;setBytePrimitive(12);
+$console-&gt;log($JavaTypeTester-&gt;getBytePrimitive());
+$JavaTypeTester-&gt;setByteWrapper(34);
+$console-&gt;log($JavaTypeTester-&gt;getByteWrapper());
+
+$JavaTypeTester-&gt;setShortPrimitive(56);
+$console-&gt;log($JavaTypeTester-&gt;getShortPrimitive());
+$JavaTypeTester-&gt;setShortWrapper(78);
+$console-&gt;log($JavaTypeTester-&gt;getShortWrapper());
+
+$JavaTypeTester-&gt;setIntPrimitive(78);
+$console-&gt;log($JavaTypeTester-&gt;getIntPrimitive());
+$JavaTypeTester-&gt;setIntWrapper(90);
+$console-&gt;log($JavaTypeTester-&gt;getIntWrapper());
+
+$JavaTypeTester-&gt;setLongPrimitive(100);
+$console-&gt;log($JavaTypeTester-&gt;getLongPrimitive());
+$JavaTypeTester-&gt;setLongWrapper(200);
+$console-&gt;log($JavaTypeTester-&gt;getLongWrapper());
+
+$JavaTypeTester-&gt;setFloatPrimitive(300);
+$console-&gt;log($JavaTypeTester-&gt;getFloatPrimitive());
+$JavaTypeTester-&gt;setFloatWrapper(400);
+$console-&gt;log($JavaTypeTester-&gt;getFloatWrapper());
+
+$JavaTypeTester-&gt;setDoublePrimitive(500);
+$console-&gt;log($JavaTypeTester-&gt;getDoublePrimitive());
+$JavaTypeTester-&gt;setDoubleWrapper(600);
+$console-&gt;log($JavaTypeTester-&gt;getDoubleWrapper());
+
+$JavaTypeTester-&gt;setBooleanPrimitive(true);
+$console-&gt;log($JavaTypeTester-&gt;getBooleanPrimitive());
+$JavaTypeTester-&gt;setBooleanWrapper(true);
+$console-&gt;log($JavaTypeTester-&gt;getBooleanWrapper());
+
+$JavaTypeTester-&gt;setCharPrimitive('a');
+$console-&gt;log($JavaTypeTester-&gt;getCharPrimitive());
+$JavaTypeTester-&gt;setCharWrapper('A');
+$console-&gt;log($JavaTypeTester-&gt;getCharWrapper());
+
+$JavaTypeTester-&gt;setStringList($iterables-&gt;listOf(1, 2, 3));
+$console-&gt;log($JavaTypeTester-&gt;getStringList());
+
+$JavaTypeTester-&gt;setStringSet($iterables-&gt;setOf(4, 5, 6));
+$console-&gt;log($JavaTypeTester-&gt;getStringSet());
+
+$JavaTypeTester-&gt;setStringStringMap($maps-&gt;mapOf($maps-&gt;pairOf(1, &quot;A&quot;), $maps-&gt;pairOf(2, &quot;B&quot;)));
+$console-&gt;log($JavaTypeTester-&gt;getStringStringMap());
+
+$JavaTypeTester-&gt;setIntArray($arrays-&gt;intArrayOf(1, 2, 3));
+$console-&gt;log($JavaTypeTester-&gt;getIntArray());
+
+$JavaTypeTester-&gt;setObject(array(4, 5, 6));
+$console-&gt;log($JavaTypeTester-&gt;getObject());
+
+$JavaTypeTester-&gt;setObject(null);
+$console-&gt;log($JavaTypeTester-&gt;getObject());
+
+$JavaTypeTester-&gt;setVarargs(&quot;123&quot;, 7, 8, 9);
+$console-&gt;log($JavaTypeTester-&gt;getVarargs());</div><aside class="prompt" data-type="tip" data-title="" id="-m0ftxg_67"><p id="-m0ftxg_68"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/TypeMapping/mapping.php" id="-m0ftxg_69" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/TypeMapping/mapping.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-m0ftxg_26" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">JavaTypeTester = _java.loadClass(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+
+JavaTypeTester.setBytePrimitive(12)
+_console.log(JavaTypeTester.getBytePrimitive())
+JavaTypeTester.setByteWrapper(34)
+_console.log(JavaTypeTester.getByteWrapper())
+
+JavaTypeTester.setShortPrimitive(56)
+_console.log(JavaTypeTester.getShortPrimitive())
+JavaTypeTester.setShortWrapper(78)
+_console.log(JavaTypeTester.getShortWrapper())
+
+JavaTypeTester.setIntPrimitive(78)
+_console.log(JavaTypeTester.getIntPrimitive())
+JavaTypeTester.setIntWrapper(90)
+_console.log(JavaTypeTester.getIntWrapper())
+
+JavaTypeTester.setLongPrimitive(100)
+_console.log(JavaTypeTester.getLongPrimitive())
+JavaTypeTester.setLongWrapper(200)
+_console.log(JavaTypeTester.getLongWrapper())
+
+JavaTypeTester.setFloatPrimitive(300.0)
+_console.log(JavaTypeTester.getFloatPrimitive())
+JavaTypeTester.setFloatWrapper(400.0)
+_console.log(JavaTypeTester.getFloatWrapper())
+
+JavaTypeTester.setDoublePrimitive(500.0)
+_console.log(JavaTypeTester.getDoublePrimitive())
+JavaTypeTester.setDoubleWrapper(600.0)
+_console.log(JavaTypeTester.getDoubleWrapper())
+
+JavaTypeTester.setBooleanPrimitive(True)
+_console.log(JavaTypeTester.getBooleanPrimitive())
+JavaTypeTester.setBooleanWrapper(False)
+_console.log(JavaTypeTester.getBooleanWrapper())
+
+JavaTypeTester.setCharPrimitive('a')
+_console.log(JavaTypeTester.getCharPrimitive())
+JavaTypeTester.setCharWrapper('A')
+_console.log(JavaTypeTester.getCharWrapper())
+
+JavaTypeTester.setStringList(['1', '2', '3'])
+_console.log(JavaTypeTester.getStringList())
+
+HashSet = _java.loadClass(&quot;java.util.HashSet&quot;)
+s = HashSet()
+s.add('11')
+s.add('22')
+s.add('33')
+JavaTypeTester.setStringSet(s)
+_console.log(JavaTypeTester.getStringSet())
+
+JavaTypeTester.setStringStringMap({'11': '11', '22': '22', '33': '33'})
+_console.log(JavaTypeTester.getStringStringMap())
+
+JavaTypeTester.setIntArray([111, 222, 333])
+_console.log(JavaTypeTester.getIntArray())
+
+JavaTypeTester.setObject([1111, 2222, 3333])
+_console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setObject(None)
+_console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setVarargs(1, 2, 3, 4)
+_console.log(JavaTypeTester.getVarargs())
+</div><aside class="prompt" data-type="tip" data-title="" id="-m0ftxg_75"><p id="-m0ftxg_76"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/TypeMapping/mapping.py" id="-m0ftxg_77" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/TypeMapping/mapping.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-m0ftxg_29" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">java_import com.m8test.script.core.impl.JavaTypeTester
+
+JavaTypeTester.setBytePrimitive(12)
+$console.log(JavaTypeTester.getBytePrimitive())
+JavaTypeTester.setByteWrapper(34)
+$console.log(JavaTypeTester.getByteWrapper())
+
+JavaTypeTester.setShortPrimitive(56)
+$console.log(JavaTypeTester.getShortPrimitive())
+JavaTypeTester.setShortWrapper(78)
+$console.log(JavaTypeTester.getShortWrapper())
+
+JavaTypeTester.setIntPrimitive(78)
+$console.log(JavaTypeTester.getIntPrimitive())
+JavaTypeTester.setIntWrapper(90)
+$console.log(JavaTypeTester.getIntWrapper())
+
+JavaTypeTester.setLongPrimitive(100)
+$console.log(JavaTypeTester.getLongPrimitive())
+JavaTypeTester.setLongWrapper(200)
+$console.log(JavaTypeTester.getLongWrapper())
+
+JavaTypeTester.setFloatPrimitive(300.0)
+$console.log(JavaTypeTester.getFloatPrimitive())
+JavaTypeTester.setFloatWrapper(400.0)
+$console.log(JavaTypeTester.getFloatWrapper())
+
+JavaTypeTester.setDoublePrimitive(500.0)
+$console.log(JavaTypeTester.getDoublePrimitive())
+JavaTypeTester.setDoubleWrapper(600.0)
+$console.log(JavaTypeTester.getDoubleWrapper())
+
+JavaTypeTester.setBooleanPrimitive(true)
+$console.log(JavaTypeTester.getBooleanPrimitive())
+JavaTypeTester.setBooleanWrapper(false)
+$console.log(JavaTypeTester.getBooleanWrapper())
+
+JavaTypeTester.setCharPrimitive('a')
+$console.log(JavaTypeTester.getCharPrimitive())
+JavaTypeTester.setCharWrapper('A')
+$console.log(JavaTypeTester.getCharWrapper())
+
+JavaTypeTester.setStringList([1, 2, 3])
+$console.log(JavaTypeTester.getStringList())
+
+set = java.util.HashSet.new()
+set.add(&quot;11&quot;)
+set.add(&quot;22&quot;)
+set.add(&quot;33&quot;)
+JavaTypeTester.setStringSet(set)
+$console.log(JavaTypeTester.getStringSet())
+
+JavaTypeTester.setStringStringMap({ '11' =&gt; '11', '22' =&gt; '22', '33' =&gt; '33' })
+$console.log(JavaTypeTester.getStringStringMap())
+
+JavaTypeTester.setIntArray([111, 222, 333])
+$console.log(JavaTypeTester.getIntArray())
+
+JavaTypeTester.setObject([1111, 2222, 3333])
+$console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setObject(nil)
+$console.log(JavaTypeTester.getObject())
+
+JavaTypeTester.setVarargs(1, 2, 3, 4)
+$console.log(JavaTypeTester.getVarargs())
+</div><aside class="prompt" data-type="tip" data-title="" id="-m0ftxg_83"><p id="-m0ftxg_84"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/TypeMapping/mapping.rb" id="-m0ftxg_85" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/TypeMapping/mapping.rb</a></p></aside></div></div><div class="tabs" id="-m0ftxg_6" data-group="languages" data-anchors="[groovy-mapping,javascript-mapping,kotlin-mapping,lua-mapping,php-mapping,python-mapping,ruby-mapping]"><div class="tabs__content" data-gtm="tab" id="kotlin-mapping" data-sync-tabs="kotlin" data-title="kotlin"><div class="table-wrapper"><table class="wide" id="-m0ftxg_109"><thead><tr class="ijRowHead" id="-m0ftxg_110"><th id="-m0ftxg_125"><p>java 类型</p></th><th id="-m0ftxg_126"><p>kotlin 类型</p></th></tr></thead><tbody><tr id="-m0ftxg_111"><td id="-m0ftxg_127"><p>null</p></td><td id="-m0ftxg_128"><p>null</p></td></tr><tr id="-m0ftxg_112"><td id="-m0ftxg_129"><p>java.lang.Object</p></td><td id="-m0ftxg_130"><p>kotlin.Any</p></td></tr><tr id="-m0ftxg_113"><td id="-m0ftxg_131"><p>java.lang.Float</p></td><td id="-m0ftxg_132"><p>kotlin.Float?</p></td></tr><tr id="-m0ftxg_114"><td id="-m0ftxg_133"><p>java.lang.Double</p></td><td id="-m0ftxg_134"><p>kotlin.Double?</p></td></tr><tr id="-m0ftxg_115"><td id="-m0ftxg_135"><p>java.lang.Integer</p></td><td id="-m0ftxg_136"><p>kotlin.Int?</p></td></tr><tr id="-m0ftxg_116"><td id="-m0ftxg_137"><p>java.lang.Long</p></td><td id="-m0ftxg_138"><p>kotlin.Long?</p></td></tr><tr id="-m0ftxg_117"><td id="-m0ftxg_139"><p>java.lang.Short</p></td><td id="-m0ftxg_140"><p>kotlin.Short?</p></td></tr><tr id="-m0ftxg_118"><td id="-m0ftxg_141"><p>java.lang.Byte</p></td><td id="-m0ftxg_142"><p>kotlin.Byte?</p></td></tr><tr id="-m0ftxg_119"><td id="-m0ftxg_143"><p>java.lang.Boolean</p></td><td id="-m0ftxg_144"><p>kotlin.Boolean?</p></td></tr><tr id="-m0ftxg_120"><td id="-m0ftxg_145"><p>java.lang.String</p></td><td id="-m0ftxg_146"><p>kotlin.String</p></td></tr><tr id="-m0ftxg_121"><td id="-m0ftxg_147"><p>java.lang.List</p></td><td id="-m0ftxg_148"><p>kotlin.collections.List/kotlin.collections.MutableList</p></td></tr><tr id="-m0ftxg_122"><td id="-m0ftxg_149"><p>java.lang.Set</p></td><td id="-m0ftxg_150"><p>kotlin.collections.Set/kotlin.collections.MutableSet</p></td></tr><tr id="-m0ftxg_123"><td id="-m0ftxg_151"><p>java.util.Map</p></td><td id="-m0ftxg_152"><p>kotlin.collections.Map/kotlin.collections.MutableMap</p></td></tr><tr id="-m0ftxg_124"><td id="-m0ftxg_153"><p>数组</p></td><td id="-m0ftxg_154"><p>kotlin.Array</p></td></tr></tbody></table></div></div><div class="tabs__content" data-gtm="tab" id="groovy-mapping" data-sync-tabs="groovy" data-title="groovy"><div class="table-wrapper"><table class="wide" id="-m0ftxg_157"><thead><tr class="ijRowHead" id="-m0ftxg_158"><th id="-m0ftxg_173"><p>java 类型</p></th><th id="-m0ftxg_174"><p>groovy 类型</p></th></tr></thead><tbody><tr id="-m0ftxg_159"><td id="-m0ftxg_175"><p>null</p></td><td id="-m0ftxg_176"><p>null</p></td></tr><tr id="-m0ftxg_160"><td id="-m0ftxg_177"><p>java.lang.Object</p></td><td id="-m0ftxg_178"><p>java.lang.Object</p></td></tr><tr id="-m0ftxg_161"><td id="-m0ftxg_179"><p>java.lang.Float</p></td><td id="-m0ftxg_180"><p>java.lang.Float</p></td></tr><tr id="-m0ftxg_162"><td id="-m0ftxg_181"><p>java.lang.Double</p></td><td id="-m0ftxg_182"><p>java.lang.Double</p></td></tr><tr id="-m0ftxg_163"><td id="-m0ftxg_183"><p>java.lang.Integer</p></td><td id="-m0ftxg_184"><p>java.lang.Integer</p></td></tr><tr id="-m0ftxg_164"><td id="-m0ftxg_185"><p>java.lang.Long</p></td><td id="-m0ftxg_186"><p>java.lang.Long</p></td></tr><tr id="-m0ftxg_165"><td id="-m0ftxg_187"><p>java.lang.Short</p></td><td id="-m0ftxg_188"><p>java.lang.Short</p></td></tr><tr id="-m0ftxg_166"><td id="-m0ftxg_189"><p>java.lang.Byte</p></td><td id="-m0ftxg_190"><p>java.lang.Byte</p></td></tr><tr id="-m0ftxg_167"><td id="-m0ftxg_191"><p>java.lang.Boolean</p></td><td id="-m0ftxg_192"><p>java.lang.Boolean</p></td></tr><tr id="-m0ftxg_168"><td id="-m0ftxg_193"><p>java.lang.String</p></td><td id="-m0ftxg_194"><p>java.lang.String</p></td></tr><tr id="-m0ftxg_169"><td id="-m0ftxg_195"><p>java.lang.List</p></td><td id="-m0ftxg_196"><p>java.lang.List</p></td></tr><tr id="-m0ftxg_170"><td id="-m0ftxg_197"><p>java.lang.Set</p></td><td id="-m0ftxg_198"><p>java.lang.Set</p></td></tr><tr id="-m0ftxg_171"><td id="-m0ftxg_199"><p>java.util.Map</p></td><td id="-m0ftxg_200"><p>java.util.Map</p></td></tr><tr id="-m0ftxg_172"><td id="-m0ftxg_201"><p>数组</p></td><td id="-m0ftxg_202"><p>数组</p></td></tr></tbody></table></div></div><div class="tabs__content" data-gtm="tab" id="javascript-mapping" data-sync-tabs="javascript" data-title="javascript"><div class="table-wrapper"><table class="wide" id="-m0ftxg_205"><thead><tr class="ijRowHead" id="-m0ftxg_206"><th id="-m0ftxg_221"><p>java 类型</p></th><th id="-m0ftxg_222"><p>javascript 类型</p></th></tr></thead><tbody><tr id="-m0ftxg_207"><td id="-m0ftxg_223"><p>null</p></td><td id="-m0ftxg_224"><p>undefined/null</p></td></tr><tr id="-m0ftxg_208"><td id="-m0ftxg_225"><p>java.lang.Object</p></td><td id="-m0ftxg_226"><p>Object</p></td></tr><tr id="-m0ftxg_209"><td id="-m0ftxg_227"><p>java.lang.Float</p></td><td id="-m0ftxg_228"><p>number</p></td></tr><tr id="-m0ftxg_210"><td id="-m0ftxg_229"><p>java.lang.Double</p></td><td id="-m0ftxg_230"><p>number</p></td></tr><tr id="-m0ftxg_211"><td id="-m0ftxg_231"><p>java.lang.Integer</p></td><td id="-m0ftxg_232"><p>number</p></td></tr><tr id="-m0ftxg_212"><td id="-m0ftxg_233"><p>java.lang.Long</p></td><td id="-m0ftxg_234"><p>number</p></td></tr><tr id="-m0ftxg_213"><td id="-m0ftxg_235"><p>java.lang.Short</p></td><td id="-m0ftxg_236"><p>number</p></td></tr><tr id="-m0ftxg_214"><td id="-m0ftxg_237"><p>java.lang.Byte</p></td><td id="-m0ftxg_238"><p>number</p></td></tr><tr id="-m0ftxg_215"><td id="-m0ftxg_239"><p>java.lang.Boolean</p></td><td id="-m0ftxg_240"><p>boolean</p></td></tr><tr id="-m0ftxg_216"><td id="-m0ftxg_241"><p>java.lang.String</p></td><td id="-m0ftxg_242"><p>string</p></td></tr><tr id="-m0ftxg_217"><td id="-m0ftxg_243"><p>java.lang.List</p></td><td id="-m0ftxg_244"><p>Array</p></td></tr><tr id="-m0ftxg_218"><td id="-m0ftxg_245"><p>java.lang.Set</p></td><td id="-m0ftxg_246"><p>Set</p></td></tr><tr id="-m0ftxg_219"><td id="-m0ftxg_247"><p>java.util.Map</p></td><td id="-m0ftxg_248"><p>Map</p></td></tr><tr id="-m0ftxg_220"><td id="-m0ftxg_249"><p>数组</p></td><td id="-m0ftxg_250"><p>Array</p></td></tr></tbody></table></div></div><div class="tabs__content" data-gtm="tab" id="lua-mapping" data-sync-tabs="lua" data-title="lua"><div class="table-wrapper"><table class="wide" id="-m0ftxg_253"><thead><tr class="ijRowHead" id="-m0ftxg_254"><th id="-m0ftxg_269"><p>java 类型</p></th><th id="-m0ftxg_270"><p>lua 类型</p></th></tr></thead><tbody><tr id="-m0ftxg_255"><td id="-m0ftxg_271"><p>null</p></td><td id="-m0ftxg_272"><p>nil</p></td></tr><tr id="-m0ftxg_256"><td id="-m0ftxg_273"><p>java.lang.Object</p></td><td id="-m0ftxg_274"><p>userdata</p></td></tr><tr id="-m0ftxg_257"><td id="-m0ftxg_275"><p>java.lang.Float</p></td><td id="-m0ftxg_276"><p>number</p></td></tr><tr id="-m0ftxg_258"><td id="-m0ftxg_277"><p>java.lang.Double</p></td><td id="-m0ftxg_278"><p>number</p></td></tr><tr id="-m0ftxg_259"><td id="-m0ftxg_279"><p>java.lang.Integer</p></td><td id="-m0ftxg_280"><p>number</p></td></tr><tr id="-m0ftxg_260"><td id="-m0ftxg_281"><p>java.lang.Long</p></td><td id="-m0ftxg_282"><p>number</p></td></tr><tr id="-m0ftxg_261"><td id="-m0ftxg_283"><p>java.lang.Short</p></td><td id="-m0ftxg_284"><p>number</p></td></tr><tr id="-m0ftxg_262"><td id="-m0ftxg_285"><p>java.lang.Byte</p></td><td id="-m0ftxg_286"><p>number</p></td></tr><tr id="-m0ftxg_263"><td id="-m0ftxg_287"><p>java.lang.Boolean</p></td><td id="-m0ftxg_288"><p>boolean</p></td></tr><tr id="-m0ftxg_264"><td id="-m0ftxg_289"><p>java.lang.String</p></td><td id="-m0ftxg_290"><p>string</p></td></tr><tr id="-m0ftxg_265"><td id="-m0ftxg_291"><p>java.lang.List</p></td><td id="-m0ftxg_292"></td></tr><tr id="-m0ftxg_266"><td id="-m0ftxg_293"><p>java.lang.Set</p></td><td id="-m0ftxg_294"></td></tr><tr id="-m0ftxg_267"><td id="-m0ftxg_295"><p>java.util.Map</p></td><td id="-m0ftxg_296"></td></tr><tr id="-m0ftxg_268"><td id="-m0ftxg_297"><p>数组</p></td><td id="-m0ftxg_298"><p>table</p></td></tr></tbody></table></div></div><div class="tabs__content" data-gtm="tab" id="php-mapping" data-sync-tabs="php" data-title="php"><div class="table-wrapper"><table class="wide" id="-m0ftxg_301"><thead><tr class="ijRowHead" id="-m0ftxg_302"><th id="-m0ftxg_317"><p>java 类型</p></th><th id="-m0ftxg_318"><p>php 类型</p></th></tr></thead><tbody><tr id="-m0ftxg_303"><td id="-m0ftxg_319"><p>null</p></td><td id="-m0ftxg_320"><p>null</p></td></tr><tr id="-m0ftxg_304"><td id="-m0ftxg_321"><p>java.lang.Object</p></td><td id="-m0ftxg_322"><p>Object</p></td></tr><tr id="-m0ftxg_305"><td id="-m0ftxg_323"><p>java.lang.Float</p></td><td id="-m0ftxg_324"><p>float</p></td></tr><tr id="-m0ftxg_306"><td id="-m0ftxg_325"><p>java.lang.Double</p></td><td id="-m0ftxg_326"><p>float</p></td></tr><tr id="-m0ftxg_307"><td id="-m0ftxg_327"><p>java.lang.Integer</p></td><td id="-m0ftxg_328"><p>int</p></td></tr><tr id="-m0ftxg_308"><td id="-m0ftxg_329"><p>java.lang.Long</p></td><td id="-m0ftxg_330"><p>int</p></td></tr><tr id="-m0ftxg_309"><td id="-m0ftxg_331"><p>java.lang.Short</p></td><td id="-m0ftxg_332"><p>int</p></td></tr><tr id="-m0ftxg_310"><td id="-m0ftxg_333"><p>java.lang.Byte</p></td><td id="-m0ftxg_334"><p>int</p></td></tr><tr id="-m0ftxg_311"><td id="-m0ftxg_335"><p>java.lang.Boolean</p></td><td id="-m0ftxg_336"><p>boolean</p></td></tr><tr id="-m0ftxg_312"><td id="-m0ftxg_337"><p>java.lang.String</p></td><td id="-m0ftxg_338"><p>string</p></td></tr><tr id="-m0ftxg_313"><td id="-m0ftxg_339"><p>java.lang.List</p></td><td id="-m0ftxg_340"><p>List</p></td></tr><tr id="-m0ftxg_314"><td id="-m0ftxg_341"><p>java.lang.Set</p></td><td id="-m0ftxg_342"><p>Set</p></td></tr><tr id="-m0ftxg_315"><td id="-m0ftxg_343"><p>java.util.Map</p></td><td id="-m0ftxg_344"><p>Map</p></td></tr><tr id="-m0ftxg_316"><td id="-m0ftxg_345"><p>数组</p></td><td id="-m0ftxg_346"><p>java array</p></td></tr></tbody></table></div></div><div class="tabs__content" data-gtm="tab" id="python-mapping" data-sync-tabs="python" data-title="python"><div class="table-wrapper"><table class="wide" id="-m0ftxg_349"><thead><tr class="ijRowHead" id="-m0ftxg_350"><th id="-m0ftxg_365"><p>java 类型</p></th><th id="-m0ftxg_366"><p>python 类型</p></th></tr></thead><tbody><tr id="-m0ftxg_351"><td id="-m0ftxg_367"><p>null</p></td><td id="-m0ftxg_368"><p>None</p></td></tr><tr id="-m0ftxg_352"><td id="-m0ftxg_369"><p>java.lang.Object</p></td><td id="-m0ftxg_370"><p>object</p></td></tr><tr id="-m0ftxg_353"><td id="-m0ftxg_371"><p>java.lang.Float</p></td><td id="-m0ftxg_372"><p>float</p></td></tr><tr id="-m0ftxg_354"><td id="-m0ftxg_373"><p>java.lang.Double</p></td><td id="-m0ftxg_374"><p>float</p></td></tr><tr id="-m0ftxg_355"><td id="-m0ftxg_375"><p>java.lang.Integer</p></td><td id="-m0ftxg_376"><p>int</p></td></tr><tr id="-m0ftxg_356"><td id="-m0ftxg_377"><p>java.lang.Long</p></td><td id="-m0ftxg_378"><p>int</p></td></tr><tr id="-m0ftxg_357"><td id="-m0ftxg_379"><p>java.lang.Short</p></td><td id="-m0ftxg_380"><p>int</p></td></tr><tr id="-m0ftxg_358"><td id="-m0ftxg_381"><p>java.lang.Byte</p></td><td id="-m0ftxg_382"><p>int</p></td></tr><tr id="-m0ftxg_359"><td id="-m0ftxg_383"><p>java.lang.Boolean</p></td><td id="-m0ftxg_384"><p>bool</p></td></tr><tr id="-m0ftxg_360"><td id="-m0ftxg_385"><p>java.lang.String</p></td><td id="-m0ftxg_386"><p>str</p></td></tr><tr id="-m0ftxg_361"><td id="-m0ftxg_387"><p>java.lang.List</p></td><td id="-m0ftxg_388"><p>list/tuple</p></td></tr><tr id="-m0ftxg_362"><td id="-m0ftxg_389"><p>java.lang.Set</p></td><td id="-m0ftxg_390"></td></tr><tr id="-m0ftxg_363"><td id="-m0ftxg_391"><p>java.util.Map</p></td><td id="-m0ftxg_392"></td></tr><tr id="-m0ftxg_364"><td id="-m0ftxg_393"><p>数组</p></td><td id="-m0ftxg_394"><p>list</p></td></tr></tbody></table></div></div><div class="tabs__content" data-gtm="tab" id="ruby-mapping" data-sync-tabs="ruby" data-title="ruby"><div class="table-wrapper"><table class="wide" id="-m0ftxg_397"><thead><tr class="ijRowHead" id="-m0ftxg_398"><th id="-m0ftxg_413"><p>java 类型</p></th><th id="-m0ftxg_414"><p>ruby 类型</p></th></tr></thead><tbody><tr id="-m0ftxg_399"><td id="-m0ftxg_415"><p>null</p></td><td id="-m0ftxg_416"><p>NilClass</p></td></tr><tr id="-m0ftxg_400"><td id="-m0ftxg_417"><p>java.lang.Object</p></td><td id="-m0ftxg_418"><p>Object</p></td></tr><tr id="-m0ftxg_401"><td id="-m0ftxg_419"><p>java.lang.Float</p></td><td id="-m0ftxg_420"><p>Float</p></td></tr><tr id="-m0ftxg_402"><td id="-m0ftxg_421"><p>java.lang.Double</p></td><td id="-m0ftxg_422"><p>Float</p></td></tr><tr id="-m0ftxg_403"><td id="-m0ftxg_423"><p>java.lang.Integer</p></td><td id="-m0ftxg_424"><p>Integer</p></td></tr><tr id="-m0ftxg_404"><td id="-m0ftxg_425"><p>java.lang.Long</p></td><td id="-m0ftxg_426"><p>Integer</p></td></tr><tr id="-m0ftxg_405"><td id="-m0ftxg_427"><p>java.lang.Short</p></td><td id="-m0ftxg_428"><p>Integer</p></td></tr><tr id="-m0ftxg_406"><td id="-m0ftxg_429"><p>java.lang.Byte</p></td><td id="-m0ftxg_430"><p>Integer</p></td></tr><tr id="-m0ftxg_407"><td id="-m0ftxg_431"><p>java.lang.Boolean</p></td><td id="-m0ftxg_432"><p>Boolean</p></td></tr><tr id="-m0ftxg_408"><td id="-m0ftxg_433"><p>java.lang.String</p></td><td id="-m0ftxg_434"><p>String</p></td></tr><tr id="-m0ftxg_409"><td id="-m0ftxg_435"><p>java.lang.List</p></td><td id="-m0ftxg_436"><p>Array</p></td></tr><tr id="-m0ftxg_410"><td id="-m0ftxg_437"><p>java.lang.Set</p></td><td id="-m0ftxg_438"><p>Array</p></td></tr><tr id="-m0ftxg_411"><td id="-m0ftxg_439"><p>java.util.Map</p></td><td id="-m0ftxg_440"><p>Hash</p></td></tr><tr id="-m0ftxg_412"><td id="-m0ftxg_441"><p>数组</p></td><td id="-m0ftxg_442"><p>Array</p></td></tr></tbody></table></div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="assess-jvm.html" class="navigation-links__prev">访问 JVM</a><a href="multi-file-project.html" class="navigation-links__next">多文件项目</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

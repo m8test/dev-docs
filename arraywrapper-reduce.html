@@ -1,0 +1,52 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:18.054026409"><title>reduce | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="reduce | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/arraywrapper-reduce.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="reduce | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/arraywrapper-reduce.html#webpage",
+    "url": "writerside-documentation/arraywrapper-reduce.html",
+    "name": "reduce | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="ArrayWrapper.reduce" data-main-title="reduce" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///ArrayWrapper.md|ArrayWrapper"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="ArrayWrapper.reduce" id="ArrayWrapper.reduce.md">reduce</h1><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_7"><p id="-7a2wzr_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.wrapper/-array-wrapper/reduce.html" id="-7a2wzr_12" data-external="true" rel="noopener noreferrer" target="_blank">ArrayWrapper.reduce()</a></p></aside><div class="tabs" id="-7a2wzr_10" data-group="languages" data-anchors="[-7a2wzr_15,-7a2wzr_18,-7a2wzr_21,-7a2wzr_24,-7a2wzr_27,-7a2wzr_30,-7a2wzr_33]"><div class="tabs__content" data-gtm="tab" id="-7a2wzr_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val numbers = arrayOf(1, 2, 3, 4, 5)
+// 计算所有元素的总和
+val sum = numbers.reduce { acc, element -&gt; acc + element }
+// 输出：总和: 15
+_console.log(&quot;总和: &quot;, sum)</div><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_39"><p id="-7a2wzr_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ArrayWrapper/reduce.kts" id="-7a2wzr_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ArrayWrapper/reduce.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-7a2wzr_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5))
+// 计算所有元素的总和
+def sum = numbers.reduce { acc, element -&gt; acc + element }
+// 输出：总和: 15
+$console.log(&quot;总和: &quot;, sum)</div><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_47"><p id="-7a2wzr_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ArrayWrapper/reduce.groovy" id="-7a2wzr_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ArrayWrapper/reduce.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-7a2wzr_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5))
+// 计算所有元素的总和
+let sum = numbers.reduce((acc, element) =&gt; acc + element)
+// 输出：总和: 15
+$console.log(&quot;总和: &quot;, sum)</div><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_55"><p id="-7a2wzr_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ArrayWrapper/reduce.js" id="-7a2wzr_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ArrayWrapper/reduce.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-7a2wzr_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local numbers = _objectWrappers:wrap(_arrays:arrayOf(_plugins:loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5))
+-- 计算所有元素的总和
+local sum = numbers:reduce(function(acc, element)
+    return acc + element
+end)
+-- 输出：总和: 15
+_console:log(&quot;总和: &quot;, sum)</div><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_63"><p id="-7a2wzr_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ArrayWrapper/reduce.lua" id="-7a2wzr_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ArrayWrapper/reduce.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-7a2wzr_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$numbers = $objectWrappers-&gt;wrap($arrays-&gt;arrayOf($plugins-&gt;loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5));
+// 计算所有元素的总和
+$sum = $numbers-&gt;reduce(function ($acc, $element) {
+    return $acc + $element;
+});
+// 输出：总和: 15
+$console-&gt;log(&quot;总和: &quot;, $sum);</div><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_71"><p id="-7a2wzr_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ArrayWrapper/reduce.php" id="-7a2wzr_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ArrayWrapper/reduce.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-7a2wzr_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">numbers = _objectWrappers.wrap(_arrays.arrayOf(_plugins.loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5))
+# 计算所有元素的总和
+sum = numbers.reduce(lambda acc, element: acc + element)
+# 输出：总和: 15
+_console.log(&quot;总和: &quot;, sum)
+</div><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_79"><p id="-7a2wzr_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ArrayWrapper/reduce.py" id="-7a2wzr_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ArrayWrapper/reduce.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-7a2wzr_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5))
+# 计算所有元素的总和
+sum = numbers.reduce { |acc, element| acc + element }
+# 输出：总和: 15
+$console.log(&quot;总和: &quot;, sum)</div><aside class="prompt" data-type="tip" data-title="" id="-7a2wzr_87"><p id="-7a2wzr_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ArrayWrapper/reduce.rb" id="-7a2wzr_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ArrayWrapper/reduce.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="arraywrapper-randomornull.html" class="navigation-links__prev">randomOrNull</a><a href="arraywrapper-reduceindexed.html" class="navigation-links__next">reduceIndexed</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

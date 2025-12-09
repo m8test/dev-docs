@@ -1,0 +1,154 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:26.799964441"><title>组件插件 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="组件插件 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/component-plugin.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="组件插件 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/component-plugin.html#webpage",
+    "url": "writerside-documentation/component-plugin.html",
+    "name": "组件插件 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="component-plugin" data-main-title="组件插件" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="plugins.md|插件"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="component-plugin" id="component-plugin.md">组件插件</h1><figure id="jbgtf8_3"><img alt="19" src="/19.png" title="19" width="510" height="680"></figure><p id="jbgtf8_4">开发组件插件的步骤如下：</p><ol class="list _decimal" id="jbgtf8_24" type="1"><li class="list__item" id="jbgtf8_57"><p>在 <code class="code" id="jbgtf8_58">build.gradle.kts</code> 文件中添加 <code class="code" id="jbgtf8_59">m8test sdk</code> 依赖。为减小插件 APK 的体积，如果依赖项已包含在 <a href="https://raw.githubusercontent.com/m8test/maven/refs/heads/0.1.5/com/m8test/version-catalog/0.1.5/version-catalog-0.1.5.toml" id="jbgtf8_60" data-external="true" rel="noopener noreferrer" target="_blank">M8Test Version Catalog</a> 中，建议使用 <code class="code" id="jbgtf8_61">compileOnly</code> 方式引入依赖。</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">import com.m8test.util.VersionUtils
+
+plugins {
+    alias(m8test.plugins.android.application)
+    alias(m8test.plugins.kotlin.android)
+}
+
+android {
+    namespace = &quot;com.m8test.component.c2&quot;
+    compileSdk = m8test.versions.compileSdk.get().toInt()
+
+    defaultConfig {
+        minSdk = m8test.versions.minSdk.get().toInt()
+        targetSdk = m8test.versions.targetSdk.get().toInt()
+        versionName = libs.versions.versionName.get()
+        versionCode = VersionUtils.getCode(versionName!!)
+
+        testInstrumentationRunner = &quot;androidx.test.runner.AndroidJUnitRunner&quot;
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile(&quot;proguard-android-optimize.txt&quot;),
+                &quot;proguard-rules.pro&quot;
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.toVersion(m8test.versions.sourceCompatibility.get())
+        targetCompatibility = JavaVersion.toVersion(m8test.versions.targetCompatibility.get())
+    }
+    kotlinOptions {
+        jvmTarget = m8test.versions.jvmTarget.get()
+    }
+}
+
+dependencies {
+    compileOnly(m8test.utilcodex)
+    compileOnly(m8test.m8test.sdk)
+    compileOnly(project(&quot;:component:c1:api&quot;))
+}</div><aside class="prompt" data-type="tip" data-title="" id="jbgtf8_30"><p id="jbgtf8_62"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/build.gradle.kts" id="jbgtf8_63" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/build.gradle.kts</a></p></aside><ol class="list _decimal" id="jbgtf8_9" type="1" start="2"><li class="list__item" id="jbgtf8_64"><p id="jbgtf8_65">编写插件类，继承 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.impl.component/-abstract-component/index.html" id="jbgtf8_66" data-external="true" rel="noopener noreferrer" target="_blank">AbstractComponent</a> 并实现 <code class="code" id="jbgtf8_67">getVariables</code> 方法</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.component.c2
+
+import com.blankj.utilcode.util.AppUtils
+import com.m8test.plugin.api.ApkPluginProvider
+import com.m8test.script.core.api.component.Variable
+import com.m8test.script.core.api.engine.ScriptContext
+import com.m8test.script.core.impl.component.AbstractComponent
+
+/**
+ * Description TODO
+ *
+ * @date 2025/02/02 21:10:37
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class C2Component(apkPluginProvider: ApkPluginProvider) : AbstractComponent(apkPluginProvider) {
+    override fun onInstall() {
+        super.onInstall()
+        addDependency {
+            setName(&quot;C1&quot;)
+            setVersion(AppUtils.getAppVersionName())
+//            setUrl(&quot;http://&quot;)
+        }
+    }
+
+    override fun getVariables(scriptContext: ScriptContext): List&lt;Variable&gt; {
+        return listOf&lt;Variable&gt;(C2Impl(scriptContext))
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="jbgtf8_35"><p id="jbgtf8_68"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/kotlin/com/m8test/component/c2/C2Component.kt" id="jbgtf8_69" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/kotlin/com/m8test/component/c2/C2Component.kt</a></p></aside><ol class="list _decimal" id="jbgtf8_13" type="1" start="3"><li class="list__item" id="jbgtf8_70"><p id="jbgtf8_71">定义一个接口，继承 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.component/-variable/index.html" id="jbgtf8_72" data-external="true" rel="noopener noreferrer" target="_blank">Variable</a> 接口，并在其中定义所需方法</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.component.c2
+
+import com.m8test.script.core.api.component.Variable
+
+/**
+ * Description TODO
+ *
+ * @date 2025/02/02 21:07:40
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+interface C2 : Variable {
+    fun test()
+}</div><aside class="prompt" data-type="tip" data-title="" id="jbgtf8_40"><p id="jbgtf8_73"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/kotlin/com/m8test/component/c2/C2.kt" id="jbgtf8_74" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/kotlin/com/m8test/component/c2/C2.kt</a></p></aside><ol class="list _decimal" id="jbgtf8_15" type="1" start="4"><li class="list__item" id="jbgtf8_75"><p id="jbgtf8_76">实现第 3 步中定义的接口</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">package com.m8test.component.c2
+
+import com.m8test.component.c1.api.C1
+import com.m8test.script.core.api.engine.ScriptContext
+import java.lang.reflect.Type
+
+/**
+ * Description TODO
+ *
+ * @date 2025/02/02 21:08:08
+ * @author M8Test, contact@m8test.com, https://m8test.com
+ */
+class C2Impl(private val scriptContext: ScriptContext) : C2 {
+    override fun test() {
+        val c1 = scriptContext.getCurrentScript().getVariable(C1::class.java)
+        // 调用其他组件的方法
+        c1.test()
+        scriptContext.getBindings().getConsole()
+            .log(&quot;c2 test ${scriptContext.getCurrentScript().getConfig().getName()}&quot;)
+    }
+
+    override fun getPublicType(): Type {
+        return C2::class.java
+    }
+
+    override fun getGlobalName(): String {
+        return &quot;c2&quot;
+    }
+
+    override fun isPrefixRequired(): Boolean {
+        return true
+    }
+
+    override fun isSuffixRequired(): Boolean {
+        return true
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="jbgtf8_45"><p id="jbgtf8_77"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/kotlin/com/m8test/component/c2/C2Impl.kt" id="jbgtf8_78" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/kotlin/com/m8test/component/c2/C2Impl.kt</a></p></aside><aside class="prompt" data-type="tip" data-title="" id="jbgtf8_17"><p id="jbgtf8_79">步骤 3 和步骤 4 可合并为一步。如果不需要额外定义接口，可以直接创建一个类并实现 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.component/-variable/index.html" id="jbgtf8_80" data-external="true" rel="noopener noreferrer" target="_blank">Variable</a> 接口。如果组件需要被其他组件引用，建议定义接口 &mdash;&mdash; 实际上我们也推荐始终定义接口。</p></aside><ol class="list _decimal" id="jbgtf8_47" type="1" start="5"><li class="list__item" id="jbgtf8_81"><p>在 <code class="code" id="jbgtf8_82">AndroidManifest.xml</code> 中配置插件信息</p></li></ol><div class="code-block" data-lang="kotlin" data-disable-link-processing="true">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;application android:icon=&quot;@drawable/ic_launcher&quot;&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.description&quot;
+            android:value=&quot;本插件实现了简单的组件功能以及演示如何依赖其他组件.&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.url&quot;
+            android:value=&quot;https://github.com/m8test/Plugins&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.type&quot;
+            android:value=&quot;component&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.name&quot;
+            android:value=&quot;C2&quot; /&gt;
+        &lt;meta-data
+            android:name=&quot;com.m8test.plugin.className&quot;
+            android:value=&quot;com.m8test.component.c2.C2Component&quot; /&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;</div><aside class="prompt" data-type="tip" data-title="" id="jbgtf8_54"><p id="jbgtf8_83"><a href="https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/AndroidManifest.xml" id="jbgtf8_84" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/Plugins/refs/heads/main/component/c2/src/main/AndroidManifest.xml</a></p></aside><ul class="list _bullet" id="jbgtf8_49"><li class="list__item" id="jbgtf8_85"><p><code class="code" id="jbgtf8_88">com.m8test.plugin.type</code>: 插件类型，此处为 <code class="code" id="jbgtf8_89">component</code></p></li><li class="list__item" id="jbgtf8_86"><p><code class="code" id="jbgtf8_90">com.m8test.plugin.name</code>: 插件名称，可为任意字符串</p></li><li class="list__item" id="jbgtf8_87"><p><code class="code" id="jbgtf8_91">com.m8test.plugin.className</code>: 插件实现类的全限定类名</p></li></ul><ol class="list _decimal" id="jbgtf8_21" type="1" start="6"><li class="list__item" id="jbgtf8_92"><p id="jbgtf8_93">通过 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.component/-component/add-dependency.html" id="jbgtf8_94" data-external="true" rel="noopener noreferrer" target="_blank">Component.addDependency</a> 添加组件依赖。在此之前，需要在 build.gradle.kts 文件中添加所依赖组件提供的 SDK，使用 compileOnly 方式即可。如果未使用其他组件的 API，则可跳过此步骤</p></li></ol><aside class="prompt" data-type="tip" data-title="" id="jbgtf8_56"><p><a href="https://github.com/m8test/Plugins/tree/main/component/c2/" id="jbgtf8_95" data-external="true" rel="noopener noreferrer" target="_blank">查看示例代码</a></p></aside><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="language-plugin.html" class="navigation-links__prev">语言插件</a><a href="build-plugin.html" class="navigation-links__next">构建插件</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

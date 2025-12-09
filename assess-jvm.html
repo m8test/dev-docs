@@ -1,0 +1,282 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:23.873759874"><title>访问 JVM | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="访问 JVM | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/assess-jvm.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="访问 JVM | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/assess-jvm.html#webpage",
+    "url": "writerside-documentation/assess-jvm.html",
+    "name": "访问 JVM | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="assess-jvm" data-main-title="访问 JVM" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="languages.md|编程语言"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="assess-jvm" id="assess-jvm.md">访问 JVM</h1><div class="tabs" id="bq6jz3_6" data-group="languages" data-anchors="[bq6jz3_12,bq6jz3_15,bq6jz3_18,bq6jz3_21,bq6jz3_24,bq6jz3_27,bq6jz3_30,bq6jz3_9]"><div class="tabs__content" data-gtm="tab" id="bq6jz3_9" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">// kotlin本身就是jvm语言，可以无缝调用java</div></div><div class="tabs__content" data-gtm="tab" id="bq6jz3_12" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// groovy本身就是jvm语言，可以无缝调用java
+</div></div><div class="tabs__content" data-gtm="tab" id="bq6jz3_15" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">// java本身是jvm语言, 可以直接调用java</div></div><div class="tabs__content" data-gtm="tab" id="bq6jz3_18" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 可以通过 Pacakges.全类名 的方式访问java类
+let sb = new Packages.java.lang.StringBuilder(&quot;M8Test&quot;)
+// 内部类同样也可以通过 Pacakge.全类名 方式访问, 但是需要将 $ 改成 ., 如 android.widget.FrameLayout$LayoutParams
+let LP = Packages.android.widget.FrameLayout.LayoutParams
+$console.log(&quot;LayoutParams class&quot;, LP)
+// 调用java对象方法使用 .
+sb.append(&quot;Javascript&quot;)
+$console.log(sb.toString());
+let JavaTypeTester = Packages.com.m8test.script.core.impl.JavaTypeTester
+// 调用java对象属性可以使用 .
+$console.log(new JavaTypeTester().OBJECT_FIELD)
+// 调用java静态方法使用 .
+$console.log(Packages.java.lang.System.currentTimeMillis())
+// 调用java静态属性使用 .
+$console.log(JavaTypeTester.STATIC_FIELD)
+// 实现java非功能性接口(含有多个抽象方法的接口)
+JavaTypeTester.setMultiAbstractMethodInterface(
+    {
+        setInt: function (n) { $console.log(&quot;setInt&quot; + n) },
+        getInt: function () {
+            $console.log(&quot;getInt&quot;)
+            return 0
+        }
+    }
+)
+let mami = JavaTypeTester.getMultiAbstractMethodInterface()
+mami.setInt(1234)
+$console.log(mami.getInt())
+// 实现java功能性接口(只有一个抽象方法的接口)
+// 方法1: 直接使用一个函数, 但是可能会没有代码提示并且报错, 实际上这样是没有问题的
+// JavaTypeTester.setSingleAbstractMethodInterface(() =&gt; {
+//     $console.log(&quot;getInt&quot;)
+//     return 0
+// })
+// 方法2: 通过一个对象, 其中含有一个和java接口抽象方法名相同的函数, 这种方式有代码提示
+JavaTypeTester.setSingleAbstractMethodInterface({
+    getInt: function () { return 0 }
+})
+let sami = JavaTypeTester.getSingleAbstractMethodInterface()
+$console.log(sami.getInt())</div></div><div class="tabs__content" data-gtm="tab" id="bq6jz3_21" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入java类, 必须以 m8test_java 开头, 后面跟 java 类名
+local StringBuilder = require(&quot;m8test_java.java.lang.StringBuilder&quot;)
+local JavaTypeTester = require(&quot;m8test_java.com.m8test.script.core.impl.JavaTypeTester&quot;)
+-- 创建java对象, 可以通过 newJavaObject 方法, 实际上会修改为 local sb = StringBuilder(&quot;M8Test&quot;)
+local sb = StringBuilder:newJavaObject(&quot;M8Test&quot;)
+-- 通过':'调用java对象方法
+sb:append(&quot;Lua&quot;)
+_console:log(sb:toString())
+-- 通过'.'调用java对象属性
+_console:log(JavaTypeTester().OBJECT_FIELD)
+local System = require(&quot;m8test_java.java.lang.System&quot;)
+-- 通过':'调用java静态方法
+_console:log(System:currentTimeMillis())
+-- 通过'.'调用静态属性
+_console:log(JavaTypeTester.STATIC_FIELD)
+-- 引入内部类, 此写法能有代码提示, 需要通过 _N_ 来替换 $ , 因为 $ 在lua中不允许, 下面的代码实际是引入 android.widget.FrameLayout$LayoutParams 内部类
+local FrameLayoutLayoutParams = require(&quot;m8test_java.android.widget.FrameLayout_N_LayoutParams&quot;)
+_console:log(FrameLayoutLayoutParams)
+-- 实现java非功能性接口
+JavaTypeTester:setMultiAbstractMethodInterface({
+    setInt = function(i)
+        _console:log(&quot;setInt&quot; .. i)
+    end,
+    getInt = function()
+        _console:log(&quot;getInt&quot;)
+        return 0
+    end,
+    new = function() end
+})
+local mami = JavaTypeTester:getMultiAbstractMethodInterface()
+mami:setInt(1234)
+_console:log(mami:getInt())
+-- 实现java功能新接口, 可以直接传递 function
+JavaTypeTester:setSingleAbstractMethodInterface(function()
+    _console:log(&quot;getInt&quot;)
+    return 0
+end)
+local sami = JavaTypeTester:getSingleAbstractMethodInterface()
+_console:log(sami:getInt())</div></div><div class="tabs__content" data-gtm="tab" id="bq6jz3_24" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+// 通过 use 导入java类, 通过&quot;m8test_java\全类名&quot;的方式
+use m8test_java\java\lang\StringBuilder;
+use m8test_java\com\m8test\script\core\impl\JavaTypeTester;
+use m8test_java\android\view\Gravity;
+use m8test_java\java\lang\System;
+// 通过 new 创建java对象
+$sb = new StringBuilder(&quot;M8Test&quot;);
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+// 调用java对象方法使用 -&gt;
+$sb-&gt;append(&quot;Php&quot;);
+$console-&gt;log($sb);
+// 调用java对象属性使用 -&gt;
+$test = new JavaTypeTester();
+$console-&gt;log($test-&gt;OBJECT_FIELD);
+// 调用java静态方法使用 ::
+$console-&gt;log(System::currentTimeMillis());
+// 调用java静态属性使用 :: 并且添加前缀 $_MJ_ , 编译后会变成 Gravity::CENTER
+$console-&gt;log(Gravity::$_MJ_CENTER);
+// 如果 :: 不能调用静态属性, 那么需要通过反射调用
+/** @var m8test_java\com\m8test\script\core\api\reflect\Reflectors $reflectors */
+$v = $reflectors-&gt;reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)-&gt;getField(null, function ($f) {
+    $f-&gt;setName(&quot;STATIC_FIELD&quot;);
+});
+$console-&gt;log($v);
+class MultiAbstractMethodInterfaceImpl
+{
+    var $console;
+    var $i;
+
+    function __construct($p)
+    {
+        $this-&gt;console = $p;
+    }
+
+    function setInt($i)
+    {
+        $this-&gt;i = $i;
+        $this-&gt;console-&gt;log(&quot;setInt&quot;, $i);
+    }
+
+    function getInt()
+    {
+        return $this-&gt;i;
+    }
+}
+JavaTypeTester::setMultiAbstractMethodInterface(new MultiAbstractMethodInterfaceImpl($console));
+$mami = JavaTypeTester::getMultiAbstractMethodInterface();
+$mami-&gt;setInt(12345);
+$console-&gt;log($mami-&gt;getInt());
+// 方法一: 通过闭包(推荐)
+JavaTypeTester::setSingleAbstractMethodInterface(function () use ($console) {
+    $console-&gt;log(&quot;closure&quot;);
+    return 1234;
+});
+$sami = JavaTypeTester::getSingleAbstractMethodInterface();
+$console-&gt;log($sami-&gt;getInt());
+
+// 方法二: 通过对象
+class SingleAbstractMethodInterfaceImpl
+{
+    var $console;
+
+    function __construct($p)
+    {
+        $this-&gt;console = $p;
+    }
+
+    function getInt()
+    {
+        $this-&gt;console-&gt;log(&quot;getInt&quot;);
+        return 0;
+    }
+}
+
+JavaTypeTester::setSingleAbstractMethodInterface(new SingleAbstractMethodInterfaceImpl($console));
+$sami = JavaTypeTester::getSingleAbstractMethodInterface();
+$console-&gt;log($sami-&gt;getInt());</div></div><div class="tabs__content" data-gtm="tab" id="bq6jz3_27" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># -*- coding: utf-8 -*-
+# 导入java类, 使用 from import 语句, from m8test_java.全类名 import 类名，这是固定格式
+
+# 创建 java 对象
+from m8test_java.java.lang.StringBuilder import StringBuilder
+
+sb = StringBuilder(&quot;M8Test&quot;)
+# 通过 . 调用 java 对象方法
+sb.append(&quot;Python&quot;)
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+_console.log(sb.toString())
+# 通过 . 调用 java 对象属性
+from m8test_java.com.m8test.script.core.impl.JavaTypeTester import JavaTypeTester
+
+_console.log(JavaTypeTester().OBJECT_FIELD)
+# 通过 . 调用java静态方法
+from m8test_java.java.lang.System import System
+
+_console.log(System.currentTimeMillis())
+# 可以通过`.`访问静态属性
+from m8test_java.android.view.Gravity import Gravity
+
+_console.log(Gravity.CENTER)
+# 如果不能通过`.`访问静态属性, 那么可以反射获取
+from m8test_java.com.m8test.script.GlobalVariables import _reflectors
+from m8test_java.android.widget.FrameLayout import FrameLayout
+
+wrap_content = (_reflectors.reflect(FrameLayout.LayoutParams)
+                .getField(None, lambda selector: selector.setName(&quot;WRAP_CONTENT&quot;)))
+_console.log(wrap_content)
+# 访问java内部类可以使用 . , 必须使用'外部类.内部类'的方式调用
+layout_params = FrameLayout.LayoutParams(wrap_content, wrap_content)
+_console.log(layout_params)
+
+# 使用 from import 语句同时使用 as m8test_javaxxx这样格式的, 如果在类的继承中会自动移除, 例如 class A(m8test_javaxxx) , class A(m8test_javaxxx.yyy.zz) 会被替换为 class A()
+from m8test_java.com.m8test.script.core.impl.JavaTypeTester import JavaTypeTester as m8test_javaHello
+
+
+# 下面的类定义会被替换为  class MultiAbstractMethodInterfaceImpl(): , 下面的写法主要是为了能有代码提示
+class MultiAbstractMethodInterfaceImpl(m8test_javaHello.MultiAbstractMethodInterface):
+    def setInt(self, i):
+        _console.log(&quot;setInt &quot; + str(i))
+
+    def getInt(self):
+        _console.log(&quot;getInt&quot;)
+        return 0
+
+# _java.proxy用于将python对象映射为java接口对象的实现类, 也就是第二个参数中指定的接口数组
+from m8test_java.com.m8test.script.GlobalVariables import _java
+JavaTypeTester.setMultiAbstractMethodInterface(_java.proxy(MultiAbstractMethodInterfaceImpl(), [
+    &quot;com.m8test.script.core.impl.JavaTypeTester$MultiAbstractMethodInterface&quot;]))
+mami = JavaTypeTester.getMultiAbstractMethodInterface()
+mami.setInt(1234)
+_console.log(mami.getInt())
+
+
+# 实现java功能性接口, 定义一个函数/lambda
+def sami():
+    _console.log(&quot;getInt&quot;)
+    return 0
+
+
+# 功能性接口可以直接使用函数/lambda
+JavaTypeTester.setSingleAbstractMethodInterface(sami)
+s = JavaTypeTester.getSingleAbstractMethodInterface()
+_console.log(s == sami)
+_console.log(s())</div></div><div class="tabs__content" data-gtm="tab" id="bq6jz3_30" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># 通过java_import导入java类
+java_import 'java.lang.StringBuilder'
+java_import 'java.lang.System'
+java_import &quot;com.m8test.script.core.impl.JavaTypeTester&quot;
+# 通过 new 创建 java 对象
+sb = StringBuilder.new(&quot;M8Test&quot;)
+# 通过.调用java对象方法
+sb.append(&quot;Ruby&quot;)
+jtt = JavaTypeTester.new
+# 通过.调用java对象属性
+$console.log(jtt.OBJECT_FIELD)
+# 通过.调用java静态方法
+$console.log(System.currentTimeMillis)
+# 非final静态属性通过.调用
+$console.log(JavaTypeTester.STATIC_FIELD)
+java_import &quot;android.os.Build&quot;
+# final静态属性通过 :: 调用
+$console.log(Build::BRAND)
+# 实现java非函数式接口
+class MultiAbstractMethodInterfaceImpl
+  include JavaTypeTester.#::
+  MultiAbstractMethodInterface
+
+  def setInt(i)
+    $console.log(&quot;setInt #{i}&quot;)
+  end
+
+  def getInt()
+    $console.log(&quot;getInt&quot;)
+    0
+  end
+end
+
+JavaTypeTester.setMultiAbstractMethodInterface(MultiAbstractMethodInterfaceImpl.new)
+mami = JavaTypeTester.getMultiAbstractMethodInterface
+mami.setInt(1234)
+$console.log(mami.getInt)
+# 实现java功能行接口
+JavaTypeTester.setSingleAbstractMethodInterface {
+  $console.log(&quot;getInt&quot;)
+  0
+}
+sami = JavaTypeTester.getMultiAbstractMethodInterface
+$console.log(sami.getInt)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="introduction.html" class="navigation-links__prev">基础入门</a><a href="type-mapping.html" class="navigation-links__next">类型映射</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

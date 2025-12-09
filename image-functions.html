@@ -1,0 +1,972 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:13.559690565"><title>图像函数 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-8zovkm_4","level":0,"title":"模板匹配","anchor":"#-8zovkm_4"},{"id":"-8zovkm_5","level":0,"title":"颜色比较","anchor":"#-8zovkm_5"},{"id":"-8zovkm_6","level":0,"title":"查找颜色","anchor":"#-8zovkm_6"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="图像函数 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/image-functions.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="图像函数 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/image-functions.html#webpage",
+    "url": "writerside-documentation/image-functions.html",
+    "name": "图像函数 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="image-functions" data-main-title="图像函数" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="image-and-color.md|图色"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="image-functions" id="image-functions.md">图像函数</h1><aside class="prompt" data-type="tip" data-title="" id="-8zovkm_3"><p id="-8zovkm_7">更多图像相关方法请查看 <a href="https://yumimiyamoto.github.io/opencv-release/image/com.m8test.image.api/-images/index.html" id="-8zovkm_8" data-external="true" rel="noopener noreferrer" target="_blank">Images</a>。</p></aside><section class="chapter"><h2 id="-8zovkm_4" data-toc="-8zovkm_4">模板匹配</h2><section class="chapter"><h3 id="-8zovkm_9" data-toc="-8zovkm_9">在虚拟屏幕中匹配</h3><div class="tabs" id="-8zovkm_14" data-group="languages" data-anchors="[-8zovkm_17,-8zovkm_20,-8zovkm_23,-8zovkm_26,-8zovkm_29,-8zovkm_32,-8zovkm_35,-8zovkm_38]"><div class="tabs__content" data-gtm="tab" id="-8zovkm_17" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+val results = _images!!.matchTemplatesInDisplay(display.getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1) {}
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+_console.log(&quot;匹配结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_20" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+def results = $images.matchTemplatesInDisplay(display.getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1) {}
+// 遍历所有的结果
+$iterables.toList(results.getAll()).forEach {
+    // 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+    $console.log(&quot;匹配结果:&quot;, it.getRegion())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_23" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.image.api.RegionResult;
+import com.m8test.image.api.Results;
+import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+Results&lt;RegionResult&gt; results = $images.matchTemplatesInDisplay(display.getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        return null;
+    }
+});
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console.log(&quot;匹配结果:&quot;, results.getAll());</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_26" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+let results = $images.matchTemplatesInDisplay(display.getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1, function () {
+})
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console.log(&quot;匹配结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_29" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+local results = _images:matchTemplatesInDisplay(display:getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1,
+    function(config) end)
+-- 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+_console:log(&quot;匹配结果:&quot;, results:getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_32" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\image\api\Images $images */
+global $images;
+// 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+$results = $images-&gt;matchTemplatesInDisplay($display-&gt;getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1, function ($config) {
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console-&gt;log(javaString(&quot;匹配结果:&quot;), $results-&gt;getAll());</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_35" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _images
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+results = _images.matchTemplatesInDisplay(display.getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1,
+                                          lambda config: config)
+# 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+_console.log(&quot;匹配结果:&quot;, results.getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_38" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# encoding: utf-8
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 在指定的虚拟屏幕中匹配给定的图片，第一个参数为虚拟屏幕id，第二个参数为图片路径，第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+results = $images.matchTemplatesInDisplay(display.getId(), &quot;/sdcard/M8Test/opencv/template.png&quot;, 90, 1) { |config| }
+# 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console.log(&quot;匹配结果:&quot;, results.getAll())</div></div></div></section><section class="chapter"><h3 id="-8zovkm_10" data-toc="-8zovkm_10">在图片中匹配</h3><div class="tabs" id="-8zovkm_90" data-group="languages" data-anchors="[-8zovkm_102,-8zovkm_105,-8zovkm_108,-8zovkm_111,-8zovkm_114,-8zovkm_93,-8zovkm_96,-8zovkm_99]"><div class="tabs__content" data-gtm="tab" id="-8zovkm_93" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._images
+
+// 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+val results =
+    _images!!.matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2) {}
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+_console.log(&quot;匹配结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_96" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+def results = $images.matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2) {}
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console.log(&quot;匹配结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_99" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.image.api.RegionResult;
+import com.m8test.image.api.Results;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$images;
+
+// 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+Results&lt;RegionResult&gt; results = $images.matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        return null;
+    }
+});
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console.log(&quot;匹配结果:&quot;, results.getAll());</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_102" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+let results = $images.matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2, function (config) {
+})
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console.log(&quot;匹配结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_105" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+local results = _images:matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2,
+    function(config) end)
+-- 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+_console:log(&quot;匹配结果:&quot;, results:getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_108" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\image\api\Images $images */
+global $images;
+// 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+$results = $images-&gt;matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2, function ($config) {
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console-&gt;log(&quot;匹配结果:&quot;, $results-&gt;getAll());</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_111" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _images
+
+# 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+results = _images.matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2,
+                                 lambda config: config)
+# 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+_console.log(&quot;匹配结果:&quot;, results.getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_114" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 模板匹配, 在大图中查找小图, 第一个参数为大图，第二个参数为小图（模板图），第三个参数为相似度，第四个参数为匹配数量，第五个参数为额外配置的函数
+results = $images.matchTemplates(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;/sdcard/M8Test/opencv/block.png&quot;, 90, 2) { |config| }
+# 打印匹配结果的区域, 实际开发时可以根据需要实现点击、长按等操作
+$console.log(&quot;匹配结果:&quot;, results.getAll())</div></div></div></section></section><section class="chapter"><h2 id="-8zovkm_5" data-toc="-8zovkm_5">颜色比较</h2><section class="chapter"><h3 id="-8zovkm_163" data-toc="-8zovkm_163">在虚拟屏幕中比较</h3><div class="tabs" id="-8zovkm_168" data-group="languages" data-anchors="[-8zovkm_171,-8zovkm_174,-8zovkm_177,-8zovkm_180,-8zovkm_183,-8zovkm_186,-8zovkm_189,-8zovkm_192]"><div class="tabs__content" data-gtm="tab" id="-8zovkm_171" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+_console.log(_images!!.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+    setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+})
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+_console.log(_images!!.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;)
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_174" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+    it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+})
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    it.setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;)
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_177" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.image.api.config.CompareColorsConfig;
+import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90, new Function1() {
+    public Object invoke(Object o) {
+        CompareColorsConfig it = (CompareColorsConfig) o;
+        // 相对于基准点的坐标颜色，
+        // (250, 125) 的颜色16进制值为FF111318
+        // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+        // (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+        it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;);
+        return null;
+    }
+}));
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90, new Function1() {
+    public Object invoke(Object o) {
+        CompareColorsConfig it = (CompareColorsConfig) o;
+        // 相对于基准点的坐标颜色，
+        // (250, 125) 的颜色16进制值为FF111318
+        // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+        // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+        it.setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;);
+        return null;
+    }
+}));</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_180" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90, function (it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+    it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+}))
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90, function (it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    it.setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;)
+}))</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_183" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+_console:log(_images:compareColorsInDisplay(display:getId(), &quot;FF111318&quot;, 250, 125, 90, function(it)
+    -- 相对于基准点的坐标颜色，
+    -- (250, 125) 的颜色16进制值为FF111318
+    -- (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    -- (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+    it:setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+end))
+-- 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+_console:log(_images:compareColorsInDisplay(display:getId(), &quot;FF111318&quot;, 250, 125, 90, function(it)
+    -- 相对于基准点的坐标颜色，
+    -- (250, 125) 的颜色16进制值为FF111318
+    -- (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    -- (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    it:setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;)
+end))</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_186" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\image\api\Images $images */
+global $images;
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console-&gt;log($images-&gt;compareColorsInDisplay($display-&gt;getId(), &quot;FF111318&quot;, 250, 125, 90, function ($it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+    $it-&gt;setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;);
+}));
+// 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console-&gt;log($images-&gt;compareColorsInDisplay($display-&gt;getId(), &quot;FF111318&quot;, 250, 125, 90, function ($it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    $it-&gt;setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;);
+}));</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_189" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _images
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+_console.log(_images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90, lambda it:
+# 相对于基准点的坐标颜色，
+# (250, 125) 的颜色16进制值为FF111318
+# (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+# (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)))
+# 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+_console.log(_images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90, lambda it:
+# 相对于基准点的坐标颜色，
+# (250, 125) 的颜色16进制值为FF111318
+# (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+# (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+it.setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;)))
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_192" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+java_import 'com.m8test.image.api.config.CompareColorsConfig'
+# 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90) {
+  # @type it [CompareColorsConfig]
+  |it|
+  # 相对于基准点的坐标颜色，
+  # (250, 125) 的颜色16进制值为FF111318
+  # (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+  # (300, 100) 的颜色16进制值为FF111318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FF111318|90
+  it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+})
+# 比较给定的颜色集合是否匹配虚拟屏幕的颜色，第一个参数为屏幕ID，第二个参数为基准点颜色，第三个参数为基准点x坐标，第四个参数为基准点y坐标，第五个参数为相似度
+$console.log($images.compareColorsInDisplay(display.getId(), &quot;FF111318&quot;, 250, 125, 90) {
+  # @type it [CompareColorsConfig]
+  |it|
+  # 相对于基准点的坐标颜色，
+  # (250, 125) 的颜色16进制值为FF111318
+  # (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+  # (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+  it.setColors(&quot;100|25|FF111318,50|-25|FFE01318|90&quot;)
+})</div></div></div></section><section class="chapter"><h3 id="-8zovkm_164" data-toc="-8zovkm_164">在图片中比较</h3><div class="tabs" id="-8zovkm_244" data-group="languages" data-anchors="[-8zovkm_247,-8zovkm_250,-8zovkm_253,-8zovkm_256,-8zovkm_259,-8zovkm_262,-8zovkm_265,-8zovkm_268]"><div class="tabs__content" data-gtm="tab" id="-8zovkm_247" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._images
+
+
+// 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+val isMatch = _images!!.compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;)
+}
+_console.log(&quot;颜色比较:&quot;, isMatch)</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_250" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+def isMatch = $images.compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    it.setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;)
+}
+$console.log(&quot;颜色比较:&quot;, isMatch)</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_253" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.image.api.config.CompareColorsConfig;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$images;
+
+// 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+boolean isMatch = $images.compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        CompareColorsConfig it = (CompareColorsConfig) o;
+        // 相对于基准点的坐标颜色，
+        // (250, 125) 的颜色16进制值为a1adff
+        // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+        // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+        it.setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;);
+        return null;
+    }
+});
+$console.log(&quot;颜色比较:&quot;, isMatch);</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_256" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+let isMatch = $images.compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95, function (it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    it.setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;)
+})
+$console.log(&quot;颜色比较:&quot;, isMatch)</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_259" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+local isMatch = _images:compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95, function(it)
+    -- 相对于基准点的坐标颜色，
+    -- (250, 125) 的颜色16进制值为a1adff
+    -- (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    -- (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    it:setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;)
+end)
+_console:log(&quot;颜色比较:&quot;, isMatch)</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_262" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\image\api\Images $images */
+global $images;
+// 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+$isMatch = $images-&gt;compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95, function ($it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    $it-&gt;setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;);
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+$console-&gt;log(javaString(&quot;颜色比较:&quot;), $isMatch);</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_265" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _images
+
+# 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+isMatch = _images.compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95, lambda it:
+# 相对于基准点的坐标颜色，
+# (250, 125) 的颜色16进制值为a1adff
+# (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+# (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+it.setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;))
+_console.log(&quot;颜色比较:&quot;, isMatch)
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_268" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.image.api.config.CompareColorsConfig'
+# 比较颜色，用于判断在给定图片的指定坐标点以及相对坐标点的颜色是否匹配，如果匹配返回true，否则返回false，第一个参数为图片路径，第二个参数为基准点的颜色值，第三个参数为基准点X坐标，第四个参数为基准点Y坐标，第五个参数为基准点坐标颜色的相似度，第六个参数为配置额外参数的函数
+isMatch = $images.compareColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 250, 125, 95) {
+  # @type it [CompareColorsConfig]
+  |it|
+  # 相对于基准点的坐标颜色，
+  # (250, 125) 的颜色16进制值为a1adff
+  # (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+  # (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+  it.setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;)
+}
+$console.log(&quot;颜色比较:&quot;, isMatch)</div></div></div></section></section><section class="chapter"><h2 id="-8zovkm_6" data-toc="-8zovkm_6">查找颜色</h2><section class="chapter"><h3 id="-8zovkm_317" data-toc="-8zovkm_317">在虚拟屏幕中查找</h3><div class="tabs" id="-8zovkm_322" data-group="languages" data-anchors="[-8zovkm_325,-8zovkm_328,-8zovkm_331,-8zovkm_334,-8zovkm_337,-8zovkm_340,-8zovkm_343,-8zovkm_346]"><div class="tabs__content" data-gtm="tab" id="-8zovkm_325" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+val results = _images!!.findColorsInDisplay(display.getId(), &quot;FF111318&quot;, 90, 1, {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+    // 设置查找区域
+    setRegion {
+        set(200, 90, 360, 160)
+    }
+})
+_console.log(results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_328" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+def results = $images.findColorsInDisplay(display.getId(), &quot;FF111318&quot;, 90, 1, {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+    // 设置查找区域
+    it.setRegion { region -&gt;
+        region.set(200, 90, 360, 160)
+    }
+})
+$console.log(results.getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_331" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import android.graphics.Rect;
+import com.m8test.image.api.CoordinateResult;
+import com.m8test.image.api.Results;
+import com.m8test.image.api.config.FindColorsConfig;
+import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+Results&lt;CoordinateResult&gt; results = $images.findColorsInDisplay(display.getId(), &quot;FF111318&quot;, 90, 1, new Function1() {
+    public Object invoke(Object o) {
+        FindColorsConfig it = (FindColorsConfig) o;
+        // 相对于基准点的坐标颜色，
+        // (250, 125) 的颜色16进制值为FF111318
+        // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+        // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+        it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;);
+        // 设置查找区域
+        it.setRegion(new Function1() {
+            public Object invoke(Object o) {
+                Rect region = (Rect) o;
+                region.set(200, 90, 360, 160);
+                return null;
+            }
+        });
+        return null;
+    }
+});
+$console.log(results.getAll());</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_334" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+let results = $images.findColorsInDisplay(display.getId(), &quot;FF111318&quot;, 90, 1, function (it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+    // 设置查找区域
+    it.setRegion(function (region) {
+        region.set(200, 90, 360, 160)
+    })
+})
+$console.log(results.getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_337" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+local results = _images:findColorsInDisplay(display:getId(), &quot;FF111318&quot;, 90, 1, function(it)
+    -- 相对于基准点的坐标颜色，
+    -- (250, 125) 的颜色16进制值为FF111318
+    -- (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    -- (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    it:setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+    -- 设置查找区域
+    it:setRegion(function(region)
+        region:set(200, 90, 360, 160)
+    end)
+end)
+_console:log(results:getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_340" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\image\api\Images $images */
+global $images;
+// 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+$results = $images-&gt;findColorsInDisplay($display-&gt;getId(), &quot;FF111318&quot;, 90, 1, function ($it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为FF111318
+    // (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+    // (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+    $it-&gt;setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;);
+    // 设置查找区域
+    $it-&gt;setRegion(function ($region) {
+        $region-&gt;set(200, 90, 360, 160);
+    });
+});
+$console-&gt;log($results-&gt;getAll());
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_343" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _images
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+results = _images.findColorsInDisplay(display.getId(), &quot;FF111318&quot;, 90, 1, lambda it:
+# 相对于基准点的坐标颜色，
+# (250, 125) 的颜色16进制值为FF111318
+# (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+# (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+(it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;),
+ # 设置查找区域
+ it.setRegion(lambda region: region.set(200, 90, 360, 160))))
+_console.log(results.getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_346" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+java_import 'com.m8test.image.api.config.FindColorsConfig'
+# 在虚拟屏幕上查找给定的颜色集合, 返回满足条件的基准点的坐标集合, 第一个参数为虚拟屏幕id, 第二个参数为基准点颜色, 第三个参数为相似度, 第四个参数为返回数量, 第五个参数为额外配置的函数
+results = $images.findColorsInDisplay(display.getId(), &quot;FF111318&quot;, 90, 1) {
+  # @type it [FindColorsConfig]
+  |it|
+  # 相对于基准点的坐标颜色，
+  # (250, 125) 的颜色16进制值为FF111318
+  # (350, 150) 的颜色16进制值为FF111318, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|FF111318
+  # (300, 100) 的颜色16进制值为FFE01318, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|FFE01318|90
+  it.setColors(&quot;100|25|FF111318,50|-25|FF111318|90&quot;)
+  # 设置查找区域
+  java_import 'android.graphics.Rect'
+  it.setRegion {
+    # @type region [Rect]
+    |region|
+    region.set(200, 90, 360, 160)
+  }
+}
+$console.log(results.getAll())
+</div></div></div></section><section class="chapter"><h3 id="-8zovkm_318" data-toc="-8zovkm_318">在图片中查找</h3><div class="tabs" id="-8zovkm_398" data-group="languages" data-anchors="[-8zovkm_401,-8zovkm_404,-8zovkm_407,-8zovkm_410,-8zovkm_413,-8zovkm_416,-8zovkm_419,-8zovkm_422]"><div class="tabs__content" data-gtm="tab" id="-8zovkm_401" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._images
+
+
+// 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+val results = _images!!.findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    setColors(&quot;100|25|a1adff|100,50|-25|f6ddc9|100&quot;)
+}
+_console.log(&quot;查找结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_404" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+def results = $images.findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    it.setColors(&quot;100|25|a1adff|100,50|-25|f6ddc9|100&quot;)
+}
+$console.log(&quot;查找结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_407" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.image.api.CoordinateResult;
+import com.m8test.image.api.Results;
+import com.m8test.image.api.config.FindColorsConfig;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$images;
+
+// 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+Results&lt;CoordinateResult&gt; results = $images.findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        FindColorsConfig it = (FindColorsConfig) o;
+        // 相对于基准点的坐标颜色，
+        // (250, 125) 的颜色16进制值为a1adff
+        // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+        // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+        it.setColors(&quot;100|25|a1adff,50|-25|f6ddc9|90&quot;);
+        return null;
+    }
+});
+$console.log(&quot;查找结果:&quot;, results.getAll());</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_410" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+let results = $images.findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1, function (it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    it.setColors(&quot;100|25|a1adff|100,50|-25|f6ddc9|100&quot;)
+})
+$console.log(&quot;查找结果:&quot;, results.getAll())</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_413" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+local results = _images:findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1, function(it)
+    -- 相对于基准点的坐标颜色，
+    -- (250, 125) 的颜色16进制值为a1adff
+    -- (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    -- (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    it:setColors(&quot;100|25|a1adff|100,50|-25|f6ddc9|100&quot;)
+end)
+_console:log(&quot;查找结果:&quot;, results:getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_416" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\image\api\Images $images */
+global $images;
+// 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+$results = $images-&gt;findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1, function ($it) {
+    // 相对于基准点的坐标颜色，
+    // (250, 125) 的颜色16进制值为a1adff
+    // (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+    // (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+    $it-&gt;setColors(&quot;100|25|a1adff|100,50|-25|f6ddc9|100&quot;);
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+$console-&gt;log(javaString(&quot;查找结果:&quot;), $results-&gt;getAll());</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_419" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _images
+
+# 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+results = _images.findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1, lambda it:
+# 相对于基准点的坐标颜色，
+# (250, 125) 的颜色16进制值为a1adff
+# (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+# (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+it.setColors(&quot;100|25|a1adff|100,50|-25|f6ddc9|100&quot;))
+_console.log(&quot;查找结果:&quot;, results.getAll())
+</div></div><div class="tabs__content" data-gtm="tab" id="-8zovkm_422" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.image.api.config.FindColorsConfig'
+# 查找图像中匹配的颜色点集合，第一个参数为待分析的图像文件路径，第二个参数为目标主颜色，支持RGB和ARGB格式，第三个参数为颜色相似度阈值（0-100），null使用默认值,第四个参数为最大返回结果数量，null表示无限制，第五个参数为额外配置的函数
+results = $images.findColors(&quot;/sdcard/M8Test/opencv/super_mario.jpg&quot;, &quot;a1adff&quot;, 100, 1) {
+  # @type it [FindColorsConfig]
+  |it|
+  # 相对于基准点的坐标颜色，
+  # (250, 125) 的颜色16进制值为a1adff
+  # (350, 150) 的颜色16进制值为a1adff, x偏移100,y偏移25, 最后面没有相似度则使用默认的相似度, 100|25|a1adff
+  # (300, 100) 的颜色16进制值为f6ddc9, x偏移50,y偏移-25, 最后面90表示相似度, 50|-25|f6ddc9|90
+  it.setColors(&quot;100|25|a1adff|100,50|-25|f6ddc9|100&quot;)
+}
+$console.log(&quot;查找结果:&quot;, results.getAll())</div></div></div></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="image-and-color.html" class="navigation-links__prev">图色</a><a href="color-functions.html" class="navigation-links__next">颜色函数</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

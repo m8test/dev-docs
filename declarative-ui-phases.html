@@ -1,0 +1,405 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:15.289564295"><title>阶段 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"3","level":0,"title":"帧的 3 个阶段","anchor":"#3"},{"id":"h3kf2d_6","level":0,"title":"状态读取","anchor":"#h3kf2d_6"},{"id":"h3kf2d_7","level":0,"title":"分阶段状态读取","anchor":"#h3kf2d_7"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="阶段 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/declarative-ui-phases.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="阶段 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/declarative-ui-phases.html#webpage",
+    "url": "writerside-documentation/declarative-ui-phases.html",
+    "name": "阶段 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="declarative-ui-phases" data-main-title="阶段" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="declarative-ui.md|声明式UI"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="declarative-ui-phases" id="declarative-ui-phases.md">阶段</h1><p id="h3kf2d_3">与大多数其他界面工具包一样，Compose 会通过几个不同的&ldquo;阶段&rdquo;来渲染帧。例如，Android View 系统有 3 个主要阶段：测量、布局和绘制。Compose 和它非常相似，但开头多了一个叫做&ldquo;组合&rdquo;的重要阶段。</p><p id="h3kf2d_4">Compose 文档中的&ldquo; <a href="declarative-ui-mental-model.html" id="h3kf2d_8" data-tooltip="Jetpack Compose 是一个适用于 Android 的新式声明性界面工具包。Compose 提供声明性 API，让您可在不以命令方式改变前端视图的情况下呈现应用界面，从而使编写和维护应用界面变得更加容易。此术语需要一些解释说明，它的含义对应用设计非常重要。">Compose 编程思想</a> &rdquo;和&ldquo; <a href="declarative-ui-state.html" id="h3kf2d_9" data-tooltip="状态是声明式UI中最重要的概念。当状态值发生改变时，UI会根据需要自动更新，无需像命令式UI那样通过代码手动更新UI。你只需改变状态值，例如按钮点击时：">状态和 Jetpack Compose</a> &rdquo;对&ldquo;组合&rdquo;阶段进行了说明。</p><section class="chapter"><h2 id="3" data-toc="3">帧的 3 个阶段</h2><p id="h3kf2d_10">Compose 有 3 个主要阶段：</p><ol class="list _decimal" id="h3kf2d_11" type="1"><li class="list__item" id="h3kf2d_16"><p id="h3kf2d_19">组合：要显示什么样的界面。Compose 运行可组合函数并创建界面说明。</p></li><li class="list__item" id="h3kf2d_17"><p id="h3kf2d_20">布局：要放置界面的位置。该阶段包含两个步骤：测量和放置。对于布局树中的每个节点，布局元素都会根据 2D 坐标来测量并放置自己及其所有子元素。</p></li><li class="list__item" id="h3kf2d_18"><p id="h3kf2d_21">绘制：渲染的方式。界面元素会绘制到画布（通常是设备屏幕）中。</p></li></ol><figure id="h3kf2d_12"><img alt="444" src="/444.png" title="444" width="1348" height="148"></figure><p id="h3kf2d_13">这些阶段通常会以相同的顺序执行，让数据能够沿一个方向（从组合到布局，再到绘制）生成帧（也称为<a href="declarative-ui-architecture.html#unidirectional-data-flow" id="h3kf2d_22" data-tooltip="单向数据流 (UDF) 是一种设计模式，在该模式下状态向下流动，事件向上流动。通过采用单向数据流，您可以将在界面中显示状态的可组合项与应用中存储和更改状态的部分分离开来。">单向数据流</a> ）。BoxWithConstraints、LazyColumn 和 LazyRow 是值得注意的特例，其子级的组合取决于父级的布局阶段。</p><p id="h3kf2d_14">从概念上讲，每个帧都会经历这 3 个阶段；不过，为了优化性能，Compose 会避免在所有这些阶段中重复执行根据相同输入计算出相同结果的工作。如果可以重复使用前面计算出的结果，Compose 会跳过对应的可组合函数；如果没有必要，Compose 界面不会对整个树进行重新布局或重新绘制。Compose 只会执行更新界面所需的最低限度的工作。之所以能够实现这种优化，是因为 Compose 会跟踪不同阶段中的状态读取。</p><section class="chapter"><h3 id="h3kf2d_15" data-toc="h3kf2d_15">了解阶段</h3><p id="h3kf2d_23">本部分更详细地介绍了如何针对可组合项执行这三个 Compose 阶段。</p><section class="chapter"><h4 id="h3kf2d_24" data-toc="h3kf2d_24">组合</h4><p id="h3kf2d_27">在组合阶段，Compose 运行时会执行可组合函数，并输出表示界面的树结构。此界面树由包含后续阶段所需的所有信息的布局节点组成，如以下视频所示：</p><div class="video-player" id="h3kf2d_28"><object class="article__bordered-element" width="1000" height="1000" data-theme="light" data="https://developer.android.google.cn/develop/ui/compose/images/composition.mp4"><param name="cover" value="/logo.png"></object></div><p id="h3kf2d_29">代码和界面树的某个子部分如下所示：</p><figure id="h3kf2d_30"><img alt="445" src="/445.png" title="445" width="1014" height="506"></figure><p id="h3kf2d_31">在这些示例中，代码中的每个可组合函数都对应于界面树中的单个布局节点。在更复杂的示例中，可组合函数可以包含逻辑和控制流，并根据不同的状态生成不同的树。</p></section><section class="chapter"><h4 id="h3kf2d_25" data-toc="h3kf2d_25">布局</h4><p id="h3kf2d_32">在布局阶段，Compose 使用在组合阶段生成的界面树作为输入。布局节点的集合包含确定每个节点在二维空间中的大小和位置所需的所有信息。</p><div class="video-player" id="h3kf2d_33"><object class="article__bordered-element" width="1000" height="1000" data-theme="light" data="https://developer.android.google.cn/static/develop/ui/compose/images/layout.mp4"><param name="cover" value="/logo.png"></object></div><p id="h3kf2d_34">在布局阶段，系统会使用以下三步算法遍历树：</p><ol class="list _decimal" id="h3kf2d_35" type="1"><li class="list__item" id="h3kf2d_43"><p id="h3kf2d_46">测量子项：节点会测量其子项（如果有）。</p></li><li class="list__item" id="h3kf2d_44"><p id="h3kf2d_47">确定自己的尺寸：节点根据这些测量结果确定自己的尺寸。</p></li><li class="list__item" id="h3kf2d_45"><p id="h3kf2d_48">放置子节点：每个子节点都相对于节点自身的位置放置。</p></li></ol><p id="h3kf2d_36">在此阶段结束时，每个布局节点都具有：</p><ul class="list _bullet" id="h3kf2d_37"><li class="list__item" id="h3kf2d_49"><p id="h3kf2d_51">分配的宽度和高度</p></li><li class="list__item" id="h3kf2d_50"><p id="h3kf2d_52">应绘制到的 x、y 坐标</p></li></ul><p id="h3kf2d_38">回顾一下上一部分中的界面树：</p><figure id="h3kf2d_39"><img alt="445" src="/445.png" title="445" width="1014" height="506"></figure><p id="h3kf2d_40">对于此树，算法的运作方式如下：</p><ol class="list _decimal" id="h3kf2d_41" type="1"><li class="list__item" id="h3kf2d_53"><p id="h3kf2d_60">Row 测量其子级 Image 和 Column。</p></li><li class="list__item" id="h3kf2d_54"><p id="h3kf2d_61">测量 Image。它没有任何子节点，因此会自行确定尺寸，并将尺寸报告给 Row。</p></li><li class="list__item" id="h3kf2d_55"><p id="h3kf2d_62">接下来，系统会衡量 Column。它首先测量自己的子项（两个 Text 可组合项）。</p></li><li class="list__item" id="h3kf2d_56"><p id="h3kf2d_63">首先测量的是 Text。它没有任何子节点，因此会自行确定尺寸，并将尺寸报告给 Column。</p><ul class="list _bullet" id="h3kf2d_64"><li class="list__item" id="h3kf2d_65"><p id="h3kf2d_66">测量第二个 Text。它没有任何子节点，因此会自行决定尺寸并将其报告给 Column。</p></li></ul></li><li class="list__item" id="h3kf2d_57"><p id="h3kf2d_67">Column 使用子测量结果来确定自己的大小。它使用最大子宽度和子高度之和。</p></li><li class="list__item" id="h3kf2d_58"><p id="h3kf2d_68">Column 将其子级放置在相对于自身的位置，并以垂直方式将它们放置在彼此下方。</p></li><li class="list__item" id="h3kf2d_59"><p id="h3kf2d_69">Row 使用子测量结果来确定自己的大小。它使用最大子项高度及其子项宽度的总和。然后放置其子项。</p></li></ol><p id="h3kf2d_42">请注意，每个节点仅访问一次。Compose 运行时只需遍历一次界面树即可测量和放置所有节点，从而提高性能。当树中的节点数量增加时，遍历树所花费的时间会呈线性增加。相比之下，如果每个节点被多次访问，遍历时间会呈指数级增长。</p></section><section class="chapter"><h4 id="h3kf2d_26" data-toc="h3kf2d_26">绘制</h4><p id="h3kf2d_70">在绘制阶段，系统会再次从上到下遍历树，并且每个节点依次在屏幕上绘制自身。</p><div class="video-player" id="h3kf2d_71"><object class="article__bordered-element" width="1000" height="1000" data-theme="light" data="https://developer.android.google.cn/static/develop/ui/compose/images/drawing.mp4"><param name="cover" value="/logo.png"></object></div><p id="h3kf2d_72">使用上一个示例，树内容将按以下方式绘制：</p><ul class="list _bullet" id="h3kf2d_73"><li class="list__item" id="h3kf2d_75"><p id="h3kf2d_79">Row 会绘制可能包含的任何内容，例如背景颜色。</p></li><li class="list__item" id="h3kf2d_76"><p id="h3kf2d_80">Image 会自行绘制。</p></li><li class="list__item" id="h3kf2d_77"><p id="h3kf2d_81">Column 会自行绘制。</p></li><li class="list__item" id="h3kf2d_78"><p id="h3kf2d_82">第一个和第二个 Text 分别自行绘制。</p></li></ul><div class="video-player" id="h3kf2d_74"><object class="article__bordered-element" width="1000" height="1000" data-theme="light" data="https://developer.android.google.cn/static/develop/ui/compose/images/drawing-ui-tree.mp4"><param name="cover" value="/logo.png"></object></div></section></section></section><section class="chapter"><h2 id="h3kf2d_6" data-toc="h3kf2d_6">状态读取</h2><p id="h3kf2d_83">Compose 会跟踪通过 trackSingleState 方法跟踪状态，通过这项跟踪，Compose 能够在状态的 value 发生变化时重新执行读取程序；此外，我们也是以这项跟踪为基础在 Compose 中实现了对状态的观察。</p><p id="h3kf2d_84">您通常使用 mutableStateOf() 创建状态， 然后通过 getValue 方法进行访问</p><div class="tabs" id="h3kf2d_88" data-group="languages" data-anchors="[h3kf2d_100,h3kf2d_103,h3kf2d_106,h3kf2d_109,h3kf2d_112,h3kf2d_91,h3kf2d_94,h3kf2d_97]"><div class="tabs__content" data-gtm="tab" id="h3kf2d_91" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._activity
+import com.m8test.script.GlobalVariables._composeView
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+        val paddingState = mutableStateOf(8)
+        val offsetXState = mutableStateOf(8)
+        Text {
+            // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+            setText(&quot;M8Test&quot;)
+            // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+            trackSingleState(paddingState)
+            setModifier {
+                padding {
+                    setAll { dimensions -&gt;
+                        // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                        dimensions.fromInt(paddingState.getValue())
+                    }
+                }
+                offset { dimensions -&gt;
+                    // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                    dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_94" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    def paddingState = slot.mutableStateOf(8)
+    def offsetXState = slot.mutableStateOf(8)
+    slot.Text { text -&gt;
+        // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text.setText(&quot;M8Test&quot;)
+        // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text.trackSingleState(paddingState)
+        text.setModifier { modifier -&gt;
+            modifier.padding { paddingValues -&gt;
+                paddingValues.setAll { dimensions -&gt;
+                    // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    dimensions.fromInt(paddingState.getValue())
+                }
+            }
+            modifier.offset { dimensions -&gt;
+                // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_97" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_100" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    const paddingState = slot.mutableStateOf(8);
+    const offsetXState = slot.mutableStateOf(8);
+    slot.Text(text =&gt; {
+        // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text.setText(&quot;M8Test&quot;);
+        // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text.trackSingleState(paddingState);
+        text.setModifier(modifier =&gt; {
+            modifier.padding(paddingValues =&gt; {
+                paddingValues.setAll(dimensions =&gt; {
+                    // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    return dimensions.fromInt(paddingState.getValue());
+                });
+            });
+            modifier.offset(dimensions =&gt; {
+                // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                return dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_103" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    local paddingState = slot:mutableStateOf(8)
+    local offsetXState = slot:mutableStateOf(8)
+    slot:Text(function(text)
+        -- 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text:setText(&quot;M8Test&quot;)
+        -- 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text:trackSingleState(paddingState)
+        text:setModifier(function(modifier)
+            modifier:padding(function(paddingValues)
+                paddingValues:setAll(function(dimensions)
+                    -- 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    return dimensions:fromInt(paddingState:getValue())
+                end)
+            end)
+            modifier:offset(function(dimensions)
+                -- 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                return dimensions:createOffset(dimensions:fromInt(offsetXState:getValue()), dimensions:fromInt(0))
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()
+</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_106" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    $paddingState = $slot-&gt;mutableStateOf(8);
+    $offsetXState = $slot-&gt;mutableStateOf(8);
+    $slot-&gt;Text(function ($text) use ($paddingState, $offsetXState) {
+        // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        $text-&gt;setText(javaString(&quot;M8Test&quot;));
+        // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        $text-&gt;trackSingleState($paddingState);
+        $text-&gt;setModifier(function ($modifier) use ($paddingState, $offsetXState) {
+            $modifier-&gt;padding(function ($paddingValues) use ($paddingState) {
+                $paddingValues-&gt;setAll(function ($dimensions) use ($paddingState) {
+                    // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    return $dimensions-&gt;fromInt($paddingState-&gt;getValue());
+                });
+            });
+            $modifier-&gt;offset(function ($dimensions) use ($offsetXState) {
+                // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                return $dimensions-&gt;createOffset($dimensions-&gt;fromInt($offsetXState-&gt;getValue()), $dimensions-&gt;fromInt(0));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_109" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    (paddingState := slot.mutableStateOf(8)),
+    (offsetXState := slot.mutableStateOf(8)),
+    slot.Text(lambda text: (
+        # 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text.setText(&quot;M8Test&quot;),
+        # 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text.trackSingleState(paddingState),
+        text.setModifier(lambda modifier: (
+            modifier.padding(lambda paddingValues:
+                             paddingValues.setAll(lambda dimensions:
+                                                  # 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                                                  dimensions.fromInt(paddingState.getValue())
+                                                  )
+                             ),
+            modifier.offset(lambda dimensions:
+                            # 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                            dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+                            )
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_112" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+  paddingState = slot.mutableStateOf(8)
+  offsetXState = slot.mutableStateOf(8)
+  slot.Text do |text|
+    # 不要在这里创建 state, 因为这个代码会在重组的时候执行
+    text.setText(&quot;M8Test&quot;)
+    # 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+    text.trackSingleState(paddingState)
+    text.setModifier do |modifier|
+      modifier.padding do |paddingValues|
+        paddingValues.setAll do |dimensions|
+          # 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+          dimensions.fromInt(paddingState.getValue())
+        end
+      end
+      modifier.offset do |dimensions|
+        # 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+        dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div></section><section class="chapter"><h2 id="h3kf2d_7" data-toc="h3kf2d_7">分阶段状态读取</h2><p id="h3kf2d_161">如前所述，Compose 有 3 个主要阶段，并且 Compose 会跟踪在每个阶段中读取到的状态。这样一来，Compose 只需向需要对界面的每个受影响的元素执行工作的特定阶段发送通知即可。</p><aside class="prompt" data-type="tip" data-title="" id="h3kf2d_162"><p id="h3kf2d_171">注意： 创建和存储状态实例的位置与阶段几乎没有什么关系，关键在于读取状态的 value 的时间和位置。</p></aside><p id="h3kf2d_163">以下部分介绍了每个阶段，并说明在各阶段中读取状态值时分别会发生什么情况。</p><div class="tabs" id="h3kf2d_170" data-group="languages" data-anchors="[h3kf2d_174,h3kf2d_177,h3kf2d_180,h3kf2d_183,h3kf2d_186,h3kf2d_189,h3kf2d_192,h3kf2d_195]"><div class="tabs__content" data-gtm="tab" id="h3kf2d_174" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._activity
+import com.m8test.script.GlobalVariables._composeView
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+        val paddingState = mutableStateOf(8)
+        val offsetXState = mutableStateOf(8)
+        Text {
+            // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+            setText(&quot;M8Test&quot;)
+            // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+            trackSingleState(paddingState)
+            setModifier {
+                padding {
+                    setAll { dimensions -&gt;
+                        // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                        dimensions.fromInt(paddingState.getValue())
+                    }
+                }
+                offset { dimensions -&gt;
+                    // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                    dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_177" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    def paddingState = slot.mutableStateOf(8)
+    def offsetXState = slot.mutableStateOf(8)
+    slot.Text { text -&gt;
+        // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text.setText(&quot;M8Test&quot;)
+        // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text.trackSingleState(paddingState)
+        text.setModifier { modifier -&gt;
+            modifier.padding { paddingValues -&gt;
+                paddingValues.setAll { dimensions -&gt;
+                    // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    dimensions.fromInt(paddingState.getValue())
+                }
+            }
+            modifier.offset { dimensions -&gt;
+                // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_180" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_183" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    const paddingState = slot.mutableStateOf(8);
+    const offsetXState = slot.mutableStateOf(8);
+    slot.Text(text =&gt; {
+        // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text.setText(&quot;M8Test&quot;);
+        // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text.trackSingleState(paddingState);
+        text.setModifier(modifier =&gt; {
+            modifier.padding(paddingValues =&gt; {
+                paddingValues.setAll(dimensions =&gt; {
+                    // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    return dimensions.fromInt(paddingState.getValue());
+                });
+            });
+            modifier.offset(dimensions =&gt; {
+                // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                return dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_186" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    local paddingState = slot:mutableStateOf(8)
+    local offsetXState = slot:mutableStateOf(8)
+    slot:Text(function(text)
+        -- 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text:setText(&quot;M8Test&quot;)
+        -- 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text:trackSingleState(paddingState)
+        text:setModifier(function(modifier)
+            modifier:padding(function(paddingValues)
+                paddingValues:setAll(function(dimensions)
+                    -- 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    return dimensions:fromInt(paddingState:getValue())
+                end)
+            end)
+            modifier:offset(function(dimensions)
+                -- 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                return dimensions:createOffset(dimensions:fromInt(offsetXState:getValue()), dimensions:fromInt(0))
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()
+</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_189" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    $paddingState = $slot-&gt;mutableStateOf(8);
+    $offsetXState = $slot-&gt;mutableStateOf(8);
+    $slot-&gt;Text(function ($text) use ($paddingState, $offsetXState) {
+        // 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        $text-&gt;setText(javaString(&quot;M8Test&quot;));
+        // 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        $text-&gt;trackSingleState($paddingState);
+        $text-&gt;setModifier(function ($modifier) use ($paddingState, $offsetXState) {
+            $modifier-&gt;padding(function ($paddingValues) use ($paddingState) {
+                $paddingValues-&gt;setAll(function ($dimensions) use ($paddingState) {
+                    // 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                    return $dimensions-&gt;fromInt($paddingState-&gt;getValue());
+                });
+            });
+            $modifier-&gt;offset(function ($dimensions) use ($offsetXState) {
+                // 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                return $dimensions-&gt;createOffset($dimensions-&gt;fromInt($offsetXState-&gt;getValue()), $dimensions-&gt;fromInt(0));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_192" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+    (paddingState := slot.mutableStateOf(8)),
+    (offsetXState := slot.mutableStateOf(8)),
+    slot.Text(lambda text: (
+        # 不要在这里创建 state, 因为这个代码会在重组的时候执行
+        text.setText(&quot;M8Test&quot;),
+        # 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+        text.trackSingleState(paddingState),
+        text.setModifier(lambda modifier: (
+            modifier.padding(lambda paddingValues:
+                             paddingValues.setAll(lambda dimensions:
+                                                  # 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+                                                  dimensions.fromInt(paddingState.getValue())
+                                                  )
+                             ),
+            modifier.offset(lambda dimensions:
+                            # 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+                            dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+                            )
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="h3kf2d_195" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 1. 创建 state 必须要在 slot 闭包中，因为这个代码只会执行一次，不会重组
+  paddingState = slot.mutableStateOf(8)
+  offsetXState = slot.mutableStateOf(8)
+  slot.Text do |text|
+    # 不要在这里创建 state, 因为这个代码会在重组的时候执行
+    text.setText(&quot;M8Test&quot;)
+    # 2. 跟踪状态，这样 compose 就会在改状态的值改变时自动重组 Text 从而更新界面
+    text.trackSingleState(paddingState)
+    text.setModifier do |modifier|
+      modifier.padding do |paddingValues|
+        paddingValues.setAll do |dimensions|
+          # 3. 使用状态值, 在组合阶段，当修饰符被构造时，会读取“paddingState”状态。 “paddingState”状态的改变将触发重组。
+          dimensions.fromInt(paddingState.getValue())
+        end
+      end
+      modifier.offset do |dimensions|
+        # 3. 使用状态值，在布局阶段的放置步骤中，计算偏移量时会读取 `offsetX` 状态。 `offsetX` 的更改会重新启动布局。
+        dimensions.createOffset(dimensions.fromInt(offsetXState.getValue()), dimensions.fromInt(0))
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><section class="chapter"><h3 id="composition" data-toc="composition">第 1 阶段：组合</h3><p id="h3kf2d_244">@Composable 函数或 lambda 代码块中的状态读取会影响组合阶段，并且可能会影响后续阶段。当状态的 value 发生更改时，recomposer 会安排重新运行所有要读取相应状态的 value 的可组合函数。请注意，如果输入未更改，运行时可能会决定跳过部分或全部可组合函数。如需了解详情，请参阅如果输入未更改，则跳过。</p><p id="h3kf2d_245">根据组合结果，Compose 界面会运行布局和绘制阶段。如果内容保持不变，并且大小和布局也未更改，界面可能会跳过这些阶段。</p></section><section class="chapter"><h3 id="layout" data-toc="layout">第 2 阶段：布局</h3><p id="h3kf2d_246">布局阶段包含两个步骤：测量和放置。测量步骤会运行传递给 Layout 可组合项的测量 lambda、LayoutModifier 接口的 MeasureScope.measure 方法，等等。 放置步骤会运行 layout 函数的放置位置块、Modifier.offset { &hellip; } 的 lambda 块以及类似函数。</p><p id="h3kf2d_247">每个步骤的状态读取都会影响布局阶段，并且可能会影响绘制阶段。当状态的 value 发生更改时，Compose 界面会安排布局阶段。如果大小或位置发生更改，界面还会运行绘制阶段。</p><aside class="prompt" data-type="tip" data-title="" id="h3kf2d_248"><p id="h3kf2d_249">要点： 测量步骤和放置步骤分别具有单独的重启作用域，这意味着，放置步骤中的状态读取不会在此之前重新调用测量步骤。不过，这两个步骤通常是交织在一起的，因此在放置步骤中读取的状态可能会影响属于测量步骤的其他重启作用域。</p></aside></section><section class="chapter"><h3 id="draw" data-toc="draw">第 3 阶段：绘制</h3><p id="h3kf2d_250">绘制代码期间的状态读取会影响绘制阶段。常见示例包括 Canvas()、Modifier.drawBehind 和 Modifier.drawWithContent。当状态的 value 发生变化时，Compose 界面只会运行绘制阶段。</p><figure id="h3kf2d_251"><img alt="446" src="/446.png" title="446" width="1124" height="718"></figure></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="declarative-ui-mental-model.html" class="navigation-links__prev">编程思想</a><a href="declarative-ui-state.html" class="navigation-links__next">状态</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

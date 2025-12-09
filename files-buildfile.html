@@ -1,0 +1,44 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:33:54.485109025"><title>buildFile | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="buildFile | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/files-buildfile.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="buildFile | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/files-buildfile.html#webpage",
+    "url": "writerside-documentation/files-buildfile.html",
+    "name": "buildFile | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="Files.buildFile" data-main-title="buildFile" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///Files.md|Files"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="Files.buildFile" id="Files.buildFile.md">buildFile</h1><aside class="prompt" data-type="tip" data-title="" id="-uo519c_7"><p id="-uo519c_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.file/-files/build-file.html" id="-uo519c_12" data-external="true" rel="noopener noreferrer" target="_blank">Files.buildFile()</a></p></aside><div class="tabs" id="-uo519c_10" data-group="languages" data-anchors="[-uo519c_15,-uo519c_18,-uo519c_21,-uo519c_24,-uo519c_27,-uo519c_30,-uo519c_33]"><div class="tabs__content" data-gtm="tab" id="-uo519c_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val file = _files.buildFile {
+    setPath(&quot;/sdcard/&quot;, &quot;&quot;)
+}
+_console.log(file.getCanonicalPath())</div><aside class="prompt" data-type="tip" data-title="" id="-uo519c_39"><p id="-uo519c_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/Files/buildFile.kts" id="-uo519c_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/Files/buildFile.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-uo519c_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def file = $files.buildFile {
+    setPath(&quot;/sdcard/&quot;, &quot;&quot;)
+}
+$console.log(file.getCanonicalPath())</div><aside class="prompt" data-type="tip" data-title="" id="-uo519c_47"><p id="-uo519c_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/Files/buildFile.groovy" id="-uo519c_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/Files/buildFile.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-uo519c_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let file = $files.buildFile((fileBuilder) =&gt; {
+    fileBuilder.setPath(&quot;/sdcard/&quot;, &quot;&quot;)
+})
+$console.log(file.getCanonicalPath())</div><aside class="prompt" data-type="tip" data-title="" id="-uo519c_55"><p id="-uo519c_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/Files/buildFile.js" id="-uo519c_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/Files/buildFile.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-uo519c_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local file = _files:buildFile(function(fileBuilder)
+    fileBuilder:setPath(&quot;/sdcard/&quot;, &quot;&quot;)
+end)
+_console:log(file:getCanonicalPath())
+</div><aside class="prompt" data-type="tip" data-title="" id="-uo519c_63"><p id="-uo519c_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/Files/buildFile.lua" id="-uo519c_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/Files/buildFile.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-uo519c_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$file = $files-&gt;buildFile(function ($fileBuilder) {
+    $fileBuilder-&gt;setPath(&quot;/sdcard/&quot;, &quot;&quot;);
+});
+$console-&gt;log($file-&gt;getCanonicalPath());
+</div><aside class="prompt" data-type="tip" data-title="" id="-uo519c_71"><p id="-uo519c_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/Files/buildFile.php" id="-uo519c_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/Files/buildFile.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-uo519c_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">def fn(fileBuilder):
+    fileBuilder.setPath(&quot;/sdcard/&quot;, &quot;&quot;)
+
+
+file = _files.buildFile(fn)
+_console.log(file.getCanonicalPath())
+</div><aside class="prompt" data-type="tip" data-title="" id="-uo519c_79"><p id="-uo519c_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/Files/buildFile.py" id="-uo519c_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/Files/buildFile.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-uo519c_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">file = $files.buildFile { |fileBuilder|
+  fileBuilder.setPath(&quot;/sdcard/&quot;, &quot;&quot;)
+}
+$console.log(file.getCanonicalPath())</div><aside class="prompt" data-type="tip" data-title="" id="-uo519c_87"><p id="-uo519c_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/Files/buildFile.rb" id="-uo519c_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/Files/buildFile.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="files.html" class="navigation-links__prev">Files</a><a href="files-getexternalfilesdir.html" class="navigation-links__next">getExternalFilesDir</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

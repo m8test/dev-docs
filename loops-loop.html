@@ -1,0 +1,77 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:34:15.353994976"><title>loop | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="loop | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/loops-loop.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="loop | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/loops-loop.html#webpage",
+    "url": "writerside-documentation/loops-loop.html",
+    "name": "loop | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="Loops.loop" data-main-title="loop" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///Loops.md|Loops"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="Loops.loop" id="Loops.loop.md">loop</h1><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_7"><p id="-l8pdak_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.control/-loops/loop.html" id="-l8pdak_12" data-external="true" rel="noopener noreferrer" target="_blank">Loops.loop()</a></p></aside><div class="tabs" id="-l8pdak_10" data-group="languages" data-anchors="[-l8pdak_15,-l8pdak_18,-l8pdak_21,-l8pdak_24,-l8pdak_27,-l8pdak_30,-l8pdak_33]"><div class="tabs__content" data-gtm="tab" id="-l8pdak_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">_loops.loop {
+    var i = 0
+    setCondition { i &lt; 10 }
+    setBody {
+        _console.log(i)
+        i++
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_39"><p id="-l8pdak_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/Loops/loop.kts" id="-l8pdak_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/Loops/loop.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-l8pdak_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$loops.loop {
+    def i = 0
+    setCondition { i &lt; 10 }
+    setBody {
+        $console.log(i)
+        i++
+    }
+}</div><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_47"><p id="-l8pdak_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/Loops/loop.groovy" id="-l8pdak_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/Loops/loop.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-l8pdak_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$loops.loop((l) =&gt; {
+    let i = 0
+    l.setCondition(() =&gt; i &lt; 10)
+    l.setBody(() =&gt; {
+        $console.log(i)
+        i++
+    })
+})</div><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_55"><p id="-l8pdak_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/Loops/loop.js" id="-l8pdak_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/Loops/loop.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-l8pdak_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_loops:loop(function(l)
+    local i = 0
+    l:setCondition(function()
+        return i &lt; 10
+    end)
+    l:setBody(function()
+        _console:log(i)
+        i = i + 1
+    end)
+end)</div><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_63"><p id="-l8pdak_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/Loops/loop.lua" id="-l8pdak_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/Loops/loop.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-l8pdak_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$loops-&gt;loop(function ($l) use ($console) {
+    $i = 0;
+    $l-&gt;setCondition(function () use (&amp;$i) {
+        return $i &lt; 10;
+    });
+    $l-&gt;setBody(function () use (&amp;$i, $console) {
+        $console-&gt;log($i);
+        $i++;
+    });
+});</div><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_71"><p id="-l8pdak_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/Loops/loop.php" id="-l8pdak_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/Loops/loop.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-l8pdak_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">def fn(loop):
+    i = 0
+    loop.setCondition(lambda: i &lt; 10)
+
+    def fn1():
+        nonlocal i
+        _console.log(i)
+        i = i + 1
+
+    loop.setBody(fn1)
+
+
+_loops.loop(fn)
+</div><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_79"><p id="-l8pdak_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/Loops/loop.py" id="-l8pdak_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/Loops/loop.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-l8pdak_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$loops.loop { |loop|
+  i = 0
+  loop.setCondition { i &lt; 10 }
+  loop.setBody {
+    $console.log(i)
+    i = i + 1
+  }
+}</div><aside class="prompt" data-type="tip" data-title="" id="-l8pdak_87"><p id="-l8pdak_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/Loops/loop.rb" id="-l8pdak_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/Loops/loop.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="loops.html" class="navigation-links__prev">Loops</a><a href="maps.html" class="navigation-links__next">Maps</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

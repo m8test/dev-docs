@@ -1,0 +1,1592 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:15.144462523"><title>编程思想 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-w8jht4_4","level":0,"title":"声明性编程范式","anchor":"#-w8jht4_4"},{"id":"-w8jht4_5","level":0,"title":"简单的可组合函数","anchor":"#-w8jht4_5"},{"id":"-w8jht4_6","level":0,"title":"声明性范式转变","anchor":"#-w8jht4_6"},{"id":"-w8jht4_7","level":0,"title":"重组","anchor":"#-w8jht4_7"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="编程思想 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/declarative-ui-mental-model.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="编程思想 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/declarative-ui-mental-model.html#webpage",
+    "url": "writerside-documentation/declarative-ui-mental-model.html",
+    "name": "编程思想 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="declarative-ui-mental-model" data-main-title="编程思想" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="declarative-ui.md|声明式UI"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="declarative-ui-mental-model" id="declarative-ui-mental-model.md">编程思想</h1><p id="-w8jht4_3">Jetpack Compose 是一个适用于 Android 的新式声明性界面工具包。Compose 提供声明性 API，让您可在不以命令方式改变前端视图的情况下呈现应用界面，从而使编写和维护应用界面变得更加容易。此术语需要一些解释说明，它的含义对应用设计非常重要。</p><section class="chapter"><h2 id="-w8jht4_4" data-toc="-w8jht4_4">声明性编程范式</h2><p id="-w8jht4_8">长期以来，Android 视图层次结构一直可以表示为界面 widget 树。由于应用的状态会因用户交互等因素而发生变化，因此界面层次结构需要进行更新以显示当前数据。最常见的界面更新方式是使用 findViewById() 等函数遍历树，并通过调用 button.setText(String)、container.addChild(View) 或 img.setImageBitmap(Bitmap) 等方法更改节点。这些方法会改变 widget 的内部状态。</p><p id="-w8jht4_9">手动操纵视图会提高出错的可能性。如果一条数据在多个位置呈现，很容易忘记更新显示它的某个视图。此外，当两项更新以出人意料的方式发生冲突时，也很容易造成异常状态。例如，某项更新可能会尝试设置刚刚从界面中移除的节点的值。一般来说，软件维护的复杂性会随着需要更新的视图数量而增长。</p><p id="-w8jht4_10">在过去的几年中，整个行业已开始转向声明性界面模型，该模型大大简化了与构建和更新界面关联的工程任务。该技术的工作原理是在概念上从头开始重新生成整个屏幕，然后仅执行必要的更改。此方法可避免手动更新有状态视图层次结构的复杂性。Compose 是一个声明性界面框架。</p><p id="-w8jht4_11">重新生成整个屏幕所面临的一个难题是，在时间、计算能力和电池用量方面可能成本高昂。为了减少在这方面耗费的资源，Compose 会智能地选择在任何给定时间需要重新绘制界面的哪些部分。这会对您设计界面组件的方式有一定影响，如重组中所述。</p></section><section class="chapter"><h2 id="-w8jht4_5" data-toc="-w8jht4_5">简单的可组合函数</h2><p id="-w8jht4_12">使用 Compose，您可以通过定义一组接受数据而发出界面元素的可组合函数来构建界面。一个简单的示例是 Greeting widget，它接受 String 并发出一个显示问候消息的 Text widget。</p><div class="tabs" id="-w8jht4_19" data-group="languages" data-anchors="[-w8jht4_22,-w8jht4_25,-w8jht4_28,-w8jht4_31,-w8jht4_34,-w8jht4_37,-w8jht4_40,-w8jht4_43]"><div class="tabs__content" data-gtm="tab" id="-w8jht4_22" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._activity
+import com.m8test.script.GlobalVariables._composeView
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private fun Greeting(slot: Slot&lt;out Modifier&gt;, name: String) {
+    slot.Column {
+        // 设置 Column 的修饰符
+        setModifier {
+            // 这里加个背景色是为了更好的展示效果
+            background({ setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+        }
+        setContent {
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(&quot;Hello&quot;)
+            }
+            Text {
+                // 设置 Text 组件显示的文本
+                setText(name)
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        Greeting(this, &quot;M8Test&quot;)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_25" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+// 垂直方向上显示两个文本组件
+private static def Greeting(Slot&lt;? extends Modifier&gt; slot, String name) {
+    slot.Column { column -&gt;
+        // 设置 Column 的修饰符
+        column.setModifier { modifier -&gt;
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background({ it.setRed(255) }, { shapes -&gt; shapes.getRectangleShape() })
+        }
+        column.setContent { columnSlot -&gt;
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            }
+            columnSlot.Text { text -&gt;
+                // 设置 Text 组件显示的文本
+                text.setText(name)
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_28" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_31" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 垂直方向上显示两个文本组件
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {string} name
+ */
+function Greeting(slot, name) {
+    slot.Column(column =&gt; {
+        // 设置 Column 的修饰符
+        column.setModifier(modifier =&gt; {
+            // 这里加个背景色是为了更好的展示效果
+            modifier.background(it =&gt; it.setRed(255), shapes =&gt; shapes.getRectangleShape());
+        });
+        column.setContent(columnSlot =&gt; {
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;);
+            });
+            columnSlot.Text(text =&gt; {
+                // 设置 Text 组件显示的文本
+                text.setText(name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_34" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 垂直方向上显示两个文本组件
+local function Greeting(slot, name)
+    slot:Column(function(column)
+        -- 设置 Column 的修饰符
+        column:setModifier(function(modifier)
+            -- 这里加个背景色是为了更好的展示效果
+            modifier:background(function(it) it:setRed(255) end, function(shapes) return shapes:getRectangleShape() end)
+        end)
+        column:setContent(function(columnSlot)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(&quot;Hello&quot;)
+            end)
+            columnSlot:Text(function(text)
+                -- 设置 Text 组件显示的文本
+                text:setText(name)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_37" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function Greeting($slot, string $name)
+{
+    $slot-&gt;Column(function ($column) use ($name) {
+        // 设置 Column 的修饰符
+        $column-&gt;setModifier(function ($modifier) {
+            // 这里加个背景色是为了更好的展示效果
+            $modifier-&gt;background(
+                function ($it) { $it-&gt;setRed(255); },
+                function ($shapes) { return $shapes-&gt;getRectangleShape(); }
+            );
+        });
+        $column-&gt;setContent(function ($columnSlot) use ($name) {
+            $columnSlot-&gt;Text(function ($text) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText(javaString(&quot;Hello&quot;));
+            });
+            $columnSlot-&gt;Text(function ($text) use ($name) {
+                // 设置 Text 组件显示的文本
+                $text-&gt;setText($name);
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting($slot, javaString(&quot;M8Test&quot;));
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_40" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot: Slot, name: str):
+    slot.Column(lambda column: (
+        # 设置 Column 的修饰符
+        column.setModifier(lambda modifier: (
+            # 这里加个背景色是为了更好的展示效果
+            # Groovy的 { it.setRed(255) } 对应 lambda it: it.setRed(255)
+            # Groovy的 { shapes -&gt; shapes.getRectangleShape() } 对应 lambda shapes: shapes.getRectangleShape()
+            modifier.background(lambda it: it.setRed(255), lambda shapes: shapes.getRectangleShape())
+        )),
+        column.setContent(lambda columnSlot: (
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(&quot;Hello&quot;)
+            )),
+            columnSlot.Text(lambda text: (
+                # 设置 Text 组件显示的文本
+                text.setText(name)
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    Greeting(slot, &quot;M8Test&quot;)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_43" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+def Greeting(slot, name)
+  slot.Column do |column|
+    # 设置 Column 的修饰符
+    column.setModifier do |modifier|
+      # 这里加个背景色是为了更好的展示效果
+      modifier.background(lambda { |it| it.setRed(255) }, lambda { |shapes| shapes.getRectangleShape() })
+    end
+    column.setContent do |columnSlot|
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(&quot;Hello&quot;)
+      end
+      columnSlot.Text do |text|
+        # 设置 Text 组件显示的文本
+        text.setText(name)
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  Greeting(slot, &quot;M8Test&quot;)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="-w8jht4_14"><img alt="431" src="/431.png" title="431" width="441" height="135"></figure><p id="-w8jht4_15">关于此函数，有几点值得注意：</p><ul class="list _bullet" id="-w8jht4_16"><li class="list__item" id="-w8jht4_92"><p id="-w8jht4_97">此函数接收一个 Slot 类型参数，通过 Slot 可以创建需要的界面元素。</p></li><li class="list__item" id="-w8jht4_93"><p id="-w8jht4_98">此函数除了接收 Slot 之外还可以接受一些数据, 这些参数可让应用逻辑描述界面。在本例中，我们的 widget 接受一个 String，因此它可以按名称问候用户。</p></li><li class="list__item" id="-w8jht4_94"><p id="-w8jht4_99">此函数可以在界面中显示文本。为此，它会调用 Text() 可组合函数，该函数实际上会创建文本界面元素。可组合函数通过调用其他可组合函数来发出界面层次结构。</p></li><li class="list__item" id="-w8jht4_95"><p id="-w8jht4_100">此函数不会返回任何内容。发出界面的 Compose 函数不需要返回任何内容，因为它们描述所需的屏幕状态，而不是构造界面 widget。</p></li><li class="list__item" id="-w8jht4_96"><p id="-w8jht4_101">此函数快速、幂等且没有附带效应。</p><ul class="list _bullet" id="-w8jht4_102"><li class="list__item" id="-w8jht4_104"><p id="-w8jht4_106">使用同一参数多次调用此函数时，它的行为方式相同，并且它不使用其他值，如全局变量或对 random() 的调用。</p></li><li class="list__item" id="-w8jht4_105"><p id="-w8jht4_107">此函数描述界面而没有任何副作用，如修改属性或全局变量。</p></li></ul><p id="-w8jht4_103">一般来说，出于重组部分所述的原因，所有可组合函数都应使用这些属性来编写。</p></li></ul></section><section class="chapter"><h2 id="-w8jht4_6" data-toc="-w8jht4_6">声明性范式转变</h2><p id="-w8jht4_108">在许多面向对象的命令式界面工具包中，您可以通过实例化 widget 树来初始化界面。您通常通过膨胀 XML 布局文件来实现此目的。每个 widget 都维护自己的内部状态，并且提供 getter 和 setter 方法，允许应用逻辑与 widget 进行交互。</p><p id="-w8jht4_109">在 Compose 的声明性方法中，widget 相对无状态，并且不提供 setter 或 getter 函数。实际上，widget 不会以对象形式提供。您可以通过调用带有不同实参的同一可组合函数来更新界面。这使得向架构模式提供状态变得很容易，然后，可组合项负责在每次可观察数据更新时将当前应用状态转换为界面。</p><figure id="-w8jht4_110"><img alt="441" src="/441.png" title="441" width="1999" height="1125"></figure><aside class="prompt" data-type="tip" data-title="" id="-w8jht4_111"><p id="-w8jht4_115">上图展示了应用逻辑为顶级可组合函数提供数据。该函数通过调用其他可组合函数来使用这些数据描述界面，将适当的数据传递给这些可组合函数，并沿层次结构向下传递数据。</p></aside><p id="-w8jht4_112">当用户与界面交互时，界面会发起 onClick 等事件。这些事件应通知应用逻辑，应用逻辑随后可以改变应用的状态。当状态发生变化时，系统会使用新数据再次调用可组合函数。这会导致重新绘制界面元素，此过程称为&ldquo;重组&rdquo;。</p><figure id="-w8jht4_113"><img alt="442" src="/442.png" title="442" width="1999" height="1125"></figure><aside class="prompt" data-type="tip" data-title="" id="-w8jht4_114"><p id="-w8jht4_116">上图展示了用户与界面元素进行了交互，导致触发一个事件。应用逻辑响应该事件，然后系统根据需要使用新参数自动再次调用可组合函数。</p></aside></section><section class="chapter"><h2 id="-w8jht4_7" data-toc="-w8jht4_7">重组</h2><p id="-w8jht4_117">在命令式界面模型中，如需更改某个 widget，您可以在该 widget 上调用 setter 以更改其内部状态。在 Compose 中，您可以使用新数据再次调用可组合函数。这样做会导致函数进行重组 -- 系统会根据需要使用新数据重新绘制函数发出的 widget。Compose 框架可以智能地仅重组已更改的组件。</p><p id="-w8jht4_118">例如，假设有以下可组合函数，它用于显示一个按钮：</p><div class="tabs" id="-w8jht4_137" data-group="languages" data-anchors="[-w8jht4_140,-w8jht4_143,-w8jht4_146,-w8jht4_149,-w8jht4_152,-w8jht4_155,-w8jht4_158,-w8jht4_161]"><div class="tabs__content" data-gtm="tab" id="-w8jht4_140" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+import com.m8test.script.core.api.ui.compose.state.MutableState
+
+// 垂直方向上显示两个文本组件
+private fun ClickCounter(slot: Slot&lt;out Modifier&gt;, clicks: MutableState&lt;Int&gt;, onClick: () -&gt; Unit) {
+    slot.Button {
+        setOnClick { onClick() }
+        setContent {
+            Text {
+                // 通过trackSingleState方法添加clicks,当clicks状态改变时, Text会重组
+                trackSingleState(clicks)
+                setText(&quot;Click me ${clicks.getValue()}&quot;)
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        val state = mutableStateOf(0)
+        ClickCounter(this, state) {
+            // 这里在按钮点击时会执行
+            state.setValue(state.getValue() + 1)
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_143" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+import com.m8test.script.core.api.ui.compose.state.MutableState
+
+// 垂直方向上显示两个文本组件
+private static def ClickCounter(Slot&lt;? extends Modifier&gt; slot, MutableState&lt;Integer&gt; clicks, Closure onClick) {
+    slot.Button { button -&gt;
+        button.setOnClick { onClick() }
+        button.setContent { buttonSlot -&gt;
+            buttonSlot.Text { text -&gt;
+                // 通过trackSingleState方法添加clicks,当clicks状态改变时, Text会重组
+                text.trackSingleState(clicks)
+                text.setText(&quot;Click me &quot; + clicks.value)
+            }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    def state = slot.mutableStateOf(0)
+    ClickCounter(slot, state) {
+        // 这里在按钮点击时会执行
+        state.setValue(state.getValue() + 1)
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_146" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_149" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.Slot&lt;Packages.com.m8test.script.core.api.ui.compose.modifier.Modifier&gt;} slot
+ * @param {Packages.com.m8test.script.core.api.ui.compose.state.MutableState&lt;number&gt;} clicks
+ * @param {() =&gt; void} onClick
+ */
+function ClickCounter(slot, clicks, onClick) {
+    slot.Button(button =&gt; {
+        button.setOnClick(() =&gt; onClick());
+        button.setContent(buttonSlot =&gt; {
+            buttonSlot.Text(text =&gt; {
+                // 通过trackSingleState方法添加clicks,当clicks状态改变时, Text会重组
+                text.trackSingleState(clicks);
+                text.setText(&quot;Click me &quot; + clicks.getValue());
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    const state = slot.mutableStateOf(0);
+    ClickCounter(slot, state, () =&gt; {
+        // 这里在按钮点击时会执行
+        state.setValue(state.getValue() + 1);
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_152" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- import com.m8test.script.core.api.ui.compose.modifier.Modifier
+-- import com.m8test.script.core.api.ui.compose.slot.Slot
+-- import com.m8test.script.core.api.ui.compose.state.MutableState
+-- (Lua中不需要显式import, require已在别处处理)
+
+-- 垂直方向上显示两个文本组件
+local function ClickCounter(slot, clicks, onClick)
+    slot:Button(function(button)
+        button:setOnClick(onClick)
+        button:setContent(function(buttonSlot)
+            buttonSlot:Text(function(text)
+                -- 通过trackSingleState方法添加clicks,当clicks状态改变时, Text会重组
+                text:trackSingleState(clicks)
+                -- 同样使用 tostring() 规则
+                text:setText(&quot;Click me &quot; .. tostring(clicks:getValue()))
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    local state = slot:mutableStateOf(0)
+    ClickCounter(slot, state, function()
+        -- 这里在按钮点击时会执行
+        state:setValue(state:getValue() + 1)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_155" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+use m8test_java\com\m8test\script\core\api\ui\compose\state\MutableState;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+
+// 垂直方向上显示两个文本组件
+/** @param Slot $slot */
+function ClickCounter($slot, MutableState $clicks, callable $onClick)
+{
+    $slot-&gt;Button(function ($button) use ($onClick, $clicks) {
+        $button-&gt;setOnClick(function () use ($onClick) {
+            $onClick();
+        });
+        $button-&gt;setContent(function ($buttonSlot) use ($clicks) {
+            $buttonSlot-&gt;Text(function ($text) use ($clicks) {
+                // 通过trackSingleState方法添加clicks,当clicks状态改变时, Text会重组
+                $text-&gt;trackSingleState($clicks);
+                $text-&gt;setText(javaString(&quot;Click me &quot;) . $clicks-&gt;getValue());
+            });
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    $state = $slot-&gt;mutableStateOf(0);
+    ClickCounter($slot, $state, function () use ($state) {
+        // 这里在按钮点击时会执行
+        $state-&gt;setValue($state-&gt;getValue() + 1);
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_158" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+from m8test_java.com.m8test.script.core.api.ui.compose.state.MutableState import MutableState
+
+# 导入 typing 以便为回调函数添加类型提示
+from typing import Callable
+
+
+# 垂直方向上显示两个文本组件
+def ClickCounter(slot: Slot, clicks: MutableState, onClick: Callable):
+    slot.Button(lambda button: (
+        button.setOnClick(lambda: onClick()),
+        button.setContent(lambda buttonSlot: (
+            buttonSlot.Text(lambda text: (
+                # 通过trackSingleState方法添加clicks,当clicks状态改变时, Text会重组
+                text.trackSingleState(clicks),
+                # 使用f-string进行字符串格式化，这是Python中更现代和推荐的方式
+                text.setText(f&quot;Click me {clicks.getValue()}&quot;)
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    (state := slot.mutableStateOf(0)),
+    # Groovy中的 ClickCounter(slot, state) { ... } 语法糖
+    # 表示将闭包 { ... } 作为最后一个参数传递给 ClickCounter 函数
+    # 在Python中，我们需要明确地将lambda作为最后一个参数传入
+    ClickCounter(slot, state, lambda: (
+        # 这里在按钮点击时会执行
+        state.setValue(state.getValue() + 1)
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_161" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 垂直方向上显示两个文本组件
+# 在 Ruby 中，闭包（Block）通常作为最后一个隐式参数，或者显式声明为 &amp;on_click
+def ClickCounter(slot, clicks, &amp;on_click)
+  slot.Button do |button|
+    # 在 Ruby 中调用传入的 Block
+    button.setOnClick { on_click.call }
+    button.setContent do |buttonSlot|
+      buttonSlot.Text do |text|
+        # 通过trackSingleState方法添加clicks,当clicks状态改变时, Text会重组
+        text.trackSingleState(clicks)
+        text.setText(&quot;Click me &quot; + clicks.value.to_s)
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  state = slot.mutableStateOf(0)
+  # 在 Ruby 中，大括号或者 do...end 跟在方法调用后面即为传递 Block
+  ClickCounter(slot, state) do
+    # 这里在按钮点击时会执行
+    state.setValue(state.getValue() + 1)
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><figure id="-w8jht4_120"><img alt="443" src="/443.png" title="443" width="449" height="211"></figure><p id="-w8jht4_121">每次点击该按钮时，调用方都会更新 clicks 的值。Compose 会再次调用 lambda 与 Text 函数以显示新值；此过程称为&ldquo;重组&rdquo;。不依赖于该值的其他函数不会进行重组。</p><p id="-w8jht4_122">如前文所述，重组整个界面树在计算上成本高昂，因为会消耗计算能力并缩短电池续航时间。Compose 使用智能重组来解决此问题。</p><p id="-w8jht4_123">重组是指在输入更改时再次调用可组合函数的过程。当函数的输入更改时，会发生这种情况。当 Compose 根据新输入重组时，它仅调用可能已更改的函数或 lambda，而跳过其余函数或 lambda。通过跳过所有未更改参数的函数或 lambda，Compose 可以高效地重组。</p><p id="-w8jht4_124">切勿依赖于执行可组合函数所产生的附带效应，因为可能会跳过函数的重组。如果您这样做，用户可能会在您的应用中遇到奇怪且不可预测的行为。附带效应是指对应用的其余部分可见的任何更改。例如，以下操作全部都是危险的附带效应：</p><ul class="list _bullet" id="-w8jht4_125"><li class="list__item" id="-w8jht4_210"><p id="-w8jht4_213">写入共享对象的属性</p></li><li class="list__item" id="-w8jht4_211"><p id="-w8jht4_214">更新 ViewModel 中的可观察项</p></li><li class="list__item" id="-w8jht4_212"><p id="-w8jht4_215">更新共享偏好设置</p></li></ul><p id="-w8jht4_126">可组合函数可能会像每一帧一样频繁地重新执行，例如在呈现动画时。可组合函数应快速执行，以避免在播放动画期间出现卡顿。如果您需要执行成本高昂的操作（例如从共享偏好设置读取数据），请在后台协程中执行，并将值结果作为参数传递给可组合函数。</p><p id="-w8jht4_127">本文档讨论了您在使用 Compose 时需要注意的事项：</p><ul class="list _bullet" id="-w8jht4_128"><li class="list__item" id="-w8jht4_216"><p id="-w8jht4_221">重组会跳过尽可能多的可组合函数和 lambda。</p></li><li class="list__item" id="-w8jht4_217"><p id="-w8jht4_222">重组是乐观的操作，可能会被取消。</p></li><li class="list__item" id="-w8jht4_218"><p id="-w8jht4_223">可组合函数可能会像动画的每一帧一样非常频繁地运行。</p></li><li class="list__item" id="-w8jht4_219"><p id="-w8jht4_224">可组合函数可以并行执行。</p></li><li class="list__item" id="-w8jht4_220"><p id="-w8jht4_225">可组合函数可以按任何顺序执行。</p></li></ul><p id="-w8jht4_129">下面几部分将介绍如何构建可组合函数以支持重组。在每种情况下，最佳实践都是使可组合函数保持快速、幂等且没有附带效应。</p><section class="chapter"><h3 id="-w8jht4_130" data-toc="-w8jht4_130">重组会跳过尽可能多的内容</h3><p id="-w8jht4_226">如果界面的某些部分无效，Compose 会尽力只重组需要更新的部分。这意味着，它可以跳过某些内容以重新运行单个按钮的可组合项，而不执行界面树中在其上面或下面的任何可组合项。</p><p id="-w8jht4_227">每个可组合函数和 lambda 都可以自行重组。以下示例演示了在呈现列表时重组如何跳过某些元素：</p><div class="tabs" id="-w8jht4_233" data-group="languages" data-anchors="[-w8jht4_236,-w8jht4_239,-w8jht4_242,-w8jht4_245,-w8jht4_248,-w8jht4_251,-w8jht4_254,-w8jht4_257]"><div class="tabs__content" data-gtm="tab" id="-w8jht4_236" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+import com.m8test.script.core.api.ui.compose.state.MutableState
+import com.m8test.script.core.api.ui.compose.state.MutableStateList
+
+/**
+ * 显示用户可以点击的带有标题的名称列表
+ */
+private fun NamePicker(slot: Slot&lt;out Modifier&gt;, header: MutableState&lt;String&gt;, names: MutableStateList&lt;String&gt;, onNameClick: (String) -&gt; Unit) {
+    slot.Column {
+        setContent {
+            Text {
+                // 当 [header] 发生改变时，它将被重新组合，但当 [names] 发生改变时，它将不会被重新组合
+                trackSingleState(header)
+                setText(header.getValue())
+            }
+            HorizontalDivider {}
+            // LazyColumn 是 RecyclerView 的 Compose 版本。
+            // 传递给 items() 的 lambda 类似于 RecyclerView.ViewHolder
+            LazyColumn {
+                setContent {
+                    itemsIndexed(names, null, null) { index, name -&gt;
+                        // 当某个项目的 [name] 更新时，该项目的适配器将进行重组。当 [header] 更改时，此适配器不会进行重组
+                        NamePickerItem(this, name, onNameClick)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 显示用户可以点击的单个名称。
+ */
+private fun NamePickerItem(slot: Slot&lt;out Modifier&gt;, name: String, onClick: (String) -&gt; Unit) {
+    slot.Text {
+        setText(name)
+        setModifier {
+            clickable(true, null, null) { onClick(name) }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        val header = mutableStateOf(&quot;Header&quot;)
+        val names = mutableStateListOf(_iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+        NamePicker(this, header, names) { name -&gt;
+            // 点击时简单打印日志
+            _console.log(name)
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_239" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+import com.m8test.script.core.api.ui.compose.state.MutableState
+import com.m8test.script.core.api.ui.compose.state.MutableStateList
+
+/**
+ * 显示用户可以点击的带有标题的名称列表
+ */
+private static def NamePicker(Slot&lt;? extends Modifier&gt; slot, MutableState&lt;String&gt; header, MutableStateList&lt;String&gt; names, Closure&lt;String&gt; onNameClick) {
+    slot.Column { column -&gt;
+        column.setContent { columnScopeSlot -&gt;
+            columnScopeSlot.Text { text -&gt;
+                // 当 [header] 发生改变时，它将被重新组合，但当 [names] 发生改变时，它将不会被重新组合
+                text.trackSingleState(header)
+                text.setText(header.getValue())
+            }
+            columnScopeSlot.HorizontalDivider {}
+            // LazyColumn 是 RecyclerView 的 Compose 版本。
+            // 传递给 items() 的 lambda 类似于 RecyclerView.ViewHolder
+            columnScopeSlot.LazyColumn { lazyColumn -&gt;
+                lazyColumn.setContent { lazyListScope -&gt;
+                    lazyListScope.itemsIndexed(names, null, null) { lazyItemScopeSlot, index, name -&gt;
+                        // 当某个项目的 [name] 更新时，该项目的适配器将进行重组。当 [header] 更改时，此适配器不会进行重组
+                        NamePickerItem(lazyItemScopeSlot, name, onNameClick)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 显示用户可以点击的单个名称。
+ */
+private static def NamePickerItem(Slot&lt;? extends Modifier&gt; slot, String name, Closure&lt;String&gt; onClick) {
+    slot.Text { text -&gt;
+        text.setText(name)
+        text.setModifier { modifier -&gt;
+            modifier.clickable(true, null, null) { onClick(name) }
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    def header = slot.mutableStateOf(&quot;Header&quot;)
+    def names = slot.mutableStateListOf($iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+    NamePicker(slot, header, names, ({ name -&gt;
+        // 点击时简单打印日志
+        $console.log(name)
+    } as Closure&lt;String&gt;))
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_242" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_245" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 显示用户可以点击的带有标题的名称列表
+ * @param {object} slot
+ * @param {object} header
+ * @param {object} names
+ * @param {function(string): void} onNameClick
+ */
+function NamePicker(slot, header, names, onNameClick) {
+    slot.Column(column =&gt; {
+        column.setContent(columnScopeSlot =&gt; {
+            columnScopeSlot.Text(text =&gt; {
+                // 当 [header] 发生改变时，它将被重新组合，但当 [names] 发生改变时，它将不会被重新组合
+                text.trackSingleState(header);
+                text.setText(header.getValue());
+            });
+            columnScopeSlot.HorizontalDivider(() =&gt; {});
+            // LazyColumn 是 RecyclerView 的 Compose 版本。
+            // 传递给 items() 的 lambda 类似于 RecyclerView.ViewHolder
+            columnScopeSlot.LazyColumn(lazyColumn =&gt; {
+                lazyColumn.setContent(lazyListScope =&gt; {
+                    lazyListScope.itemsIndexed(names, null, null, (lazyItemScopeSlot, index, name) =&gt; {
+                        // 当某个项目的 [name] 更新时，该项目的适配器将进行重组。当 [header] 更改时，此适配器不会进行重组
+                        NamePickerItem(lazyItemScopeSlot, name, onNameClick);
+                    });
+                });
+            });
+        });
+    });
+}
+
+/**
+ * 显示用户可以点击的单个名称。
+ * @param {object} slot
+ * @param {string} name
+ * @param {function(string): void} onClick
+ */
+function NamePickerItem(slot, name, onClick) {
+    slot.Text(text =&gt; {
+        text.setText(name);
+        text.setModifier(modifier =&gt; {
+            modifier.clickable(true, null, null, () =&gt; onClick(name));
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    const header = slot.mutableStateOf(&quot;Header&quot;);
+    const names = slot.mutableStateListOf($iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;));
+    NamePicker(slot, header, names, name =&gt; {
+        // 点击时简单打印日志
+        $console.log(name);
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_248" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 显示用户可以点击的单个名称。
+]]
+local function NamePickerItem(slot, name, onClick)
+    slot:Text(function(text)
+        text:setText(name)
+        text:setModifier(function(modifier)
+            modifier:clickable(true, nil, nil, function()
+                onClick(name)
+            end)
+        end)
+    end)
+end
+
+
+--[[
+ * 显示用户可以点击的带有标题的名称列表
+]]
+local function NamePicker(slot, header, names, onNameClick)
+    slot:Column(function(column)
+        column:setContent(function(columnScopeSlot)
+            columnScopeSlot:Text(function(text)
+                -- 当 [header] 发生改变时，它将被重新组合，但当 [names] 发生改变时，它将不会被重新组合
+                text:trackSingleState(header)
+                text:setText(tostring(header:getValue()))
+            end)
+            columnScopeSlot:HorizontalDivider(function() end)
+            -- LazyColumn 是 RecyclerView 的 Compose 版本。
+            -- 传递给 items() 的 lambda 类似于 RecyclerView.ViewHolder
+            columnScopeSlot:LazyColumn(function(lazyColumn)
+                lazyColumn:setContent(function(lazyListScope)
+                    lazyListScope:itemsIndexed(names, nil, nil, function(lazyItemScopeSlot, index, name)
+                        -- 当某个项目的 [name] 更新时，该项目的适配器将进行重组。当 [header] 更改时，此适配器不会进行重组
+                        NamePickerItem(lazyItemScopeSlot, name, onNameClick)
+                    end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    local header = slot:mutableStateOf(&quot;Header&quot;)
+    -- 假设 _iterables:listOf 存在，并接收一个 Lua table 来创建 Java List
+    local names = slot:mutableStateListOf(_iterables:listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+    NamePicker(slot, header, names, function(name)
+        -- 点击时简单打印日志
+        _console:log(name)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_251" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+use m8test_java\com\m8test\script\core\api\ui\compose\state\MutableState;
+use m8test_java\com\m8test\script\core\api\ui\compose\state\MutableStateList;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/**
+ * 显示用户可以点击的单个名称。
+ * @param Slot $slot
+ */
+function NamePickerItem($slot, string $name, callable $onClick)
+{
+    $slot-&gt;Text(function ($text) use ($name, $onClick) {
+        $text-&gt;setText($name);
+        $text-&gt;setModifier(function ($modifier) use ($name, $onClick) {
+            $modifier-&gt;clickable(true, null, null, function () use ($name, $onClick) {
+                $onClick($name);
+            });
+        });
+    });
+}
+
+/**
+ * 显示用户可以点击的带有标题的名称列表
+ * @param Slot $slot
+ */
+function NamePicker($slot, MutableState $header, MutableStateList $names, callable $onNameClick)
+{
+    $slot-&gt;Column(function ($column) use ($header, $names, $onNameClick) {
+        $column-&gt;setContent(function ($columnScopeSlot) use ($header, $names, $onNameClick) {
+            $columnScopeSlot-&gt;Text(function ($text) use ($header) {
+                // 当 [header] 发生改变时，它将被重新组合，但当 [names] 发生改变时，它将不会被重新组合
+                $text-&gt;trackSingleState($header);
+                $text-&gt;setText($header-&gt;getValue());
+            });
+            $columnScopeSlot-&gt;HorizontalDivider(function () {
+            });
+            // LazyColumn 是 RecyclerView 的 Compose 版本。
+            // 传递给 items() 的 lambda 类似于 RecyclerView.ViewHolder
+            $columnScopeSlot-&gt;LazyColumn(function ($lazyColumn) use ($names, $onNameClick) {
+                $lazyColumn-&gt;setContent(function ($lazyListScope) use ($names, $onNameClick) {
+                    $lazyListScope-&gt;itemsIndexed($names, null, null, function ($lazyItemScopeSlot, $index, $name) use ($onNameClick) {
+                        // 当某个项目的 [name] 更新时，该项目的适配器将进行重组。当 [header] 更改时，此适配器不会进行重组
+                        NamePickerItem($lazyItemScopeSlot, $name, $onNameClick);
+                    });
+                });
+            });
+        });
+    });
+}
+
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    global $iterables, $console;
+    $header = $slot-&gt;mutableStateOf(javaString(&quot;Header&quot;));
+    $names = $slot-&gt;mutableStateListOf($iterables-&gt;listOf(javaString(&quot;Alice&quot;), javaString(&quot;Tom&quot;), javaString(&quot;John&quot;)));
+    NamePicker($slot, $header, $names, function ($name) {
+        global $console;
+        // 点击时简单打印日志
+        $console-&gt;log($name);
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_254" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+from m8test_java.com.m8test.script.core.api.ui.compose.state.MutableState import MutableState
+from m8test_java.com.m8test.script.core.api.ui.compose.state.MutableStateList import MutableStateList
+
+
+def NamePicker(slot, header, names, onNameClick):
+    &quot;&quot;&quot;
+    显示用户可以点击的带有标题的名称列表
+    &quot;&quot;&quot;
+    slot.Column(lambda column: (
+        column.setContent(lambda columnScopeSlot: (
+            columnScopeSlot.Text(lambda text: (
+                # 当 [header] 发生改变时，它将被重新组合，但当 [names] 发生改变时，它将不会被重新组合
+                text.trackSingleState(header),
+                text.setText(header.getValue())
+            )),
+            # 修复：将 lambda: None 修改为 lambda _: None
+            # 框架会向此回调传递一个参数，即使我们用不到它，也必须定义一个形参来接收，否则会报TypeError
+            columnScopeSlot.HorizontalDivider(lambda _: None),
+            # LazyColumn 是 RecyclerView 的 Compose 版本。
+            # 传递给 items() 的 lambda 类似于 RecyclerView.ViewHolder
+            columnScopeSlot.LazyColumn(lambda lazyColumn: (
+                lazyColumn.setContent(lambda lazyListScope: (
+                    lazyListScope.itemsIndexed(names, None, None, lambda lazyItemScopeSlot, index, name: (
+                        # 当某个项目的 [name] 更新时，该项目的适配器将进行重组。当 [header] 更改时，此适配器不会进行重组
+                        NamePickerItem(lazyItemScopeSlot, name, onNameClick)
+                    ))
+                ))
+            ))
+        ))
+    ))
+
+
+def NamePickerItem(slot, name, onClick):
+    &quot;&quot;&quot;
+    显示用户可以点击的单个名称。
+    &quot;&quot;&quot;
+    slot.Text(lambda text: (
+        text.setText(name),
+        text.setModifier(lambda modifier: (
+            # Groovy的 { onClick(name) } 是一个无参闭包，它调用了外部的onClick函数
+            # 对应Python的 lambda: onClick(name)
+            modifier.clickable(True, None, None, lambda: onClick(name))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    (header := slot.mutableStateOf(&quot;Header&quot;)),
+    (names := slot.mutableStateListOf(_iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))),
+    NamePicker(slot, header, names,
+               # Groovy的 ({ name -&gt; ... } as Closure&lt;String&gt;) 直接变成Python的 lambda name: ...
+               # 点击时简单打印日志
+               lambda name: _console.log(name)
+               )
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_257" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 显示用户可以点击的带有标题的名称列表
+# onNameClick 在 Ruby 中作为一个 Proc 对象传递
+def NamePicker(slot, header, names, onNameClick)
+  slot.Column do |column|
+    column.setContent do |columnScopeSlot|
+      columnScopeSlot.Text do |text|
+        # 当 [header] 发生改变时，它将被重新组合，但当 [names] 发生改变时，它将不会被重新组合
+        text.trackSingleState(header)
+        text.setText(header.getValue())
+      end
+      columnScopeSlot.HorizontalDivider {}
+      # LazyColumn 是 RecyclerView 的 Compose 版本。
+      # 传递给 items() 的 lambda 类似于 RecyclerView.ViewHolder
+      columnScopeSlot.LazyColumn do |lazyColumn|
+        lazyColumn.setContent do |lazyListScope|
+          lazyListScope.itemsIndexed(names, nil, nil) do |lazyItemScopeSlot, index, name|
+            # 当某个项目的 [name] 更新时，该项目的适配器将进行重组。当 [header] 更改时，此适配器不会进行重组
+            NamePickerItem(lazyItemScopeSlot, name, onNameClick)
+          end
+        end
+      end
+    end
+  end
+end
+
+# 显示用户可以点击的单个名称。
+def NamePickerItem(slot, name, onClick)
+  slot.Text do |text|
+    text.setText(name)
+    text.setModifier do |modifier|
+      modifier.clickable(true, nil, nil) { onClick.call(name) }
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  header = slot.mutableStateOf(&quot;Header&quot;)
+  names = slot.mutableStateListOf($iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+  # 使用 lambda 或 proc 创建闭包传递
+  NamePicker(slot, header, names, lambda { |name|
+    # 点击时简单打印日志
+    $console.log(name)
+  })
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><p id="-w8jht4_229">这些作用域中的每一个都可能是在重组期间执行的唯一一个作用域。当 header 发生更改时，Compose 可能会跳至 Column lambda，而不执行它的任何父项。此外，执行 Column 时，如果 names 未更改，Compose 可能会选择跳过 LazyColumn 的项。</p><p id="-w8jht4_230">同样，执行所有可组合函数或 lambda 都应该没有附带效应。当您需要执行附带效应时，应通过回调触发。</p></section><section class="chapter"><h3 id="-w8jht4_131" data-toc="-w8jht4_131">重组是乐观的操作</h3><p id="-w8jht4_306">只要 Compose 认为某个可组合项的参数可能已更改，就会开始重组。重组是乐观的操作，也就是说，Compose 预计会在参数再次更改之前完成重组。如果某个参数在重组完成之前发生更改，Compose 可能会取消重组，并使用新参数重新开始。</p><p id="-w8jht4_307">取消重组后，Compose 会从重组中舍弃界面树。如有任何附带效应依赖于显示的界面，则即使取消了组合操作，也会应用该附带效应。这可能会导致应用状态不一致。</p><p id="-w8jht4_308">确保所有可组合函数和 lambda 都幂等且没有附带效应，以处理乐观的重组。</p></section><section class="chapter"><h3 id="-w8jht4_132" data-toc="-w8jht4_132">可组合函数可能会非常频繁地运行</h3><p id="-w8jht4_309">在某些情况下，可能会针对界面动画的每一帧运行一个可组合函数。如果该函数执行成本高昂的操作（例如从设备存储空间读取数据），可能会导致界面卡顿。</p><p id="-w8jht4_310">例如，如果您的 widget 尝试读取设备设置，它可能会在一秒内读取这些设置数百次，这会对应用的性能造成灾难性的影响。</p><p id="-w8jht4_311">如果您的可组合函数需要数据，它应为相应的数据定义参数。然后，您可以将成本高昂的工作移至组成操作线程之外的其他线程，并使用 mutableStateOf 将相应的数据传递给 Compose。</p></section><section class="chapter"><h3 id="-w8jht4_133" data-toc="-w8jht4_133">可组合函数可以并行运行</h3><aside class="prompt" data-type="tip" data-title="" id="-w8jht4_312"><p id="-w8jht4_323">注意： 可组合函数目前无法并行运行，但您应以多线程方式编写 Compose 代码。未来，Compose 可能会采用多线程。</p></aside><p id="-w8jht4_313">Compose 可以通过并行运行可组合函数来优化重组。这样一来，Compose 就可以利用多个核心，并以较低的优先级运行可组合函数（不在屏幕上）。</p><p id="-w8jht4_314">这种优化意味着，可组合函数可能会在后台线程池中执行。 如果某个可组合函数对 ViewModel 调用一个函数，则 Compose 可能会同时从多个线程调用该函数。</p><p id="-w8jht4_315">为了确保应用正常运行，所有可组合函数都不应有附带效应，而应通过始终在界面线程上执行的 onClick 等回调触发附带效应。</p><p id="-w8jht4_316">调用某个可组合函数时，调用可能发生在与调用方不同的线程上。这意味着，应避免使用修改可组合 lambda 中的变量的代码，既因为此类代码并非线程安全代码，又因为它是可组合 lambda 不允许的附带效应。</p><p id="-w8jht4_317">以下示例展示了一个可组合项，它显示一个列表及其项数：</p><div class="tabs" id="-w8jht4_322" data-group="languages" data-anchors="[-w8jht4_326,-w8jht4_329,-w8jht4_332,-w8jht4_335,-w8jht4_338,-w8jht4_341,-w8jht4_344,-w8jht4_347]"><div class="tabs__content" data-gtm="tab" id="-w8jht4_326" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+import com.m8test.script.core.api.ui.compose.state.MutableStateList
+
+// 这是正确的版本
+private fun ListComposable(slot: Slot&lt;out Modifier&gt;, names: MutableStateList&lt;String&gt;) {
+    slot.Column {
+        setContent {
+            Text {
+                setText(&quot;count:${names.getSize()}&quot;)
+            }
+            LazyColumn {
+                setContent {
+                    itemsIndexed(names, null, null) { index, name -&gt;
+                        Text {
+                            setText(name)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 这是错误的版本
+private fun ListComposableWithBug(slot: Slot&lt;out Modifier&gt;, names: MutableStateList&lt;String&gt;) {
+    var count = 0
+    slot.Column {
+        setContent {
+            LazyColumn {
+                setContent {
+                    itemsIndexed(names, null, null) { index, name -&gt;
+                        Text {
+                            setText(name)
+                            count++ // 避免附带效应，不应该在这里修改 count 值
+                        }
+                    }
+                }
+            }
+            Text {
+                setText(&quot;count:$count&quot;)
+            }
+        }
+    }
+}
+
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        val names = mutableStateListOf(_iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+        ListComposable(this, names)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_329" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+import com.m8test.script.core.api.ui.compose.state.MutableStateList
+
+// 这是正确的版本
+private static def ListComposable(Slot&lt;? extends Modifier&gt; slot, MutableStateList&lt;String&gt; names) {
+    slot.Column { column -&gt;
+        column.setContent { columnScopeSlot -&gt;
+            columnScopeSlot.Text { text -&gt;
+                text.setText(&quot;count:&quot; + names.getSize())
+            }
+            columnScopeSlot.LazyColumn { lazyColumn -&gt;
+                lazyColumn.setContent { lazyListScope -&gt;
+                    lazyListScope.itemsIndexed(names, null, null) { lazyItemScopeSlot, index, name -&gt;
+                        lazyItemScopeSlot.Text { text -&gt;
+                            text.setText(name)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 这是错误的版本
+private static def ListComposableWithBug(Slot&lt;? extends Modifier&gt; slot, MutableStateList&lt;String&gt; names) {
+    def count = 0
+    slot.Column { column -&gt;
+        column.setContent { columnScopeSlot -&gt;
+            columnScopeSlot.LazyColumn { lazyColumn -&gt;
+                lazyColumn.setContent { lazyListScope -&gt;
+                    lazyListScope.itemsIndexed(names, null, null) { lazyItemScopeSlot, index, name -&gt;
+                        lazyItemScopeSlot.Text { text -&gt;
+                            text.setText(name)
+                            count++ // 避免附带效应，不应该在这里修改 count 值
+                        }
+                    }
+                }
+            }
+            columnScopeSlot.Text { text -&gt;
+                text.setText(&quot;count:&quot; + count)
+            }
+        }
+    }
+}
+
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    def names = slot.mutableStateListOf($iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+    ListComposable(slot, names)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_332" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_335" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 这是正确的版本
+function ListComposable(slot, names) {
+    slot.Column(column =&gt; {
+        column.setContent(columnScopeSlot =&gt; {
+            columnScopeSlot.Text(text =&gt; {
+                text.setText(&quot;count:&quot; + names.getSize());
+            });
+            columnScopeSlot.LazyColumn(lazyColumn =&gt; {
+                lazyColumn.setContent(lazyListScope =&gt; {
+                    lazyListScope.itemsIndexed(names, null, null, (lazyItemScopeSlot, index, name) =&gt; {
+                        lazyItemScopeSlot.Text(text =&gt; {
+                            text.setText(name);
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+
+// 这是错误的版本
+function ListComposableWithBug(slot, names) {
+    let count = 0;
+    slot.Column(column =&gt; {
+        column.setContent(columnScopeSlot =&gt; {
+            columnScopeSlot.LazyColumn(lazyColumn =&gt; {
+                lazyColumn.setContent(lazyListScope =&gt; {
+                    lazyListScope.itemsIndexed(names, null, null, (lazyItemScopeSlot, index, name) =&gt; {
+                        lazyItemScopeSlot.Text(text =&gt; {
+                            text.setText(name);
+                            count++; // 避免附带效应，不应该在这里修改 count 值
+                        });
+                    });
+                });
+            });
+            columnScopeSlot.Text(text =&gt; {
+                text.setText(&quot;count:&quot; + count);
+            });
+        });
+    });
+}
+
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    const names = slot.mutableStateListOf($iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;));
+    ListComposable(slot, names);
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_338" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 这是正确的版本
+local function ListComposable(slot, names)
+    slot:Column(function(column)
+        column:setContent(function(columnScopeSlot)
+            columnScopeSlot:Text(function(text)
+                text:setText(&quot;count:&quot; .. names:getSize())
+            end)
+            columnScopeSlot:LazyColumn(function(lazyColumn)
+                lazyColumn:setContent(function(lazyListScope)
+                    lazyListScope:itemsIndexed(names, nil, nil, function(lazyItemScopeSlot, index, name)
+                        lazyItemScopeSlot:Text(function(text)
+                            text:setText(name)
+                        end)
+                    end)
+                end)
+            end)
+        end)
+    end)
+end
+
+-- 这是错误的版本
+local function ListComposableWithBug(slot, names)
+    local count = 0
+    slot:Column(function(column)
+        column:setContent(function(columnScopeSlot)
+            columnScopeSlot:LazyColumn(function(lazyColumn)
+                lazyColumn:setContent(function(lazyListScope)
+                    lazyListScope:itemsIndexed(names, nil, nil, function(lazyItemScopeSlot, index, name)
+                        lazyItemScopeSlot:Text(function(text)
+                            text:setText(name)
+                            count = count + 1 -- 避免附带效应，不应该在这里修改 count 值
+                        end)
+                    end)
+                end)
+            end)
+            columnScopeSlot:Text(function(text)
+                text:setText(&quot;count:&quot; .. count)
+            end)
+        end)
+    end)
+end
+
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    local names = slot:mutableStateListOf(_iterables:listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+    ListComposable(slot, names)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_341" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+use m8test_java\com\m8test\script\core\api\ui\compose\state\MutableStateList;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+// 这是正确的版本
+/** @param Slot $slot */
+function ListComposable($slot, MutableStateList $names)
+{
+    $slot-&gt;Column(function ($column) use ($names) {
+        $column-&gt;setContent(function ($columnScopeSlot) use ($names) {
+            $columnScopeSlot-&gt;Text(function ($text) use ($names) {
+                $text-&gt;setText(javaString(&quot;count:&quot;) . $names-&gt;getSize());
+            });
+            $columnScopeSlot-&gt;LazyColumn(function ($lazyColumn) use ($names) {
+                $lazyColumn-&gt;setContent(function ($lazyListScope) use ($names) {
+                    $lazyListScope-&gt;itemsIndexed($names, null, null, function ($lazyItemScopeSlot, $index, $name) {
+                        $lazyItemScopeSlot-&gt;Text(function ($text) use ($name) {
+                            $text-&gt;setText($name);
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+
+// 这是错误的版本
+/** @param Slot $slot */
+function ListComposableWithBug($slot, MutableStateList $names)
+{
+    $count = 0;
+    $slot-&gt;Column(function ($column) use ($names, &amp;$count) {
+        $column-&gt;setContent(function ($columnScopeSlot) use ($names, &amp;$count) {
+            $columnScopeSlot-&gt;LazyColumn(function ($lazyColumn) use ($names, &amp;$count) {
+                $lazyColumn-&gt;setContent(function ($lazyListScope) use ($names, &amp;$count) {
+                    $lazyListScope-&gt;itemsIndexed($names, null, null, function ($lazyItemScopeSlot, $index, $name) use (&amp;$count) {
+                        $lazyItemScopeSlot-&gt;Text(function ($text) use ($name, &amp;$count) {
+                            $text-&gt;setText($name);
+                            $count++; // 避免附带效应，不应该在这里修改 count 值
+                        });
+                    });
+                });
+            });
+            $columnScopeSlot-&gt;Text(function ($text) use ($count) {
+                $text-&gt;setText(javaString(&quot;count:&quot;) . $count);
+            });
+        });
+    });
+}
+
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    global $iterables;
+    $names = $slot-&gt;mutableStateListOf($iterables-&gt;listOf(javaString(&quot;Alice&quot;), javaString(&quot;Tom&quot;), javaString(&quot;John&quot;)));
+    ListComposable($slot, $names);
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_344" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+from m8test_java.com.m8test.script.core.api.ui.compose.state.MutableStateList import MutableStateList
+
+
+# 这是正确的版本
+def ListComposable(slot, names):
+    slot.Column(lambda column: (
+        column.setContent(lambda columnScopeSlot: (
+            columnScopeSlot.Text(lambda text: (
+                text.setText(&quot;count:&quot; + str(names.getSize()))
+            )),
+            columnScopeSlot.LazyColumn(lambda lazyColumn: (
+                lazyColumn.setContent(lambda lazyListScope: (
+                    lazyListScope.itemsIndexed(names, None, None, lambda lazyItemScopeSlot, index, name: (
+                        lazyItemScopeSlot.Text(lambda text: (
+                            text.setText(name)
+                        ))
+                    ))
+                ))
+            ))
+        ))
+    ))
+
+
+# 这是错误的版本
+def ListComposableWithBug(slot, names):
+    # 在Python中，lambda不能直接修改外部作用域的简单类型变量（如整数）。
+    # 为了模拟Groovy闭包可以直接修改外部变量的行为（附带效应），
+    # 我们使用一个可变对象（如单元素列表）来包装count值。
+    count = [0]
+    slot.Column(lambda column: (
+        column.setContent(lambda columnScopeSlot: (
+            columnScopeSlot.LazyColumn(lambda lazyColumn: (
+                lazyColumn.setContent(lambda lazyListScope: (
+                    lazyListScope.itemsIndexed(names, None, None, lambda lazyItemScopeSlot, index, name: (
+                        lazyItemScopeSlot.Text(lambda text: (
+                            text.setText(name),
+                            # 避免附带效应，不应该在这里修改 count 值
+                            # 这里通过修改列表的第一个元素来模拟 count++
+                            (count.__setitem__(0, count[0] + 1))
+                        ))
+                    ))
+                ))
+            )),
+            columnScopeSlot.Text(lambda text: (
+                # 读取时也从列表中获取
+                text.setText(&quot;count:&quot; + str(count[0]))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    (names := slot.mutableStateListOf(_iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))),
+    ListComposable(slot, names)
+    # 如果要测试错误版本，请取消下面一行的注释，并注释掉上面一行
+    # ListComposableWithBug(slot, names)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_347" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 这是正确的版本
+def ListComposable(slot, names)
+  slot.Column do |column|
+    column.setContent do |columnScopeSlot|
+      columnScopeSlot.Text do |text|
+        text.setText(&quot;count:&quot; + names.getSize().to_s)
+      end
+      columnScopeSlot.LazyColumn do |lazyColumn|
+        lazyColumn.setContent do |lazyListScope|
+          lazyListScope.itemsIndexed(names, nil, nil) do |lazyItemScopeSlot, index, name|
+            lazyItemScopeSlot.Text do |text|
+              text.setText(name)
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+# 这是错误的版本
+def ListComposableWithBug(slot, names)
+  count = 0
+  slot.Column do |column|
+    column.setContent do |columnScopeSlot|
+      columnScopeSlot.LazyColumn do |lazyColumn|
+        lazyColumn.setContent do |lazyListScope|
+          lazyListScope.itemsIndexed(names, nil, nil) do |lazyItemScopeSlot, index, name|
+            lazyItemScopeSlot.Text do |text|
+              text.setText(name)
+              count += 1 # 避免附带效应，不应该在这里修改 count 值
+            end
+          end
+        end
+      end
+      columnScopeSlot.Text do |text|
+        text.setText(&quot;count:&quot; + count.to_s)
+      end
+    end
+  end
+end
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  names = slot.mutableStateListOf($iterables.listOf(&quot;Alice&quot;, &quot;Tom&quot;, &quot;John&quot;))
+  ListComposable(slot, names)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><p id="-w8jht4_319">ListComposable 代码没有附带效应，它会将输入列表转换为界面。此代码非常适合显示小列表。不过，如果函数写入局部变量，则这并非线程安全或正确的代码, 也就是 ListComposableWithBug，每次重组时，都会修改 count, 这可以是动画的每一帧，或是在列表更新时。但不管怎样，界面都会显示错误的项数。因此，Compose 不支持这样的写入操作；通过禁止此类写入操作，我们允许框架更改线程以执行可组合 lambda。</p></section><section class="chapter"><h3 id="-w8jht4_134" data-toc="-w8jht4_134">可组合函数可以按任何顺序执行</h3><aside class="prompt" data-type="tip" data-title="" id="-w8jht4_396"><p id="-w8jht4_404">注意： Compose 在主线程上运行，但从一开始就考虑到了多线程，我们不保证未来会一直采用单线程模型。因此，您应始终将可组合函数编写为可在多个线程上运行。</p></aside><p id="-w8jht4_397">如果您看一下可组合函数的代码，可能会认为这些代码按其出现的顺序运行。但不能保证此属性为 true。如果某个可组合函数包含对其他可组合函数的调用，这些函数可以按任何顺序运行。Compose 可以选择识别出某些界面元素的优先级高于其他界面元素，因而首先绘制这些元素。</p><p id="-w8jht4_398">例如，假设您有如下代码，用于在标签页布局中绘制三个屏幕：</p><div class="tabs" id="-w8jht4_403" data-group="languages" data-anchors="[-w8jht4_407,-w8jht4_410,-w8jht4_413,-w8jht4_416,-w8jht4_419,-w8jht4_422,-w8jht4_425,-w8jht4_428]"><div class="tabs__content" data-gtm="tab" id="-w8jht4_407" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+private fun StartScreen(slot: Slot&lt;out Modifier&gt;) {
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text {
+        setText(&quot;StartScreen&quot;)
+    }
+}
+
+private fun MiddleScreen(slot: Slot&lt;out Modifier&gt;) {
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text {
+        setText(&quot;MiddleScreen&quot;)
+    }
+}
+
+private fun EndScreen(slot: Slot&lt;out Modifier&gt;) {
+// 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text {
+        setText(&quot;EndScreen&quot;)
+    }
+}
+
+private fun ButtonRow(slot: Slot&lt;out Modifier&gt;) {
+    slot.Row {
+        setModifier { fillMaxWidth(1f) }
+        setHorizontalArrangement { it.getSpaceEvenly() }
+        setContent {
+            StartScreen(this)
+            MiddleScreen(this)
+            EndScreen(this)
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        ButtonRow(this)
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_410" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.modifier.Modifier
+import com.m8test.script.core.api.ui.compose.slot.Slot
+
+private static def StartScreen(Slot&lt;? extends Modifier&gt; slot) {
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text { text -&gt;
+        text.setText(&quot;StartScreen&quot;)
+    }
+}
+
+private static def MiddleScreen(Slot&lt;? extends Modifier&gt; slot) {
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text { text -&gt;
+        text.setText(&quot;MiddleScreen&quot;)
+    }
+}
+
+private static def EndScreen(Slot&lt;? extends Modifier&gt; slot) {
+// 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text { text -&gt;
+        text.setText(&quot;EndScreen&quot;)
+    }
+}
+
+private static def ButtonRow(Slot&lt;? extends Modifier&gt; slot) {
+    slot.Row { row -&gt;
+        row.setModifier { it.fillMaxWidth(1f) }
+        row.setHorizontalArrangement { it.getSpaceEvenly() }
+        row.setContent { rowScopeSlot -&gt;
+            StartScreen(rowScopeSlot)
+            MiddleScreen(rowScopeSlot)
+            EndScreen(rowScopeSlot)
+        }
+    }
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    ButtonRow(slot)
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_413" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_416" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// import com.m8test.script.core.api.ui.compose.modifier.Modifier
+// import com.m8test.script.core.api.ui.compose.slot.Slot
+// 注意：上面的 import 语句在 Groovy 中用于类型提示，在 JavaScript 中不需要，因此已注释掉。
+
+function StartScreen(slot) {
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text(text =&gt; {
+        text.setText(&quot;StartScreen&quot;);
+    });
+}
+
+function MiddleScreen(slot) {
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text(text =&gt; {
+        text.setText(&quot;MiddleScreen&quot;);
+    });
+}
+
+function EndScreen(slot) {
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text(text =&gt; {
+        text.setText(&quot;EndScreen&quot;);
+    });
+}
+
+function ButtonRow(slot) {
+    slot.Row(row =&gt; {
+        row.setModifier(it =&gt; it.fillMaxWidth(1.0));
+        row.setHorizontalArrangement(it =&gt; it.getSpaceEvenly());
+        row.setContent(rowScopeSlot =&gt; {
+            StartScreen(rowScopeSlot);
+            MiddleScreen(rowScopeSlot);
+            EndScreen(rowScopeSlot);
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    ButtonRow(slot);
+});
+
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_419" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local function StartScreen(slot)
+    -- 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot:Text(function(text)
+        text:setText(&quot;StartScreen&quot;)
+    end)
+end
+
+local function MiddleScreen(slot)
+    -- 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot:Text(function(text)
+        text:setText(&quot;MiddleScreen&quot;)
+    end)
+end
+
+local function EndScreen(slot)
+    -- 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot:Text(function(text)
+        text:setText(&quot;EndScreen&quot;)
+    end)
+end
+
+local function ButtonRow(slot)
+    slot:Row(function(row)
+        row:setModifier(function(it) it:fillMaxWidth(1) end)
+        row:setHorizontalArrangement(function(it) return it:getSpaceEvenly() end)
+        row:setContent(function(rowScopeSlot)
+            StartScreen(rowScopeSlot)
+            MiddleScreen(rowScopeSlot)
+            EndScreen(rowScopeSlot)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    ButtonRow(slot)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_422" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\modifier\Modifier;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\Slot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+/** @param Slot $slot */
+function StartScreen($slot)
+{
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    $slot-&gt;Text(function ($text) {
+        $text-&gt;setText(javaString(&quot;StartScreen&quot;));
+    });
+}
+
+/** @param Slot $slot */
+function MiddleScreen($slot)
+{
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    $slot-&gt;Text(function ($text) {
+        $text-&gt;setText(javaString(&quot;MiddleScreen&quot;));
+    });
+}
+
+/** @param Slot $slot */
+function EndScreen($slot)
+{
+    // 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    $slot-&gt;Text(function ($text) {
+        $text-&gt;setText(javaString(&quot;EndScreen&quot;));
+    });
+}
+
+/** @param Slot $slot */
+function ButtonRow($slot)
+{
+    $slot-&gt;Row(function ($row) {
+        $row-&gt;setModifier(function ($it) {
+            $it-&gt;fillMaxWidth(1.0);
+        });
+        $row-&gt;setHorizontalArrangement(function ($it) {
+            return $it-&gt;getSpaceEvenly();
+        });
+        $row-&gt;setContent(function ($rowScopeSlot) {
+            StartScreen($rowScopeSlot);
+            MiddleScreen($rowScopeSlot);
+            EndScreen($rowScopeSlot);
+        });
+    });
+}
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    ButtonRow($slot);
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_425" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.modifier.Modifier import Modifier
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.Slot import Slot
+
+
+def StartScreen(slot):
+    # 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text(lambda text: (
+        text.setText(&quot;StartScreen&quot;)
+    ))
+
+
+def MiddleScreen(slot):
+    # 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text(lambda text: (
+        text.setText(&quot;MiddleScreen&quot;)
+    ))
+
+
+def EndScreen(slot):
+    # 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+    slot.Text(lambda text: (
+        text.setText(&quot;EndScreen&quot;)
+    ))
+
+
+def ButtonRow(slot):
+    slot.Row(lambda row: (
+        row.setModifier(lambda it: it.fillMaxWidth(1.0)),
+        row.setHorizontalArrangement(lambda it: it.getSpaceEvenly()),
+        row.setContent(lambda rowScopeSlot: (
+            StartScreen(rowScopeSlot),
+            MiddleScreen(rowScopeSlot),
+            EndScreen(rowScopeSlot)
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    ButtonRow(slot)
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="-w8jht4_428" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+def StartScreen(slot)
+  # 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+  slot.Text do |text|
+    text.setText(&quot;StartScreen&quot;)
+  end
+end
+
+def MiddleScreen(slot)
+  # 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+  slot.Text do |text|
+    text.setText(&quot;MiddleScreen&quot;)
+  end
+end
+
+def EndScreen(slot)
+  # 这里只是简单的显示一个文本，实际可能是一个较为复杂的界面
+  slot.Text do |text|
+    text.setText(&quot;EndScreen&quot;)
+  end
+end
+
+def ButtonRow(slot)
+  slot.Row do |row|
+    row.setModifier { |it| it.fillMaxWidth(1.0) }
+    row.setHorizontalArrangement { |it| it.getSpaceEvenly() }
+    row.setContent do |rowScopeSlot|
+      StartScreen(rowScopeSlot)
+      MiddleScreen(rowScopeSlot)
+      EndScreen(rowScopeSlot)
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  ButtonRow(slot)
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><p id="-w8jht4_400">对 StartScreen、MiddleScreen 和 EndScreen 的调用可以按任何顺序进行。这意味着，举例来说，您不能让 StartScreen() 设置某个全局变量（附带效应）并让 MiddleScreen() 利用这项更改。相反，其中每个函数都需要保持独立。</p></section></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="declarative-ui.html" class="navigation-links__prev">声明式UI</a><a href="declarative-ui-phases.html" class="navigation-links__next">阶段</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

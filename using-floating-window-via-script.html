@@ -1,0 +1,780 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.280652548"><title>在脚本中使用 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-35cwsy_4","level":0,"title":"显示日志","anchor":"#-35cwsy_4"},{"id":"android","level":0,"title":"显示Android视图","anchor":"#android"},{"id":"webview","level":0,"title":"显示 WebView","anchor":"#webview"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="在脚本中使用 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/using-floating-window-via-script.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="在脚本中使用 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/using-floating-window-via-script.html#webpage",
+    "url": "writerside-documentation/using-floating-window-via-script.html",
+    "name": "在脚本中使用 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="using-floating-window-via-script" data-main-title="在脚本中使用" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="floating-windows.md|悬浮窗"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="using-floating-window-via-script" id="using-floating-window-via-script.md">在脚本中使用</h1><aside class="prompt" data-type="tip" data-title="" id="-35cwsy_3"><p id="-35cwsy_7">更多悬浮窗相关方法可以查看 <a href="https://sdk-docs.m8test.com/sdk/com.m8test.script.core.api.floating/-floating-windows/index.html" id="-35cwsy_8" data-external="true" rel="noopener noreferrer" target="_blank">FloatingWindows</a></p></aside><section class="chapter"><h2 id="-35cwsy_4" data-toc="-35cwsy_4">显示日志</h2><div class="tabs" id="-35cwsy_12" data-group="languages" data-anchors="[-35cwsy_15,-35cwsy_18,-35cwsy_21,-35cwsy_24,-35cwsy_27,-35cwsy_30,-35cwsy_33,-35cwsy_36]"><div class="tabs__content" data-gtm="tab" id="-35cwsy_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">
+import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+fun getDisplay(): Display {
+    val allDisplays = _displays.getAll()
+    if (allDisplays.isNotEmpty()) return allDisplays[0]
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+val display = getDisplay()
+// 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+val consoleWindow = _floatingWindows.showConsole {
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    setDisplayId(display.getId())
+}
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+consoleWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads.getMain().setBackground(true)
+// 打印日志，可以在悬浮窗中看到输出
+_console.log(&quot;测试日志悬浮窗&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create { config -&gt;
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+def display = getDisplay()
+// 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+def consoleWindow = $floatingWindows.showConsole { config -&gt;
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config.setDisplayId(display.getId())
+}
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+consoleWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)
+// 打印日志，可以在悬浮窗中看到输出
+$console.log(&quot;测试日志悬浮窗&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_21" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.floating.FloatingWindow;
+import com.m8test.script.core.api.floating.WindowConfig;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+final Display display = getDisplay();
+// 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+FloatingWindow consoleWindow = $floatingWindows.showConsole(new Function1() {
+    @Override
+    public Object invoke(Object windowConfig) {
+        WindowConfig config = (WindowConfig) windowConfig;
+        // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+        config.setDisplayId(display.getId());
+        return null;
+    }
+});
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+consoleWindow.getWindowBridge().setTouchable(false);
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true);
+// 打印日志，可以在悬浮窗中看到输出
+$console.log(&quot;测试日志悬浮窗&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_24" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+let display = getDisplay()
+// 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+let consoleWindow = $floatingWindows.showConsole(function (config) {
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config.setDisplayId(display.getId())
+});
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+consoleWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)
+// 打印日志，可以在悬浮窗中看到输出
+$console.log(&quot;测试日志悬浮窗&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_27" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+
+-- 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+local consoleWindow = _floatingWindows:showConsole(function(config)
+    -- 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config:setDisplayId(display:getId())
+end)
+-- 设置窗口不可以点击, 防止窗口影响自动化操作
+consoleWindow:getWindowBridge():setTouchable(false)
+-- 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads:getMain():setBackground(true)
+-- 打印日志，可以在悬浮窗中看到输出
+_console:log(&quot;测试日志悬浮窗&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_30" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\floating\FloatingWindows $floatingWindows */
+global $floatingWindows;
+// 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+$consoleWindow = $floatingWindows-&gt;showConsole(function ($config) use ($display) {
+// 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    $config-&gt;setDisplayId($display-&gt;getId());
+});
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+$consoleWindow-&gt;getWindowBridge()-&gt;setTouchable(false);
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads-&gt;getMain()-&gt;setBackground(true);
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+// 打印日志，可以在悬浮窗中看到输出
+$console-&gt;log(javaString(&quot;测试日志悬浮窗&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_33" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _floatingWindows
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+consoleWindow = _floatingWindows.showConsole(lambda config:
+                                             # 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+                                             config.setDisplayId(display.getId()))
+
+# 设置窗口不可以点击, 防止窗口影响自动化操作
+consoleWindow.getWindowBridge().setTouchable(False)
+# 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads.getMain().setBackground(True)
+# 打印日志，可以在悬浮窗中看到输出
+_console.log(&quot;测试日志悬浮窗&quot;)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_36" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 显示日志悬浮窗口，该悬浮窗仅会显示当前脚本运行时产生的日志
+consoleWindow = $floatingWindows.showConsole { |config|
+  # 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+  config.setDisplayId(display.getId())
+}
+# 设置窗口不可以点击, 防止窗口影响自动化操作
+consoleWindow.getWindowBridge().setTouchable(false)
+# 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)
+# 打印日志，可以在悬浮窗中看到输出
+$console.log(&quot;测试日志悬浮窗&quot;)</div></div></div></section><section class="chapter"><h2 id="android" data-toc="android">显示Android视图</h2><div class="tabs" id="-35cwsy_88" data-group="languages" data-anchors="[-35cwsy_100,-35cwsy_103,-35cwsy_106,-35cwsy_109,-35cwsy_112,-35cwsy_91,-35cwsy_94,-35cwsy_97]"><div class="tabs__content" data-gtm="tab" id="-35cwsy_91" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.script
+
+import android.widget.TextView
+import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+fun getDisplay(): Display {
+    val allDisplays = _displays.getAll()
+    if (allDisplays.isNotEmpty()) return allDisplays[0]
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+val display = getDisplay()
+// 在悬浮窗口显示android视图
+val floatingWindow = _floatingWindows.showView({
+    val textView = TextView(context)
+    textView.text = &quot;悬浮窗视图&quot;
+    addView(textView)
+}) {
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    setDisplayId(display.getId())
+}
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_94" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import android.widget.TextView
+import com.m8test.script.core.api.display.Display
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create { config -&gt;
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+def display = getDisplay()
+// 在悬浮窗口显示android视图
+def floatingWindow = $floatingWindows.showView({ frameLayout -&gt;
+    def textView = new TextView(frameLayout.getContext())
+    textView.setText(&quot;悬浮窗视图&quot;)
+    frameLayout.addView(textView)
+}) { config -&gt;
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config.setDisplayId(display.getId())
+}
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_97" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import android.widget.FrameLayout;
+import android.widget.TextView;
+import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.floating.FloatingWindow;
+import com.m8test.script.core.api.floating.WindowConfig;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+final Display display = getDisplay();
+// 在悬浮窗口显示android视图
+FloatingWindow floatingWindow = $floatingWindows.showView(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        FrameLayout frameLayout = (FrameLayout) o;
+        TextView textView = new TextView(frameLayout.getContext());
+        textView.setText(&quot;悬浮窗视图&quot;);
+        frameLayout.addView(textView);
+        return null;
+    }
+}, new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        WindowConfig config = (WindowConfig) o;
+        // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+        config.setDisplayId(display.getId());
+        return null;
+    }
+});
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false);
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_100" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+let display = getDisplay()
+// 在悬浮窗口显示android视图
+let floatingWindow = $floatingWindows.showView(function (frameLayout) {
+    let textView = new Packages.android.widget.TextView(frameLayout.getContext())
+    textView.setText(&quot;悬浮窗视图&quot;)
+    frameLayout.addView(textView)
+}, function (config) {
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config.setDisplayId(display.getId())
+})
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_103" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入 TextView 类, 必须以 m8test_java 开头, 后面跟 java 类名
+local TextView = require(&quot;m8test_java.android.widget.TextView&quot;)
+-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+
+-- 在悬浮窗口显示android视图
+local floatingWindow = _floatingWindows:showView(function(frameLayout)
+    local textView = TextView:newJavaObject(frameLayout:getContext())
+    textView:setText(&quot;悬浮窗视图&quot;)
+    frameLayout:addView(textView)
+end, function(config)
+    -- 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config:setDisplayId(display:getId())
+end)
+-- 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow:getWindowBridge():setTouchable(false)
+-- 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads:getMain():setBackground(true)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_106" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\android\widget\TextView;
+
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\floating\FloatingWindows $floatingWindows */
+global $floatingWindows;
+// 在悬浮窗口显示android视图
+$floatingWindow = $floatingWindows-&gt;showView(function ($frameLayout) {
+    $textView = new TextView($frameLayout-&gt;getContext());
+    $textView-&gt;setText(javaString(&quot;悬浮窗视图&quot;));
+    $frameLayout-&gt;addView($textView);
+}, function ($config) use ($display) {
+// 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    $config-&gt;setDisplayId($display-&gt;getId());
+});
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+$floatingWindow-&gt;getWindowBridge()-&gt;setTouchable(false);
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_109" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _floatingWindows
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+
+from m8test_java.android.widget.TextView import TextView
+from m8test_java.android.widget.FrameLayout import FrameLayout
+
+
+def viewContent(frameLayout: FrameLayout):
+    textView = TextView(frameLayout.getContext())
+    textView.setText(&quot;悬浮窗视图&quot;)
+    frameLayout.addView(textView)
+
+
+# 在悬浮窗口显示android视图
+floatingWindow = _floatingWindows.showView(viewContent, lambda config:
+# 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+config.setDisplayId(display.getId()))
+# 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(False)
+# 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads.getMain().setBackground(True)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_112" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+java_import &quot;android.widget.FrameLayout&quot;
+java_import &quot;android.widget.TextView&quot;
+# 在悬浮窗口显示android视图
+floatingWindow = $floatingWindows.showView(lambda {
+  # @type frameLayout [FrameLayout]
+  |frameLayout|
+  textView = TextView.new(frameLayout.getContext())
+  textView.setText(&quot;悬浮窗视图&quot;)
+  frameLayout.addView(textView)
+}) { |config|
+  # 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+  config.setDisplayId(display.getId())
+}
+# 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+# 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)</div></div></div></section><section class="chapter"><h2 id="webview" data-toc="webview">显示 WebView</h2><div class="tabs" id="-35cwsy_164" data-group="languages" data-anchors="[-35cwsy_167,-35cwsy_170,-35cwsy_173,-35cwsy_176,-35cwsy_179,-35cwsy_182,-35cwsy_185,-35cwsy_188]"><div class="tabs__content" data-gtm="tab" id="-35cwsy_167" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">package com.example.script
+
+import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+fun getDisplay(): Display {
+    val allDisplays = _displays.getAll()
+    if (allDisplays.isNotEmpty()) return allDisplays[0]
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+val display = getDisplay()
+// 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+val floatingWindow = _floatingWindows.showWebView(&quot;https://www.m8test.com&quot;) {
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    setDisplayId(display.getId())
+}
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_170" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create { config -&gt;
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+def display = getDisplay()
+// 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+def floatingWindow = $floatingWindows.showWebView(&quot;https://www.m8test.com&quot;) { config -&gt;
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config.setDisplayId(display.getId())
+}
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_173" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display;
+import com.m8test.script.core.api.floating.FloatingWindow;
+import com.m8test.script.core.api.floating.WindowConfig;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @return
+ */
+static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+final Display display = getDisplay();
+// 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+FloatingWindow floatingWindow = $floatingWindows.showWebView(&quot;https://www.m8test.com&quot;, new Function1() {
+@Override
+public Object invoke(Object o) {
+    WindowConfig config = (WindowConfig) o;
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config.setDisplayId(display.getId());
+    return null;
+}
+});
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false);
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_176" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+let display = getDisplay()
+// 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+let floatingWindow = $floatingWindows.showWebView(&quot;https://www.m8test.com&quot;, function (config) {
+    // 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config.setDisplayId(display.getId())
+})
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_179" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入 TextView 类, 必须以 m8test_java 开头, 后面跟 java 类名
+local TextView = require(&quot;m8test_java.android.widget.TextView&quot;)
+-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+local floatingWindow = _floatingWindows:showWebView(&quot;https://www.m8test.com&quot;, function(config)
+    -- 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    config:setDisplayId(display:getId())
+end)
+-- 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow:getWindowBridge():setTouchable(false)
+-- 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads:getMain():setBackground(true)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_182" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\android\widget\TextView;
+
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\script\core\api\floating\FloatingWindows $floatingWindows */
+global $floatingWindows;
+// 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+$floatingWindow = $floatingWindows-&gt;showWebView(&quot;https://www.m8test.com&quot;, function ($config) use ($display) {
+// 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+    $config-&gt;setDisplayId($display-&gt;getId());
+});
+// 设置窗口不可以点击, 防止窗口影响自动化操作
+$floatingWindow-&gt;getWindowBridge()-&gt;setTouchable(false);
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+// 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads-&gt;getMain()-&gt;setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_185" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _floatingWindows
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+floatingWindow = _floatingWindows.showWebView(&quot;https://www.m8test.com&quot;, lambda config:
+# 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+config.setDisplayId(display.getId()))
+# 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(False)
+# 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+_threads.getMain().setBackground(True)
+</div></div><div class="tabs__content" data-gtm="tab" id="-35cwsy_188" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# 在悬浮窗口中显示WebView内容, 第一个参数为要加载的内容URI，可以是网络URL或本地HTML文件路径 本地文件路径相对于脚本项目的webview目录
+floatingWindow = $floatingWindows.showWebView(&quot;https://www.m8test.com&quot;) { |config|
+  # 设置悬浮窗显示的屏幕, 如果不设置默认显示在物理屏幕
+  config.setDisplayId(display.getId())
+}
+# 设置窗口不可以点击, 防止窗口影响自动化操作
+floatingWindow.getWindowBridge().setTouchable(false)
+# 为了看到效果让主线程在后台运行，因为脚本结束时会自动关闭所有脚本创建的悬浮窗
+$threads.getMain().setBackground(true)</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="grant-floating-window-permission.html" class="navigation-links__prev">授予权限</a><a href="coroutines.html" class="navigation-links__next">协程</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

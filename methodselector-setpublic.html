@@ -1,0 +1,126 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:34:21.424820348"><title>setPublic | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="setPublic | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/methodselector-setpublic.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="setPublic | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/methodselector-setpublic.html#webpage",
+    "url": "writerside-documentation/methodselector-setpublic.html",
+    "name": "setPublic | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="MethodSelector.setPublic" data-main-title="setPublic" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///MethodSelector.md|MethodSelector"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="MethodSelector.setPublic" id="MethodSelector.setPublic.md">setPublic</h1><aside class="prompt" data-type="tip" data-title="" id="kqy56i_7"><p id="kqy56i_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.reflect/-method-selector/set-public.html" id="kqy56i_12" data-external="true" rel="noopener noreferrer" target="_blank">MethodSelector.setPublic()</a></p></aside><div class="tabs" id="kqy56i_10" data-group="languages" data-anchors="[kqy56i_15,kqy56i_18,kqy56i_21,kqy56i_24,kqy56i_27,kqy56i_30,kqy56i_33]"><div class="tabs__content" data-gtm="tab" id="kqy56i_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val reflector = _reflectors.reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+val realParams = intArrayOf(1, 2, 3, 4)
+val wrappedParams = arrayOf&lt;Any?&gt;(realParams)
+// 调用带有参数的静态方法
+reflector.invokeMethod(null, wrappedParams) {
+    setPublic(true)
+    setName(&quot;setIntArray&quot;)
+    setParameterTypes(arrayOf(_plugins.loadClass(&quot;[I&quot;)))
+}
+// 调用无参静态方法并获取返回值
+_console.log(&quot;调用静态方法并获取返回值&quot;, (reflector.invokeMethod(null, null) {
+    setPublic(true)
+    setName(&quot;getIntArray&quot;)
+} as IntArray).contentToString())</div><aside class="prompt" data-type="tip" data-title="" id="kqy56i_39"><p id="kqy56i_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/MethodSelector/setPublic.kts" id="kqy56i_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/MethodSelector/setPublic.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="kqy56i_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def reflector = $reflectors.reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+def realParams = $arrays.intArrayOf(1, 2, 3, 4)
+def wrappedParams = $arrays.newArray($plugins.loadClass(&quot;java.lang.Object&quot;), 1)
+$objectWrappers.wrap(wrappedParams).set(0, realParams)
+// 调用带有参数的静态方法
+reflector.invokeMethod(null, wrappedParams) {
+    setPublic(true)
+    setName(&quot;setIntArray&quot;)
+    setParameterTypes($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Class&quot;), $plugins.loadClass(&quot;[I&quot;)))
+}
+// 调用无参静态方法并获取返回值
+$console.log(&quot;调用静态方法并获取返回值&quot;, $objectWrappers.wrap(reflector.invokeMethod(null, null) {
+    setPublic(true)
+    setName(&quot;getIntArray&quot;)
+}).contentToString())</div><aside class="prompt" data-type="tip" data-title="" id="kqy56i_47"><p id="kqy56i_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/MethodSelector/setPublic.groovy" id="kqy56i_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/MethodSelector/setPublic.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="kqy56i_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let reflector = $reflectors.reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+let realParams = $arrays.intArrayOf(1, 2, 3, 4)
+let wrappedParams = $arrays.newArray($plugins.loadClass(&quot;java.lang.Object&quot;), 1)
+$objectWrappers.wrap(wrappedParams).set(0, realParams)
+// 调用带有参数的静态方法
+reflector.invokeMethod(null, wrappedParams, (methodSelector) =&gt; {
+    methodSelector.setPublic(true)
+    methodSelector.setName(&quot;setIntArray&quot;)
+    methodSelector.setParameterTypes($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Class&quot;), $plugins.loadClass(&quot;[I&quot;)))
+})
+// 调用无参静态方法并获取返回值
+$console.log(&quot;调用静态方法并获取返回值&quot;, $objectWrappers.wrap(reflector.invokeMethod(null, null, (methodSelector) =&gt; {
+    methodSelector.setPublic(true)
+    methodSelector.setName(&quot;getIntArray&quot;)
+})).contentToString())</div><aside class="prompt" data-type="tip" data-title="" id="kqy56i_55"><p id="kqy56i_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/MethodSelector/setPublic.js" id="kqy56i_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/MethodSelector/setPublic.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="kqy56i_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local reflector = _reflectors:reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+local realParams = _arrays:intArrayOf(1, 2, 3, 4)
+local wrappedParams = _arrays:newArray(_plugins:loadClass(&quot;java.lang.Object&quot;), 1)
+_objectWrappers:wrap(wrappedParams):set(0, realParams)
+-- 调用带有参数的静态方法
+reflector:invokeMethod(nil, wrappedParams, function(methodSelector)
+    methodSelector:setPublic(true)
+    methodSelector:setName(&quot;setIntArray&quot;)
+    methodSelector:setParameterTypes(_arrays:arrayOf(_plugins:loadClass(&quot;java.lang.Class&quot;), _plugins:loadClass(&quot;[I&quot;)))
+end)
+-- 调用无参静态方法并获取返回值
+_console:log(&quot;调用静态方法并获取返回值&quot;, _objectWrappers:wrap(reflector:invokeMethod(nil, nil, function(methodSelector)
+    methodSelector:setPublic(true)
+    methodSelector:setName(&quot;getIntArray&quot;)
+end))                                                   :contentToString())</div><aside class="prompt" data-type="tip" data-title="" id="kqy56i_63"><p id="kqy56i_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/MethodSelector/setPublic.lua" id="kqy56i_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/MethodSelector/setPublic.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="kqy56i_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$reflector = $reflectors-&gt;reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;);
+$realParams = $arrays-&gt;intArrayOf(1, 2, 3, 4);
+$wrappedParams = $arrays-&gt;newArray($plugins-&gt;loadClass(&quot;java.lang.Object&quot;), 1);
+$objectWrappers-&gt;wrap($wrappedParams)-&gt;set(0, $realParams);
+// 调用带有参数的静态方法
+$reflector-&gt;invokeMethod(null, $wrappedParams, function ($methodSelector) use ($arrays, $plugins) {
+    $methodSelector-&gt;setPublic(true);
+    $methodSelector-&gt;setName(&quot;setIntArray&quot;);
+    $methodSelector-&gt;setParameterTypes($arrays-&gt;arrayOf($plugins-&gt;loadClass(&quot;java.lang.Class&quot;), $plugins-&gt;loadClass(&quot;[I&quot;)));
+});
+// 调用无参静态方法并获取返回值
+$console-&gt;log(&quot;调用静态方法并获取返回值&quot;, $objectWrappers-&gt;wrap($reflector-&gt;invokeMethod(null, null, function ($methodSelector) {
+    $methodSelector-&gt;setPublic(true);
+    $methodSelector-&gt;setName(&quot;getIntArray&quot;);
+}))-&gt;contentToString());</div><aside class="prompt" data-type="tip" data-title="" id="kqy56i_71"><p id="kqy56i_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/MethodSelector/setPublic.php" id="kqy56i_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/MethodSelector/setPublic.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="kqy56i_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">reflector = _reflectors.reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+realParams = _arrays.intArrayOf(1, 2, 3, 4)
+wrappedParams = _arrays.newArray(_plugins.loadClass(&quot;java.lang.Object&quot;), 1)
+_objectWrappers.wrap(wrappedParams).set(0, realParams)
+
+
+def fn1(methodSelector):
+    methodSelector.setPublic(True)
+    methodSelector.setName(&quot;setIntArray&quot;)
+    methodSelector.setParameterTypes(_arrays.arrayOf(_plugins.loadClass(&quot;java.lang.Class&quot;), _plugins.loadClass(&quot;[I&quot;)))
+
+
+# 调用带有参数的静态方法
+reflector.invokeMethod(None, wrappedParams, fn1)
+
+
+def fn2(methodSelector):
+    methodSelector.setPublic(True)
+    methodSelector.setName(&quot;getIntArray&quot;)
+
+
+# 调用无参静态方法并获取返回值
+_console.log(&quot;调用静态方法并获取返回值&quot;,
+             _objectWrappers.wrap(reflector.invokeMethod(None, None, fn2)).contentToString())
+</div><aside class="prompt" data-type="tip" data-title="" id="kqy56i_79"><p id="kqy56i_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/MethodSelector/setPublic.py" id="kqy56i_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/MethodSelector/setPublic.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="kqy56i_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+reflector = $reflectors.reflect(&quot;com.m8test.script.core.impl.JavaTypeTester&quot;)
+realParams = $arrays.intArrayOf(1, 2, 3, 4)
+wrappedParams = $arrays.newArray($plugins.loadClass(&quot;java.lang.Object&quot;), 1)
+$objectWrappers.wrap(wrappedParams).set(0, realParams)
+# 调用带有参数的静态方法
+reflector.invokeMethod(nil, wrappedParams) { |methodSelector|
+  methodSelector.setPublic(true)
+  methodSelector.setName(&quot;setIntArray&quot;)
+  methodSelector.setParameterTypes($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Class&quot;), $plugins.loadClass(&quot;[I&quot;)))
+}
+# 调用无参静态方法并获取返回值
+$console.log(&quot;调用静态方法并获取返回值&quot;, $objectWrappers.wrap(reflector.invokeMethod(nil, nil) { |methodSelector|
+  methodSelector.setPublic(true)
+  methodSelector.setName(&quot;getIntArray&quot;)
+}).contentToString())</div><aside class="prompt" data-type="tip" data-title="" id="kqy56i_87"><p id="kqy56i_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/MethodSelector/setPublic.rb" id="kqy56i_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/MethodSelector/setPublic.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="methodselector-setparametertypes.html" class="navigation-links__prev">setParameterTypes</a><a href="newscriptthread.html" class="navigation-links__next">NewScriptThread</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:34:03.063569201"><title>listOf | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="listOf | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/iterables-listof.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="listOf | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/iterables-listof.html#webpage",
+    "url": "writerside-documentation/iterables-listof.html",
+    "name": "listOf | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="Iterables.listOf" data-main-title="listOf" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///Iterables.md|Iterables"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="Iterables.listOf" id="Iterables.listOf.md">listOf</h1><aside class="prompt" data-type="tip" data-title="" id="-jtigob_7"><p id="-jtigob_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.collections/-iterables/list-of.html" id="-jtigob_12" data-external="true" rel="noopener noreferrer" target="_blank">Iterables.listOf()</a></p></aside><div class="tabs" id="-jtigob_10" data-group="languages" data-anchors="[-jtigob_15,-jtigob_18,-jtigob_21,-jtigob_24,-jtigob_27,-jtigob_30,-jtigob_33]"><div class="tabs__content" data-gtm="tab" id="-jtigob_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val l = listOf(1, 2, 3)
+// 不可变 List 无法修改
+//l.add(4)
+//l.add(5)
+//l.add(6)
+l.forEach {
+    _console.log(it)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-jtigob_39"><p id="-jtigob_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/Iterables/listOf.kts" id="-jtigob_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/Iterables/listOf.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-jtigob_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def l = $iterables.listOf(1, 2, 3)
+// 不可变 List 无法修改
+//l.add(4)
+//l.add(5)
+//l.add(6)
+$objectWrappers.wrap(l).forEach {
+    $console.log(it)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-jtigob_47"><p id="-jtigob_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/Iterables/listOf.groovy" id="-jtigob_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/Iterables/listOf.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-jtigob_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let l = $iterables.listOf(1, 2, 3)
+// 不可变 List 无法修改
+//l.add(4)
+//l.add(5)
+//l.add(6)
+$objectWrappers.wrap(l).forEach((it) =&gt; {
+    $console.log(it)
+})</div><aside class="prompt" data-type="tip" data-title="" id="-jtigob_55"><p id="-jtigob_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/Iterables/listOf.js" id="-jtigob_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/Iterables/listOf.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-jtigob_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local l = _iterables:listOf(1, 2, 3)
+-- 不可变 List 无法修改
+--l:add(4)
+--l:add(5)
+--l:add(6)
+_objectWrappers:wrap(l):forEach(function(it)
+    _console:log(it)
+end)
+</div><aside class="prompt" data-type="tip" data-title="" id="-jtigob_63"><p id="-jtigob_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/Iterables/listOf.lua" id="-jtigob_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/Iterables/listOf.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-jtigob_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$l = $iterables-&gt;listOf(1, 2, 3);
+// 不可变 List 无法修改
+//l.add(4)
+//l.add(5)
+//l.add(6)
+$objectWrappers-&gt;wrap($l)-&gt;forEach(function ($it) use ($console) {
+    $console-&gt;log($it);
+});</div><aside class="prompt" data-type="tip" data-title="" id="-jtigob_71"><p id="-jtigob_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/Iterables/listOf.php" id="-jtigob_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/Iterables/listOf.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-jtigob_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">l = _iterables.listOf(1, 2, 3)
+
+
+# 不可变 List 无法修改
+# l.add(4)
+# l.add(5)
+# l.add(6)
+def fn(it):
+    _console.log(it)
+
+
+_objectWrappers.wrap(l).forEach(fn)
+</div><aside class="prompt" data-type="tip" data-title="" id="-jtigob_79"><p id="-jtigob_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/Iterables/listOf.py" id="-jtigob_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/Iterables/listOf.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="-jtigob_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">l = $iterables.listOf(1, 2, 3)
+# 不可变 List 无法修改
+# l.add(4)
+# l.add(5)
+# l.add(6)
+$objectWrappers.wrap(l).forEach { |it|
+  $console.log(it)
+}</div><aside class="prompt" data-type="tip" data-title="" id="-jtigob_87"><p id="-jtigob_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/Iterables/listOf.rb" id="-jtigob_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/Iterables/listOf.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="iterables.html" class="navigation-links__prev">Iterables</a><a href="iterables-mutablelistof.html" class="navigation-links__next">mutableListOf</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

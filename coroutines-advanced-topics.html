@@ -1,0 +1,1401 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.574604071"><title>高级主题 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"-8iuksm_3","level":0,"title":"协作式取消","anchor":"#-8iuksm_3"},{"id":"-8iuksm_4","level":0,"title":"控制执行线程","anchor":"#-8iuksm_4"},{"id":"-8iuksm_5","level":0,"title":"懒加载协程","anchor":"#-8iuksm_5"},{"id":"withtimeout-withtimeoutornull","level":0,"title":"超时(withTimeout 与 withTimeoutOrNull)","anchor":"#withtimeout-withtimeoutornull"},{"id":"-8iuksm_7","level":0,"title":"异常处理","anchor":"#-8iuksm_7"},{"id":"api","level":0,"title":"适配回调式 api","anchor":"#api"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="高级主题 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/coroutines-advanced-topics.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="高级主题 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/coroutines-advanced-topics.html#webpage",
+    "url": "writerside-documentation/coroutines-advanced-topics.html",
+    "name": "高级主题 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="coroutines-advanced-topics" data-main-title="高级主题" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="coroutines.md|协程"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="coroutines-advanced-topics" id="coroutines-advanced-topics.md">高级主题</h1><section class="chapter"><h2 id="-8iuksm_3" data-toc="-8iuksm_3">协作式取消</h2><p id="-8iuksm_9">协程的取消是&ldquo;协作式&rdquo;的，这意味着协程代码需要主动检查自己是否被取消。所有本库提供的挂起函数（如 delay）都会自动进行这种检查。</p><aside class="prompt" data-type="tip" data-title="" id="-8iuksm_10"><p id="-8iuksm_11">注意事项：请绝对避免在协程内部使用阻塞式的 $threads.sleep() 。它会冻结线程，使协程无法响应取消，导致资源无法及时释放。请始终使用非阻塞的 scope.delay()。</p></aside></section><section class="chapter"><h2 id="-8iuksm_4" data-toc="-8iuksm_4">控制执行线程</h2><p id="-8iuksm_12">使用 scope.withContext 可以在不同的线程池（调度器）之间安全地切换，而无需手动管理回调。</p><div class="tabs" id="-8iuksm_16" data-group="languages" data-anchors="[-8iuksm_19,-8iuksm_22,-8iuksm_25,-8iuksm_28,-8iuksm_31,-8iuksm_34,-8iuksm_37,-8iuksm_40]"><div class="tabs__content" data-gtm="tab" id="-8iuksm_19" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+_threads.getMain().setBackground(true)
+// 修复：newScope 块移除显式参数 it -&gt;，直接调用 setDispatcher
+val scope = _coroutines.newScope {
+    setDispatcher { dispatchers -&gt; dispatchers.getDefault() }
+}
+
+// 修复：launch 块移除显式参数
+scope.launch(null, null) {
+    _console.log(&quot;当前在默认线程池上: &quot; + Thread.currentThread().name)
+
+    // 修复：withContext 的 contextBuilder 块移除显式参数
+    withContext({
+        // 在配置块中指定要切换到的调度器
+        setDispatcher { dispatchers -&gt; dispatchers.getScriptMain() }
+    }) {
+        // 修复：block 移除显式参数 innerScope -&gt;
+        // 这个闭包内的代码将在脚本主线程上执行
+        _console.log(&quot;已切换到脚本主线程: &quot; + Thread.currentThread().name)
+        &quot;脚本主线程&quot;
+    }
+
+    // 修复：withContext 参数
+    withContext({ setDispatcher { dispatchers -&gt; dispatchers.getAndroidMain() } }) {
+        _console.log(&quot;已切换到 Android UI 线程: &quot; + Thread.currentThread().name)
+        &quot;Android UI线程&quot;
+    }
+}</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_22" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope {
+    it.setDispatcher { dispatchers -&gt; dispatchers.getDefault() }
+}
+
+scope.launch(null, null, { coroutineScope -&gt;
+    $console.log(&quot;当前在默认线程池上: &quot; + Thread.currentThread().getName())
+    coroutineScope.withContext({ context -&gt;
+        // 在配置块中指定要切换到的调度器
+        context.setDispatcher { dispatchers -&gt; dispatchers.getScriptMain() }
+    }, { innerScope -&gt;
+        // 这个闭包内的代码将在脚本主线程上执行
+        $console.log(&quot;已切换到脚本主线程: &quot; + Thread.currentThread().getName())
+        &quot;脚本主线程&quot;
+    })
+    coroutineScope.withContext({ context -&gt; context.setDispatcher { dispatchers -&gt; dispatchers.getAndroidMain() } }) {
+        $console.log(&quot;已切换到 Android UI 线程: &quot; + Thread.currentThread().getName())
+        &quot;Android UI线程&quot;
+    }
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_25" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_28" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(it =&gt; {
+    it.setDispatcher(dispatchers =&gt; dispatchers.getDefault());
+});
+
+scope.launch(null, null, coroutineScope =&gt; {
+    $console.log(&quot;当前在默认线程池上: &quot; + Packages.java.lang.Thread.currentThread().getName());
+    coroutineScope.withContext(context =&gt; {
+        // 在配置块中指定要切换到的调度器
+        context.setDispatcher(dispatchers =&gt; dispatchers.getScriptMain());
+    }, innerScope =&gt; {
+        // 这个闭包内的代码将在脚本主线程上执行
+        $console.log(&quot;已切换到脚本主线程: &quot; + Packages.java.lang.Thread.currentThread().getName());
+        return &quot;脚本主线程&quot;;
+    });
+    coroutineScope.withContext(context =&gt; context.setDispatcher(dispatchers =&gt; dispatchers.getAndroidMain()),
+        innerScope =&gt; {
+            $console.log(&quot;已切换到 Android UI 线程: &quot; + Packages.java.lang.Thread.currentThread().getName());
+            return &quot;Android UI线程&quot;;
+        });
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_31" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入 java.lang.Thread 类，这是修复的关键点
+local Thread = require(&quot;m8test_java.java.lang.Thread&quot;)
+
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(function(it)
+    it:setDispatcher(function(dispatchers) return dispatchers:getDefault() end)
+end)
+
+scope:launch(nil, nil, function(coroutineScope)
+    _console:log(&quot;当前在默认线程池上: &quot; .. Thread:currentThread():getName())
+    coroutineScope:withContext(function(context)
+        -- 在配置块中指定要切换到的调度器
+        context:setDispatcher(function(dispatchers) return dispatchers:getScriptMain() end)
+    end, function(innerScope)
+        -- 这个闭包内的代码将在脚本主线程上执行
+        _console:log(&quot;已切换到脚本主线程: &quot; .. Thread:currentThread():getName())
+        return &quot;脚本主线程&quot;
+    end)
+    coroutineScope:withContext(function(context) context:setDispatcher(function(dispatchers) return dispatchers:getAndroidMain() end) end, function()
+        _console:log(&quot;已切换到 Android UI 线程: &quot; .. Thread:currentThread():getName())
+        return &quot;Android UI线程&quot;
+    end)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_34" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+use m8test_java\java\lang\Thread;
+
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$scope-&gt;launch(null, null, function ($coroutineScope) {
+    global $console;
+    $console-&gt;log(javaString(&quot;当前在默认线程池上: &quot;) . Thread::currentThread()-&gt;getName());
+    $coroutineScope-&gt;withContext(function ($context) {
+        // 在配置块中指定要切换到的调度器
+        $context-&gt;setDispatcher(function ($dispatchers) {
+            return $dispatchers-&gt;getScriptMain();
+        });
+    }, function ($innerScope) {
+        global $console;
+        // 这个闭包内的代码将在脚本主线程上执行
+        $console-&gt;log(javaString(&quot;已切换到脚本主线程: &quot;) . Thread::currentThread()-&gt;getName());
+        return javaString(&quot;脚本主线程&quot;);
+    });
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_37" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入Python标准库
+import threading
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+
+scope.launch(None, None, lambda coroutineScope: (
+    _console.log(&quot;当前在脚本主线程上: &quot; + threading.current_thread().name),
+    coroutineScope.withContext(
+        lambda context: context.setDispatcher(lambda dispatchers: dispatchers.getAndroidMain()),
+        lambda innerScope: (
+            _console.log(&quot;已切换到 Android UI 线程: &quot; + threading.current_thread().name),
+            &quot;Android UI线程&quot;
+        )
+    )
+))
+</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_40" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope do |it|
+  it.setDispatcher { |dispatchers| dispatchers.getDefault() }
+end
+
+scope.launch(nil, nil) do |coroutineScope|
+  $console.log(&quot;当前在默认线程池上: &quot; + Java::JavaLang::Thread.currentThread().getName())
+  coroutineScope.withContext(lambda do |context|
+    # 在配置块中指定要切换到的调度器
+    context.setDispatcher { |dispatchers| dispatchers.getScriptMain() }
+  end) do |innerScope|
+    # 这个闭包内的代码将在脚本主线程上执行
+    $console.log(&quot;已切换到脚本主线程: &quot; + Java::JavaLang::Thread.currentThread().getName())
+    &quot;脚本主线程&quot;
+  end
+  coroutineScope.withContext(lambda { |context| context.setDispatcher { |dispatchers| dispatchers.getAndroidMain() } }) do
+    $console.log(&quot;已切换到 Android UI 线程: &quot; + Java::JavaLang::Thread.currentThread().getName())
+    &quot;Android UI线程&quot;
+  end
+end</div></div></div></section><section class="chapter"><h2 id="-8iuksm_5" data-toc="-8iuksm_5">懒加载协程</h2><p id="-8iuksm_89">默认情况下，launch 和 async 会立即调度协程执行。但你可以通过 start 参数将其设置为懒加载模式，这样协程只会在被需要时（例如调用 job.start()）才真正开始。</p><div class="tabs" id="-8iuksm_93" data-group="languages" data-anchors="[-8iuksm_102,-8iuksm_105,-8iuksm_108,-8iuksm_111,-8iuksm_114,-8iuksm_117,-8iuksm_96,-8iuksm_99]"><div class="tabs__content" data-gtm="tab" id="-8iuksm_96" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 6.4: 使用懒加载模式
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.log(&quot;创建一个懒加载的 Deferred...&quot;)
+
+// 使用 CoroutineStarts.getLazy() 来设置启动模式
+// 注意：start 参数是 (CoroutineStarts) -&gt; CoroutineStart，这里需要保留参数 starts -&gt;
+// 修复：block 参数是 CoroutineScope.() -&gt; T，需要移除 s -&gt;
+val lazyDeferred = scope.async(null, { starts -&gt; starts.getLazy() }) {
+    _console.log(&quot;懒加载的协程现在才真正开始执行！&quot;)
+    delay(1500).then { innerScope, _ -&gt; innerScope.resolve(&quot;懒加载的结果&quot;) }
+}
+
+_console.log(&quot;Deferred 已创建，但内部代码尚未执行。&quot;)
+_console.log(&quot;任务状态: isActive=&quot; + lazyDeferred.isActive() + &quot;, isCompleted=&quot; + lazyDeferred.isCompleted())
+
+scope.delay(1000).then { s, _ -&gt;
+    _console.log(&quot;\n1秒后... 准备启动任务...&quot;)
+
+    // 手动启动任务
+    lazyDeferred.start()
+    // 或者，如果你需要结果，可以直接调用 .then()，它们会自动触发启动
+    lazyDeferred
+        .then { innerScope, result -&gt; result }
+        .then { innerScope, result -&gt;
+            _console.log(&quot;懒加载任务完成，结果是: &quot; + result)
+            innerScope.resolve(null)
+        }
+}</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_99" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 6.4: 使用懒加载模式
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.log(&quot;创建一个懒加载的 Deferred...&quot;)
+
+// 使用 CoroutineStarts.getLazy() 来设置启动模式
+def lazyDeferred = scope.async(null, { starts -&gt; starts.getLazy() }, { s -&gt;
+    $console.log(&quot;懒加载的协程现在才真正开始执行！&quot;)
+    s.delay(1500).then({ innerScope, _ -&gt; innerScope.resolve(&quot;懒加载的结果&quot;) })
+})
+
+$console.log(&quot;Deferred 已创建，但内部代码尚未执行。&quot;)
+$console.log(&quot;任务状态: isActive=&quot; + lazyDeferred.isActive() + &quot;, isCompleted=&quot; + lazyDeferred.isCompleted())
+
+scope.delay(1000).then({ s, _ -&gt;
+    $console.log(&quot;\n1秒后... 准备启动任务...&quot;)
+
+    // 手动启动任务
+    lazyDeferred.start()
+    // 或者，如果你需要结果，可以直接调用 .then()，它们会自动触发启动
+    lazyDeferred
+            .then({ innerScope, result -&gt; result })
+            .then { innerScope, result -&gt;
+                $console.log(&quot;懒加载任务完成，结果是: &quot; + result)
+                innerScope.resolve(null)
+            }
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_102" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_105" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 6.4: 使用懒加载模式
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.log(&quot;创建一个懒加载的 Deferred...&quot;);
+
+// 使用 CoroutineStarts.getLazy() 来设置启动模式
+const lazyDeferred = scope.async(null, starts =&gt; starts.getLazy(), s =&gt; {
+    $console.log(&quot;懒加载的协程现在才真正开始执行！&quot;);
+    return s.delay(1500).then((innerScope, _) =&gt; {
+        return innerScope.resolve(&quot;懒加载的结果&quot;)
+    });
+});
+
+$console.log(&quot;Deferred 已创建，但内部代码尚未执行。&quot;);
+$console.log(&quot;任务状态: isActive=&quot; + lazyDeferred.isActive() + &quot;, isCompleted=&quot; + lazyDeferred.isCompleted());
+
+scope.delay(1000).then((s, _) =&gt; {
+    $console.log(&quot;\n1秒后... 准备启动任务...&quot;);
+
+    // 手动启动任务
+    lazyDeferred.start();
+    // 或者，如果你需要结果，可以直接调用 .then()，它们会自动触发启动
+    return lazyDeferred
+        .then((innerScope, result) =&gt; {
+            // 根据API，then的处理器需要返回一个新的Deferred，这里我们用resolve包装结果
+            return result;
+        })
+        .then((innerScope, result) =&gt; {
+            $console.log(&quot;懒加载任务完成，结果是: &quot; + result);
+            return innerScope.resolve(null);
+        });
+}).onError(error =&gt; {
+    $console.error(&quot;懒加载任务出错: &quot; + error);
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_108" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 6.4: 使用懒加载模式
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:log(&quot;创建一个懒加载的 Deferred...&quot;)
+
+-- 使用 CoroutineStarts.getLazy() 来设置启动模式
+local lazyDeferred = scope:async(nil, function(starts) return starts:getLazy() end, function(s)
+    _console:log(&quot;懒加载的协程现在才真正开始执行！&quot;)
+    return s:delay(1500):_then(function(innerScope, _)
+        return innerScope:resolve(&quot;懒加载的结果&quot;) end)
+end)
+
+_console:log(&quot;Deferred 已创建，但内部代码尚未执行。&quot;)
+_console:log(&quot;任务状态: isActive=&quot; .. tostring(lazyDeferred:isActive()) .. &quot;, isCompleted=&quot; .. tostring(lazyDeferred:isCompleted()))
+
+scope:delay(1000):_then(function(s, _)
+    _console:log(&quot;\n1秒后... 准备启动任务...&quot;)
+
+    -- 手动启动任务
+    lazyDeferred:start()
+    -- 或者，如果你需要结果，可以直接调用 ._then()，它们会自动触发启动
+    return lazyDeferred
+            :_then(function(innerScope, result)
+                return result end)
+            :_then(function(innerScope, result)
+                _console:log(&quot;懒加载任务完成，结果是: &quot; , result)
+                return innerScope:resolve(nil)
+            end)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_111" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 6.4: 使用懒加载模式
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;log(javaString(&quot;创建一个懒加载的 Deferred...&quot;));
+
+// 使用 CoroutineStarts.getLazy() 来设置启动模式
+$lazyDeferred = $scope-&gt;async(null, function ($starts) {
+    return $starts-&gt;getLazy();
+}, function ($s) {
+    global $console;
+    $console-&gt;log(javaString(&quot;懒加载的协程现在才真正开始执行！&quot;));
+    return $s-&gt;delay(1500)-&gt;then(function ($innerScope, $_) {
+        return $innerScope-&gt;resolve(javaString(&quot;懒加载的结果&quot;));
+    });
+});
+
+$console-&gt;log(javaString(&quot;Deferred 已创建，但内部代码尚未执行。&quot;));
+$console-&gt;log(javaString(&quot;任务状态: isActive=&quot;) . ($lazyDeferred-&gt;isActive() ? 'true' : 'false') . javaString(&quot;, isCompleted=&quot;) . ($lazyDeferred-&gt;isCompleted() ? 'true' : 'false'));
+
+$scope-&gt;delay(1000)-&gt;then(function ($s, $_) use ($lazyDeferred) {
+    global $console;
+    $console-&gt;log(javaString(&quot;\n1秒后... 准备启动任务...&quot;));
+
+    // 手动启动任务
+    $lazyDeferred-&gt;start();
+    // 或者，如果你需要结果，可以直接调用 .then()，它们会自动触发启动
+    $lazyDeferred
+        -&gt;then(function ($innerScope, $result) {
+            return $result;
+        })
+        -&gt;then(function ($innerScope, $result) {
+            global $console;
+            $console-&gt;log(javaString(&quot;懒加载任务完成，结果是: &quot;) . $result);
+            return $innerScope-&gt;resolve(null);
+        });
+    return $s-&gt;resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_114" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 6.4: 使用懒加载模式
+#
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+_console.log(&quot;创建一个懒加载的 Deferred...&quot;)
+
+# 使用 CoroutineStarts.getLazy() 来设置启动模式
+# Remember to use _async for scope.async
+lazyDeferred = scope._async(None, lambda starts: starts.getLazy(), lambda s: (
+    _console.log(&quot;懒加载的协程现在才真正开始执行！&quot;),
+    s.delay(1500).then(lambda innerScope, _: innerScope.resolve(&quot;懒加载的结果&quot;))
+)[-1])
+
+_console.log(&quot;Deferred 已创建，但内部代码尚未执行。&quot;)
+_console.log(&quot;任务状态: isActive=&quot; + str(lazyDeferred.isActive()) + &quot;, isCompleted=&quot; + str(lazyDeferred.isCompleted()))
+
+scope.delay(1000).then(lambda sc, _: (
+    _console.log(&quot;\n1秒后... 准备启动任务...&quot;),
+    # 手动启动任务
+    lazyDeferred.start(),
+    # 或者，如果你需要结果，可以直接调用 .then()，它们会自动触发启动
+    lazyDeferred
+    .then(lambda i, result: result)
+    .then(lambda s, result: (
+        _console.log(&quot;懒加载任务完成，结果是: &quot; + str(result)),
+        s.resolve(None)
+    )[-1])
+)[-1])
+</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_117" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 6.4: 使用懒加载模式
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.log(&quot;创建一个懒加载的 Deferred...&quot;)
+
+# 使用 CoroutineStarts.getLazy() 来设置启动模式
+lazyDeferred = scope.async(nil, lambda { |starts| starts.getLazy() }) do |s|
+  $console.log(&quot;懒加载的协程现在才真正开始执行！&quot;)
+  s.delay(1500).then { |innerScope, _| innerScope.resolve(&quot;懒加载的结果&quot;) }
+end
+
+$console.log(&quot;Deferred 已创建，但内部代码尚未执行。&quot;)
+$console.log(&quot;任务状态: isActive=&quot; + lazyDeferred.isActive().to_s + &quot;, isCompleted=&quot; + lazyDeferred.isCompleted().to_s)
+
+scope.delay(1000).then do |s, _|
+  $console.log(&quot;\n1秒后... 准备启动任务...&quot;)
+
+  # 手动启动任务
+  lazyDeferred.start()
+  # 或者，如果你需要结果，可以直接调用 .then()，它们会自动触发启动
+  lazyDeferred
+    .then(lambda { |innerScope, result| result })
+    .then do |innerScope, result|
+    $console.log(&quot;懒加载任务完成，结果是: &quot; + result)
+    innerScope.resolve(nil)
+  end
+end</div></div></div></section><section class="chapter"><h2 id="withtimeout-withtimeoutornull" data-toc="withtimeout-withtimeoutornull">超时(withTimeout 与 withTimeoutOrNull)</h2><p id="-8iuksm_166">为异步操作设置超时是一个常见的需求。本库提供了两个便利的函数来处理这种情况。</p><ul class="list _bullet" id="-8iuksm_167"><li class="list__item" id="-8iuksm_172"><p id="-8iuksm_174">scope.withTimeout(millis) : 在指定时间内运行代码块。如果超时，返回的 Deferred 会因 TimeoutCancellationException 而失败。</p></li><li class="list__item" id="-8iuksm_173"><p id="-8iuksm_175">scope.withTimeoutOrNull(millis) : 行为类似，但超时后返回的 Deferred 会成功完成，其结果为 null，而不是抛出异常。</p></li></ul><div class="tabs" id="-8iuksm_171" data-group="languages" data-anchors="[-8iuksm_178,-8iuksm_181,-8iuksm_184,-8iuksm_187,-8iuksm_190,-8iuksm_193,-8iuksm_196,-8iuksm_199]"><div class="tabs__content" data-gtm="tab" id="-8iuksm_178" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 7.1: 演示超时处理
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+// 案例 1: withTimeout，将会失败
+_console.log(&quot;测试 withTimeout (预期会失败)...&quot;)
+scope.withTimeout(500) {
+    // 这个任务需要 1 秒，但超时只有 500 毫秒
+    // 注意: withTimeout 的 block 是 CoroutineScope.() -&gt; T，所以可以直接调用 delay
+    delay(1000).then { innerScope, _ -&gt;
+        innerScope.resolve(&quot;这个结果永远不会返回&quot;)
+    }
+}.then { s, r -&gt;
+    _console.log(&quot;withTimeout(预期会失败): 这个应该不会打印&quot;, r)
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;withTimeout(预期失败)成功捕获到超时异常&quot;)
+}
+
+// 案例 2: withTimeout，将会成功
+scope.delay(2000).then { s1, _ -&gt;
+    _console.log(&quot;测试 withTimeout (预期会成功)...&quot;)
+    // 这里使用了外部的 scope，也可以使用 s1
+    scope.withTimeout(500) {
+        // 这个任务需要 100 毫秒，超时有 500 毫秒
+        delay(100).then { innerScope, u -&gt;
+            innerScope.resolve(&quot;这个结果会返回&quot;)
+        }
+    }
+}.then { s, r -&gt;
+    _console.log(&quot;withTimeout(预期会成功): 这个应该会打印&quot;, r)
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;成功捕获到超时异常: &quot; + error)
+}
+
+// 案例 3: withTimeoutOrNull，将会返回 null
+scope.delay(3000).then { s, _ -&gt;
+    _console.log(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;)
+    s.withTimeoutOrNull(500) {
+        // 这里的 this 是新的 CoroutineScope
+        delay(1000).then { innerS, u -&gt;
+            innerS.resolve(&quot;这个结果也永远不会返回&quot;)
+        }
+    }
+}.then { innerS, result -&gt;
+    val msg = if (result == null) &quot;null (符合预期)&quot; else result
+    _console.log(&quot;withTimeoutOrNull(预期失败) 的结果是: &quot; + msg)
+    innerS.resolve(null)
+}
+
+// 案例 4: withTimeoutOrNull，会返回给定的数据
+scope.delay(4000).then { s, _ -&gt;
+    _console.log(&quot;\n测试 withTimeoutOrNull (预期返回给定的数据)...&quot;)
+    s.withTimeoutOrNull(500) {
+        delay(100).then { innerS, u -&gt;
+            innerS.resolve(&quot;这个结果会返回&quot;)
+        }
+    }
+}.then { innerS, result -&gt;
+    val msg = if (result == null) &quot;null (符合预期)&quot; else result
+    _console.log(&quot;withTimeoutOrNull(预期成功) 的结果是: &quot; + msg)
+    innerS.resolve(null)
+}</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_181" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 7.1: 演示超时处理
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+// 案例 1: withTimeout，将会失败
+$console.log(&quot;测试 withTimeout (预期会失败)...&quot;)
+scope.withTimeout(500, { s -&gt;
+    // 这个任务需要 1 秒，但超时只有 500 毫秒
+    return s.delay(1000).then({ innerScope, _ -&gt;
+        return innerScope.resolve(&quot;这个结果永远不会返回&quot;)
+    })
+}).then { s, r -&gt;
+    $console.log(&quot;withTimeout(预期会失败): 这个应该不会打印&quot;, r)
+    return s.resolve(null)
+}.onError({ error -&gt;
+    $console.error(&quot;withTimeout(预期失败)成功捕获到超时异常&quot;)
+})
+
+// 案例 2: withTimeout，将会成功
+scope.delay(2000).then({ s1, _ -&gt;
+    $console.log(&quot;测试 withTimeout (预期会成功)...&quot;)
+    return scope.withTimeout(500, { s -&gt;
+        // 这个任务需要 100 毫秒，超时有 500 毫秒
+        return s.delay(100).then({ innerScope, u -&gt;
+            return innerScope.resolve(&quot;这个结果会返回&quot;)
+        })
+    })
+}).then { s, r -&gt;
+    $console.log(&quot;withTimeout(预期会成功): 这个应该会打印&quot;, r)
+    return s.resolve(null)
+}.onError({ error -&gt;
+    $console.error(&quot;成功捕获到超时异常: &quot; + error.stackTraceToString())
+})
+
+// 案例 3: withTimeoutOrNull，将会返回 null
+scope.delay(3000).then({ s, _ -&gt;
+    $console.log(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;)
+    return s.withTimeoutOrNull(500, { innerS -&gt;
+        return innerS.delay(1000).then({ s1, u -&gt;
+            return innerS.resolve(&quot;这个结果也永远不会返回&quot;)
+        })
+    })
+}).then({ innerS, result -&gt;
+    $console.log(&quot;withTimeoutOrNull(预期失败) 的结果是: &quot; + (result == null ? &quot;null (符合预期)&quot; : result))
+    return innerS.resolve(null)
+})
+
+// 案例 4: withTimeoutOrNull，会返回给定的数据
+scope.delay(4000).then({ s, _ -&gt;
+    $console.log(&quot;\n测试 withTimeoutOrNull (预期返回给定的数据)...&quot;)
+    return s.withTimeoutOrNull(500, { innerS -&gt;
+        return innerS.delay(100).then({ s1, u -&gt;
+            return innerS.resolve(&quot;这个结果会返回&quot;)
+        })
+    })
+}).then({ innerS, result -&gt;
+    $console.log(&quot;withTimeoutOrNull(预期成功) 的结果是: &quot; + (result == null ? &quot;null (符合预期)&quot; : result))
+    return innerS.resolve(null)
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_184" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_187" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 7.1: 演示超时处理
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+// 案例 1: withTimeout，将会失败
+$console.log(&quot;测试 withTimeout (预期会失败)...&quot;);
+scope.withTimeout(500, s =&gt; {
+    // 这个任务需要 1 秒，但超时只有 500 毫秒
+    return s.delay(1000).then((innerScope, _) =&gt; {
+        return innerScope.resolve(&quot;这个结果永远不会返回&quot;);
+    });
+}).then((s, r) =&gt; {
+    $console.log(&quot;withTimeout(预期会失败): 这个应该不会打印&quot;, r);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;withTimeout(预期失败)成功捕获到超时异常&quot;);
+});
+
+// 案例 2: withTimeout，将会成功
+scope.delay(2000).then((s1, _) =&gt; {
+    $console.log(&quot;测试 withTimeout (预期会成功)...&quot;);
+    return scope.withTimeout(500, s =&gt; {
+        // 这个任务需要 100 毫秒，超时有 500 毫秒
+        return s.delay(100).then((innerScope, u) =&gt; {
+            return innerScope.resolve(&quot;这个结果会返回&quot;);
+        });
+    });
+}).then((s, r) =&gt; {
+    $console.log(&quot;withTimeout(预期会成功): 这个应该会打印&quot;, r);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;成功捕获到超时异常: &quot; + error.stackTraceToString());
+});
+
+// 案例 3: withTimeoutOrNull，将会返回 null
+scope.delay(3000).then((s, _) =&gt; {
+    $console.log(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;);
+    return s.withTimeoutOrNull(500, innerS =&gt; {
+        return innerS.delay(1000).then((s1, u) =&gt; {
+            return innerS.resolve(&quot;这个结果也永远不会返回&quot;);
+        });
+    });
+}).then((innerS, result) =&gt; {
+    $console.log(&quot;withTimeoutOrNull(预期失败) 的结果是: &quot; + (result == null ? &quot;null (符合预期)&quot; : result));
+    return innerS.resolve(null);
+});
+
+// 案例 4: withTimeoutOrNull，会返回给定的数据
+scope.delay(4000).then((s, _) =&gt; {
+    $console.log(&quot;\n测试 withTimeoutOrNull (预期返回给定的数据)...&quot;);
+    return s.withTimeoutOrNull(500, innerS =&gt; {
+        return innerS.delay(100).then((s1, u) =&gt; {
+            return innerS.resolve(&quot;这个结果会返回&quot;);
+        });
+    });
+}).then((innerS, result) =&gt; {
+    $console.log(&quot;withTimeoutOrNull(预期成功) 的结果是: &quot; + (result == null ? &quot;null (符合预期)&quot; : result));
+    return innerS.resolve(null);
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_190" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 7.1: 演示超时处理
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+-- 案例 1: withTimeout，将会失败
+_console:log(&quot;测试 withTimeout (预期会失败)...&quot;)
+scope:withTimeout(500, function(s)
+    -- 这个任务需要 1 秒，但超时只有 500 毫秒
+    return s:delay(1000):_then(function(innerScope, _)
+        return innerScope:resolve(&quot;这个结果永远不会返回&quot;)
+    end)
+end):_then(function(s, r)
+    _console:log(&quot;withTimeout(预期会失败): 这个应该不会打印&quot;, r)
+    return s:resolve(nil)
+end):onError(function(error)
+    _console:error(&quot;withTimeout(预期失败)成功捕获到超时异常&quot;)
+end)
+
+-- 案例 2: withTimeout，将会成功
+scope:delay(2000):_then(function(s1, _)
+    _console:log(&quot;测试 withTimeout (预期会成功)...&quot;)
+    return scope:withTimeout(500, function(s)
+        -- 这个任务需要 100 毫秒，超时有 500 毫秒
+        return s:delay(100):_then(function(innerScope, u)
+            return innerScope:resolve(&quot;这个结果会返回&quot;)
+        end)
+    end)
+end):_then(function(s, r)
+    _console:log(&quot;withTimeout(预期会成功): 这个应该会打印&quot;, r)
+    return s:resolve(nil)
+end):onError(function(error)
+    _console:error(&quot;成功捕获到超时异常: &quot; .. error:stackTraceToString())
+end)
+
+-- 案例 3: withTimeoutOrNull，将会返回 null
+scope:delay(3000):_then(function(s, _)
+    _console:log(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;)
+    return s:withTimeoutOrNull(500, function(innerS)
+        return innerS:delay(1000):_then(function(s1, u)
+            return innerS:resolve(&quot;这个结果也永远不会返回&quot;)
+        end)
+    end)
+end):_then(function(innerS, result)
+    _console:log(&quot;withTimeoutOrNull(预期失败) 的结果是: &quot; .. (result == nil and &quot;null (符合预期)&quot; or result))
+    return innerS:resolve(nil)
+end)
+
+-- 案例 4: withTimeoutOrNull，会返回给定的数据
+scope:delay(4000):_then(function(s, _)
+    _console:log(&quot;\n测试 withTimeoutOrNull (预期返回给定的数据)...&quot;)
+    return s:withTimeoutOrNull(500, function(innerS)
+        return innerS:delay(100):_then(function(s1, u)
+            return innerS:resolve(&quot;这个结果会返回&quot;)
+        end)
+    end)
+end):_then(function(innerS, result)
+    _console:log(&quot;withTimeoutOrNull(预期成功) 的结果是: &quot; .. (result == nil and &quot;null (符合预期)&quot; or result))
+    return innerS:resolve(nil)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_193" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 7.1: 演示超时处理
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 案例 1: withTimeo&lt;?php
+///** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+//global $threads;
+///** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+//global $coroutines;
+///** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+//global $console;
+//
+///*
+// * 完整示例 7.1: 演示超时处理
+// */
+//
+//// --- 样板代码 ---
+//$threads-&gt;getMain()-&gt;setBackground(true);
+//$scope = $coroutines-&gt;newScope(function ($context) {
+//    $context-&gt;setDispatcher(function ($dispatchers) {
+//        return $dispatchers-&gt;getScriptMain();
+//    });
+//});
+//
+//// 案例 1: withTimeout，将会失败
+//$console-&gt;log(javaString(&quot;测试 withTimeout (预期会失败)...&quot;));
+//$scope-&gt;withTimeout(500, function ($s) {
+//    // 这个任务需要 1 秒，但超时只有 500 毫秒
+//    return $s-&gt;delay(1000)-&gt;then(function ($innerScope, $_) {
+//        return $innerScope-&gt;resolve(javaString(&quot;这个结果永远不会返回&quot;));
+//    });
+//})-&gt;then(function ($s, $r) {
+//    global $console;
+//    $console-&gt;log(javaString(&quot;withTimeout(预期会失败): 这个应该不会打印&quot;), $r);
+//    return $s-&gt;resolve(null);
+//})-&gt;onError(function ($error) {
+//    global $console;
+//    $console-&gt;error(javaString(&quot;withTimeout(预期失败)成功捕获到超时异常&quot;));
+//});
+//
+//// 案例 2: withTimeout，将会成功
+//$scope-&gt;delay(2000)-&gt;then(function ($s1, $_) use ($scope) {
+//    global $console;
+//    $console-&gt;log(javaString(&quot;测试 withTimeout (预期会成功)...&quot;));
+//    return $scope-&gt;withTimeout(500, function ($s) {
+//        // 这个任务需要 100 毫秒，超时有 500 毫秒
+//        return $s-&gt;delay(100)-&gt;then(function ($innerScope, $u) {
+//            return $innerScope-&gt;resolve(javaString(&quot;这个结果会返回&quot;));
+//        });
+//    });
+//})-&gt;then(function ($s, $r) {
+//    global $console;
+//    $console-&gt;log(javaString(&quot;withTimeout(预期会成功): 这个应该会打印&quot;), $r);
+//    return $s-&gt;resolve(null);
+//})-&gt;onError(function ($error) {
+//    global $console;
+//    $console-&gt;error(javaString(&quot;成功捕获到超时异常: &quot; . $error-&gt;stackTraceToString()));
+//});
+//
+//// 案例 3: withTimeoutOrNull，将会返回 null
+//$scope-&gt;delay(3000)-&gt;then(function ($s, $_) {
+//    global $console;
+//    $console-&gt;log(javaString(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;));
+//    return $s-&gt;withTimeoutOrNull(500, function ($innerS) {
+//        return $innerS-&gt;delay(1000)-&gt;then(function ($s1, $u) use ($innerS) {
+//            return $innerS-&gt;resolve(javaString(&quot;这个结果也永远不会返回&quot;));
+//        });
+//    });
+//})-&gt;then(function ($innerS, $result) {
+//    global $console;
+//    $console-&gt;log(javaString(&quot;withTimeoutOrNull(预期失败) 的结果是: &quot; . ($result == null ? javaString(&quot;null (符合预期)&quot;) : $result)));
+//    return $innerS-&gt;resolve(null);
+//});
+//
+//// 案例 4: withTimeoutOrNull，会返回给定的数据
+//$scope-&gt;delay(4000)-&gt;then(function ($s, $_) {
+//    global $console;
+//    $console-&gt;log(javaString(&quot;\n测试 withTimeoutOrNull (预期返回给定的数据)...&quot;));
+//    return $s-&gt;withTimeoutOrNull(500, function ($innerS) {
+//        return $innerS-&gt;delay(100)-&gt;then(function ($s1, $u) use ($innerS) {
+//            return $innerS-&gt;resolve(javaString(&quot;这个结果会返回&quot;));
+//        });
+//    });
+//})-&gt;then(function ($innerS, $result) {
+//    global $console;
+//    $console-&gt;log(javaString(&quot;withTimeoutOrNull(预期成功) 的结果是: &quot; . ($result == null ? javaString(&quot;null (符合预期)&quot;) : $result)));
+//    return $innerS-&gt;resolve(null);
+//});ut，将会失败
+$console-&gt;log(javaString(&quot;测试 withTimeout (预期会失败)...&quot;));
+$scope-&gt;withTimeout(500, function ($s) {
+    // 这个任务需要 1 秒，但超时只有 500 毫秒
+    return $s-&gt;delay(1000)-&gt;then(function ($innerScope, $_) {
+        return $innerScope-&gt;resolve(javaString(&quot;这个结果永远不会返回&quot;));
+    });
+})
+    -&gt;then(function ($s, $r) {
+        global $console;
+        $console-&gt;log(javaString(&quot;这个应该不会打印&quot;));
+    })
+    -&gt;onError(function ($error) {
+        global $console;
+        $console-&gt;error(javaString(&quot;成功捕获到超时异常: &quot;) . $error-&gt;getOrigin()-&gt;getClass()-&gt;getName());
+    });
+
+
+// 案例 2: withTimeoutOrNull，将会返回 null
+$scope-&gt;delay(1500)-&gt;then(function ($s, $_) {
+    global $console;
+    $console-&gt;log(javaString(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;));
+    return $s-&gt;withTimeoutOrNull(500, function ($innerS) {
+        return $innerS-&gt;delay(1000)-&gt;then(function ($s1, $u) use ($innerS) {
+            return $innerS-&gt;resolve(javaString(&quot;这个结果也永远不会返回&quot;));
+        });
+    })-&gt;then(function ($innerS, $result) {
+        global $console;
+        $console-&gt;log(javaString(&quot;withTimeoutOrNull 的结果是: &quot;) . ($result == null ? javaString(&quot;null (符合预期)&quot;) : $result));
+        return $innerS-&gt;resolve(null);
+    });
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_196" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 7.1: 演示超时处理
+#
+
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+_threads.getMain().setBackground(True)
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+# 案例 1: withTimeout，将会失败
+_console.log(&quot;测试 withTimeout (预期会失败)...&quot;)
+scope.withTimeout(500, lambda s:
+# 这个任务需要 1 秒，但超时只有 500 毫秒
+s.delay(1000).then(lambda innerScope, _:
+                   innerScope.resolve(&quot;这个结果永远不会返回&quot;)
+                   )
+                  ).then(lambda s, r: (
+    _console.log(&quot;withTimeout(预期会失败): 这个应该不会打印&quot;, r),
+    s.resolve(None)
+)[-1]).onError(lambda error:
+               _console.error(&quot;withTimeout(预期失败)成功捕获到超时异常&quot;)
+               )
+
+# 案例 2: withTimeout，将会成功
+scope.delay(2000).then(lambda s1, _: (
+    _console.log(&quot;测试 withTimeout (预期会成功)...&quot;),
+    # 此 lambda 只有一个返回表达式，所以直接返回
+    scope.withTimeout(500, lambda s:
+    # 这个任务需要 100 毫秒，超时有 500 毫秒
+    s.delay(100).then(lambda innerScope, u:
+                      innerScope.resolve(&quot;这个结果会返回&quot;)
+                      )
+                      )
+)[-1]).then(lambda s, r: (
+    _console.log(&quot;withTimeout(预期会成功): 这个应该会打印&quot;, r),
+    s.resolve(None)
+)[-1]).onError(lambda error:
+               _console.error(&quot;成功捕获到超时异常: &quot; + str(error.stackTraceToString()))
+               )
+
+# 案例 3: withTimeoutOrNull，将会返回 null
+scope.delay(3000).then(lambda s, _: (
+    _console.log(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;),
+    s.withTimeoutOrNull(500, lambda innerS:
+    innerS.delay(1000).then(lambda s1, u:
+                            innerS.resolve(&quot;这个结果也永远不会返回&quot;)
+                            )
+                        )
+)[-1]).then(lambda innerS, result: (
+    # Groovy的 (result == null ? &quot;...&quot; : result) 转换为Python的条件表达式
+    _console.log(&quot;withTimeoutOrNull(预期失败) 的结果是: &quot; + (&quot;null (符合预期)&quot; if result is None else str(result))),
+    innerS.resolve(None)
+)[-1])
+
+# 案例 4: withTimeoutOrNull，会返回给定的数据
+scope.delay(4000).then(lambda s, _: (
+    _console.log(&quot;\n测试 withTimeoutOrNull (预期返回给定的数据)...&quot;),
+    s.withTimeoutOrNull(500, lambda innerS:
+    innerS.delay(100).then(lambda s1, u:
+                           innerS.resolve(&quot;这个结果会返回&quot;)
+                           )
+                        )
+)[-1]).then(lambda innerS, result: (
+    _console.log(&quot;withTimeoutOrNull(预期成功) 的结果是: &quot; + (&quot;null (符合预期)&quot; if result is None else str(result))),
+    innerS.resolve(None)
+)[-1])</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_199" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 如果源代码中包含中文，那么就需要添加上面的编码语句
+
+#
+# 完整示例 7.1: 演示超时处理
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+# 案例 1: withTimeout，将会失败
+$console.log(&quot;测试 withTimeout (预期会失败)...&quot;)
+scope.withTimeout(500) do |s|
+  # 这个任务需要 1 秒，但超时只有 500 毫秒
+  s.delay(1000).then do |innerScope, _it|
+    innerScope.resolve(&quot;这个结果永远不会返回&quot;)
+  end
+end.then do |s, r|
+  $console.log(&quot;withTimeout(预期会失败): 这个应该不会打印&quot;, r)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;withTimeout(预期失败)成功捕获到超时异常&quot;)
+end
+
+# 案例 2: withTimeout，将会成功
+scope.delay(2000).then do |s1, _it|
+  $console.log(&quot;测试 withTimeout (预期会成功)...&quot;)
+  scope.withTimeout(500) do |s|
+    # 这个任务需要 100 毫秒，超时有 500 毫秒
+    s.delay(100).then do |innerScope, u|
+      innerScope.resolve(&quot;这个结果会返回&quot;)
+    end
+  end
+end.then do |s, r|
+  $console.log(&quot;withTimeout(预期会成功): 这个应该会打印&quot;, r)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;成功捕获到超时异常: &quot; + error.stackTraceToString())
+end
+
+# 案例 3: withTimeoutOrNull，将会返回 null
+scope.delay(3000).then do |s, _it|
+  $console.log(&quot;\n测试 withTimeoutOrNull (预期返回 null)...&quot;)
+  s.withTimeoutOrNull(500) do |innerS|
+    innerS.delay(1000).then do |s1, u|
+      innerS.resolve(&quot;这个结果也永远不会返回&quot;)
+    end
+  end
+end.then do |innerS, result|
+  $console.log(&quot;withTimeoutOrNull(预期失败) 的结果是: &quot; + (result.nil? ? &quot;null (符合预期)&quot; : result.to_s))
+  innerS.resolve(nil)
+end
+
+# 案例 4: withTimeoutOrNull，会返回给定的数据
+scope.delay(4000).then do |s, _it|
+  $console.log(&quot;\n测试 withTimeoutOrNull (预期返回给定的数据)...&quot;)
+  s.withTimeoutOrNull(500) do |innerS|
+    innerS.delay(100).then do |s1, u|
+      innerS.resolve(&quot;这个结果会返回&quot;)
+    end
+  end
+end.then do |innerS, result|
+  $console.log(&quot;withTimeoutOrNull(预期成功) 的结果是: &quot; + (result.nil? ? &quot;null (符合预期)&quot; : result.to_s))
+  innerS.resolve(nil)
+end</div></div></div></section><section class="chapter"><h2 id="-8iuksm_7" data-toc="-8iuksm_7">异常处理</h2><ul class="list _bullet" id="-8iuksm_248"><li class="list__item" id="-8iuksm_256"><p id="-8iuksm_258">deferred.onError(...): 异步错误处理。它是 Deferred 链的一部分，用于捕获异步流程中发生的任何异常（包括上游 Deferred 的失败）。这是处理异步错误的首选方式。</p></li><li class="list__item" id="-8iuksm_257"><p id="-8iuksm_259">$exceptions.tryCatch : 同步错误处理。它用于 launch 或 async 代码块内部，捕获那些在协程调度和执行的同步部分可能抛出的异常。例如，解析 JSON、访问一个可能为 null 的属性等。</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="-8iuksm_249"><p id="-8iuksm_260">它们分别处理不同阶段的错误，常常需要结合使用以构建健壮的程序。</p></aside><p id="-8iuksm_250">对于 launch 启动的、未被 try-catch 包围的协程，如果发生异常，异常会向上&ldquo;冒泡&rdquo;。你可以通过在创建 CoroutineScope 时提供一个 exceptionHandler 来捕获这些&ldquo;未被捕获&rdquo;的异常。</p><aside class="prompt" data-type="tip" data-title="" id="-8iuksm_251"><p id="-8iuksm_261">注意：async 启动的协程的异常会被封装在返回的 Deferred 对象中，等待被 .onError 处理，它们不会触发作用域的异常处理器。</p></aside><div class="tabs" id="-8iuksm_255" data-group="languages" data-anchors="[-8iuksm_264,-8iuksm_267,-8iuksm_270,-8iuksm_273,-8iuksm_276,-8iuksm_279,-8iuksm_282,-8iuksm_285]"><div class="tabs__content" data-gtm="tab" id="-8iuksm_264" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 7.3: 使用作用域级别的异常处理器
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+
+// 创建一个带有自定义异常处理器的作用域
+val scopeWithHandler = _coroutines.newScope {
+    setExceptionHandler { ctx, error -&gt;
+        _console.error(&quot;[作用域异常捕获器]: 在协程 '${ctx.getName()}' 中捕获到未处理的异常 -&gt; &quot; + error.getMessage())
+    }
+    // 设置 SupervisorJob 这样子 job 失败不会取消其他子 job
+    setJob(newSupervisorJob(null))
+}
+
+// 案例 1: launch 中的异常会被捕获
+// 修正：移除了 lambda 参数，直接使用 receiver (this) 调用 setName 和 delay
+scopeWithHandler.launch({ setName(&quot;会失败的Launch任务&quot;) }, null) {
+    delay(200).then&lt;Unit&gt; { innerScope, _ -&gt;
+        throw RuntimeException(&quot;来自 launch 的错误&quot;)
+    }
+}
+
+// 案例 2: async 中的异常不会被捕获，而是由 onError 处理
+// 修正：移除了 lambda 参数，直接使用 receiver (this) 调用 setName 和 delay
+val failedAsync = scopeWithHandler.async({ setName(&quot;会失败的Async任务&quot;) }, null) {
+    delay(400).then&lt;Unit&gt; { innerScope, _ -&gt;
+        throw RuntimeException(&quot;来自 async 的错误&quot;)
+    }
+}
+failedAsync.onError { error -&gt;
+    _console.log(&quot;[onError]: 成功捕获到 async 的错误 -&gt; &quot; + error.getMessage())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_267" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 7.3: 使用作用域级别的异常处理器
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+
+// 创建一个带有自定义异常处理器的作用域
+def scopeWithHandler = $coroutines.newScope({ context -&gt;
+    context.setExceptionHandler({ ctx, error -&gt;
+        $console.error(&quot;[作用域异常捕获器]: 在协程 '${ctx.getName()}' 中捕获到未处理的异常 -&gt; &quot; + error.getMessage())
+    })
+    // 设置 SupervisorJob 这样子 job 失败不会取消其他子 job
+    context.setJob(context.newSupervisorJob(null))
+})
+
+// 案例 1: launch 中的异常会被捕获
+scopeWithHandler.launch({ ctx -&gt; ctx.setName(&quot;会失败的Launch任务&quot;) }, null, { s -&gt;
+    s.delay(200).then({ innerScope, _ -&gt;
+        throw new RuntimeException(&quot;来自 launch 的错误&quot;)
+    })
+})
+
+// 案例 2: async 中的异常不会被捕获，而是由 onError 处理
+def failedAsync = scopeWithHandler.async({ ctx -&gt; ctx.setName(&quot;会失败的Async任务&quot;) }, null, { s -&gt;
+    s.delay(400).then({ innerScope, _ -&gt;
+        throw new RuntimeException(&quot;来自 async 的错误&quot;)
+    })
+})
+failedAsync.onError({ error -&gt;
+    $console.log(&quot;[onError]: 成功捕获到 async 的错误 -&gt; &quot; + error.getMessage())
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_270" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_273" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 7.3: 使用作用域级别的异常处理器
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+
+// 创建一个带有自定义异常处理器的作用域
+const scopeWithHandler = $coroutines.newScope(context =&gt; {
+    context.setExceptionHandler((ctx, error) =&gt; {
+        $console.error(`[作用域异常捕获器]: 在协程 '${ctx.getName()}' 中捕获到未处理的异常 -&gt; ${error.getMessage()}`);
+    });
+    // 设置 SupervisorJob 这样子 job 失败不会取消其他子 job
+    context.setJob(context.newSupervisorJob(null));
+});
+
+// 案例 1: launch 中的异常会被捕获
+scopeWithHandler.launch(ctx =&gt; ctx.setName(&quot;会失败的Launch任务&quot;), null, s =&gt; {
+    s.delay(200).then((innerScope, _) =&gt; {
+        throw new Error(&quot;来自 launch 的错误&quot;);
+    });
+});
+
+// 案例 2: async 中的异常不会被捕获，而是由 onError 处理
+const failedAsync = scopeWithHandler.async(ctx =&gt; ctx.setName(&quot;会失败的Async任务&quot;), null, s =&gt; {
+    return s.delay(400).then((innerScope, _) =&gt; {
+        throw new Error(&quot;来自 async 的错误&quot;);
+    });
+});
+failedAsync.onError(error =&gt; {
+    $console.log(&quot;[onError]: 成功捕获到 async 的错误 -&gt; &quot; + error.getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_276" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 7.3: 使用作用域级别的异常处理器
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+
+-- 创建一个带有自定义异常处理器的作用域
+local scopeWithHandler = _coroutines:newScope(function(context)
+    context:setExceptionHandler(function(ctx, error)
+        _console:error(&quot;[作用域异常捕获器]: 在协程 '&quot; .. ctx:getName() .. &quot;' 中捕获到未处理的异常 -&gt; &quot; .. error:getMessage())
+    end)
+    -- 设置 SupervisorJob 这样子 job 失败不会取消其他子 job
+    context:setJob(context:newSupervisorJob(nil))
+end)
+
+-- 案例 1: launch 中的异常会被捕获
+scopeWithHandler:launch(function(ctx) ctx:setName(&quot;会失败的Launch任务&quot;) end, nil, function(s)
+    s:delay(200):_then(function(innerScope, _)
+        error(&quot;来自 launch 的错误&quot;)
+    end)
+end)
+
+-- 案例 2: async 中的异常不会被捕获，而是由 onError 处理
+local failedAsync = scopeWithHandler:async(function(ctx) ctx:setName(&quot;会失败的Async任务&quot;) end, nil, function(s)
+    return s:delay(400):_then(function(innerScope, _)
+        error(&quot;来自 async 的错误&quot;)
+    end)
+end)
+failedAsync:onError(function(error)
+    _console:log(&quot;[onError]: 成功捕获到 async 的错误 -&gt; &quot; .. error:getMessage())
+end)</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_279" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 7.3: 使用作用域级别的异常处理器
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+
+// 创建一个带有自定义异常处理器的作用域
+$scopeWithHandler = $coroutines-&gt;newScope(function ($context) {
+    global $console;
+    $context-&gt;setExceptionHandler(function ($ctx, $error) use ($console) {
+        $console-&gt;error(javaString(&quot;[作用域异常捕获器]: 在协程 '&quot;) . $ctx-&gt;getName() . javaString(&quot;' 中捕获到未处理的异常 -&gt; &quot;) . $error-&gt;getMessage());
+    });
+    // 设置 SupervisorJob 这样子 job 失败不会取消其他子 job
+    $context-&gt;setJob($context-&gt;newSupervisorJob(null));
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 案例 1: launch 中的异常会被捕获
+$scopeWithHandler-&gt;launch(function ($ctx) {
+    $ctx-&gt;setName(javaString(&quot;会失败的Launch任务&quot;));
+}, null, function ($s) {
+    $s-&gt;delay(200)-&gt;then(function ($innerScope, $_) {
+        global $exceptions;
+        return $innerScope-&gt;reject($exceptions-&gt;newThrowable(function ($eb) {
+            $eb-&gt;setMessageAndClassName(javaString(&quot;来自 launch 的错误&quot;), null);
+        }));
+    });
+});
+
+// 案例 2: async 中的异常不会被捕获，而是由 onError 处理
+$failedAsync = $scopeWithHandler-&gt;async(function ($ctx) {
+    $ctx-&gt;setName(javaString(&quot;会失败的Async任务&quot;));
+}, null, function ($s) {
+    return $s-&gt;delay(400)-&gt;then(function ($innerScope, $_) {
+        global $exceptions;
+        return $innerScope-&gt;reject($exceptions-&gt;newThrowable(function ($eb) {
+            $eb-&gt;setMessageAndClassName(javaString(&quot;来自 async 的错误&quot;), null);
+        }));
+    });
+});
+$failedAsync-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;log(javaString(&quot;[onError]: 成功捕获到 async 的错误 -&gt; &quot;) . $error-&gt;getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_282" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 7.3: 使用作用域级别的异常处理器
+#
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _exceptions
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+
+# 创建一个带有自定义异常处理器的作用域
+scopeWithHandler = _coroutines.newScope(lambda context: (
+    context.setExceptionHandler(lambda ctx, error:
+                                _console.error(
+                                    &quot;[作用域异常捕获器]: 在协程 '{}' 中捕获到未处理的异常 -&gt; {}&quot;.format(ctx.getName(),
+                                                                                                        error.getMessage()))
+                                ),
+    # 设置 SupervisorJob 这样子 job 失败不会取消其他子 job
+    context.setJob(context.newSupervisorJob(None)),
+    context.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+))
+
+# 案例 1: launch 中的异常会被捕获
+scopeWithHandler.launch(lambda ctx: ctx.setName(&quot;会失败的Launch任务&quot;), None, lambda s: (
+    s.delay(200).then(lambda innerScope, _:
+                      innerScope.reject(_exceptions.newThrowable(lambda builder:
+                                                                 builder.setMessageAndClassName(&quot;来自 launch 的错误&quot;,
+                                                                                                &quot;java.lang.RuntimeException&quot;)
+                                                                 )
+                                        ))
+))
+
+# 案例 2: async 中的异常不会被捕获，而是由 onError 处理
+failedAsync = scopeWithHandler._async(lambda ctx: ctx.setName(&quot;会失败的Async任务&quot;), None, lambda s:
+s.delay(400).then(lambda innerScope, _:
+                  innerScope.reject(_exceptions.newThrowable(lambda builder:
+                                                             builder.setMessageAndClassName(&quot;来自 async 的错误&quot;,
+                                                                                            &quot;java.lang.RuntimeException&quot;)
+                                                             ))
+                  )
+                                      )
+failedAsync.onError(lambda error: (
+    _console.log(&quot;[onError]: 成功捕获到 async 的错误 -&gt; &quot; + str(error.getMessage()))
+))
+</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_285" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 7.3: 使用作用域级别的异常处理器
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+
+# 创建一个带有自定义异常处理器的作用域
+scopeWithHandler = $coroutines.newScope do |context|
+  context.setExceptionHandler do |ctx, error|
+    $console.error(&quot;[作用域异常捕获器]: 在协程 '#{ctx.getName()}' 中捕获到未处理的异常 -&gt; &quot; + error.getMessage())
+  end
+  # 设置 SupervisorJob 这样子 job 失败不会取消其他子 job
+  context.setJob(context.newSupervisorJob(nil))
+end
+
+# 案例 1: launch 中的异常会被捕获
+scopeWithHandler.launch(lambda { |ctx| ctx.setName(&quot;会失败的Launch任务&quot;) }, nil) do |s|
+  s.delay(200).then do |innerScope, _|
+    raise RuntimeException.new(&quot;来自 launch 的错误&quot;)
+  end
+end
+
+# 案例 2: async 中的异常不会被捕获，而是由 onError 处理
+failedAsync = scopeWithHandler.async(lambda { |ctx| ctx.setName(&quot;会失败的Async任务&quot;) }, nil) do |s|
+  s.delay(400).then do |innerScope, _|
+    raise RuntimeException.new(&quot;来自 async 的错误&quot;)
+  end
+end
+failedAsync.onError do |error|
+  $console.log(&quot;[onError]: 成功捕获到 async 的错误 -&gt; &quot; + error.getMessage())
+end</div></div></div></section><section class="chapter"><h2 id="api" data-toc="api">适配回调式 api</h2><p id="-8iuksm_334">许多库（特别是旧的 Java 库）都使用回调风格的异步 API。scope.cancellableDeferred 是一个强大的桥梁，可以将这些回调无缝转换为现代的 Deferred 对象。</p><div class="tabs" id="-8iuksm_338" data-group="languages" data-anchors="[-8iuksm_341,-8iuksm_344,-8iuksm_347,-8iuksm_350,-8iuksm_353,-8iuksm_356,-8iuksm_359,-8iuksm_362]"><div class="tabs__content" data-gtm="tab" id="-8iuksm_341" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 8.1: 将一个虚构的回调函数转换为 Deferred
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+// 使用 cancellableDeferred 进行包装
+val modernDeferred = scope.cancellableDeferred { continuation -&gt;
+    _console.log(&quot;正在通过 cancellableDeferred 调用旧的回调式 API...&quot;)
+    _threads.getMain().getTimer().setTimeout({
+        continuation.resume(&quot;M8Test&quot;, null)
+    }, 5000)
+}
+
+// 现在你可以像使用任何其他 Deferred 一样使用它了！
+modernDeferred.then { s, data -&gt;
+    _console.log(&quot;成功将回调转换为 Deferred！结果: &quot; + data)
+    s.resolve(null)
+}.onError { error -&gt;
+    _console.error(&quot;从回调转换的 Deferred 失败了: &quot; + error.getMessage())
+}</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_344" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 8.1: 将一个虚构的回调函数转换为 Deferred
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+// 使用 cancellableDeferred 进行包装
+def modernDeferred = scope.cancellableDeferred({ continuation -&gt;
+    $console.log(&quot;正在通过 cancellableDeferred 调用旧的回调式 API...&quot;)
+    $threads.getMain().getTimer().setTimeout({
+        continuation.resume(&quot;M8Test&quot;, null)
+    }, 5000)
+})
+
+// 现在你可以像使用任何其他 Deferred 一样使用它了！
+modernDeferred.then({ s, data -&gt;
+    $console.log(&quot;成功将回调转换为 Deferred！结果: &quot; + data)
+    s.resolve(null)
+}).onError({ error -&gt;
+    $console.error(&quot;从回调转换的 Deferred 失败了: &quot; + error.getMessage())
+})</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_347" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_350" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 8.1: 将一个虚构的回调函数转换为 Deferred
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+// 使用 cancellableDeferred 进行包装
+const modernDeferred = scope.cancellableDeferred(continuation =&gt; {
+    $console.log(&quot;正在通过 cancellableDeferred 调用旧的回调式 API...&quot;);
+    $threads.getMain().getTimer().setTimeout(() =&gt; {
+        continuation.resume(&quot;M8Test&quot;, null);
+    }, 5000);
+});
+
+// 现在你可以像使用任何其他 Deferred 一样使用它了！
+modernDeferred.then((s, data) =&gt; {
+    $console.log(&quot;成功将回调转换为 Deferred！结果: &quot; + data);
+    return s.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;从回调转换的 Deferred 失败了: &quot; + error.getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_353" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 8.1: 将一个虚构的回调函数转换为 Deferred
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+-- 使用 cancellableDeferred 进行包装
+local modernDeferred = scope:cancellableDeferred(function(continuation)
+    _console:log(&quot;正在通过 cancellableDeferred 调用旧的回调式 API...&quot;)
+    _threads:getMain():getTimer():setTimeout(function()
+        continuation:resume(&quot;M8Test&quot;, nil)
+    end, 5000)
+end)
+
+-- 现在你可以像使用任何其他 Deferred 一样使用它了！
+modernDeferred:_then(function(s, data)
+    _console:log(&quot;成功将回调转换为 Deferred！结果: &quot; .. data)
+    return s:resolve(nil)
+end):onError(function(error)
+    _console:error(&quot;从回调转换的 Deferred 失败了: &quot; .. error:getMessage())
+end)</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_356" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 8.1: 将一个虚构的回调函数转换为 Deferred
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+// 使用 cancellableDeferred 进行包装
+$modernDeferred = $scope-&gt;cancellableDeferred(function ($continuation) {
+    global $console, $threads;
+    $console-&gt;log(javaString(&quot;正在通过 cancellableDeferred 调用旧的回调式 API...&quot;));
+    $threads-&gt;getMain()-&gt;getTimer()-&gt;setTimeout(function() use ($continuation) {
+        $continuation-&gt;resume(javaString(&quot;M8Test&quot;), null);
+    }, 5000);
+});
+
+// 现在你可以像使用任何其他 Deferred 一样使用它了！
+$modernDeferred-&gt;then(function ($s, $data) {
+    global $console;
+    $console-&gt;log(javaString(&quot;成功将回调转换为 Deferred！结果: &quot;) . $data);
+    return $s-&gt;resolve(null);
+})-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;error(javaString(&quot;从回调转换的 Deferred 失败了: &quot;) . $error-&gt;getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_359" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 8.1: 将一个虚构的回调函数转换为 Deferred
+#
+
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda it: it.setDispatcher(lambda d: d.getScriptMain()))
+
+# 使用 cancellableDeferred 进行包装
+modernDeferred = scope.cancellableDeferred(lambda continuation: (
+    _console.log(&quot;正在通过 cancellableDeferred 调用旧的回调式 API...&quot;),
+    _threads.getMain().getTimer().setTimeout(lambda _: (
+        continuation.resume(&quot;M8Test&quot;, None)
+    ), 5000)
+))
+
+# 现在你可以像使用任何其他 Deferred 一样使用它了！
+modernDeferred.then(lambda s, data: (
+    _console.log(&quot;成功将回调转换为 Deferred！结果: &quot; + str(data)),
+    s.resolve(None)
+)[-1]).onError(lambda error: (
+    _console.error(&quot;从回调转换的 Deferred 失败了: &quot; + str(error.getMessage()))
+))</div></div><div class="tabs__content" data-gtm="tab" id="-8iuksm_362" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 8.1: 将一个虚构的回调函数转换为 Deferred
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+# 使用 cancellableDeferred 进行包装
+modernDeferred = scope.cancellableDeferred do |continuation|
+  $console.log(&quot;正在通过 cancellableDeferred 调用旧的回调式 API...&quot;)
+  $threads.getMain().getTimer().setTimeout(lambda { |p|
+    continuation.resume(&quot;M8Test&quot;, nil)
+  }, 5000)
+end
+
+# 现在你可以像使用任何其他 Deferred 一样使用它了！
+modernDeferred.then do |s, data|
+  $console.log(&quot;成功将回调转换为 Deferred！结果: &quot; + data)
+  s.resolve(nil)
+end.onError do |error|
+  $console.error(&quot;从回调转换的 Deferred 失败了: &quot; + error.getMessage())
+end</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="coroutines-lifecycle.html" class="navigation-links__prev">生命周期</a><a href="coroutines-flows.html" class="navigation-links__next">Flow 使用指南</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

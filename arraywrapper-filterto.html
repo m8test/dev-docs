@@ -1,0 +1,106 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:36:18.868048237"><title>filterTo | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="filterTo | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/arraywrapper-filterto.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="filterTo | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/arraywrapper-filterto.html#webpage",
+    "url": "writerside-documentation/arraywrapper-filterto.html",
+    "name": "filterTo | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="ArrayWrapper.filterTo" data-main-title="filterTo" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///ArrayWrapper.md|ArrayWrapper"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="ArrayWrapper.filterTo" id="ArrayWrapper.filterTo.md">filterTo</h1><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_7"><p id="z5n4zzg_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.wrapper/-array-wrapper/filter-to.html" id="z5n4zzg_12" data-external="true" rel="noopener noreferrer" target="_blank">ArrayWrapper.filterTo()</a></p></aside><div class="tabs" id="z5n4zzg_10" data-group="languages" data-anchors="[z5n4zzg_15,z5n4zzg_18,z5n4zzg_21,z5n4zzg_24,z5n4zzg_27,z5n4zzg_30,z5n4zzg_33]"><div class="tabs__content" data-gtm="tab" id="z5n4zzg_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val nc = mutableListOf&lt;Int&gt;()
+val numbers = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+// 筛选出所有偶数
+numbers.filterTo(nc) { it % 2 == 0 }
+// 输出：偶数: [2, 4, 6, 8, 10]
+_console.log(&quot;偶数: &quot;, nc)
+val wc = mutableListOf&lt;String&gt;()
+val words = arrayOf(&quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;)
+// 筛选出长度大于 5 的单词
+words.filterTo(wc) { it.count() &gt; 5 }
+// 输出：长度大于 5 的单词: [kotlin, android]
+_console.log(&quot;长度大于 5 的单词: &quot;, wc)</div><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_39"><p id="z5n4zzg_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ArrayWrapper/filterTo.kts" id="z5n4zzg_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ArrayWrapper/filterTo.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z5n4zzg_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def nc = $objectWrappers.wrap($iterables.mutableListOf())
+def numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+// 筛选出所有偶数
+numbers.filterTo(nc) { it % 2 == 0 }
+// 输出：偶数: [2, 4, 6, 8, 10]
+$console.log(&quot;偶数: &quot;, nc)
+def wc = $objectWrappers.wrap($iterables.mutableListOf())
+def words = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+// 筛选出长度大于 5 的单词
+words.filterTo(wc) { $objectWrappers.wrap(it).count() &gt; 5 }
+// 输出：长度大于 5 的单词: [kotlin, android]
+$console.log(&quot;长度大于 5 的单词: &quot;, wc)</div><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_47"><p id="z5n4zzg_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ArrayWrapper/filterTo.groovy" id="z5n4zzg_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ArrayWrapper/filterTo.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z5n4zzg_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let nc = $objectWrappers.wrap($iterables.mutableListOf())
+let numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+// 筛选出所有偶数
+numbers.filterTo(nc, (it) =&gt; it % 2 == 0)
+// 输出：偶数: [2, 4, 6, 8, 10]
+$console.log(&quot;偶数: &quot;, nc)
+let wc = $objectWrappers.wrap($iterables.mutableListOf())
+let words = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+// 筛选出长度大于 5 的单词
+words.filterTo(wc, (it) =&gt; $objectWrappers.wrap(it).count() &gt; 5)
+// 输出：长度大于 5 的单词: [kotlin, android]
+$console.log(&quot;长度大于 5 的单词: &quot;, wc)</div><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_55"><p id="z5n4zzg_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ArrayWrapper/filterTo.js" id="z5n4zzg_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ArrayWrapper/filterTo.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z5n4zzg_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local nc = _objectWrappers:wrap(_iterables:mutableListOf())
+local numbers = _objectWrappers:wrap(_arrays:arrayOf(_plugins:loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+-- 筛选出所有偶数
+numbers:filterTo(nc, function(it)
+    return it % 2 == 0
+end)
+-- 输出：偶数: [2, 4, 6, 8, 10]
+_console:log(&quot;偶数: &quot;, nc)
+local wc = _objectWrappers:wrap(_iterables:mutableListOf())
+local words = _objectWrappers:wrap(_arrays:arrayOf(_plugins:loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+-- 筛选出长度大于 5 的单词
+words:filterTo(wc, function(it)
+    return _objectWrappers:wrap(it):count() &gt; 5
+end)
+-- 输出：长度大于 5 的单词: [kotlin, android]
+_console:log(&quot;长度大于 5 的单词: &quot;, wc)</div><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_63"><p id="z5n4zzg_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ArrayWrapper/filterTo.lua" id="z5n4zzg_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ArrayWrapper/filterTo.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z5n4zzg_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$nc = $objectWrappers-&gt;wrap($iterables-&gt;mutableListOf());
+$numbers = $objectWrappers-&gt;wrap($arrays-&gt;arrayOf($plugins-&gt;loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+// 筛选出所有偶数
+$numbers-&gt;filterTo($nc, function ($it) {
+    return $it % 2 == 0;
+});
+// 输出：偶数: [2, 4, 6, 8, 10]
+$console-&gt;log(&quot;偶数: &quot;, $nc);
+$wc = $objectWrappers-&gt;wrap($iterables-&gt;mutableListOf());
+$words = $objectWrappers-&gt;wrap($arrays-&gt;arrayOf($plugins-&gt;loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;));
+// 筛选出长度大于 5 的单词
+$words-&gt;filterTo($wc, function ($it) use ($objectWrappers) {
+    return $objectWrappers-&gt;wrap($it)-&gt;count() &gt; 5;
+});
+// 输出：长度大于 5 的单词: [kotlin, android]
+$console-&gt;log(&quot;长度大于 5 的单词: &quot;, $wc);</div><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_71"><p id="z5n4zzg_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ArrayWrapper/filterTo.php" id="z5n4zzg_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ArrayWrapper/filterTo.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z5n4zzg_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">nc = _objectWrappers.wrap(_iterables.mutableListOf())
+numbers = _objectWrappers.wrap(_arrays.arrayOf(_plugins.loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+# 筛选出所有偶数
+numbers.filterTo(nc, lambda it: it % 2 == 0)
+# 输出：偶数: [2, 4, 6, 8, 10]
+_console.log(&quot;偶数: &quot;, nc)
+wc = _objectWrappers.wrap(_iterables.mutableListOf())
+words = _objectWrappers.wrap(
+    _arrays.arrayOf(_plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+# 筛选出长度大于 5 的单词
+words.filterTo(wc, lambda it: _objectWrappers.wrap(it).count() &gt; 5)
+# 输出：长度大于 5 的单词: [kotlin, android]
+_console.log(&quot;长度大于 5 的单词: &quot;, wc)
+</div><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_79"><p id="z5n4zzg_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ArrayWrapper/filterTo.py" id="z5n4zzg_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ArrayWrapper/filterTo.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z5n4zzg_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+nc = $objectWrappers.wrap($iterables.mutableListOf())
+numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+# 筛选出所有偶数
+numbers.filterTo(nc) { |it| it % 2 == 0 }
+# 输出：偶数: [2, 4, 6, 8, 10]
+$console.log(&quot;偶数: &quot;, nc)
+wc = $objectWrappers.wrap($iterables.mutableListOf())
+words = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+# 筛选出长度大于 5 的单词
+words.filterTo(wc) { |it| $objectWrappers.wrap(it).count() &gt; 5 }
+# 输出：长度大于 5 的单词: [kotlin, android]
+$console.log(&quot;长度大于 5 的单词: &quot;, wc)</div><aside class="prompt" data-type="tip" data-title="" id="z5n4zzg_87"><p id="z5n4zzg_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ArrayWrapper/filterTo.rb" id="z5n4zzg_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ArrayWrapper/filterTo.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="arraywrapper-filternotto.html" class="navigation-links__prev">filterNotTo</a><a href="arraywrapper-find.html" class="navigation-links__next">find</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

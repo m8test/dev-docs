@@ -1,0 +1,349 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:13.95786857"><title>Paddle OCR | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"fa4lks_10","level":0,"title":"在虚拟屏幕中识别","anchor":"#fa4lks_10"},{"id":"fa4lks_11","level":0,"title":"在图片中识别","anchor":"#fa4lks_11"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Paddle OCR | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/paddle-ocr.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Paddle OCR | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/paddle-ocr.html#webpage",
+    "url": "writerside-documentation/paddle-ocr.html",
+    "name": "Paddle OCR | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="paddle-ocr" data-main-title="Paddle OCR" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="ocr.md|光学字符识别"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="paddle-ocr" id="paddle-ocr.md">Paddle OCR</h1><p id="fa4lks_3">模型文件可通过以下链接下载：</p><ul class="list _bullet" id="fa4lks_4"><li class="list__item" id="fa4lks_12"><p id="fa4lks_13"><a href="https://github.com/YumiMiyamoto/ocr-release/tree/main/paddleModel" id="fa4lks_14" data-external="true" rel="noopener noreferrer" target="_blank">Ocr组件仓库</a></p></li></ul><p id="fa4lks_5">请将下图中的四个文件下载至指定目录，然后通过 <a href="https://yumimiyamoto.github.io/ocr-release/ocr/com.m8test.ocr.api/-paddle-ocr-config/set-model-path.html" id="fa4lks_15" data-external="true" rel="noopener noreferrer" target="_blank">setModelPath</a> 方法设置模型目录路径。</p><figure id="fa4lks_6"><img alt="368" src="/368.png" title="368" width="1920" height="898"></figure><p id="fa4lks_7">若使用脚本项目，建议将模型文件放置在 <code class="code" id="fa4lks_16">res</code> 目录下。</p><p id="fa4lks_8">更多模型信息可参考：</p><ul class="list _bullet" id="fa4lks_9"><li class="list__item" id="fa4lks_17"><p id="fa4lks_18"><a href="https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md" id="fa4lks_19" data-external="true" rel="noopener noreferrer" target="_blank">PaddleOCR官方模型列表</a></p></li></ul><section class="chapter"><h2 id="fa4lks_10" data-toc="fa4lks_10">在虚拟屏幕中识别</h2><div class="tabs" id="fa4lks_23" data-group="languages" data-anchors="[fa4lks_26,fa4lks_29,fa4lks_32,fa4lks_35,fa4lks_38,fa4lks_41,fa4lks_44,fa4lks_47]"><div class="tabs__content" data-gtm="tab" id="fa4lks_26" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+val paddleOcr = _ocrs!!.paddle {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+}
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+val screenResults = paddleOcr.analyzeDisplay(display.getId()) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    set(0, 0, display.getWidth(), display.getHeight())
+}
+_console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_29" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+def paddleOcr = $ocrs.paddle {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+}
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+def screenResults = paddleOcr.analyzeDisplay(display.getId()) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    it.set(0, 0, display.getWidth(), display.getHeight())
+}
+$console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_32" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import android.graphics.Rect;
+import com.m8test.ocr.api.OcrResults;
+import com.m8test.ocr.api.PaddleOcr;
+import com.m8test.ocr.api.PaddleOcrConfig;
+import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+final Display display = getDisplay();
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+PaddleOcr paddleOcr = $ocrs.paddle(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        PaddleOcrConfig it = (PaddleOcrConfig) o;
+        // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+        it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;);
+        return null;
+    }
+});
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+OcrResults screenResults = paddleOcr.analyzeDisplay(display.getId(), new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        Rect it = (Rect) o;
+        // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+        it.set(0, 0, display.getWidth(), display.getHeight());
+        return null;
+    }
+});
+$console.log(screenResults.getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_35" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+let paddleOcr = $ocrs.paddle(function (it) {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+})
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+let screenResults = paddleOcr.analyzeDisplay(display.getId(), function (it) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    it.set(0, 0, display.getWidth(), display.getHeight())
+})
+$console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_38" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- Ocrs.paddle() 用于创建 PaddleOcr 对象
+local paddleOcr = _ocrs:paddle(function(it)
+    -- PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https:--github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    it:setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+end)
+-- Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+local screenResults = paddleOcr:analyzeDisplay(display:getId(), function(it)
+    -- 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    it:set(0, 0, display:getWidth(), display:getHeight())
+end)
+_console:log(screenResults:getText(&quot;\n&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_41" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\ocr\api\Ocrs $ocrs */
+global $ocrs;
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+$paddleOcr = $ocrs-&gt;paddle(function ($it) {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    $it-&gt;setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;);
+});
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+$screenResults = $paddleOcr-&gt;analyzeDisplay($display-&gt;getId(), function ($it) use ($display) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    $it-&gt;set(0, 0, $display-&gt;getWidth(), $display-&gt;getHeight());
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+$console-&gt;log($screenResults-&gt;getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_44" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _ocrs
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# Ocrs.paddle() 用于创建 PaddleOcr 对象
+paddleOcr = _ocrs.paddle(lambda it:
+                         # PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https:#github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+                         it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;))
+# Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+screenResults = paddleOcr.analyzeDisplay(display.getId(), lambda it:
+# 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+it.set(0, 0, display.getWidth(), display.getHeight()))
+_console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_47" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+java_import 'com.m8test.ocr.api.PaddleOcrConfig'
+# Ocrs.paddle() 用于创建 PaddleOcr 对象
+paddleOcr = $ocrs.paddle {
+  # @type it [PaddleOcrConfig]
+  |it|
+  # PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https:#github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+  it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+}
+java_import 'android.graphics.Rect'
+# Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+screenResults = paddleOcr.analyzeDisplay(display.getId()) {
+  # @type it [Rect]
+  |it|
+  # 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+  it.set(0, 0, display.getWidth(), display.getHeight())
+}
+$console.log(screenResults.getText(&quot;\n&quot;))</div></div></div></section><section class="chapter"><h2 id="fa4lks_11" data-toc="fa4lks_11">在图片中识别</h2><div class="tabs" id="fa4lks_99" data-group="languages" data-anchors="[fa4lks_102,fa4lks_105,fa4lks_108,fa4lks_111,fa4lks_114,fa4lks_117,fa4lks_120,fa4lks_123]"><div class="tabs__content" data-gtm="tab" id="fa4lks_102" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._ocrs
+
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+val paddleOcr = _ocrs!!.paddle {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+}
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+val results = paddleOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+_console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_105" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// Ocrs.paddle() 用于创建 PaddleOcr 对象
+def paddleOcr = $ocrs.paddle {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+}
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+def results = paddleOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_108" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.ocr.api.OcrResults;
+import com.m8test.ocr.api.PaddleOcr;
+import com.m8test.ocr.api.PaddleOcrConfig;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$ocrs;
+
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+PaddleOcr paddleOcr = $ocrs.paddle(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        PaddleOcrConfig it = (PaddleOcrConfig) o;
+        // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+        it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;);
+        return null;
+    }
+});
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+OcrResults results = paddleOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null);
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_111" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// Ocrs.paddle() 用于创建 PaddleOcr 对象
+let paddleOcr = $ocrs.paddle(function (it) {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+})
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+let results = paddleOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_114" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- Ocrs.paddle() 用于创建 PaddleOcr 对象
+local paddleOcr = _ocrs:paddle(function(it)
+    -- PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https:--github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    it:setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+end)
+-- Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+local results = paddleOcr:analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+-- OcrResults.getText() 用于获取 Ocr 识别结果
+_console:log(results:getText(&quot;\n&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_117" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\ocr\api\Ocrs $ocrs */
+global $ocrs;
+// Ocrs.paddle() 用于创建 PaddleOcr 对象
+$paddleOcr = $ocrs-&gt;paddle(function ($it) {
+    // PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+    $it-&gt;setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;);
+});
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+$results = $paddleOcr-&gt;analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null);
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console-&gt;log($results-&gt;getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_120" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _ocrs
+
+# Ocrs.paddle() 用于创建 PaddleOcr 对象
+paddleOcr = _ocrs.paddle(lambda it:
+                         # PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https:#github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+                         it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;))
+# Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+results = paddleOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, None)
+# OcrResults.getText() 用于获取 Ocr 识别结果
+_console.log(results.getText(&quot;\n&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="fa4lks_123" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">java_import &quot;com.m8test.ocr.api.PaddleOcrConfig&quot;
+# Ocrs.paddle() 用于创建 PaddleOcr 对象
+paddleOcr = $ocrs.paddle {
+  # @type it [PaddleOcrConfig]
+  |it|
+  # PaddleOcrConfig.setModelPath() 用于添加 Paddle 训练数据文件, 可以在 https:#github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_ch/models_list.md 下载
+  it.setModelPath(&quot;/sdcard/M8Test/ocr/paddleModel/&quot;)
+}
+# Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+results = paddleOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, nil)
+# OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="baidu-ocr.html" class="navigation-links__prev">百度OCR</a><a href="tesseract-ocr.html" class="navigation-links__next">Tesseract OCR</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

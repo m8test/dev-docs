@@ -1,0 +1,930 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:25.451886148"><title>SharedPreferences | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="SharedPreferences | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/shared-preferences.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="SharedPreferences | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/shared-preferences.html#webpage",
+    "url": "writerside-documentation/shared-preferences.html",
+    "name": "SharedPreferences | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="shared-preferences" data-main-title="SharedPreferences" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="utility-tools.md|实用工具"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="shared-preferences" id="shared-preferences.md">SharedPreferences</h1><div class="tabs" id="-rufghl_6" data-group="languages" data-anchors="[-rufghl_12,-rufghl_15,-rufghl_18,-rufghl_21,-rufghl_24,-rufghl_27,-rufghl_30,-rufghl_9]"><div class="tabs__content" data-gtm="tab" id="-rufghl_9" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/**
+ * Storage (键值对存储) 与 Storages (存储管理) 接口测试脚本
+ * 全局变量: _storages
+ */
+
+// 辅助函数
+fun assertLog(name: String, actual: Any?, expected: Any?) {
+    if (actual == expected) {
+        _console.log(&quot;✅ [$name] Passed. Result: $actual&quot;)
+    } else {
+        _console.error(&quot;❌ [$name] Failed.\n   Expected: $expected\n   Actual  : $actual&quot;)
+    }
+}
+
+_console.log(&quot;🚀 开始测试 Storage 存储模块...&quot;)
+
+// ==========================================
+// 1. 初始化与 Storages 管理测试
+// ==========================================
+val storeName = &quot;test_config_pref&quot;
+
+// 确保测试环境干净：先尝试移除该名称的存储
+// remove 返回 boolean
+_storages.remove(storeName)
+
+// 获取存储实例
+// 如果不存在会自动创建/打开
+val store = _storages.get(storeName)
+
+if (store != null) {
+    _console.log(&quot;✅ 获取 Storage 实例成功: $storeName&quot;)
+} else {
+    _console.error(&quot;❌ 获取 Storage 实例失败&quot;)
+    throw RuntimeException(&quot;Storage is null&quot;)
+}
+
+// 确保是一个空的或干净的存储
+store.clear()
+
+// ==========================================
+// 2. 基础增删改查 (CRUD)
+// ==========================================
+
+_console.log(&quot;\n--- 测试 Put &amp; Get ---&quot;)
+// Put
+val putRes1 = store.put(&quot;username&quot;, &quot;M8Tester&quot;)
+val putRes2 = store.put(&quot;api_token&quot;, &quot;abcdef123456&quot;)
+val putRes3 = store.put(&quot;login_count&quot;, &quot;10&quot;) // 接口定义 value 必须是 String
+
+assertLog(&quot;put('username')&quot;, putRes1, true)
+assertLog(&quot;put('api_token')&quot;, putRes2, true)
+
+// Get (存在的键)
+val username = store.get(&quot;username&quot;, &quot;default_user&quot;)
+assertLog(&quot;get('username')&quot;, username, &quot;M8Tester&quot;)
+
+// Get (不存在的键，测试默认值)
+val missingVal = store.get(&quot;not_exist_key&quot;, &quot;DEFAULT_VAL&quot;)
+assertLog(&quot;get(不存在的键)&quot;, missingVal, &quot;DEFAULT_VAL&quot;)
+
+// ==========================================
+// 3. 状态判断 (Contains)
+// ==========================================
+_console.log(&quot;\n--- 测试 Contains ---&quot;)
+assertLog(&quot;contains('api_token')&quot;, store.contains(&quot;api_token&quot;), true)
+assertLog(&quot;contains('ghost_key')&quot;, store.contains(&quot;ghost_key&quot;), false)
+
+// ==========================================
+// 4. 遍历 (ForEach)
+// ==========================================
+_console.log(&quot;\n--- 测试 ForEach ---&quot;)
+var count = 0
+val keysFound = mutableListOf&lt;String&gt;()
+
+// forEach
+store.forEach { key, value -&gt;
+    _console.log(&quot;  Iterating -&gt; Key: $key, Value: $value&quot;)
+    keysFound.add(key)
+    count++
+}
+
+// 验证遍历的数量和内容是否正确
+// 我们插入了 3 个: username, api_token, login_count
+assertLog(&quot;forEach 数量统计&quot;, count, 3)
+if (keysFound.contains(&quot;username&quot;) &amp;&amp; keysFound.contains(&quot;login_count&quot;)) {
+    _console.log(&quot;✅ forEach 内容验证通过&quot;)
+} else {
+    _console.error(&quot;❌ forEach 内容验证失败: $keysFound&quot;)
+}
+
+// ==========================================
+// 5. 移除与清空 (Remove &amp; Clear)
+// ==========================================
+_console.log(&quot;\n--- 测试 Remove &amp; Clear ---&quot;)
+
+// Remove 单个 Key
+val removeRes = store.remove(&quot;username&quot;)
+assertLog(&quot;remove('username')&quot;, removeRes, true)
+assertLog(&quot;contains('username') after remove&quot;, store.contains(&quot;username&quot;), false)
+
+// Clear 全部
+val clearRes = store.clear()
+assertLog(&quot;clear()&quot;, clearRes, true)
+
+// 验证是否为空
+// 通过再次遍历或检查 contains 验证
+val isEmpty = !store.contains(&quot;api_token&quot;) &amp;&amp; !store.contains(&quot;login_count&quot;)
+assertLog(&quot;验证 clear 后数据为空&quot;, isEmpty, true)
+
+// ==========================================
+// 6. 销毁存储实例 (Storages.remove)
+// ==========================================
+_console.log(&quot;\n--- 测试 Storages.remove ---&quot;)
+
+// 移除整个存储实例（通常意味着删除底层的 XML 文件或数据库文件）
+val storageRemoveRes = _storages.remove(storeName)
+assertLog(&quot;storages.remove&quot;, storageRemoveRes, true)
+
+// 再次获取该名称的 storage，应该是全新的（空的）
+// 此时 get 不会返回 null，而是返回一个新的空实例
+val newStore = _storages.get(storeName)
+// 验证旧数据确实没了（虽然我们在步骤 5 已经 clear 了，但为了测试 remove 的逻辑，这里假设其重置了状态）
+// 使用 !! 假设 get 返回非空，或者安全调用
+assertLog(&quot;新实例不包含旧数据&quot;, newStore?.contains(&quot;api_token&quot;) ?: false, false)
+
+_console.log(&quot;🎉 Storage 接口测试完毕。&quot;)
+
+_script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-rufghl_12" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/**
+ * Storage (键值对存储) 与 Storages (存储管理) 接口测试脚本
+ * 全局变量: $storages
+ */
+
+$console.log(&quot;🚀 开始测试 Storage 存储模块...&quot;)
+
+// ==========================================
+// 1. 初始化与 Storages 管理测试
+// ==========================================
+def storeName = &quot;test_config_pref&quot;
+
+// 确保测试环境干净：先尝试移除该名称的存储
+// remove 返回 boolean
+$storages.remove(storeName)
+
+// 获取存储实例
+// 如果不存在会自动创建/打开
+def store = $storages.get(storeName)
+
+if (store != null) {
+    $console.log(&quot;✅ 获取 Storage 实例成功: ${storeName}&quot;)
+} else {
+    $console.error(&quot;❌ 获取 Storage 实例失败&quot;)
+    return
+}
+
+// 确保是一个空的或干净的存储
+store.clear()
+
+// ==========================================
+// 2. 基础增删改查 (CRUD)
+// ==========================================
+
+$console.log(&quot;\n--- 测试 Put &amp; Get ---&quot;)
+// Put
+def putRes1 = store.put(&quot;username&quot;, &quot;M8Tester&quot;)
+def putRes2 = store.put(&quot;api_token&quot;, &quot;abcdef123456&quot;)
+def putRes3 = store.put(&quot;login_count&quot;, &quot;10&quot;) // 接口定义 value 必须是 String
+
+assertLog(&quot;put('username')&quot;, putRes1, true)
+assertLog(&quot;put('api_token')&quot;, putRes2, true)
+
+// Get (存在的键)
+def username = store.get(&quot;username&quot;, &quot;default_user&quot;)
+assertLog(&quot;get('username')&quot;, username, &quot;M8Tester&quot;)
+
+// Get (不存在的键，测试默认值)
+def missingVal = store.get(&quot;not_exist_key&quot;, &quot;DEFAULT_VAL&quot;)
+assertLog(&quot;get(不存在的键)&quot;, missingVal, &quot;DEFAULT_VAL&quot;)
+
+// ==========================================
+// 3. 状态判断 (Contains)
+// ==========================================
+$console.log(&quot;\n--- 测试 Contains ---&quot;)
+assertLog(&quot;contains('api_token')&quot;, store.contains(&quot;api_token&quot;), true)
+assertLog(&quot;contains('ghost_key')&quot;, store.contains(&quot;ghost_key&quot;), false)
+
+// ==========================================
+// 4. 遍历 (ForEach)
+// ==========================================
+$console.log(&quot;\n--- 测试 ForEach ---&quot;)
+def count = 0
+def keysFound = []
+
+// forEach 接收一个 BiConsumer (String, String) -&gt; Unit
+store.forEach { key, value -&gt;
+    $console.log(&quot;  Iterating -&gt; Key: ${key}, Value: ${value}&quot;)
+    keysFound.add(key)
+    count++
+}
+
+// 验证遍历的数量和内容是否正确
+// 我们插入了 3 个: username, api_token, login_count
+assertLog(&quot;forEach 数量统计&quot;, count, 3)
+if (keysFound.contains(&quot;username&quot;) &amp;&amp; keysFound.contains(&quot;login_count&quot;)) {
+    $console.log(&quot;✅ forEach 内容验证通过&quot;)
+} else {
+    $console.error(&quot;❌ forEach 内容验证失败: &quot; + keysFound)
+}
+
+// ==========================================
+// 5. 移除与清空 (Remove &amp; Clear)
+// ==========================================
+$console.log(&quot;\n--- 测试 Remove &amp; Clear ---&quot;)
+
+// Remove 单个 Key
+def removeRes = store.remove(&quot;username&quot;)
+assertLog(&quot;remove('username')&quot;, removeRes, true)
+assertLog(&quot;contains('username') after remove&quot;, store.contains(&quot;username&quot;), false)
+
+// Clear 全部
+def clearRes = store.clear()
+assertLog(&quot;clear()&quot;, clearRes, true)
+
+// 验证是否为空
+// 通过再次遍历或检查 contains 验证
+def isEmpty = !store.contains(&quot;api_token&quot;) &amp;&amp; !store.contains(&quot;login_count&quot;)
+assertLog(&quot;验证 clear 后数据为空&quot;, isEmpty, true)
+
+// ==========================================
+// 6. 销毁存储实例 (Storages.remove)
+// ==========================================
+$console.log(&quot;\n--- 测试 Storages.remove ---&quot;)
+
+// 移除整个存储实例（通常意味着删除底层的 XML 文件或数据库文件）
+def storageRemoveRes = $storages.remove(storeName)
+assertLog(&quot;storages.remove&quot;, storageRemoveRes, true)
+
+// 再次获取该名称的 storage，应该是全新的（空的）
+// 此时 get 不会返回 null，而是返回一个新的空实例
+def newStore = $storages.get(storeName)
+// 验证旧数据确实没了（虽然我们在步骤 5 已经 clear 了，但为了测试 remove 的逻辑，这里假设其重置了状态）
+assertLog(&quot;新实例不包含旧数据&quot;, newStore.contains(&quot;api_token&quot;), false)
+
+$console.log(&quot;🎉 Storage 接口测试完毕。&quot;)
+
+// ==========================================
+// 辅助函数
+// ==========================================
+def assertLog(name, actual, expected) {
+    if (actual == expected) {
+        $console.log(&quot;✅ [${name}] Passed. Result: ${actual}&quot;)
+    } else {
+        $console.error(&quot;❌ [${name}] Failed.\n   Expected: ${expected}\n   Actual  : ${actual}&quot;)
+    }
+}
+
+$script.getThreads().getMain().setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-rufghl_15" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-rufghl_18" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * Storage (键值对存储) 与 Storages (存储管理) 接口测试脚本
+ * 全局变量: $storages
+ */
+
+$console.log(&quot;🚀 开始测试 Storage 存储模块...&quot;);
+
+// ==========================================
+// 1. 初始化与 Storages 管理测试
+// ==========================================
+const storeName = &quot;test_config_pref&quot;;
+
+// 确保测试环境干净：先尝试移除该名称的存储
+// remove 返回 boolean
+$storages.remove(storeName);
+
+// 获取存储实例
+// 如果不存在会自动创建/打开
+const store = $storages.get(storeName);
+
+if (store != null) {
+    $console.log(&quot;✅ 获取 Storage 实例成功: &quot; + storeName);
+} else {
+    $console.error(&quot;❌ 获取 Storage 实例失败&quot;);
+    throw new Error(&quot;获取 Storage 实例失败，测试终止&quot;);
+}
+
+// 确保是一个空的或干净的存储
+store.clear();
+
+// ==========================================
+// 2. 基础增删改查 (CRUD)
+// ==========================================
+
+$console.log(&quot;\n--- 测试 Put &amp; Get ---&quot;);
+// Put
+const putRes1 = store.put(&quot;username&quot;, &quot;M8Tester&quot;);
+const putRes2 = store.put(&quot;api_token&quot;, &quot;abcdef123456&quot;);
+const putRes3 = store.put(&quot;login_count&quot;, &quot;10&quot;); // 接口定义 value 必须是 String
+
+assertLog(&quot;put('username')&quot;, putRes1, true);
+assertLog(&quot;put('api_token')&quot;, putRes2, true);
+
+// Get (存在的键)
+const username = store.get(&quot;username&quot;, &quot;default_user&quot;);
+assertLog(&quot;get('username')&quot;, username, &quot;M8Tester&quot;);
+
+// Get (不存在的键，测试默认值)
+const missingVal = store.get(&quot;not_exist_key&quot;, &quot;DEFAULT_VAL&quot;);
+assertLog(&quot;get(不存在的键)&quot;, missingVal, &quot;DEFAULT_VAL&quot;);
+
+// ==========================================
+// 3. 状态判断 (Contains)
+// ==========================================
+$console.log(&quot;\n--- 测试 Contains ---&quot;);
+assertLog(&quot;contains('api_token')&quot;, store.contains(&quot;api_token&quot;), true);
+assertLog(&quot;contains('ghost_key')&quot;, store.contains(&quot;ghost_key&quot;), false);
+
+// ==========================================
+// 4. 遍历 (ForEach)
+// ==========================================
+$console.log(&quot;\n--- 测试 ForEach ---&quot;);
+let count = 0;
+let keysFound = [];
+
+// forEach 接收一个 (key, value) =&gt; {}
+store.forEach((key, value) =&gt; {
+    $console.log(&quot;  Iterating -&gt; Key: &quot; + key + &quot;, Value: &quot; + value);
+    keysFound.push(key);
+    count++;
+});
+
+// 验证遍历的数量和内容是否正确
+// 我们插入了 3 个: username, api_token, login_count
+assertLog(&quot;forEach 数量统计&quot;, count, 3);
+if (keysFound.includes(&quot;username&quot;) &amp;&amp; keysFound.includes(&quot;login_count&quot;)) {
+    $console.log(&quot;✅ forEach 内容验证通过&quot;);
+} else {
+    $console.error(&quot;❌ forEach 内容验证失败: &quot; + keysFound);
+}
+
+// ==========================================
+// 5. 移除与清空 (Remove &amp; Clear)
+// ==========================================
+$console.log(&quot;\n--- 测试 Remove &amp; Clear ---&quot;);
+
+// Remove 单个 Key
+const removeRes = store.remove(&quot;username&quot;);
+assertLog(&quot;remove('username')&quot;, removeRes, true);
+assertLog(&quot;contains('username') after remove&quot;, store.contains(&quot;username&quot;), false);
+
+// Clear 全部
+const clearRes = store.clear();
+assertLog(&quot;clear()&quot;, clearRes, true);
+
+// 验证是否为空
+// 通过再次遍历或检查 contains 验证
+const isEmpty = store.contains(&quot;api_token&quot;) == false &amp;&amp; store.contains(&quot;login_count&quot;) == false;
+assertLog(&quot;验证 clear 后数据为空&quot;, isEmpty, true);
+
+// ==========================================
+// 6. 销毁存储实例 (Storages.remove)
+// ==========================================
+$console.log(&quot;\n--- 测试 Storages.remove ---&quot;);
+
+// 移除整个存储实例（通常意味着删除底层的 XML 文件或数据库文件）
+const storageRemoveRes = $storages.remove(storeName);
+assertLog(&quot;storages.remove&quot;, storageRemoveRes, true);
+
+// 再次获取该名称的 storage，应该是全新的（空的）
+// 此时 get 不会返回 null，而是返回一个新的空实例
+const newStore = $storages.get(storeName);
+// 验证旧数据确实没了（虽然我们在步骤 5 已经 clear 了，但为了测试 remove 的逻辑，这里假设其重置了状态）
+assertLog(&quot;新实例不包含旧数据&quot;, newStore.contains(&quot;api_token&quot;), false);
+
+$console.log(&quot;🎉 Storage 接口测试完毕。&quot;);
+
+// ==========================================
+// 辅助函数
+// ==========================================
+/**
+ * @param {string} name
+ * @param {any} actual
+ * @param {any} expected
+ */
+function assertLog(name, actual, expected) {
+    if (actual == expected) {
+        $console.log(&quot;✅ [&quot; + name + &quot;] Passed. Result: &quot; + actual);
+    } else {
+        $console.error(&quot;❌ [&quot; + name + &quot;] Failed.\n   Expected: &quot; + expected + &quot;\n   Actual  : &quot; + actual);
+    }
+}
+
+$script.getThreads().getMain().setBackground(true);</div></div><div class="tabs__content" data-gtm="tab" id="-rufghl_21" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- ==========================================
+-- 辅助函数
+-- ==========================================
+local function assertLog(name, actual, expected)
+    if tostring(actual) == tostring(expected) then
+        _console:log(&quot;✅ [&quot; .. name .. &quot;] Passed. Result: &quot; .. tostring(actual))
+    else
+        _console:error(&quot;❌ [&quot; .. name .. &quot;] Failed.\n   Expected: &quot; .. tostring(expected) .. &quot;\n   Actual  : &quot; .. tostring(actual))
+    end
+end
+
+-- 辅助函数：检查 table (作为list) 中是否包含某个值
+local function list_contains(list, value)
+    for _, v in ipairs(list) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
+---
+-- Storage (键值对存储) 与 Storages (存储管理) 接口测试脚本
+-- 全局变量: _storages
+---
+
+_console:log(&quot;🚀 开始测试 Storage 存储模块...&quot;)
+
+-- ==========================================
+-- 1. 初始化与 Storages 管理测试
+-- ==========================================
+local storeName = &quot;test_config_pref&quot;
+
+-- 确保测试环境干净：先尝试移除该名称的存储
+-- remove 返回 boolean
+_storages:remove(storeName)
+
+-- 获取存储实例
+-- 如果不存在会自动创建/打开
+local store = _storages:get(storeName)
+
+if store ~= nil then
+    _console:log(&quot;✅ 获取 Storage 实例成功: &quot; .. storeName)
+else
+    _console:error(&quot;❌ 获取 Storage 实例失败&quot;)
+    return
+end
+
+-- 确保是一个空的或干净的存储
+store:clear()
+
+-- ==========================================
+-- 2. 基础增删改查 (CRUD)
+-- ==========================================
+
+_console:log(&quot;\n--- 测试 Put &amp; Get ---&quot;)
+-- Put
+local putRes1 = store:put(&quot;username&quot;, &quot;M8Tester&quot;)
+local putRes2 = store:put(&quot;api_token&quot;, &quot;abcdef123456&quot;)
+local putRes3 = store:put(&quot;login_count&quot;, &quot;10&quot;) -- 接口定义 value 必须是 String
+
+assertLog(&quot;put('username')&quot;, putRes1, true)
+assertLog(&quot;put('api_token')&quot;, putRes2, true)
+
+-- Get (存在的键)
+local username = store:get(&quot;username&quot;, &quot;default_user&quot;)
+assertLog(&quot;get('username')&quot;, username, &quot;M8Tester&quot;)
+
+-- Get (不存在的键，测试默认值)
+local missingVal = store:get(&quot;not_exist_key&quot;, &quot;DEFAULT_VAL&quot;)
+assertLog(&quot;get(不存在的键)&quot;, missingVal, &quot;DEFAULT_VAL&quot;)
+
+-- ==========================================
+-- 3. 状态判断 (Contains)
+-- ==========================================
+_console:log(&quot;\n--- 测试 Contains ---&quot;)
+assertLog(&quot;contains('api_token')&quot;, store:contains(&quot;api_token&quot;), true)
+assertLog(&quot;contains('ghost_key')&quot;, store:contains(&quot;ghost_key&quot;), false)
+
+-- ==========================================
+-- 4. 遍历 (ForEach)
+-- ==========================================
+_console:log(&quot;\n--- 测试 ForEach ---&quot;)
+local count = 0
+local keysFound = {}
+
+-- forEach 接收一个 function (key, value)
+store:forEach(function(key, value)
+    _console:log(&quot;  Iterating -&gt; Key: &quot; .. tostring(key) .. &quot;, Value: &quot; .. tostring(value))
+    table.insert(keysFound, key)
+    count = count + 1
+end)
+
+-- 验证遍历的数量和内容是否正确
+-- 我们插入了 3 个: username, api_token, login_count
+assertLog(&quot;forEach 数量统计&quot;, count, 3)
+if list_contains(keysFound, &quot;username&quot;) and list_contains(keysFound, &quot;login_count&quot;) then
+    _console:log(&quot;✅ forEach 内容验证通过&quot;)
+else
+    _console:error(&quot;❌ forEach 内容验证失败: &quot; .. tostring(keysFound))
+end
+
+-- ==========================================
+-- 5. 移除与清空 (Remove &amp; Clear)
+-- ==========================================
+_console:log(&quot;\n--- 测试 Remove &amp; Clear ---&quot;)
+
+-- Remove 单个 Key
+local removeRes = store:remove(&quot;username&quot;)
+assertLog(&quot;remove('username')&quot;, removeRes, true)
+assertLog(&quot;contains('username') after remove&quot;, store:contains(&quot;username&quot;), false)
+
+-- Clear 全部
+local clearRes = store:clear()
+assertLog(&quot;clear()&quot;, clearRes, true)
+
+-- 验证是否为空
+-- 通过再次遍历或检查 contains 验证
+local isEmpty = not store:contains(&quot;api_token&quot;) and not store:contains(&quot;login_count&quot;)
+assertLog(&quot;验证 clear 后数据为空&quot;, isEmpty, true)
+
+-- ==========================================
+-- 6. 销毁存储实例 (Storages.remove)
+-- ==========================================
+_console:log(&quot;\n--- 测试 Storages.remove ---&quot;)
+
+-- 移除整个存储实例（通常意味着删除底层的 XML 文件或数据库文件）
+local storageRemoveRes = _storages:remove(storeName)
+assertLog(&quot;storages.remove&quot;, storageRemoveRes, true)
+
+-- 再次获取该名称的 storage，应该是全新的（空的）
+-- 此时 get 不会返回 nil，而是返回一个新的空实例
+local newStore = _storages:get(storeName)
+-- 验证旧数据确实没了（虽然我们在步骤 5 已经 clear 了，但为了测试 remove 的逻辑，这里假设其重置了状态）
+assertLog(&quot;新实例不包含旧数据&quot;, newStore:contains(&quot;api_token&quot;), false)
+
+_console:log(&quot;🎉 Storage 接口测试完毕。&quot;)
+
+_script:getThreads():getMain():setBackground(true)</div></div><div class="tabs__content" data-gtm="tab" id="-rufghl_24" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\storage\Storages $storages */
+global $storages;
+/** @var m8test_java\com\m8test\script\core\api\engine\Script $script */
+global $script;
+
+// ==========================================
+// 辅助函数
+// ==========================================
+function assertLog($name, $actual, $expected)
+{
+    global $console;
+    if ($actual === $expected) { // 使用严格比较
+        $console-&gt;log(javaString(&quot;✅ [{$name}] Passed. Result: &quot; . var_export($actual, true)));
+    } else {
+        $console-&gt;error(javaString(&quot;❌ [{$name}] Failed.\n   Expected: &quot; . var_export($expected, true) . &quot;\n   Actual  : &quot; . var_export($actual, true)));
+    }
+}
+
+
+/**
+ * Storage (键值对存储) 与 Storages (存储管理) 接口测试脚本
+ * 全局变量: $storages
+ */
+
+$console-&gt;log(javaString(&quot;🚀 开始测试 Storage 存储模块...&quot;));
+
+// ==========================================
+// 1. 初始化与 Storages 管理测试
+// ==========================================
+$storeName = javaString(&quot;test_config_pref&quot;);
+
+// 确保测试环境干净：先尝试移除该名称的存储
+// remove 返回 boolean
+$storages-&gt;remove($storeName);
+
+// 获取存储实例
+// 如果不存在会自动创建/打开
+$store = $storages-&gt;get($storeName);
+
+if ($store != null) {
+    $console-&gt;log(javaString(&quot;✅ 获取 Storage 实例成功: {$storeName}&quot;));
+} else {
+    $console-&gt;error(javaString(&quot;❌ 获取 Storage 实例失败&quot;));
+    return;
+}
+
+// 确保是一个空的或干净的存储
+$store-&gt;clear();
+
+// ==========================================
+// 2. 基础增删改查 (CRUD)
+// ==========================================
+
+$console-&gt;log(javaString(&quot;\n--- 测试 Put &amp; Get ---&quot;));
+// Put
+$putRes1 = $store-&gt;put(javaString(&quot;username&quot;), javaString(&quot;M8Tester&quot;));
+$putRes2 = $store-&gt;put(javaString(&quot;api_token&quot;), javaString(&quot;abcdef123456&quot;));
+$putRes3 = $store-&gt;put(javaString(&quot;login_count&quot;), javaString(&quot;10&quot;)); // 接口定义 value 必须是 String
+
+assertLog(javaString(&quot;put('username')&quot;), $putRes1, true);
+assertLog(javaString(&quot;put('api_token')&quot;), $putRes2, true);
+
+// Get (存在的键)
+$username = $store-&gt;get(javaString(&quot;username&quot;), javaString(&quot;default_user&quot;));
+assertLog(javaString(&quot;get('username')&quot;), $username, javaString(&quot;M8Tester&quot;));
+
+// Get (不存在的键，测试默认值)
+$missingVal = $store-&gt;get(javaString(&quot;not_exist_key&quot;), javaString(&quot;DEFAULT_VAL&quot;));
+assertLog(javaString(&quot;get(不存在的键)&quot;), $missingVal, javaString(&quot;DEFAULT_VAL&quot;));
+
+// ==========================================
+// 3. 状态判断 (Contains)
+// ==========================================
+$console-&gt;log(javaString(&quot;\n--- 测试 Contains ---&quot;));
+assertLog(javaString(&quot;contains('api_token')&quot;), $store-&gt;contains(javaString(&quot;api_token&quot;)), true);
+assertLog(javaString(&quot;contains('ghost_key')&quot;), $store-&gt;contains(javaString(&quot;ghost_key&quot;)), false);
+
+// ==========================================
+// 4. 遍历 (ForEach)
+// ==========================================
+$console-&gt;log(javaString(&quot;\n--- 测试 ForEach ---&quot;));
+$count = 0;
+$keysFound = [];
+
+// forEach 接收一个 BiConsumer (String, String) -&gt; Unit
+// 在 PHP 中，我们需要将外部变量通过 `use` 传入，并使用引用 `&amp;` 来修改它们
+$store-&gt;forEach(function ($key, $value) use (&amp;$count, &amp;$keysFound) {
+    global $console;
+    $console-&gt;log(javaString(&quot;  Iterating -&gt; Key: {$key}, Value: {$value}&quot;));
+    $keysFound[] = $key;
+    $count++;
+});
+
+// 验证遍历的数量和内容是否正确
+// 我们插入了 3 个: username, api_token, login_count
+assertLog(javaString(&quot;forEach 数量统计&quot;), $count, 3);
+//if (in_array(javaString(&quot;username&quot;), $keysFound) &amp;&amp; in_array(javaString(&quot;login_count&quot;), $keysFound)) {
+//    $console-&gt;log(javaString(&quot;✅ forEach 内容验证通过&quot;));
+//} else {
+//    $console-&gt;error(javaString(&quot;❌ forEach 内容验证失败: &quot;) . implode(&quot;, &quot;, $keysFound));
+//}
+
+
+// ==========================================
+// 5. 移除与清空 (Remove &amp; Clear)
+// ==========================================
+$console-&gt;log(javaString(&quot;\n--- 测试 Remove &amp; Clear ---&quot;));
+
+// Remove 单个 Key
+$removeRes = $store-&gt;remove(javaString(&quot;username&quot;));
+assertLog(javaString(&quot;remove('username')&quot;), $removeRes, true);
+assertLog(javaString(&quot;contains('username') after remove&quot;), $store-&gt;contains(javaString(&quot;username&quot;)), false);
+
+// Clear 全部
+$clearRes = $store-&gt;clear();
+assertLog(javaString(&quot;clear()&quot;), $clearRes, true);
+
+// 验证是否为空
+// 通过再次遍历或检查 contains 验证
+$isEmpty = !$store-&gt;contains(javaString(&quot;api_token&quot;)) &amp;&amp; !$store-&gt;contains(javaString(&quot;login_count&quot;));
+assertLog(javaString(&quot;验证 clear 后数据为空&quot;), $isEmpty, true);
+
+// ==========================================
+// 6. 销毁存储实例 (Storages.remove)
+// ==========================================
+$console-&gt;log(javaString(&quot;\n--- 测试 Storages.remove ---&quot;));
+
+// 移除整个存储实例（通常意味着删除底层的 XML 文件或数据库文件）
+$storageRemoveRes = $storages-&gt;remove($storeName);
+assertLog(javaString(&quot;storages.remove&quot;), $storageRemoveRes, true);
+
+// 再次获取该名称的 storage，应该是全新的（空的）
+// 此时 get 不会返回 null，而是返回一个新的空实例
+$newStore = $storages-&gt;get($storeName);
+// 验证旧数据确实没了（虽然我们在步骤 5 已经 clear 了，但为了测试 remove 的逻辑，这里假设其重置了状态）
+assertLog(javaString(&quot;新实例不包含旧数据&quot;), $newStore-&gt;contains(javaString(&quot;api_token&quot;)), false);
+
+$console-&gt;log(javaString(&quot;🎉 Storage 接口测试完毕。&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-rufghl_27" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _storages
+from m8test_java.com.m8test.script.GlobalVariables import _script
+
+# ==========================================
+# 辅助函数
+# ==========================================
+def assertLog(name, actual, expected):
+    # Java boolean is returned as string 'true'/'false'
+    actual_str = str(actual).lower() if isinstance(actual, str) and actual.lower() in ['true', 'false'] else str(actual)
+    expected_str = str(expected).lower() if isinstance(expected, bool) else str(expected)
+
+    if actual_str == expected_str:
+        _console.log(f&quot;✅ [{name}] Passed. Result: {actual}&quot;)
+    else:
+        _console.error(f&quot;❌ [{name}] Failed.\n   Expected: {expected}\n   Actual  : {actual}&quot;)
+
+&quot;&quot;&quot;
+Storage (键值对存储) 与 Storages (存储管理) 接口测试脚本
+全局变量: $storages
+&quot;&quot;&quot;
+
+_console.log(&quot;🚀 开始测试 Storage 存储模块...&quot;)
+
+# ==========================================
+# 1. 初始化与 Storages 管理测试
+# ==========================================
+storeName = &quot;test_config_pref&quot;
+
+# 确保测试环境干净：先尝试移除该名称的存储
+_storages.remove(storeName)
+
+# 获取存储实例
+store = _storages.get(storeName)
+
+if store is not None:
+    _console.log(f&quot;✅ 获取 Storage 实例成功: {storeName}&quot;)
+else:
+    _console.error(&quot;❌ 获取 Storage 实例失败&quot;)
+    store = None # Ensure store is None to avoid further errors
+
+if store:
+    # 确保是一个空的或干净的存储
+    store.clear()
+
+    # ==========================================
+    # 2. 基础增删改查 (CRUD)
+    # ==========================================
+    _console.log(&quot;\n--- 测试 Put &amp; Get ---&quot;)
+    putRes1 = store.put(&quot;username&quot;, &quot;M8Tester&quot;)
+    putRes2 = store.put(&quot;api_token&quot;, &quot;abcdef123456&quot;)
+    putRes3 = store.put(&quot;login_count&quot;, &quot;10&quot;)
+
+    assertLog(&quot;put('username')&quot;, putRes1, &quot;True&quot;)
+    assertLog(&quot;put('api_token')&quot;, putRes2, &quot;True&quot;)
+
+    username = store.get(&quot;username&quot;, &quot;default_user&quot;)
+    assertLog(&quot;get('username')&quot;, username, &quot;M8Tester&quot;)
+
+    missingVal = store.get(&quot;not_exist_key&quot;, &quot;DEFAULT_VAL&quot;)
+    assertLog(&quot;get(不存在的键)&quot;, missingVal, &quot;DEFAULT_VAL&quot;)
+
+    # ==========================================
+    # 3. 状态判断 (Contains)
+    # ==========================================
+    _console.log(&quot;\n--- 测试 Contains ---&quot;)
+    assertLog(&quot;contains('api_token')&quot;, store.contains(&quot;api_token&quot;), &quot;True&quot;)
+    assertLog(&quot;contains('ghost_key')&quot;, store.contains(&quot;ghost_key&quot;), &quot;False&quot;)
+
+    # ==========================================
+    # 4. 遍历 (ForEach)
+    # ==========================================
+    _console.log(&quot;\n--- 测试 ForEach ---&quot;)
+    count = [0] # Use a mutable list to be modified inside lambda
+    keysFound = []
+
+    # forEach takes a BiConsumer, which translates to a two-argument lambda
+    store.forEach(lambda key, value: (
+        _console.log(f&quot;  Iterating -&gt; Key: {key}, Value: {value}&quot;),
+        keysFound.append(key),
+        count.__setitem__(0, count[0] + 1)
+    ))
+
+    assertLog(&quot;forEach 数量统计&quot;, count[0], 3)
+    if &quot;username&quot; in keysFound and &quot;login_count&quot; in keysFound:
+        _console.log(&quot;✅ forEach 内容验证通过&quot;)
+    else:
+        _console.error(f&quot;❌ forEach 内容验证失败: {keysFound}&quot;)
+
+    # ==========================================
+    # 5. 移除与清空 (Remove &amp; Clear)
+    # ==========================================
+    _console.log(&quot;\n--- 测试 Remove &amp; Clear ---&quot;)
+    removeRes = store.remove(&quot;username&quot;)
+    assertLog(&quot;remove('username')&quot;, removeRes, &quot;True&quot;)
+    assertLog(&quot;contains('username') after remove&quot;, store.contains(&quot;username&quot;), &quot;False&quot;)
+
+    clearRes = store.clear()
+    assertLog(&quot;clear()&quot;, clearRes, &quot;True&quot;)
+
+    # Use 'false' for comparison as `contains` returns string from Java
+    isEmpty = store.contains(&quot;api_token&quot;) == 'false' and store.contains(&quot;login_count&quot;) == 'false'
+    assertLog(&quot;验证 clear 后数据为空&quot;, isEmpty, &quot;True&quot;)
+
+    # ==========================================
+    # 6. 销毁存储实例 (Storages.remove)
+    # ==========================================
+    _console.log(&quot;\n--- 测试 Storages.remove ---&quot;)
+    storageRemoveRes = _storages.remove(storeName)
+    assertLog(&quot;storages.remove&quot;, storageRemoveRes, &quot;True&quot;)
+
+    newStore = _storages.get(storeName)
+    assertLog(&quot;新实例不包含旧数据&quot;, newStore.contains(&quot;api_token&quot;), &quot;False&quot;)
+
+    _console.log(&quot;🎉 Storage 接口测试完毕。&quot;)
+
+_script.getThreads().getMain().setBackground(True)</div></div><div class="tabs__content" data-gtm="tab" id="-rufghl_30" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# Storage (键值对存储) 与 Storages (存储管理) 接口测试脚本
+# 全局变量: $storages
+
+$console.log(&quot;🚀 开始测试 Storage 存储模块...&quot;)
+
+# ==========================================
+# 辅助函数
+# ==========================================
+def assertLog(name, actual, expected)
+  if actual == expected
+    $console.log(&quot;✅ [#{name}] Passed. Result: #{actual}&quot;)
+  else
+    $console.error(&quot;❌ [#{name}] Failed.\n   Expected: #{expected}\n   Actual  : #{actual}&quot;)
+  end
+end
+
+# ==========================================
+# 1. 初始化与 Storages 管理测试
+# ==========================================
+storeName = &quot;test_config_pref&quot;
+
+# 确保测试环境干净：先尝试移除该名称的存储
+# remove 返回 boolean
+$storages.remove(storeName)
+
+# 获取存储实例
+# 如果不存在会自动创建/打开
+store = $storages.get(storeName)
+
+if store != nil
+  $console.log(&quot;✅ 获取 Storage 实例成功: #{storeName}&quot;)
+else
+  $console.error(&quot;❌ 获取 Storage 实例失败&quot;)
+  return
+end
+
+# 确保是一个空的或干净的存储
+store.clear()
+
+# ==========================================
+# 2. 基础增删改查 (CRUD)
+# ==========================================
+
+$console.log(&quot;\n--- 测试 Put &amp; Get ---&quot;)
+# Put
+putRes1 = store.put(&quot;username&quot;, &quot;M8Tester&quot;)
+putRes2 = store.put(&quot;api_token&quot;, &quot;abcdef123456&quot;)
+putRes3 = store.put(&quot;login_count&quot;, &quot;10&quot;) # 接口定义 value 必须是 String
+
+assertLog(&quot;put('username')&quot;, putRes1, true)
+assertLog(&quot;put('api_token')&quot;, putRes2, true)
+
+# Get (存在的键)
+username = store.get(&quot;username&quot;, &quot;default_user&quot;)
+assertLog(&quot;get('username')&quot;, username, &quot;M8Tester&quot;)
+
+# Get (不存在的键，测试默认值)
+missingVal = store.get(&quot;not_exist_key&quot;, &quot;DEFAULT_VAL&quot;)
+assertLog(&quot;get(不存在的键)&quot;, missingVal, &quot;DEFAULT_VAL&quot;)
+
+# ==========================================
+# 3. 状态判断 (Contains)
+# ==========================================
+$console.log(&quot;\n--- 测试 Contains ---&quot;)
+assertLog(&quot;contains('api_token')&quot;, store.contains(&quot;api_token&quot;), true)
+assertLog(&quot;contains('ghost_key')&quot;, store.contains(&quot;ghost_key&quot;), false)
+
+# ==========================================
+# 4. 遍历 (ForEach)
+# ==========================================
+$console.log(&quot;\n--- 测试 ForEach ---&quot;)
+count = 0
+keysFound = []
+
+# forEach 接收一个 BiConsumer (String, String) -&gt; Unit
+# Ruby 的 block 参数，这里直接挂在 forEach 后面
+store.forEach do |key, value|
+  $console.log(&quot;  Iterating -&gt; Key: #{key}, Value: #{value}&quot;)
+  keysFound &lt;&lt; key
+  count += 1
+end
+
+# 验证遍历的数量和内容是否正确
+# 我们插入了 3 个: username, api_token, login_count
+assertLog(&quot;forEach 数量统计&quot;, count, 3)
+if keysFound.include?(&quot;username&quot;) &amp;&amp; keysFound.include?(&quot;login_count&quot;)
+  $console.log(&quot;✅ forEach 内容验证通过&quot;)
+else
+  $console.error(&quot;❌ forEach 内容验证失败: &quot; + keysFound.to_s)
+end
+
+# ==========================================
+# 5. 移除与清空 (Remove &amp; Clear)
+# ==========================================
+$console.log(&quot;\n--- 测试 Remove &amp; Clear ---&quot;)
+
+# Remove 单个 Key
+removeRes = store.remove(&quot;username&quot;)
+assertLog(&quot;remove('username')&quot;, removeRes, true)
+assertLog(&quot;contains('username') after remove&quot;, store.contains(&quot;username&quot;), false)
+
+# Clear 全部
+clearRes = store.clear()
+assertLog(&quot;clear()&quot;, clearRes, true)
+
+# 验证是否为空
+# 通过再次遍历或检查 contains 验证
+isEmpty = !store.contains(&quot;api_token&quot;) &amp;&amp; !store.contains(&quot;login_count&quot;)
+assertLog(&quot;验证 clear 后数据为空&quot;, isEmpty, true)
+
+# ==========================================
+# 6. 销毁存储实例 (Storages.remove)
+# ==========================================
+$console.log(&quot;\n--- 测试 Storages.remove ---&quot;)
+
+# 移除整个存储实例（通常意味着删除底层的 XML 文件或数据库文件）
+storageRemoveRes = $storages.remove(storeName)
+assertLog(&quot;storages.remove&quot;, storageRemoveRes, true)
+
+# 再次获取该名称的 storage，应该是全新的（空的）
+# 此时 get 不会返回 nil，而是返回一个新的空实例
+newStore = $storages.get(storeName)
+# 验证旧数据确实没了（虽然我们在步骤 5 已经 clear 了，但为了测试 remove 的逻辑，这里假设其重置了状态）
+assertLog(&quot;新实例不包含旧数据&quot;, newStore.contains(&quot;api_token&quot;), false)
+
+$console.log(&quot;🎉 Storage 接口测试完毕。&quot;)
+
+$script.getThreads().getMain().setBackground(true)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="sqlite-manager.html" class="navigation-links__prev">Sqlite数据库</a><a href="plugins.html" class="navigation-links__next">插件</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:13.85664436"><title>百度OCR | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"wdhszr_7","level":0,"title":"在虚拟屏幕中识别文字","anchor":"#wdhszr_7"},{"id":"wdhszr_8","level":0,"title":"在图片中识别文字","anchor":"#wdhszr_8"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="百度OCR | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/baidu-ocr.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="百度OCR | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/baidu-ocr.html#webpage",
+    "url": "writerside-documentation/baidu-ocr.html",
+    "name": "百度OCR | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="baidu-ocr" data-main-title="百度OCR" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="ocr.md|光学字符识别"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="baidu-ocr" id="baidu-ocr.md">百度OCR</h1><p id="wdhszr_3">使用百度OCR前，需先在<a href="https://console.bce.baidu.com/ai-engine/old/#/ai/ocr/app/list" id="wdhszr_9" data-external="true" rel="noopener noreferrer" target="_blank">百度智能云</a>创建应用。</p><p id="wdhszr_4">创建完成后，需获取以下信息用于后续配置：</p><ul class="list _bullet" id="wdhszr_5"><li class="list__item" id="wdhszr_10"><p id="wdhszr_13"><code class="code" id="wdhszr_14">App ID</code></p></li><li class="list__item" id="wdhszr_11"><p id="wdhszr_15"><code class="code" id="wdhszr_16">Api Key</code></p></li><li class="list__item" id="wdhszr_12"><p id="wdhszr_17"><code class="code" id="wdhszr_18">Secret Key</code></p></li></ul><figure id="wdhszr_6"><img alt="367" src="/367.png" title="367" width="1908" height="917"></figure><section class="chapter"><h2 id="wdhszr_7" data-toc="wdhszr_7">在虚拟屏幕中识别文字</h2><div class="tabs" id="wdhszr_22" data-group="languages" data-anchors="[wdhszr_25,wdhszr_28,wdhszr_31,wdhszr_34,wdhszr_37,wdhszr_40,wdhszr_43,wdhszr_46]"><div class="tabs__content" data-gtm="tab" id="wdhszr_25" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+val baiduOcr = _ocrs!!.baidu {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+}
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+val screenResults = baiduOcr.analyzeDisplay(display.getId()) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    set(0, 0, display.getWidth(), display.getHeight())
+}
+_console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_28" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+def baiduOcr = $ocrs.baidu {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+}
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+def screenResults = baiduOcr.analyzeDisplay(display.getId()) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    it.set(0, 0, display.getWidth(), display.getHeight())
+}
+$console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_31" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import android.graphics.Rect;
+import com.m8test.ocr.api.BaiduOcr;
+import com.m8test.ocr.api.BaiduOcrConfig;
+import com.m8test.ocr.api.OcrResults;
+import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+final Display display = getDisplay();
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+BaiduOcr baiduOcr = $ocrs.baidu(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        BaiduOcrConfig it = (BaiduOcrConfig) o;
+        // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+        it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;);
+        return null;
+    }
+});
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+OcrResults screenResults = baiduOcr.analyzeDisplay(display.getId(), new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        Rect it = (Rect) o;
+        // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+        it.set(0, 0, display.getWidth(), display.getHeight());
+        return null;
+    }
+});
+$console.log(screenResults.getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_34" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+let baiduOcr = $ocrs.baidu(function (it) {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+})
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+let screenResults = baiduOcr.analyzeDisplay(display.getId(), function (it) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    it.set(0, 0, display.getWidth(), display.getHeight())
+})
+$console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_37" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+
+-- Ocrs.baidu() 用于创建 BaiduOcr 对象
+local baiduOcr = _ocrs:baidu(function(it)
+    -- BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    it:setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+end)
+-- Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+local screenResults = baiduOcr:analyzeDisplay(display:getId(), function(it)
+    -- 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    it:set(0, 0, display:getWidth(), display:getHeight())
+end)
+_console:log(screenResults:getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_40" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\ocr\api\Ocrs $ocrs */
+global $ocrs;
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+$baiduOcr = $ocrs-&gt;baidu(function ($it) {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    $it-&gt;setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;);
+});
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+$screenResults = $baiduOcr-&gt;analyzeDisplay($display-&gt;getId(), function ($it) use ($display) {
+    // 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+    $it-&gt;set(0, 0, $display-&gt;getWidth(), $display-&gt;getHeight());
+});
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+$console-&gt;log($screenResults-&gt;getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_43" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _ocrs
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# Ocrs.baidu() 用于创建 BaiduOcr 对象
+baiduOcr = _ocrs.baidu(lambda it:
+                       # BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+                       it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;))
+# Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+screenResults = baiduOcr.analyzeDisplay(display.getId(), lambda it:
+# 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+it.set(0, 0, display.getWidth(), display.getHeight()))
+_console.log(screenResults.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_46" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+java_import 'com.m8test.ocr.api.BaiduOcrConfig'
+# Ocrs.baidu() 用于创建 BaiduOcr 对象
+baiduOcr = $ocrs.baidu {
+  # @type it [BaiduOcrConfig]
+  |it|
+  # BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+  it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+}
+java_import 'android.graphics.Rect'
+# Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+screenResults = baiduOcr.analyzeDisplay(display.getId()) {
+  # @type it[Rect]
+  |it|
+  # 设置需要识别的区域, 这里是全屏，如果不设置默认也是全屏
+  it.set(0, 0, display.getWidth(), display.getHeight())
+}
+$console.log(screenResults.getText(&quot;\n&quot;))</div></div></div></section><section class="chapter"><h2 id="wdhszr_8" data-toc="wdhszr_8">在图片中识别文字</h2><div class="tabs" id="wdhszr_98" data-group="languages" data-anchors="[wdhszr_101,wdhszr_104,wdhszr_107,wdhszr_110,wdhszr_113,wdhszr_116,wdhszr_119,wdhszr_122]"><div class="tabs__content" data-gtm="tab" id="wdhszr_101" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._ocrs
+
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+val baiduOcr = _ocrs!!.baidu {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+}
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+val results = baiduOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+_console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_104" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// Ocrs.baidu() 用于创建 BaiduOcr 对象
+def baiduOcr = $ocrs.baidu {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+}
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+def results = baiduOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_107" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.ocr.api.BaiduOcr;
+import com.m8test.ocr.api.BaiduOcrConfig;
+import com.m8test.ocr.api.OcrResults;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$ocrs;
+
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+BaiduOcr baiduOcr = $ocrs.baidu(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        BaiduOcrConfig it = (BaiduOcrConfig) o;
+        // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+        it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;);
+        return null;
+    }
+});
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+OcrResults results = baiduOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null);
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_110" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// Ocrs.baidu() 用于创建 BaiduOcr 对象
+let baiduOcr = $ocrs.baidu(function (it) {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+})
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+let results = baiduOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_113" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- Ocrs.baidu() 用于创建 BaiduOcr 对象
+local baiduOcr = _ocrs:baidu(function(it)
+    -- BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    it:setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+end)
+-- Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+local results = baiduOcr:analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, nil)
+-- OcrResults.getText() 用于获取 Ocr 识别结果
+_console:log(results:getText(&quot;\n&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_116" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\ocr\api\Ocrs $ocrs */
+global $ocrs;
+// Ocrs.baidu() 用于创建 BaiduOcr 对象
+$baiduOcr = $ocrs-&gt;baidu(function ($it) {
+    // BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+    $it-&gt;setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;);
+});
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+$results = $baiduOcr-&gt;analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null);
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console-&gt;log($results-&gt;getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_119" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _ocrs
+
+# Ocrs.baidu() 用于创建 BaiduOcr 对象
+baiduOcr = _ocrs.baidu(lambda it:
+                       # BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+                       it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;))
+# Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+results = baiduOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, None)
+# OcrResults.getText() 用于获取 Ocr 识别结果
+_console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="wdhszr_122" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">java_import &quot;com.m8test.ocr.api.BaiduOcrConfig&quot;
+# Ocrs.baidu() 用于创建 BaiduOcr 对象
+baiduOcr = $ocrs.baidu {
+  # @type it [BaiduOcrConfig]
+  |it|
+  # BaiduOcrConfig.setCredential() 用于设置百度 OCR 客户端凭证信息, 依次为 appId, apiKey, secretKey。
+  it.setCredential(&quot;appId&quot;, &quot;apiKey&quot;, &quot;secretKey&quot;)
+}
+# Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+results = baiduOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, nil)
+# OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="ocr.html" class="navigation-links__prev">光学字符识别</a><a href="paddle-ocr.html" class="navigation-links__next">Paddle OCR</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

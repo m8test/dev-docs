@@ -1,0 +1,1199 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:15.71795945"><title>CompositionLocal | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"k0hl5x_3","level":0,"title":"核心概念","anchor":"#k0hl5x_3"},{"id":"k0hl5x_4","level":0,"title":"用法","anchor":"#k0hl5x_4"},{"id":"k0hl5x_5","level":0,"title":"进阶用法","anchor":"#k0hl5x_5"},{"id":"k0hl5x_6","level":0,"title":"总结与最佳实践","anchor":"#k0hl5x_6"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="CompositionLocal | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/declarative-ui-composition-local.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="CompositionLocal | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/declarative-ui-composition-local.html#webpage",
+    "url": "writerside-documentation/declarative-ui-composition-local.html",
+    "name": "CompositionLocal | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="declarative-ui-composition-local" data-main-title="CompositionLocal" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="declarative-ui.md|声明式UI"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="declarative-ui-composition-local" id="declarative-ui-composition-local.md">CompositionLocal</h1><section class="chapter"><h2 id="k0hl5x_3" data-toc="k0hl5x_3">核心概念</h2><p id="k0hl5x_7"><code class="code" id="k0hl5x_12">CompositionLocal</code> 是 Jetpack Compose 中一种<span class="control" id="k0hl5x_13">在 Composable 组件树中隐式传递数据</span>的机制。</p><p id="k0hl5x_8">想象一下，你有一些数据（比如主题颜色、字体大小、当前登录的用户信息）需要在很多个 Composable 中使用。如果没有 <code class="code" id="k0hl5x_14">CompositionLocal</code> ，你唯一的办法就是将这些数据作为参数，一层一层地从父组件传递到子组件，即使中间的很多组件本身并不需要这些数据。这个过程被称为 <span class="control" id="k0hl5x_15">&ldquo;属性逐层传递&rdquo;（Prop Drilling）</span> ，它非常繁琐且难以维护。</p><p id="k0hl5x_9"><code class="code" id="k0hl5x_16">CompositionLocal</code> 完美地解决了这个问题。它允许你在组件树的某个上层节点提供一个值，然后在这个节点下的任何子孙组件中，都可以直接获取到这个值，而无需通过参数显式传递。</p><p id="k0hl5x_10">可以把它理解为：</p><ul class="list _bullet" id="k0hl5x_11"><li class="list__item" id="k0hl5x_17"><p id="k0hl5x_19"><span class="control" id="k0hl5x_20">作用域内的&ldquo;全局&rdquo;变量</span> ：它的作用范围仅限于提供它的那个组件及其所有后代。</p></li><li class="list__item" id="k0hl5x_18"><p id="k0hl5x_21"><span class="control" id="k0hl5x_22">Compose 版的依赖注入</span> ：它为 Composable 组件树提供了一种轻量级的依赖注入方式。</p></li></ul></section><section class="chapter"><h2 id="k0hl5x_4" data-toc="k0hl5x_4">用法</h2><p id="k0hl5x_23"><code class="code" id="k0hl5x_27">CompositionLocal</code> 的使用分为三个步骤： <span class="control" id="k0hl5x_28">创建</span>、 <span class="control" id="k0hl5x_29">提供</span> 和 <span class="control" id="k0hl5x_30">消费</span>。</p><section class="chapter"><h3 id="1-compositionlocal" data-toc="1-compositionlocal">步骤 1：创建 <code class="code" id="k0hl5x_39">CompositionLocal</code></h3><p id="k0hl5x_32">首先，我们需要创建一个 <code class="code" id="k0hl5x_40">CompositionLocal</code> 实例来&ldquo;持有&rdquo;我们的数据。通常我们会把它定义成一个顶层的 <code class="code" id="k0hl5x_41">val</code>。</p><p id="k0hl5x_33">创建 <code class="code" id="k0hl5x_42">CompositionLocal</code> 有两种主要方式：</p><ol class="list _decimal" id="k0hl5x_34" type="1"><li class="list__item" id="k0hl5x_43"><p id="k0hl5x_45"><span class="control" id="k0hl5x_47"><code class="code" id="k0hl5x_48">compositionLocalOf</code></span>: 这是最常用的方式。</p><ul class="list _bullet" id="k0hl5x_46"><li class="list__item" id="k0hl5x_49"><p id="k0hl5x_51"><span class="control" id="k0hl5x_52">特点</span> ：当 <code class="code" id="k0hl5x_53">CompositionLocal</code> 的值发生变化时，Compose 只会<span class="control" id="k0hl5x_54">重组（recompose）那些直接读取了这个值的 Composable</span> 。这是一种智能的、高性能的优化。</p></li><li class="list__item" id="k0hl5x_50"><p id="k0hl5x_55"><span class="control" id="k0hl5x_56">要求</span> ：必须提供一个默认值，以防止在没有提供值的情况下使用它导致崩溃。</p></li></ul></li><li class="list__item" id="k0hl5x_44"><p id="k0hl5x_57"><span class="control" id="k0hl5x_59"><code class="code" id="k0hl5x_60">staticCompositionLocalOf</code></span>: 用于那些值几乎不会改变或永远不会改变的情况。</p><ul class="list _bullet" id="k0hl5x_58"><li class="list__item" id="k0hl5x_61"><p id="k0hl5x_64"><span class="control" id="k0hl5x_65">特点</span> ：如果它的值发生变化， <span class="control" id="k0hl5x_66">所有</span> 在 <code class="code" id="k0hl5x_67">CompositionLocalProvider</code> 范围内的 Composable（无论它们是否读取了该值）都会被重组。</p></li><li class="list__item" id="k0hl5x_62"><p id="k0hl5x_68"><span class="control" id="k0hl5x_69">优势</span> ：如果值是静态的，它的初始创建和读取开销比 <code class="code" id="k0hl5x_70">compositionLocalOf</code> 稍低。</p></li><li class="list__item" id="k0hl5x_63"><p id="k0hl5x_71"><span class="control" id="k0hl5x_72">警告</span>： <span class="control" id="k0hl5x_73">只有当你确定这个值几乎不会改变时才使用它</span> ，否则会造成严重的性能问题。</p></li></ul></li></ol><div class="tabs" id="k0hl5x_38" data-group="languages" data-anchors="[k0hl5x_76,k0hl5x_79,k0hl5x_82,k0hl5x_85,k0hl5x_88,k0hl5x_91,k0hl5x_94,k0hl5x_97]"><div class="tabs__content" data-gtm="tab" id="k0hl5x_76" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+        Column {
+            // 设置 Column 中 content 插槽的内容
+            setContent {
+                val state = mutableStateOf(&quot;InitValue&quot;)
+                // 1. 创建 CompositionLocal 和 StaticCompositionLocal
+                val localTestComposition = getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { state }
+                val localTestStaticComposition = getCompositionLocals().staticCompositionLocalOf(&quot;LocalTestStatic&quot;) { state }
+                CompositionLocalProvider {
+                    // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                    setValues(_iterables.listOf(localTestComposition.provides(state)))
+                    setContent {
+                        // 在插槽中添加一个文本
+                        Text {
+                            // 3. 消费值
+                            setText(getCompositionLocalValue(localTestComposition)!!.getValue())
+                        }
+                        // 在插槽中添加一个文本
+                        Text {
+                            // 由于这个没有用到 CompositionLocal 的值，所以就算状态发生改变也不会重组, providerSlot 中用到 CompositionLocal 的值的 Composable 才会重组
+                            setText(&quot;非静态${state.getValue()}&quot;)
+                        }
+                    }
+                }
+                CompositionLocalProvider {
+                    // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                    setValues(_iterables.listOf(localTestStaticComposition.provides(state)))
+                    setContent {
+                        // 在插槽中添加一个文本
+                        Text {
+                            // 3. 消费值
+                            setText(getCompositionLocalValue(localTestStaticComposition)!!.getValue())
+                        }
+                        // 在插槽中添加一个文本
+                        Text {
+                            // 即使这个没有用到 CompositionLocal 的值但因为其使用了静态的 CompositionLocal，所以状态发生改变会重组, 因为整个 providerSlot 中的 Composable 都会重组
+                            setText(&quot;静态${state.getValue()}&quot;)
+                        }
+                    }
+                }
+                // 添加一个按钮，这个按钮点击后会改变 state 的值
+                Button {
+                    setContent {
+                        Text {
+                            setText(&quot;点击我&quot;)
+                        }
+                    }
+                    // 改变状态值
+                    setOnClick {
+                        state.setValue(state.getValue() + &quot;.&quot;)
+                    }
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_79" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column { column -&gt;
+        // 设置 Column 中 content 插槽的内容
+        column.setContent { columnSlot -&gt;
+            def state = columnSlot.mutableStateOf(&quot;InitValue&quot;)
+            // 1. 创建 CompositionLocal 和 StaticCompositionLocal
+            def localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { state }
+            def localTestStaticComposition = columnSlot.getCompositionLocals().staticCompositionLocalOf(&quot;LocalTestStatic&quot;) { state }
+            columnSlot.CompositionLocalProvider { provider -&gt;
+                // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider.setValues($iterables.listOf(localTestComposition.provides(state)))
+                provider.setContent { providerSlot -&gt;
+                    // 在插槽中添加一个文本
+                    providerSlot.Text { text -&gt;
+                        // 3. 消费值
+                        text.setText(text.getCompositionLocalValue(localTestComposition).getValue())
+                    }
+                    // 在插槽中添加一个文本
+                    providerSlot.Text { text -&gt;
+                        // 由于这个没有用到 CompositionLocal 的值，所以就算状态发生改变也不会重组, providerSlot 中用到 CompositionLocal 的值的 Composable 才会重组
+                        text.setText(&quot;非静态&quot; + state.getValue())
+                    }
+                }
+            }
+            columnSlot.CompositionLocalProvider { provider -&gt;
+                // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider.setValues($iterables.listOf(localTestStaticComposition.provides(state)))
+                provider.setContent { providerSlot -&gt;
+                    // 在插槽中添加一个文本
+                    providerSlot.Text { text -&gt;
+                        // 3. 消费值
+                        text.setText(text.getCompositionLocalValue(localTestStaticComposition).getValue())
+                    }
+                    // 在插槽中添加一个文本
+                    providerSlot.Text { text -&gt;
+                        // 即使这个没有用到 CompositionLocal 的值但因为其使用了静态的 CompositionLocal，所以状态发生改变会重组, 因为整个 providerSlot 中的 Composable 都会重组
+                        text.setText(&quot;静态&quot; + state.getValue())
+                    }
+                }
+            }
+            // 添加一个按钮，这个按钮点击后会改变 state 的值
+            columnSlot.Button { button -&gt;
+                button.setContent { bs -&gt;
+                    bs.Text {
+                        it.setText(&quot;点击我&quot;)
+                    }
+                }
+                // 改变状态值
+                button.setOnClick {
+                    state.setValue(state.getValue() + &quot;.&quot;)
+                }
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_82" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_85" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column(column =&gt; {
+        // 设置 Column 中 content 插槽的内容
+        column.setContent(columnSlot =&gt; {
+            const state = columnSlot.mutableStateOf(&quot;InitValue&quot;);
+            // 1. 创建 CompositionLocal 和 StaticCompositionLocal
+            const localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;, () =&gt; state);
+            const localTestStaticComposition = columnSlot.getCompositionLocals().staticCompositionLocalOf(&quot;LocalTestStatic&quot;, () =&gt; state);
+            columnSlot.CompositionLocalProvider(provider =&gt; {
+                // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider.setValues($iterables.listOf(localTestComposition.provides(state)));
+                provider.setContent(providerSlot =&gt; {
+                    // 在插槽中添加一个文本
+                    providerSlot.Text(text =&gt; {
+                        // 3. 消费值
+                        text.setText(text.getCompositionLocalValue(localTestComposition).getValue());
+                    });
+                    // 在插槽中添加一个文本
+                    providerSlot.Text(text =&gt; {
+                        // 由于这个没有用到 CompositionLocal 的值，所以就算状态发生改变也不会重组, providerSlot 中用到 CompositionLocal 的值的 Composable 才会重组
+                        text.setText(&quot;非静态&quot; + state.getValue());
+                    });
+                });
+            });
+            columnSlot.CompositionLocalProvider(provider =&gt; {
+                // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider.setValues($iterables.listOf(localTestStaticComposition.provides(state)));
+                provider.setContent(providerSlot =&gt; {
+                    // 在插槽中添加一个文本
+                    providerSlot.Text(text =&gt; {
+                        // 3. 消费值
+                        text.setText(text.getCompositionLocalValue(localTestStaticComposition).getValue());
+                    });
+                    // 在插槽中添加一个文本
+                    providerSlot.Text(text =&gt; {
+                        // 即使这个没有用到 CompositionLocal 的值但因为其使用了静态的 CompositionLocal，所以状态发生改变会重组, 因为整个 providerSlot 中的 Composable 都会重组
+                        text.setText(&quot;静态&quot; + state.getValue());
+                    });
+                });
+            });
+            // 添加一个按钮，这个按钮点击后会改变 state 的值
+            columnSlot.Button(button =&gt; {
+                button.setContent(bs =&gt; {
+                    bs.Text(it =&gt; {
+                        it.setText(&quot;点击我&quot;);
+                    });
+                });
+                // 改变状态值
+                button.setOnClick(() =&gt; {
+                    state.setValue(state.getValue() + &quot;.&quot;);
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_88" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    -- 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot:Column(function(column)
+        -- 设置 Column 中 content 插槽的内容
+        column:setContent(function(columnSlot)
+            local state = columnSlot:mutableStateOf(&quot;InitValue&quot;)
+            -- 1. 创建 CompositionLocal 和 StaticCompositionLocal
+            local localTestComposition = columnSlot:getCompositionLocals():compositionLocalOf(&quot;LocalTest&quot;, function() return state end)
+            local localTestStaticComposition = columnSlot:getCompositionLocals():staticCompositionLocalOf(&quot;LocalTestStatic&quot;, function() return state end)
+            columnSlot:CompositionLocalProvider(function(provider)
+                -- 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider:setValues(_iterables:listOf(localTestComposition:provides(state)))
+                provider:setContent(function(providerSlot)
+                    -- 在插槽中添加一个文本
+                    providerSlot:Text(function(text)
+                        -- 3. 消费值
+                        text:setText(tostring(text:getCompositionLocalValue(localTestComposition):getValue()))
+                    end)
+                    -- 在插槽中添加一个文本
+                    providerSlot:Text(function(text)
+                        -- 由于这个没有用到 CompositionLocal 的值，所以就算状态发生改变也不会重组, providerSlot 中用到 CompositionLocal 的值的 Composable 才会重组
+                        text:setText(&quot;非静态&quot; .. tostring(state:getValue()))
+                    end)
+                end)
+            end)
+            columnSlot:CompositionLocalProvider(function(provider)
+                -- 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider:setValues(_iterables:listOf(localTestStaticComposition:provides(state)))
+                provider:setContent(function(providerSlot)
+                    -- 在插槽中添加一个文本
+                    providerSlot:Text(function(text)
+                        -- 3. 消费值
+                        text:setText(tostring(text:getCompositionLocalValue(localTestStaticComposition):getValue()))
+                    end)
+                    -- 在插槽中添加一个文本
+                    providerSlot:Text(function(text)
+                        -- 即使这个没有用到 CompositionLocal 的值但因为其使用了静态的 CompositionLocal，所以状态发生改变会重组, 因为整个 providerSlot 中的 Composable 都会重组
+                        text:setText(&quot;静态&quot; .. tostring(state:getValue()))
+                    end)
+                end)
+            end)
+            -- 添加一个按钮，这个按钮点击后会改变 state 的值
+            columnSlot:Button(function(button)
+                button:setContent(function(bs)
+                    bs:Text(function(it)
+                        it:setText(&quot;点击我&quot;)
+                    end)
+                end)
+                -- 改变状态值
+                button:setOnClick(function()
+                    state:setValue(tostring(state:getValue()) .. &quot;.&quot;)
+                end)
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_91" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    $slot-&gt;Column(function ($column) use ($slot) {
+        // 设置 Column 中 content 插槽的内容
+        $column-&gt;setContent(function ($columnSlot) use ($slot) {
+            global $iterables;
+            $state = $columnSlot-&gt;mutableStateOf(javaString(&quot;InitValue&quot;));
+            // 1. 创建 CompositionLocal 和 StaticCompositionLocal
+            $localTestComposition = $columnSlot-&gt;getCompositionLocals()-&gt;compositionLocalOf(javaString(&quot;LocalTest&quot;), function () use ($state) {
+                return $state;
+            });
+            $localTestStaticComposition = $columnSlot-&gt;getCompositionLocals()-&gt;staticCompositionLocalOf(javaString(&quot;LocalTestStatic&quot;), function () use ($state) {
+                return $state;
+            });
+            $columnSlot-&gt;CompositionLocalProvider(function ($provider) use ($localTestComposition, $state) {
+                global $iterables;
+                // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                $provider-&gt;setValues($iterables-&gt;listOf($localTestComposition-&gt;provides($state)));
+                $provider-&gt;setContent(function ($providerSlot) use ($localTestComposition, $state) {
+                    // 在插槽中添加一个文本
+                    $providerSlot-&gt;Text(function ($text) use ($localTestComposition) {
+                        // 3. 消费值
+                        $text-&gt;setText($text-&gt;getCompositionLocalValue($localTestComposition)-&gt;getValue());
+                    });
+                    // 在插槽中添加一个文本
+                    $providerSlot-&gt;Text(function ($text) use ($state) {
+                        // 由于这个没有用到 CompositionLocal 的值，所以就算状态发生改变也不会重组, providerSlot 中用到 CompositionLocal 的值的 Composable 才会重组
+                        $text-&gt;setText(javaString(&quot;非静态&quot;) . $state-&gt;getValue());
+                    });
+                });
+            });
+            $columnSlot-&gt;CompositionLocalProvider(function ($provider) use ($localTestStaticComposition, $state) {
+                global $iterables;
+                // 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                $provider-&gt;setValues($iterables-&gt;listOf($localTestStaticComposition-&gt;provides($state)));
+                $provider-&gt;setContent(function ($providerSlot) use ($localTestStaticComposition, $state) {
+                    // 在插槽中添加一个文本
+                    $providerSlot-&gt;Text(function ($text) use ($localTestStaticComposition) {
+                        // 3. 消费值
+                        $text-&gt;setText($text-&gt;getCompositionLocalValue($localTestStaticComposition)-&gt;getValue());
+                    });
+                    // 在插槽中添加一个文本
+                    $providerSlot-&gt;Text(function ($text) use ($state) {
+                        // 即使这个没有用到 CompositionLocal 的值但因为其使用了静态的 CompositionLocal，所以状态发生改变会重组, 因为整个 providerSlot 中的 Composable 都会重组
+                        $text-&gt;setText(javaString(&quot;静态&quot;) . $state-&gt;getValue());
+                    });
+                });
+            });
+            // 添加一个按钮，这个按钮点击后会改变 state 的值
+            $columnSlot-&gt;Button(function ($button) use ($state) {
+                $button-&gt;setContent(function ($bs) {
+                    $bs-&gt;Text(function ($it) {
+                        $it-&gt;setText(javaString(&quot;点击我&quot;));
+                    });
+                });
+                // 改变状态值
+                $button-&gt;setOnClick(function () use ($state) {
+                    $state-&gt;setValue($state-&gt;getValue() . javaString(&quot;.&quot;));
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_94" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column(lambda column: (
+        # 设置 Column 中 content 插槽的内容
+        column.setContent(lambda columnSlot: (
+            # 使用海象表达式定义 state
+            (state := columnSlot.mutableStateOf(&quot;InitValue&quot;)),
+            # 1. 创建 CompositionLocal 和 StaticCompositionLocal
+            # Groovy 的 { state } 转换为 lambda: state
+            (localTestComposition := columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;, lambda: state)),
+            (localTestStaticComposition := columnSlot.getCompositionLocals().staticCompositionLocalOf(&quot;LocalTestStatic&quot;,
+                                                                                                      lambda: state)),
+            columnSlot.CompositionLocalProvider(lambda provider: (
+                # 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider.setValues(_iterables.listOf(localTestComposition.provides(state))),
+                provider.setContent(lambda providerSlot: (
+                    # 在插槽中添加一个文本
+                    providerSlot.Text(lambda text: (
+                        # 3. 消费值
+                        text.setText(text.getCompositionLocalValue(localTestComposition).getValue())
+                    )),
+                    # 在插槽中添加一个文本
+                    providerSlot.Text(lambda text: (
+                        # 由于这个没有用到 CompositionLocal 的值，所以就算状态发生改变也不会重组, providerSlot 中用到 CompositionLocal 的值的 Composable 才会重组
+                        text.setText(&quot;非静态&quot; + state.getValue())
+                    ))
+                ))
+            )),
+            columnSlot.CompositionLocalProvider(lambda provider: (
+                # 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+                provider.setValues(_iterables.listOf(localTestStaticComposition.provides(state))),
+                provider.setContent(lambda providerSlot: (
+                    # 在插槽中添加一个文本
+                    providerSlot.Text(lambda text: (
+                        # 3. 消费值
+                        text.setText(text.getCompositionLocalValue(localTestStaticComposition).getValue())
+                    )),
+                    # 在插槽中添加一个文本
+                    providerSlot.Text(lambda text: (
+                        # 即使这个没有用到 CompositionLocal 的值但因为其使用了静态的 CompositionLocal，所以状态发生改变会重组, 因为整个 providerSlot 中的 Composable 都会重组
+                        text.setText(&quot;静态&quot; + state.getValue())
+                    ))
+                ))
+            )),
+            # 添加一个按钮，这个按钮点击后会改变 state 的值
+            columnSlot.Button(lambda button: (
+                button.setContent(lambda bs: (
+                    bs.Text(lambda it: (
+                        it.setText(&quot;点击我&quot;)
+                    ))
+                )),
+                # 改变状态值
+                # setOnClick 通常是一个无参闭包
+                button.setOnClick(lambda: (
+                    state.setValue(state.getValue() + &quot;.&quot;)
+                ))
+            ))
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_97" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+  slot.Column do |column|
+    # 设置 Column 中 content 插槽的内容
+    column.setContent do |columnSlot|
+      state = columnSlot.mutableStateOf(&quot;InitValue&quot;)
+      # 1. 创建 CompositionLocal 和 StaticCompositionLocal
+      localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { state }
+      localTestStaticComposition = columnSlot.getCompositionLocals().staticCompositionLocalOf(&quot;LocalTestStatic&quot;) { state }
+      columnSlot.CompositionLocalProvider do |provider|
+        # 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+        provider.setValues($iterables.listOf(localTestComposition.provides(state)))
+        provider.setContent do |providerSlot|
+          # 在插槽中添加一个文本
+          providerSlot.Text do |text|
+            # 3. 消费值
+            text.setText(text.getCompositionLocalValue(localTestComposition).getValue())
+          end
+          # 在插槽中添加一个文本
+          providerSlot.Text do |text|
+            # 由于这个没有用到 CompositionLocal 的值，所以就算状态发生改变也不会重组, providerSlot 中用到 CompositionLocal 的值的 Composable 才会重组
+            text.setText(&quot;非静态&quot; + state.getValue().to_s)
+          end
+        end
+      end
+      columnSlot.CompositionLocalProvider do |provider|
+        # 2. 通过 CompositionLocalProvider 为 CompositionLocal 提供值
+        provider.setValues($iterables.listOf(localTestStaticComposition.provides(state)))
+        provider.setContent do |providerSlot|
+          # 在插槽中添加一个文本
+          providerSlot.Text do |text|
+            # 3. 消费值
+            text.setText(text.getCompositionLocalValue(localTestStaticComposition).getValue())
+          end
+          # 在插槽中添加一个文本
+          providerSlot.Text do |text|
+            # 即使这个没有用到 CompositionLocal 的值但因为其使用了静态的 CompositionLocal，所以状态发生改变会重组, 因为整个 providerSlot 中的 Composable 都会重组
+            text.setText(&quot;静态&quot; + state.getValue().to_s)
+          end
+        end
+      end
+      # 添加一个按钮，这个按钮点击后会改变 state 的值
+      columnSlot.Button do |button|
+        button.setContent do |bs|
+          bs.Text do |it|
+            it.setText(&quot;点击我&quot;)
+          end
+        end
+        # 改变状态值
+        button.setOnClick do
+          state.setValue(state.getValue() + &quot;.&quot;)
+        end
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div></section><section class="chapter"><h3 id="2-provide" data-toc="2-provide">步骤 2：提供 (Provide) 值</h3><p id="k0hl5x_146">使用 <code class="code" id="k0hl5x_147">CompositionLocalProvider</code> 组件，在组件树的某个节点上为 <code class="code" id="k0hl5x_148">CompositionLocal</code> 提供一个具体的值。所有在这个 <code class="code" id="k0hl5x_149">CompositionLocalProvider</code> 的 <code class="code" id="k0hl5x_150">content</code> lambda 闭包内的 Composable 都可以访问到这个值。</p></section><section class="chapter"><h3 id="3-consume" data-toc="3-consume">步骤 3：消费 (Consume) 值</h3><p id="k0hl5x_151">在任何子孙 Composable 中，通过访问 <code class="code" id="k0hl5x_156">CompositionLocal</code> 实例的 <code class="code" id="k0hl5x_157">.current</code> 属性来获取当前作用域内提供的那个值。</p><div class="tabs" id="k0hl5x_155" data-group="languages" data-anchors="[k0hl5x_160,k0hl5x_163,k0hl5x_166,k0hl5x_169,k0hl5x_172,k0hl5x_175,k0hl5x_178,k0hl5x_181]"><div class="tabs__content" data-gtm="tab" id="k0hl5x_160" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal
+import com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot
+
+private fun Provider(columnSlot: ColumnScopeSlot) {
+    columnSlot.CompositionLocalProvider {
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        val localTestComposition: ProvidableCompositionLocal&lt;String&gt;? = getCompositionLocal(&quot;LocalTest&quot;)
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        setValues(_iterables.listOf(localTestComposition!!.provides(&quot;LocalTextChangeValue&quot;)))
+        // 设置受该 CompositionLocalProvider 影响的内容
+        setContent {
+            // 在插槽中添加一个文本
+            Text {
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                setText(getCompositionLocalValue&lt;String&gt;(localTestComposition)!!)
+            }
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+        Column {
+            // 设置 Column 中 content 插槽的内容
+            setContent {
+                // 1. 创建 CompositionLocal
+                val localTestComposition = getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { &quot;LocalTestInitValue&quot; }
+                Provider(this)
+                // 在插槽中添加一个文本
+                Text {
+                    // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                    setText(getCompositionLocalValue(localTestComposition)!!)
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_163" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal
+import com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot
+
+private def Provider(ColumnScopeSlot columnSlot) {
+    columnSlot.CompositionLocalProvider { provider -&gt;
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        ProvidableCompositionLocal&lt;String&gt; localTestComposition = provider.getCompositionLocal(&quot;LocalTest&quot;)
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;)))
+        // 设置受该 CompositionLocalProvider 影响的内容
+        provider.setContent { providerSlot -&gt;
+            // 在插槽中添加一个文本
+            providerSlot.Text { text -&gt;
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            }
+        }
+    }
+}
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column { column -&gt;
+        // 设置 Column 中 content 插槽的内容
+        column.setContent { columnSlot -&gt;
+            // 1. 创建 CompositionLocal
+            def localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { &quot;LocalTestInitValue&quot; }
+            Provider(columnSlot)
+            // 在插槽中添加一个文本
+            columnSlot.Text { text -&gt;
+                // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_166" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_169" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot} columnSlot
+ */
+function Provider(columnSlot) {
+    columnSlot.CompositionLocalProvider(provider =&gt; {
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        /** @type {Packages.com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal&lt;String&gt;} */
+        const localTestComposition = provider.getCompositionLocal(&quot;LocalTest&quot;);
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;)));
+        // 设置受该 CompositionLocalProvider 影响的内容
+        provider.setContent(providerSlot =&gt; {
+            // 在插槽中添加一个文本
+            providerSlot.Text(text =&gt; {
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                text.setText(text.getCompositionLocalValue(localTestComposition));
+            });
+        });
+    });
+}
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column(column =&gt; {
+        // 设置 Column 中 content 插槽的内容
+        column.setContent(columnSlot =&gt; {
+            // 1. 创建 CompositionLocal
+            const localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;, () =&gt; &quot;LocalTestInitValue&quot;);
+            Provider(columnSlot);
+            // 在插槽中添加一个文本
+            columnSlot.Text(text =&gt; {
+                // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                text.setText(text.getCompositionLocalValue(localTestComposition));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_172" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 引入 java 类
+local ProvidableCompositionLocal = require(&quot;m8test_java.com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal&quot;)
+
+local function Provider(columnSlot)
+    columnSlot:CompositionLocalProvider(function(provider)
+        -- 1. 根据名称获取之前创建的 CompositionLocal
+        local localTestComposition = provider:getCompositionLocal(&quot;LocalTest&quot;)
+        -- 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider:setValues(_iterables:listOf(localTestComposition:provides(&quot;LocalTextChangeValue&quot;)))
+        -- 设置受该 CompositionLocalProvider 影响的内容
+        provider:setContent(function(providerSlot)
+            -- 在插槽中添加一个文本
+            providerSlot:Text(function(text)
+                -- 3. 消费值，这里就是 LocalTextChangeValue
+                text:setText(text:getCompositionLocalValue(localTestComposition))
+            end)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    -- 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot:Column(function(column)
+        -- 设置 Column 中 content 插槽的内容
+        column:setContent(function(columnSlot)
+            -- 1. 创建 CompositionLocal
+            local localTestComposition = columnSlot:getCompositionLocals():compositionLocalOf(&quot;LocalTest&quot;, function() return &quot;LocalTestInitValue&quot; end)
+            Provider(columnSlot)
+            -- 在插槽中添加一个文本
+            columnSlot:Text(function(text)
+                -- 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                text:setText(text:getCompositionLocalValue(localTestComposition))
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_175" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\compositionlocal\ProvidableCompositionLocal;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\ColumnScopeSlot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+function Provider(ColumnScopeSlot $columnSlot)
+{
+    $columnSlot-&gt;CompositionLocalProvider(function ($provider) {
+        global $iterables;
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        /** @var ProvidableCompositionLocal $localTestComposition */
+        $localTestComposition = $provider-&gt;getCompositionLocal(javaString(&quot;LocalTest&quot;));
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        $provider-&gt;setValues($iterables-&gt;listOf($localTestComposition-&gt;provides(javaString(&quot;LocalTextChangeValue&quot;))));
+        // 设置受该 CompositionLocalProvider 影响的内容
+        $provider-&gt;setContent(function ($providerSlot) use ($localTestComposition) {
+            // 在插槽中添加一个文本
+            $providerSlot-&gt;Text(function ($text) use ($localTestComposition) {
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                $text-&gt;setText($text-&gt;getCompositionLocalValue($localTestComposition));
+            });
+        });
+    });
+}
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    $slot-&gt;Column(function ($column) {
+        // 设置 Column 中 content 插槽的内容
+        $column-&gt;setContent(function ($columnSlot) {
+            // 1. 创建 CompositionLocal
+            $localTestComposition = $columnSlot-&gt;getCompositionLocals()-&gt;compositionLocalOf(javaString(&quot;LocalTest&quot;), function () {
+                return javaString(&quot;LocalTestInitValue&quot;);
+            });
+            Provider($columnSlot);
+            // 在插槽中添加一个文本
+            $columnSlot-&gt;Text(function ($text) use ($localTestComposition) {
+                // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTestInitValue
+                $text-&gt;setText($text-&gt;getCompositionLocalValue($localTestComposition));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_178" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot import ColumnScopeSlot
+
+
+def Provider(columnSlot: ColumnScopeSlot):
+    columnSlot.CompositionLocalProvider(lambda provider: (
+        # 1. 根据名称获取之前创建的 CompositionLocal
+        (localTestComposition := provider.getCompositionLocal(&quot;LocalTest&quot;)),
+        # 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider.setValues(_iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;))),
+        # 设置受该 CompositionLocalProvider 影响的内容
+        provider.setContent(lambda providerSlot: (
+            # 在插槽中添加一个文本
+            providerSlot.Text(lambda text: (
+                # 3. 消费值，这里就是 LocalTextChangeValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            ))
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column(lambda column: (
+        # 设置 Column 中 content 插槽的内容
+        column.setContent(lambda columnSlot: (
+            # 1. 创建 CompositionLocal
+            # Groovy的 { &quot;LocalTestInitValue&quot; } 是一个无参闭包，返回一个值，对应Python的 lambda: &quot;LocalTestInitValue&quot;
+            (localTestComposition := columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;,
+                                                                                          lambda: &quot;LocalTestInitValue&quot;)),
+            Provider(columnSlot),
+            # 在插槽中添加一个文本
+            columnSlot.Text(lambda text: (
+                # 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTestInitValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            ))
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_181" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+def Provider(columnSlot)
+  columnSlot.CompositionLocalProvider do |provider|
+    # 1. 根据名称获取之前创建的 CompositionLocal
+    localTestComposition = provider.getCompositionLocal(&quot;LocalTest&quot;)
+    # 2. 提供值，通过 setValues 添加 provides 提供的值
+    provider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;)))
+    # 设置受该 CompositionLocalProvider 影响的内容
+    provider.setContent do |providerSlot|
+      # 在插槽中添加一个文本
+      providerSlot.Text do |text|
+        # 3. 消费值，这里就是 LocalTextChangeValue
+        text.setText(text.getCompositionLocalValue(localTestComposition))
+      end
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+  slot.Column do |column|
+    # 设置 Column 中 content 插槽的内容
+    column.setContent do |columnSlot|
+      # 1. 创建 CompositionLocal
+      localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { &quot;LocalTestInitValue&quot; }
+      Provider(columnSlot)
+      # 在插槽中添加一个文本
+      columnSlot.Text do |text|
+        # 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+        text.setText(text.getCompositionLocalValue(localTestComposition))
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div></section></section><section class="chapter"><h2 id="k0hl5x_5" data-toc="k0hl5x_5">进阶用法</h2><p id="k0hl5x_230"><code class="code" id="k0hl5x_236">CompositionLocalProvider</code> 是可以嵌套的。内层的 <code class="code" id="k0hl5x_237">Provider</code> 会覆盖外层 <code class="code" id="k0hl5x_238">Provider</code> 为同一个 <code class="code" id="k0hl5x_239">CompositionLocal</code> 提供的值，这个覆盖效果仅在内层 <code class="code" id="k0hl5x_240">Provider</code> 的作用域内有效。</p><p id="k0hl5x_231">这在某些场景下非常有用，比如在一个深色主题的 App 中，让某一个卡片强制使用浅色主题。</p><div class="tabs" id="k0hl5x_235" data-group="languages" data-anchors="[k0hl5x_243,k0hl5x_246,k0hl5x_249,k0hl5x_252,k0hl5x_255,k0hl5x_258,k0hl5x_261,k0hl5x_264]"><div class="tabs__content" data-gtm="tab" id="k0hl5x_243" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal
+import com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot
+import com.m8test.script.core.api.ui.compose.slot.UnitScopeSlot
+
+private fun Provider2(providerSlot: UnitScopeSlot) {
+    // 嵌套一个 CompositionLocalProvider
+    providerSlot.CompositionLocalProvider {
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        val localTestComposition: ProvidableCompositionLocal&lt;String&gt;? = getCompositionLocal(&quot;LocalTest&quot;)
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        setValues(_iterables.listOf(localTestComposition!!.provides(&quot;LocalTextChangeValue2&quot;)))
+        // 设置受嵌套 CompositionLocalProvider 影响的内容
+        setContent {
+            // 在插槽中添加一个文本
+            Text {
+                // 3. 消费值，这里就是 LocalTextChangeValue2
+                setText(getCompositionLocalValue(localTestComposition)!!)
+            }
+        }
+    }
+}
+
+private fun Provider1(columnSlot: ColumnScopeSlot) {
+    columnSlot.CompositionLocalProvider {
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        val localTestComposition: ProvidableCompositionLocal&lt;String&gt;? = getCompositionLocal(&quot;LocalTest&quot;)
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        setValues(_iterables.listOf(localTestComposition!!.provides(&quot;LocalTextChangeValue&quot;)))
+        // 设置受该 CompositionLocalProvider 影响的内容
+        setContent {
+            // 在插槽中添加一个文本
+            Text {
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                setText(getCompositionLocalValue(localTestComposition)!!)
+            }
+            Provider2(this)
+        }
+    }
+}
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+        Column {
+            // 设置 Column 中 content 插槽的内容
+            setContent {
+                // 1. 创建 CompositionLocal
+                val localTestComposition =
+                    getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { &quot;LocalTestInitValue&quot; }
+                Provider1(this)
+                // 在插槽中添加一个文本
+                Text {
+                    // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                    setText(getCompositionLocalValue(localTestComposition)!!)
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_246" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal
+import com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot
+import com.m8test.script.core.api.ui.compose.slot.UnitScopeSlot
+
+private def Provider2(UnitScopeSlot providerSlot) {
+    // 嵌套一个 CompositionLocalProvider
+    providerSlot.CompositionLocalProvider { nestProvider -&gt;
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        ProvidableCompositionLocal&lt;String&gt; localTestComposition = nestProvider.getCompositionLocal(&quot;LocalTest&quot;)
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        nestProvider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue2&quot;)))
+        // 设置受嵌套 CompositionLocalProvider 影响的内容
+        nestProvider.setContent { nestProviderSlot -&gt;
+            // 在插槽中添加一个文本
+            nestProviderSlot.Text { text -&gt;
+                // 3. 消费值，这里就是 LocalTextChangeValue2
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            }
+        }
+    }
+}
+
+private def Provider1(ColumnScopeSlot columnSlot) {
+    columnSlot.CompositionLocalProvider { provider -&gt;
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        ProvidableCompositionLocal&lt;String&gt; localTestComposition = provider.getCompositionLocal(&quot;LocalTest&quot;)
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;)))
+        // 设置受该 CompositionLocalProvider 影响的内容
+        provider.setContent { providerSlot -&gt;
+            // 在插槽中添加一个文本
+            providerSlot.Text { text -&gt;
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            }
+            Provider2(providerSlot)
+        }
+    }
+
+}
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column { column -&gt;
+        // 设置 Column 中 content 插槽的内容
+        column.setContent { columnSlot -&gt;
+            // 1. 创建 CompositionLocal
+            def localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { &quot;LocalTestInitValue&quot; }
+            Provider1(columnSlot)
+            // 在插槽中添加一个文本
+            columnSlot.Text { text -&gt;
+                // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_249" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_252" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.UnitScopeSlot} providerSlot
+ */
+function Provider2(providerSlot) {
+    // 嵌套一个 CompositionLocalProvider
+    providerSlot.CompositionLocalProvider(nestProvider =&gt; {
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        /** @type {Packages.com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal&lt;String&gt;} */
+        const localTestComposition = nestProvider.getCompositionLocal(&quot;LocalTest&quot;);
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        nestProvider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue2&quot;)));
+        // 设置受嵌套 CompositionLocalProvider 影响的内容
+        nestProvider.setContent(nestProviderSlot =&gt; {
+            // 在插槽中添加一个文本
+            nestProviderSlot.Text(text =&gt; {
+                // 3. 消费值，这里就是 LocalTextChangeValue2
+                text.setText(text.getCompositionLocalValue(localTestComposition));
+            });
+        });
+    });
+}
+
+/**
+ * @param {Packages.com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot} columnSlot
+ */
+function Provider1(columnSlot) {
+    columnSlot.CompositionLocalProvider(provider =&gt; {
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        /** @type {Packages.com.m8test.script.core.api.ui.compose.compositionlocal.ProvidableCompositionLocal&lt;String&gt;} */
+        const localTestComposition = provider.getCompositionLocal(&quot;LocalTest&quot;);
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;)));
+        // 设置受该 CompositionLocalProvider 影响的内容
+        provider.setContent(providerSlot =&gt; {
+            // 在插槽中添加一个文本
+            providerSlot.Text(text =&gt; {
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                text.setText(text.getCompositionLocalValue(localTestComposition));
+            });
+            Provider2(providerSlot);
+        });
+    });
+
+}
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column(column =&gt; {
+        // 设置 Column 中 content 插槽的内容
+        column.setContent(columnSlot =&gt; {
+            // 1. 创建 CompositionLocal
+            const localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;, () =&gt; &quot;LocalTestInitValue&quot;);
+            Provider1(columnSlot);
+            // 在插槽中添加一个文本
+            columnSlot.Text(text =&gt; {
+                // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                text.setText(text.getCompositionLocalValue(localTestComposition));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_255" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- private def Provider2(UnitScopeSlot providerSlot)
+local function Provider2(providerSlot)
+    -- 嵌套一个 CompositionLocalProvider
+    providerSlot:CompositionLocalProvider(function(nestProvider)
+        -- 1. 根据名称获取之前创建的 CompositionLocal
+        local localTestComposition = nestProvider:getCompositionLocal(&quot;LocalTest&quot;)
+        -- 2. 提供值，通过 setValues 添加 provides 提供的值
+        nestProvider:setValues(_iterables:listOf(localTestComposition:provides(&quot;LocalTextChangeValue2&quot;)))
+        -- 设置受嵌套 CompositionLocalProvider 影响的内容
+        nestProvider:setContent(function(nestProviderSlot)
+            -- 在插槽中添加一个文本
+            nestProviderSlot:Text(function(text)
+                -- 3. 消费值，这里就是 LocalTextChangeValue2
+                text:setText(text:getCompositionLocalValue(localTestComposition))
+            end)
+        end)
+    end)
+end
+
+-- private def Provider1(ColumnScopeSlot columnSlot)
+local function Provider1(columnSlot)
+    columnSlot:CompositionLocalProvider(function(provider)
+        -- 1. 根据名称获取之前创建的 CompositionLocal
+        local localTestComposition = provider:getCompositionLocal(&quot;LocalTest&quot;)
+        -- 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider:setValues(_iterables:listOf(localTestComposition:provides(&quot;LocalTextChangeValue&quot;)))
+        -- 设置受该 CompositionLocalProvider 影响的内容
+        provider:setContent(function(providerSlot)
+            -- 在插槽中添加一个文本
+            providerSlot:Text(function(text)
+                -- 3. 消费值，这里就是 LocalTextChangeValue
+                text:setText(text:getCompositionLocalValue(localTestComposition))
+            end)
+            Provider2(providerSlot)
+        end)
+    end)
+end
+
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    -- 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot:Column(function(column)
+        -- 设置 Column 中 content 插槽的内容
+        column:setContent(function(columnSlot)
+            -- 1. 创建 CompositionLocal
+            local localTestComposition = columnSlot:getCompositionLocals():compositionLocalOf(&quot;LocalTest&quot;, function() return &quot;LocalTestInitValue&quot; end)
+            Provider1(columnSlot)
+            -- 在插槽中添加一个文本
+            columnSlot:Text(function(text)
+                -- 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTestInitValue
+                text:setText(text:getCompositionLocalValue(localTestComposition))
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_258" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+
+use m8test_java\com\m8test\script\core\api\ui\compose\compositionlocal\ProvidableCompositionLocal;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\ColumnScopeSlot;
+use m8test_java\com\m8test\script\core\api\ui\compose\slot\UnitScopeSlot;
+
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+
+function Provider2(UnitScopeSlot $providerSlot)
+{
+    // 嵌套一个 CompositionLocalProvider
+    $providerSlot-&gt;CompositionLocalProvider(function ($nestProvider) {
+        global $iterables;
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        /** @var ProvidableCompositionLocal $localTestComposition */
+        $localTestComposition = $nestProvider-&gt;getCompositionLocal(javaString(&quot;LocalTest&quot;));
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        $nestProvider-&gt;setValues($iterables-&gt;listOf($localTestComposition-&gt;provides(javaString(&quot;LocalTextChangeValue2&quot;))));
+        // 设置受嵌套 CompositionLocalProvider 影响的内容
+        $nestProvider-&gt;setContent(function ($nestProviderSlot) use ($localTestComposition) {
+            // 在插槽中添加一个文本
+            $nestProviderSlot-&gt;Text(function ($text) use ($localTestComposition) {
+                // 3. 消费值，这里就是 LocalTextChangeValue2
+                $text-&gt;setText($text-&gt;getCompositionLocalValue($localTestComposition));
+            });
+        });
+    });
+}
+
+function Provider1(ColumnScopeSlot $columnSlot)
+{
+    $columnSlot-&gt;CompositionLocalProvider(function ($provider) {
+        global $iterables;
+        // 1. 根据名称获取之前创建的 CompositionLocal
+        /** @var ProvidableCompositionLocal $localTestComposition */
+        $localTestComposition = $provider-&gt;getCompositionLocal(javaString(&quot;LocalTest&quot;));
+        // 2. 提供值，通过 setValues 添加 provides 提供的值
+        $provider-&gt;setValues($iterables-&gt;listOf($localTestComposition-&gt;provides(javaString(&quot;LocalTextChangeValue&quot;))));
+        // 设置受该 CompositionLocalProvider 影响的内容
+        $provider-&gt;setContent(function ($providerSlot) use ($localTestComposition) {
+            // 在插槽中添加一个文本
+            $providerSlot-&gt;Text(function ($text) use ($localTestComposition) {
+                // 3. 消费值，这里就是 LocalTextChangeValue
+                $text-&gt;setText($text-&gt;getCompositionLocalValue($localTestComposition));
+            });
+            Provider2($providerSlot);
+        });
+    });
+
+}
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    $slot-&gt;Column(function ($column) {
+        // 设置 Column 中 content 插槽的内容
+        $column-&gt;setContent(function ($columnSlot) {
+            // 1. 创建 CompositionLocal
+            $localTestComposition = $columnSlot-&gt;getCompositionLocals()-&gt;compositionLocalOf(javaString(&quot;LocalTest&quot;), function () {
+                return javaString(&quot;LocalTestInitValue&quot;);
+            });
+            Provider1($columnSlot);
+            // 在插槽中添加一个文本
+            $columnSlot-&gt;Text(function ($text) use ($localTestComposition) {
+                // 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTestInitValue
+                $text-&gt;setText($text-&gt;getCompositionLocalValue($localTestComposition));
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_261" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+# 导入所需的Java类
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.ColumnScopeSlot import ColumnScopeSlot
+from m8test_java.com.m8test.script.core.api.ui.compose.slot.UnitScopeSlot import UnitScopeSlot
+
+
+def Provider2(providerSlot: UnitScopeSlot):
+    # 嵌套一个 CompositionLocalProvider
+    providerSlot.CompositionLocalProvider(lambda nestProvider: (
+        # 1. 根据名称获取之前创建的 CompositionLocal
+        (localTestComposition := nestProvider.getCompositionLocal(&quot;LocalTest&quot;)),
+        # 2. 提供值，通过 setValues 添加 provides 提供的值
+        nestProvider.setValues(_iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue2&quot;))),
+        # 设置受嵌套 CompositionLocalProvider 影响的内容
+        nestProvider.setContent(lambda nestProviderSlot: (
+            # 在插槽中添加一个文本
+            nestProviderSlot.Text(lambda text: (
+                # 3. 消费值，这里就是 LocalTextChangeValue2
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            ))
+        ))
+    ))
+
+
+def Provider1(columnSlot: ColumnScopeSlot):
+    columnSlot.CompositionLocalProvider(lambda provider: (
+        # 1. 根据名称获取之前创建的 CompositionLocal
+        (localTestComposition := provider.getCompositionLocal(&quot;LocalTest&quot;)),
+        # 2. 提供值，通过 setValues 添加 provides 提供的值
+        provider.setValues(_iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;))),
+        # 设置受该 CompositionLocalProvider 影响的内容
+        provider.setContent(lambda providerSlot: (
+            # 在插槽中添加一个文本
+            providerSlot.Text(lambda text: (
+                # 3. 消费值，这里就是 LocalTextChangeValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            )),
+            Provider2(providerSlot)
+        ))
+    ))
+
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column(lambda column: (
+        # 设置 Column 中 content 插槽的内容
+        column.setContent(lambda columnSlot: (
+            # 1. 创建 CompositionLocal
+            (localTestComposition := columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;,
+                                                                                          lambda: &quot;LocalTestInitValue&quot;)),
+            Provider1(columnSlot),
+            # 在插槽中添加一个文本
+            columnSlot.Text(lambda text: (
+                # 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+                text.setText(text.getCompositionLocalValue(localTestComposition))
+            ))
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="k0hl5x_264" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+def Provider2(providerSlot)
+  # 嵌套一个 CompositionLocalProvider
+  providerSlot.CompositionLocalProvider do |nestProvider|
+    # 1. 根据名称获取之前创建的 CompositionLocal
+    localTestComposition = nestProvider.getCompositionLocal(&quot;LocalTest&quot;)
+    # 2. 提供值，通过 setValues 添加 provides 提供的值
+    nestProvider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue2&quot;)))
+    # 设置受嵌套 CompositionLocalProvider 影响的内容
+    nestProvider.setContent do |nestProviderSlot|
+      # 在插槽中添加一个文本
+      nestProviderSlot.Text do |text|
+        # 3. 消费值，这里就是 LocalTextChangeValue2
+        text.setText(text.getCompositionLocalValue(localTestComposition))
+      end
+    end
+  end
+end
+
+def Provider1(columnSlot)
+  columnSlot.CompositionLocalProvider do |provider|
+    # 1. 根据名称获取之前创建的 CompositionLocal
+    localTestComposition = provider.getCompositionLocal(&quot;LocalTest&quot;)
+    # 2. 提供值，通过 setValues 添加 provides 提供的值
+    provider.setValues($iterables.listOf(localTestComposition.provides(&quot;LocalTextChangeValue&quot;)))
+    # 设置受该 CompositionLocalProvider 影响的内容
+    provider.setContent do |providerSlot|
+      # 在插槽中添加一个文本
+      providerSlot.Text do |text|
+        # 3. 消费值，这里就是 LocalTextChangeValue
+        text.setText(text.getCompositionLocalValue(localTestComposition))
+      end
+      Provider2(providerSlot)
+    end
+  end
+end
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+  slot.Column do |column|
+    # 设置 Column 中 content 插槽的内容
+    column.setContent do |columnSlot|
+      # 1. 创建 CompositionLocal
+      localTestComposition = columnSlot.getCompositionLocals().compositionLocalOf(&quot;LocalTest&quot;) { &quot;LocalTestInitValue&quot; }
+      Provider1(columnSlot)
+      # 在插槽中添加一个文本
+      columnSlot.Text do |text|
+        # 3. 消费值，这里因为没有通过CompositionLocalProvider改变值，所以还是 LocalTextInitValue
+        text.setText(text.getCompositionLocalValue(localTestComposition))
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div></section><section class="chapter"><h2 id="k0hl5x_6" data-toc="k0hl5x_6">总结与最佳实践</h2><p id="k0hl5x_313"><span class="control" id="k0hl5x_318">优点</span>：</p><ul class="list _bullet" id="k0hl5x_314"><li class="list__item" id="k0hl5x_319"><p id="k0hl5x_322"><span class="control" id="k0hl5x_323">解耦</span> ：避免了无关组件的参数污染，使组件签名更简洁。</p></li><li class="list__item" id="k0hl5x_320"><p id="k0hl5x_324"><span class="control" id="k0hl5x_325">易于维护</span> ：当需要给深层组件添加新数据时，无需修改中间所有组件。</p></li><li class="list__item" id="k0hl5x_321"><p id="k0hl5x_326"><span class="control" id="k0hl5x_327">功能强大</span> ：适用于实现主题、本地化等贯穿整个应用的功能。</p></li></ul><p id="k0hl5x_315"><span class="control" id="k0hl5x_328">注意事项和最佳实践</span>：</p><ol class="list _decimal" id="k0hl5x_316" type="1"><li class="list__item" id="k0hl5x_329"><p id="k0hl5x_334"><span class="control" id="k0hl5x_335">不要滥用</span>： <code class="code" id="k0hl5x_336">CompositionLocal</code> 会让数据流变得不那么明确。对于组件的核心逻辑数据， <span class="control" id="k0hl5x_337">显式参数传递仍然是首选</span> ，因为它能让组件的依赖关系一目了然，更易于测试和复用。</p></li><li class="list__item" id="k0hl5x_330"><p id="k0hl5x_338"><span class="control" id="k0hl5x_339">何时使用</span> ：当数据是&ldquo;环境性的&rdquo;（ambient），并且在组件树的很多地方都可能需要时，才是使用 <code class="code" id="k0hl5x_340">CompositionLocal</code> 的好时机。例如：主题、用户偏好、语言设置。</p></li><li class="list__item" id="k0hl5x_331"><p id="k0hl5x_341"><span class="control" id="k0hl5x_342">提供默认值</span> ：总是为 <code class="code" id="k0hl5x_343">compositionLocalOf</code> 提供一个有意义的默认值，以避免在忘记提供值时应用崩溃。</p></li><li class="list__item" id="k0hl5x_332"><p id="k0hl5x_344"><span class="control" id="k0hl5x_345">明智选择 <code class="code" id="k0hl5x_348">static</code> vs <code class="code" id="k0hl5x_349">non-static</code></span> ：仔细考虑你的数据是否会改变。绝大多数情况下， <code class="code" id="k0hl5x_346">compositionLocalOf</code> 是更安全、更合适的选择。只有在数据真正是静态的情况下才考虑 <code class="code" id="k0hl5x_347">staticCompositionLocalOf</code> 以获得微小的性能提升。</p></li><li class="list__item" id="k0hl5x_333"><p id="k0hl5x_350"><span class="control" id="k0hl5x_351">命名约定</span> ：通常以 <code class="code" id="k0hl5x_352">Local</code> 开头命名你的 <code class="code" id="k0hl5x_353">CompositionLocal</code> 实例，例如 <code class="code" id="k0hl5x_354">LocalUser</code>、 <code class="code" id="k0hl5x_355">LocalTheme</code> ，这是一种社区约定，有助于代码的可读性。</p></li></ol><p id="k0hl5x_317"><code class="code" id="k0hl5x_356">CompositionLocal</code> 是 Jetpack Compose 工具箱中一个非常强大且必不可少的工具，正确地使用它可以极大地提升代码的整洁度和可维护性。</p></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="declarative-ui-effects.html" class="navigation-links__prev">附带效应</a><a href="declarative-ui-difference-from-compose.html" class="navigation-links__next">与 Compose 的区别</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

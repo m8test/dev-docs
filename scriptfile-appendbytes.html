@@ -1,0 +1,74 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:35:27.30829504"><title>appendBytes | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="appendBytes | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/scriptfile-appendbytes.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="appendBytes | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/scriptfile-appendbytes.html#webpage",
+    "url": "writerside-documentation/scriptfile-appendbytes.html",
+    "name": "appendBytes | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="ScriptFile.appendBytes" data-main-title="appendBytes" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///ScriptFile.md|ScriptFile"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="ScriptFile.appendBytes" id="ScriptFile.appendBytes.md">appendBytes</h1><aside class="prompt" data-type="tip" data-title="" id="z6innd9_7"><p id="z6innd9_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.file/-script-file/append-bytes.html" id="z6innd9_12" data-external="true" rel="noopener noreferrer" target="_blank">ScriptFile.appendBytes()</a></p></aside><div class="tabs" id="z6innd9_10" data-group="languages" data-anchors="[z6innd9_15,z6innd9_18,z6innd9_21,z6innd9_24,z6innd9_27,z6innd9_30,z6innd9_33]"><div class="tabs__content" data-gtm="tab" id="z6innd9_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val filesDir = _files.getFilesDir()
+val file = _files.buildFile {
+    setPath(filesDir, &quot;tmp/aaa.txt&quot;)
+}
+file.writeText(&quot;hello world&quot;, &quot;UTF-8&quot;)
+file.appendBytes(file.readBytes())
+_console.log(file.readText(&quot;UTF-8&quot;))
+file.delete()</div><aside class="prompt" data-type="tip" data-title="" id="z6innd9_39"><p id="z6innd9_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ScriptFile/appendBytes.kts" id="z6innd9_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ScriptFile/appendBytes.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z6innd9_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def filesDir = $files.getFilesDir()
+def file = $files.buildFile {
+    setPath(filesDir, &quot;tmp/aaa.txt&quot;)
+}
+file.writeText(&quot;hello world&quot;, &quot;UTF-8&quot;)
+file.appendBytes(file.readBytes())
+$console.log(file.readText(&quot;UTF-8&quot;))
+file.delete()</div><aside class="prompt" data-type="tip" data-title="" id="z6innd9_47"><p id="z6innd9_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ScriptFile/appendBytes.groovy" id="z6innd9_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ScriptFile/appendBytes.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z6innd9_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let filesDir = $files.getFilesDir()
+let file = $files.buildFile((fileBuilder) =&gt; {
+    fileBuilder.setPath(filesDir, &quot;tmp/aaa.txt&quot;)
+})
+file.writeText(&quot;hello world&quot;, &quot;UTF-8&quot;)
+file.appendBytes(file.readBytes())
+$console.log(file.readText(&quot;UTF-8&quot;))
+file.delete()</div><aside class="prompt" data-type="tip" data-title="" id="z6innd9_55"><p id="z6innd9_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ScriptFile/appendBytes.js" id="z6innd9_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ScriptFile/appendBytes.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z6innd9_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local filesDir = _files:getFilesDir()
+local file = _files:buildFile(function(fileBuilder)
+    fileBuilder:setPath(filesDir, &quot;tmp/aaa.txt&quot;)
+end)
+file:writeText(&quot;hello world&quot;, &quot;UTF-8&quot;)
+file:appendBytes(file:readBytes())
+_console:log(file:readText(&quot;UTF-8&quot;))
+file:delete()
+</div><aside class="prompt" data-type="tip" data-title="" id="z6innd9_63"><p id="z6innd9_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ScriptFile/appendBytes.lua" id="z6innd9_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ScriptFile/appendBytes.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z6innd9_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$filesDir = $files-&gt;getFilesDir();
+$file = $files-&gt;buildFile(function ($fileBuilder) use ($filesDir) {
+    $fileBuilder-&gt;setPath($filesDir, &quot;tmp/aaa.txt&quot;);
+});
+$file-&gt;writeText(&quot;hello world&quot;, &quot;UTF-8&quot;);
+$file-&gt;appendBytes($file-&gt;readBytes());
+$console-&gt;log($file-&gt;readText(&quot;UTF-8&quot;));
+$file-&gt;delete();
+</div><aside class="prompt" data-type="tip" data-title="" id="z6innd9_71"><p id="z6innd9_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ScriptFile/appendBytes.php" id="z6innd9_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ScriptFile/appendBytes.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z6innd9_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">filesDir = _files.getFilesDir()
+
+
+def fn1(fileBuilder):
+    fileBuilder.setPath(filesDir, &quot;tmp/aaa.txt&quot;)
+
+
+file = _files.buildFile(fn1)
+file.writeText(&quot;hello world&quot;, &quot;UTF-8&quot;)
+file.appendBytes(file.readBytes())
+_console.log(file.readText(&quot;UTF-8&quot;))
+file.delete()
+</div><aside class="prompt" data-type="tip" data-title="" id="z6innd9_79"><p id="z6innd9_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ScriptFile/appendBytes.py" id="z6innd9_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ScriptFile/appendBytes.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="z6innd9_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">filesDir = $files.getFilesDir()
+file = $files.buildFile { |fileBuilder|
+  fileBuilder.setPath(filesDir, &quot;tmp/aaa.txt&quot;)
+}
+file.writeText(&quot;hello world&quot;, &quot;UTF-8&quot;)
+file.appendBytes(file.readBytes())
+$console.log(file.readText(&quot;UTF-8&quot;))
+file.delete()</div><aside class="prompt" data-type="tip" data-title="" id="z6innd9_87"><p id="z6innd9_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ScriptFile/appendBytes.rb" id="z6innd9_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ScriptFile/appendBytes.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="scriptfile.html" class="navigation-links__prev">ScriptFile</a><a href="scriptfile-appendtext.html" class="navigation-links__next">appendText</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

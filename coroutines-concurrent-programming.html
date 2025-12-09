@@ -1,0 +1,498 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.470637634"><title>并发编程 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"awaitall","level":0,"title":"awaitAll: 并发获取多个结果","anchor":"#awaitall"},{"id":"joinall","level":0,"title":"joinAll: 等待多个任务完成","anchor":"#joinall"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="并发编程 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/coroutines-concurrent-programming.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="并发编程 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/coroutines-concurrent-programming.html#webpage",
+    "url": "writerside-documentation/coroutines-concurrent-programming.html",
+    "name": "并发编程 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="coroutines-concurrent-programming" data-main-title="并发编程" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="coroutines.md|协程"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="coroutines-concurrent-programming" id="coroutines-concurrent-programming.md">并发编程</h1><section class="chapter"><h2 id="awaitall" data-toc="awaitall">awaitAll: 并发获取多个结果</h2><p id="tidi1q_5">当你需要同时执行多个异步任务，并等待它们全部成功后统一处理结果时，使用 scope.awaitAll()。</p><ul class="list _bullet" id="tidi1q_6"><li class="list__item" id="tidi1q_11"><p id="tidi1q_14">并发执行：所有任务同时开始，总耗时取决于最慢的那个任务。</p></li><li class="list__item" id="tidi1q_12"><p id="tidi1q_15">类型安全：要求所有 Deferred 返回相同类型的结果 T，最终结果是 List。</p></li><li class="list__item" id="tidi1q_13"><p id="tidi1q_17">快速失败：只要有一个任务失败，awaitAll 就会立即失败，并取消其他未完成的任务。</p></li></ul><div class="tabs" id="tidi1q_10" data-group="languages" data-anchors="[tidi1q_20,tidi1q_23,tidi1q_26,tidi1q_29,tidi1q_32,tidi1q_35,tidi1q_38,tidi1q_41]"><div class="tabs__content" data-gtm="tab" id="tidi1q_20" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 4.1: 并发获取三个服务器的配置信息
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+val scope = _coroutines.newScope(null)
+
+_console.log(&quot;准备并发获取多个配置...&quot;)
+
+val fetchConfigA = scope.delay(300).then { innerScope, _ -&gt; innerScope.resolve(&quot;配置A：加载成功&quot;) }
+val fetchConfigB = scope.delay(800).then { innerScope, _ -&gt; innerScope.resolve(&quot;配置B：加载成功&quot;) }
+val fetchConfigC = scope.delay(500).then { innerScope, _ -&gt; innerScope.resolve(&quot;配置C：加载成功&quot;) }
+val allConfigsDeferred = scope.awaitAll(listOf(fetchConfigA, fetchConfigB, fetchConfigC))
+
+allConfigsDeferred.then { innerScope, configs -&gt;
+    // configs 是一个 List&lt;String&gt;，其元素的顺序与输入列表 [fetchConfigA, fetchConfigB, fetchConfigC] 一致
+    _console.log(&quot;所有配置已成功加载！总耗时约800毫秒（取决于最慢的任务）。&quot;)
+    _console.log(&quot;结果: &quot; + configs)
+    innerScope.resolve(null)
+
+}.onError { error -&gt;
+    _console.error(&quot;在并发获取配置时，至少有一个任务失败了: &quot; + error.getMessage())
+}</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_23" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 4.1: 并发获取三个服务器的配置信息
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope(null)
+
+$console.log(&quot;准备并发获取多个配置...&quot;)
+
+def fetchConfigA = scope.delay(300).then({ innerScope, _ -&gt; innerScope.resolve(&quot;配置A：加载成功&quot;) })
+def fetchConfigB = scope.delay(800).then({ innerScope, _ -&gt; innerScope.resolve(&quot;配置B：加载成功&quot;) })
+def fetchConfigC = scope.delay(500).then({ innerScope, _ -&gt; innerScope.resolve(&quot;配置C：加载成功&quot;) })
+def allConfigsDeferred = scope.awaitAll([fetchConfigA, fetchConfigB, fetchConfigC])
+
+allConfigsDeferred.then({ innerScope, configs -&gt;
+    // configs 是一个 List&lt;String&gt;，其元素的顺序与输入列表 [fetchConfigA, fetchConfigB, fetchConfigC] 一致
+    $console.log(&quot;所有配置已成功加载！总耗时约800毫秒（取决于最慢的任务）。&quot;)
+    $console.log(&quot;结果: &quot; + configs)
+    innerScope.resolve(null)
+
+}).onError({ error -&gt;
+    $console.error(&quot;在并发获取配置时，至少有一个任务失败了: &quot; + error.getMessage())
+})</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_26" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_29" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 4.1: 并发获取三个服务器的配置信息
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(null);
+
+$console.log(&quot;准备并发获取多个配置...&quot;);
+
+const fetchConfigA = scope.delay(300).then((innerScope, _) =&gt; innerScope.resolve(&quot;配置A：加载成功&quot;));
+const fetchConfigB = scope.delay(800).then((innerScope, _) =&gt; innerScope.resolve(&quot;配置B：加载成功&quot;));
+const fetchConfigC = scope.delay(500).then((innerScope, _) =&gt; innerScope.resolve(&quot;配置C：加载成功&quot;));
+const allConfigsDeferred = scope.awaitAll([fetchConfigA, fetchConfigB, fetchConfigC]);
+
+allConfigsDeferred.then((innerScope, configs) =&gt; {
+    // configs 是一个 List&lt;String&gt;，其元素的顺序与输入列表 [fetchConfigA, fetchConfigB, fetchConfigC] 一致
+    $console.log(&quot;所有配置已成功加载！总耗时约800毫秒（取决于最慢的任务）。&quot;);
+    $console.log(&quot;结果: &quot; + configs);
+    return innerScope.resolve(null);
+
+}).onError(error =&gt; {
+    $console.error(&quot;在并发获取配置时，至少有一个任务失败了: &quot; + error.getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_32" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 4.1: 并发获取三个服务器的配置信息
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(nil)
+
+_console:log(&quot;准备并发获取多个配置...&quot;)
+
+local fetchConfigA = scope:delay(300):_then(function(innerScope, _) return innerScope:resolve(&quot;配置A：加载成功&quot;) end)
+local fetchConfigB = scope:delay(800):_then(function(innerScope, _) return innerScope:resolve(&quot;配置B：加载成功&quot;) end)
+local fetchConfigC = scope:delay(500):_then(function(innerScope, _) return innerScope:resolve(&quot;配置C：加载成功&quot;) end)
+local allConfigsDeferred = scope:awaitAll(_iterables:listOf(fetchConfigA, fetchConfigB, fetchConfigC))
+
+allConfigsDeferred:_then(function(innerScope, configs)
+    -- configs 是一个 List&lt;String&gt;，其元素的顺序与输入列表 [fetchConfigA, fetchConfigB, fetchConfigC] 一致
+    _console:log(&quot;所有配置已成功加载！总耗时约800毫秒（取决于最慢的任务）。&quot;)
+    _console:log(&quot;结果: &quot; .. tostring(configs))
+    return innerScope:resolve(nil)
+
+end):onError(function(error)
+    _console:error(&quot;在并发获取配置时，至少有一个任务失败了: &quot; .. error:getMessage())
+end)</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_35" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 4.1: 并发获取三个服务器的配置信息
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+});
+
+$console-&gt;log(javaString(&quot;准备并发获取多个配置...&quot;));
+
+$fetchConfigA = $scope-&gt;delay(300)-&gt;then(function ($innerScope, $_) {
+    return $innerScope-&gt;resolve(javaString(&quot;配置A：加载成功&quot;));
+});
+$fetchConfigB = $scope-&gt;delay(800)-&gt;then(function ($innerScope, $_) {
+    return $innerScope-&gt;resolve(javaString(&quot;配置B：加载成功&quot;));
+});
+$fetchConfigC = $scope-&gt;delay(500)-&gt;then(function ($innerScope, $_) {
+    return $innerScope-&gt;resolve(javaString(&quot;配置C：加载成功&quot;));
+});
+global $iterables;
+$allConfigsDeferred = $scope-&gt;awaitAll($iterables-&gt;listOf($fetchConfigA, $fetchConfigB, $fetchConfigC));
+$allConfigsDeferred-&gt;then(function ($innerScope, $configs) {
+    global $console;
+    // configs 是一个 List&lt;String&gt;，其元素的顺序与输入列表 [fetchConfigA, fetchConfigB, fetchConfigC] 一致
+    $console-&gt;log(javaString(&quot;所有配置已成功加载！总耗时约800毫秒（取决于最慢的任务）。&quot;));
+    $console-&gt;log(javaString(&quot;结果: &quot;), $configs);
+    return $innerScope-&gt;resolve(null);
+
+})-&gt;onError(function ($error) {
+    global $console;
+    $console-&gt;error(javaString(&quot;在并发获取配置时，至少有一个任务失败了: &quot;) . $error-&gt;getMessage());
+});</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_38" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 4.1: 并发获取三个服务器的配置信息
+#
+
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _console
+
+_threads.getMain().setBackground(True)
+# 使用您指定的 scope 创建方式
+scope = _coroutines.newScope(lambda it:
+                             it.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+                             )
+
+_console.log(&quot;准备并发获取多个配置...&quot;)
+
+# 对于单行返回值的 lambda，可以直接返回值，无需元组
+fetchConfigA = scope.delay(300).then(lambda innerScope, _: innerScope.resolve(&quot;配置A：加载成功&quot;))
+fetchConfigB = scope.delay(800).then(lambda innerScope, _: innerScope.resolve(&quot;配置B：加载成功&quot;))
+fetchConfigC = scope.delay(500).then(lambda innerScope, _: innerScope.resolve(&quot;配置C：加载成功&quot;))
+
+allConfigsDeferred = scope.awaitAll([fetchConfigA, fetchConfigB, fetchConfigC])
+
+allConfigsDeferred.then(lambda innerScope, configs: (
+    # configs 是一个 List&lt;String&gt;，其元素的顺序与输入列表 [fetchConfigA, fetchConfigB, fetchConfigC] 一致
+    _console.log(&quot;所有配置已成功加载！总耗时约800毫秒（取决于最慢的任务）。&quot;),
+    # Python中打印列表需要将其转换为字符串
+    _console.log(&quot;结果: &quot; + str(configs)),
+    innerScope.resolve(None)
+
+    # 应用规则：返回元组的最后一个元素
+)[-1]).onError(lambda error: (
+    _console.error(&quot;在并发获取配置时，至少有一个任务失败了: &quot; + str(error.getMessage()))
+))</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_41" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 4.1: 并发获取三个服务器的配置信息
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope(nil)
+
+$console.log(&quot;准备并发获取多个配置...&quot;)
+
+fetchConfigA = scope.delay(300).then { |innerScope, _| innerScope.resolve(&quot;配置A：加载成功&quot;) }
+fetchConfigB = scope.delay(800).then { |innerScope, _| innerScope.resolve(&quot;配置B：加载成功&quot;) }
+fetchConfigC = scope.delay(500).then { |innerScope, _| innerScope.resolve(&quot;配置C：加载成功&quot;) }
+# 创建数组使用 []
+allConfigsDeferred = scope.awaitAll([fetchConfigA, fetchConfigB, fetchConfigC])
+
+allConfigsDeferred.then do |innerScope, configs|
+  # configs 是一个 List&lt;String&gt;，其元素的顺序与输入列表 [fetchConfigA, fetchConfigB, fetchConfigC] 一致
+  $console.log(&quot;所有配置已成功加载！总耗时约800毫秒（取决于最慢的任务）。&quot;)
+  $console.log(&quot;结果: &quot; + configs.to_s)
+  innerScope.resolve(nil)
+
+end.onError do |error|
+  $console.error(&quot;在并发获取配置时，至少有一个任务失败了: &quot; + error.getMessage())
+end</div></div></div></section><section class="chapter"><h2 id="joinall" data-toc="joinall">joinAll: 等待多个任务完成</h2><p id="tidi1q_90">当你只关心一组任务是否全部结束（无论成败），而不关心它们的返回值时，使用 scope.joinAll()。</p><ul class="list _bullet" id="tidi1q_91"><li class="list__item" id="tidi1q_96"><p id="tidi1q_98">纯同步点：等待所有 Job 或 Deferred 完成。</p></li><li class="list__item" id="tidi1q_97"><p id="tidi1q_99">如果其中一个任务抛出异常，其他未完成的任务会被取消执行。</p></li></ul><div class="tabs" id="tidi1q_95" data-group="languages" data-anchors="[tidi1q_102,tidi1q_105,tidi1q_108,tidi1q_111,tidi1q_114,tidi1q_117,tidi1q_120,tidi1q_123]"><div class="tabs__content" data-gtm="tab" id="tidi1q_102" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+/*
+ * 完整示例 4.2: 启动多个后台任务（日志上报、文件清理），并等待它们全部结束
+ */
+
+// --- 样板代码 ---
+_threads.getMain().setBackground(true)
+// newScope 的 builder 是 Receiver.() -&gt; Unit，所以直接调用 setExceptionHandler
+val scope = _coroutines.newScope {
+    // 设置一个异常处理器，来观察失败任务的日志
+    setExceptionHandler { ctx, err -&gt;
+        _console.error(&quot;[作用域异常捕获] 任务 '${ctx.getName()}' 失败了: ${err.getMessage()}&quot;)
+    }
+}
+
+_console.log(&quot;准备启动多个独立的后台任务...&quot;)
+
+// 修复：contextBuilder 和 block 都移除了显式参数
+val logUploadJob = scope.launch({ setName(&quot;日志上传任务&quot;) }, null) {
+    delay(4000).then { innerScope, _ -&gt;
+        _console.log(&quot; -&gt; 日志上传成功。&quot;)
+        innerScope.resolve(null)
+    }
+}
+
+// 修复：contextBuilder 和 block 都移除了显式参数
+val cacheClearJob = scope.launch({ setName(&quot;缓存清理任务&quot;) }, null) {
+    delay(200).then&lt;Unit&gt; { innerScope, _ -&gt;
+        _console.log(&quot; -&gt; 缓存清理时发生了一个预期的错误。&quot;)
+        throw RuntimeException(&quot;磁盘空间不足！&quot;)
+    }
+}
+
+scope.joinAll(listOf(logUploadJob, cacheClearJob)).then { innerScope, _ -&gt;
+    _console.log(&quot;\n✅ joinAll 完成！这意味着所有后台任务都已经结束了（无论成功或失败）。&quot;)
+    _console.log(&quot;现在可以安全地执行后续的清理操作或退出脚本。&quot;)
+    innerScope.resolve(null)
+}.onError {
+    _console.error(&quot;至少有任务执行失败&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_105" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">/*
+ * 完整示例 4.2: 启动多个后台任务（日志上报、文件清理），并等待它们全部结束
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true)
+def scope = $coroutines.newScope({ context -&gt;
+    // 设置一个异常处理器，来观察失败任务的日志
+    context.setExceptionHandler({ ctx, err -&gt;
+        $console.error(&quot;[作用域异常捕获] 任务 '${ctx.getName()}' 失败了: ${err.getMessage()}&quot;)
+    })
+})
+
+$console.log(&quot;准备启动多个独立的后台任务...&quot;)
+
+def logUploadJob = scope.launch({ ctx -&gt; ctx.setName(&quot;日志上传任务&quot;) }, null, { s -&gt;
+    s.delay(4000).then({ innerScope, _ -&gt;
+        $console.log(&quot; -&gt; 日志上传成功。&quot;)
+        innerScope.resolve(null)
+    })
+})
+
+def cacheClearJob = scope.launch({ ctx -&gt; ctx.setName(&quot;缓存清理任务&quot;) }, null, { s -&gt;
+    s.delay(200).then({ innerScope, _ -&gt;
+        $console.log(&quot; -&gt; 缓存清理时发生了一个预期的错误。&quot;)
+        throw new RuntimeException(&quot;磁盘空间不足！&quot;)
+    })
+})
+
+scope.joinAll([logUploadJob, cacheClearJob]).then({ innerScope, _ -&gt;
+    $console.log(&quot;\n✅ joinAll 完成！这意味着所有后台任务都已经结束了（无论成功或失败）。&quot;)
+    $console.log(&quot;现在可以安全地执行后续的清理操作或退出脚本。&quot;)
+    innerScope.resolve(null)
+}).onError {
+    $console.error(&quot;至少有任务执行失败&quot;)
+}</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_108" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_111" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/*
+ * 完整示例 4.2: 启动多个后台任务（日志上报、文件清理），并等待它们全部结束
+ */
+
+// --- 样板代码 ---
+$threads.getMain().setBackground(true);
+const scope = $coroutines.newScope(context =&gt; {
+    // 设置一个异常处理器，来观察失败任务的日志
+    context.setExceptionHandler((ctx, err) =&gt; {
+        $console.error(`[作用域异常捕获] 任务 '${ctx.getName()}' 失败了: ${err.getMessage()}`);
+    });
+});
+
+$console.log(&quot;准备启动多个独立的后台任务...&quot;);
+
+const logUploadJob = scope.launch(ctx =&gt; ctx.setName(&quot;日志上传任务&quot;), null, s =&gt; {
+    s.delay(4000).then((innerScope, _) =&gt; {
+        $console.log(&quot; -&gt; 日志上传成功。&quot;);
+        return innerScope.resolve(null);
+    });
+});
+
+const cacheClearJob = scope.launch(ctx =&gt; ctx.setName(&quot;缓存清理任务&quot;), null, s =&gt; {
+    s.delay(200).then((innerScope, _) =&gt; {
+        $console.log(&quot; -&gt; 缓存清理时发生了一个预期的错误。&quot;);
+        throw new Error(&quot;磁盘空间不足！&quot;);
+    });
+});
+
+scope.joinAll([logUploadJob, cacheClearJob]).then((innerScope, _) =&gt; {
+    $console.log(&quot;\n✅ joinAll 完成！这意味着所有后台任务都已经结束了（无论成功或失败）。&quot;);
+    $console.log(&quot;现在可以安全地执行后续的清理操作或退出脚本。&quot;);
+    return innerScope.resolve(null);
+}).onError(error =&gt; {
+    $console.error(&quot;至少有任务执行失败&quot;);
+});</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_114" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">--[[
+ * 完整示例 4.2: 启动多个后台任务（日志上报、文件清理），并等待它们全部结束
+ ]]
+
+-- --- 样板代码 ---
+_threads:getMain():setBackground(true)
+local scope = _coroutines:newScope(function(context)
+    -- 设置一个异常处理器，来观察失败任务的日志
+    context:setExceptionHandler(function(ctx, err)
+        _console:error(&quot;[作用域异常捕获] 任务 '&quot;..ctx:getName()..&quot;' 失败了: &quot;..err:getMessage())
+    end)
+end)
+
+_console:log(&quot;准备启动多个独立的后台任务...&quot;)
+
+local logUploadJob = scope:launch(function(ctx) ctx:setName(&quot;日志上传任务&quot;) end, nil, function(s)
+    s:delay(4000):_then(function(innerScope, _)
+        _console:log(&quot; -&gt; 日志上传成功。&quot;)
+        return innerScope:resolve(nil)
+    end)
+end)
+
+local cacheClearJob = scope:launch(function(ctx) ctx:setName(&quot;缓存清理任务&quot;) end, nil, function(s)
+    s:delay(200):_then(function(innerScope, _)
+        _console:log(&quot; -&gt; 缓存清理时发生了一个预期的错误。&quot;)
+        -- 在Lua中，使用 error() 来抛出异常
+        error(&quot;磁盘空间不足！&quot;)
+    end)
+end)
+
+scope:joinAll(_iterables:listOf(logUploadJob, cacheClearJob)):_then(function(innerScope, _)
+    _console:log(&quot;\n✅ joinAll 完成！这意味着所有后台任务都已经结束了（无论成功或失败）。&quot;)
+    _console:log(&quot;现在可以安全地执行后续的清理操作或退出脚本。&quot;)
+    return innerScope:resolve(nil)
+end):onError(function()
+    _console:error(&quot;至少有任务执行失败&quot;)
+end)</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_117" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\thread\Threads $threads */
+global $threads;
+/** @var m8test_java\com\m8test\script\core\api\coroutines\Coroutines $coroutines */
+global $coroutines;
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+
+/*
+ * 完整示例 4.2: 启动多个后台任务（日志上报、文件清理），并等待它们全部结束
+ */
+
+// --- 样板代码 ---
+$threads-&gt;getMain()-&gt;setBackground(true);
+$scope = $coroutines-&gt;newScope(function ($context) {
+    global $console;
+    $context-&gt;setDispatcher(function ($dispatchers) {
+        return $dispatchers-&gt;getScriptMain();
+    });
+    // 设置一个异常处理器，来观察失败任务的日志
+    $context-&gt;setExceptionHandler(function ($ctx, $err) use ($console) {
+        $console-&gt;error(javaString(&quot;[作用域异常捕获] 任务 '&quot;) . $ctx-&gt;getName() . javaString(&quot;' 失败了: &quot;) . $err-&gt;getMessage());
+    });
+});
+
+$console-&gt;log(javaString(&quot;准备启动多个独立的后台任务...&quot;));
+
+$logUploadJob = $scope-&gt;launch(function ($ctx) {
+    $ctx-&gt;setName(javaString(&quot;日志上传任务&quot;));
+}, null, function ($s) {
+    $s-&gt;delay(4000)-&gt;then(function ($innerScope, $_) {
+        global $console;
+        $console-&gt;log(javaString(&quot; -&gt; 日志上传成功。&quot;));
+        return $innerScope-&gt;resolve(null);
+    });
+});
+$cacheClearJob = $scope-&gt;launch(function ($ctx) {
+    $ctx-&gt;setName(javaString(&quot;缓存清理任务&quot;));
+}, null, function ($s) {
+    $s-&gt;delay(200)-&gt;then(function ($innerScope, $_) {
+        global $console;
+        global $exceptions;
+        $console-&gt;log(javaString(&quot; -&gt; 缓存清理时发生了一个预期的错误。&quot;));
+        return $innerScope-&gt;reject($exceptions-&gt;newThrowable(function ($eb) {
+            $eb-&gt;setMessageAndClassName(javaString(&quot;磁盘空间不足！&quot;), null);
+        }));
+    });
+});
+
+global $iterables;
+$scope-&gt;joinAll($iterables-&gt;listOf($logUploadJob, $cacheClearJob))-&gt;then(function ($innerScope, $_) {
+    global $console;
+    $console-&gt;log(javaString(&quot;\n✅ joinAll 完成！这意味着所有后台任务都已经结束了（无论成功或失败）。&quot;));
+    $console-&gt;log(javaString(&quot;现在可以安全地执行后续的清理操作或退出脚本。&quot;));
+    return $innerScope-&gt;resolve(null);
+})-&gt;onError(function () {
+    global $console;
+    $console-&gt;error(javaString(&quot;至少有任务执行失败&quot;));
+});</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_120" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">#
+# 完整示例 4.2: 启动多个后台任务（日志上报、文件清理），并等待它们全部结束
+#
+
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _coroutines
+from m8test_java.com.m8test.script.GlobalVariables import _exceptions
+# --- 样板代码 ---
+# 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _threads
+
+_threads.getMain().setBackground(True)
+scope = _coroutines.newScope(lambda context: (
+    # 设置一个异常处理器，来观察失败任务的日志
+    context.setExceptionHandler(lambda ctx, err:
+                                _console.error(
+                                    &quot;[作用域异常捕获] 任务 '{}' 失败了: {}&quot;.format(ctx.getName(), err.getMessage()))
+                                ),
+    context.setDispatcher(lambda dispatchers: dispatchers.getScriptMain())
+))
+
+_console.log(&quot;准备启动多个独立的后台任务...&quot;)
+
+logUploadJob = scope.launch(lambda ctx: ctx.setName(&quot;日志上传任务&quot;), None, lambda s:
+s.delay(4000).then(lambda innerScope, _: (
+    _console.log(&quot; -&gt; 日志上传成功。&quot;),
+    innerScope.resolve(None)
+)[-1]))
+
+cacheClearJob = scope.launch(lambda ctx: ctx.setName(&quot;缓存清理任务&quot;), None, lambda s:
+s.delay(200).then(lambda innerScope, _: (
+    _console.log(&quot; -&gt; 缓存清理时发生了一个预期的错误。&quot;),
+    innerScope.reject(_exceptions.newThrowable(lambda builder:
+                                               builder.setMessageAndClassName(&quot;磁盘空间不足！&quot;,
+                                                                              &quot;java.lang.RuntimeException&quot;)
+                                               ))
+)[-1]
+                  ))
+
+scope.joinAll([logUploadJob, cacheClearJob]).then(lambda innerScope, _: (
+    _console.log(&quot;\n✅ joinAll 完成！这意味着所有后台任务都已经结束了（无论成功或失败）。&quot;),
+    _console.log(&quot;现在可以安全地执行后续的清理操作或退出脚本。&quot;),
+    innerScope.resolve(None)
+)[-1]).onError(lambda error: _console.error(&quot;至少有任务执行失败&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="tidi1q_123" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+#
+# 完整示例 4.2: 启动多个后台任务（日志上报、文件清理），并等待它们全部结束
+#
+
+# --- 样板代码 ---
+$threads.getMain().setBackground(true)
+scope = $coroutines.newScope do |context|
+  # 设置一个异常处理器，来观察失败任务的日志
+  context.setExceptionHandler do |ctx, err|
+    $console.error(&quot;[作用域异常捕获] 任务 '#{ctx.getName()}' 失败了: #{err.getMessage()}&quot;)
+  end
+end
+
+$console.log(&quot;准备启动多个独立的后台任务...&quot;)
+
+logUploadJob = scope.launch(lambda { |ctx| ctx.setName(&quot;日志上传任务&quot;) }, nil) do |s|
+  s.delay(4000).then do |innerScope, _|
+    $console.log(&quot; -&gt; 日志上传成功。&quot;)
+    innerScope.resolve(nil)
+  end
+end
+
+cacheClearJob = scope.launch(lambda { |ctx| ctx.setName(&quot;缓存清理任务&quot;) }, nil) do |s|
+  s.delay(200).then do |innerScope, _|
+    $console.log(&quot; -&gt; 缓存清理时发生了一个预期的错误。&quot;)
+    raise RuntimeException.new(&quot;磁盘空间不足！&quot;)
+  end
+end
+
+scope.joinAll([logUploadJob, cacheClearJob]).then do |innerScope, _|
+  $console.log(&quot;\n✅ joinAll 完成！这意味着所有后台任务都已经结束了（无论成功或失败）。&quot;)
+  $console.log(&quot;现在可以安全地执行后续的清理操作或退出脚本。&quot;)
+  innerScope.resolve(nil)
+end.onError do
+  $console.error(&quot;至少有任务执行失败&quot;)
+end</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="coroutines-getting-started.html" class="navigation-links__prev">入门</a><a href="coroutines-lifecycle.html" class="navigation-links__next">生命周期</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

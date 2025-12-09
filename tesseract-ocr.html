@@ -1,0 +1,365 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:14.049706958"><title>Tesseract OCR | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"pbyf5a_10","level":0,"title":"在虚拟屏幕中识别","anchor":"#pbyf5a_10"},{"id":"pbyf5a_11","level":0,"title":"在图片中识别","anchor":"#pbyf5a_11"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Tesseract OCR | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/tesseract-ocr.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Tesseract OCR | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/tesseract-ocr.html#webpage",
+    "url": "writerside-documentation/tesseract-ocr.html",
+    "name": "Tesseract OCR | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="tesseract-ocr" data-main-title="Tesseract OCR" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="ocr.md|光学字符识别"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="tesseract-ocr" id="tesseract-ocr.md">Tesseract OCR</h1><p id="pbyf5a_3">模型文件可通过以下渠道下载：</p><ul class="list _bullet" id="pbyf5a_4"><li class="list__item" id="pbyf5a_12"><p id="pbyf5a_14"><a href="https://github.com/tesseract-ocr/tessdata_fast" id="pbyf5a_15" data-external="true" rel="noopener noreferrer" target="_blank">tesseract-ocr 官方仓库</a></p></li><li class="list__item" id="pbyf5a_13"><p id="pbyf5a_16"><a href="https://github.com/YumiMiyamoto/ocr-release/tree/main/tesseractdata" id="pbyf5a_17" data-external="true" rel="noopener noreferrer" target="_blank">组件发布仓库</a></p></li></ul><p id="pbyf5a_5">下载完成后，可选择以下任一方式存放：</p><ol class="list _decimal" id="pbyf5a_6" type="1"><li class="list__item" id="pbyf5a_18"><p id="pbyf5a_20">脚本项目的 <code class="code" id="pbyf5a_21">res/tesseractdata</code> 目录</p></li><li class="list__item" id="pbyf5a_19"><p id="pbyf5a_22">本地任意目录下的 <code class="code" id="pbyf5a_23">tesseractdata</code> 子目录</p></li></ol><p id="pbyf5a_7">完成存放后，即可在代码中加载并使用这些模型。</p><figure id="pbyf5a_8"><img alt="369" src="/369.png" title="369" width="1920" height="898"></figure><figure id="pbyf5a_9"><img alt="370" src="/370.png" title="370" width="1920" height="898"></figure><section class="chapter"><h2 id="pbyf5a_10" data-toc="pbyf5a_10">在虚拟屏幕中识别</h2><div class="tabs" id="pbyf5a_27" data-group="languages" data-anchors="[pbyf5a_30,pbyf5a_33,pbyf5a_36,pbyf5a_39,pbyf5a_42,pbyf5a_45,pbyf5a_48,pbyf5a_51]"><div class="tabs__content" data-gtm="tab" id="pbyf5a_30" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+fun getDisplay(): Display {
+    return _displays.getAll().firstOrNull() ?: _displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+}
+
+// 获取一个虚拟屏幕
+val display = getDisplay()
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+val tesseractOcr = _ocrs!!.tesseract {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) // 添加中文
+    addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    setApi(&quot;chi_sim+eng&quot;, 1)
+}
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+val results = tesseractOcr.analyzeDisplay(display.getId(), null)
+_console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_33" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">import com.m8test.script.core.api.display.Display
+
+// 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+Display getDisplay() {
+    def allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    def display = $displays.create {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+    return display
+}
+
+// 获取一个虚拟屏幕
+def display = getDisplay()
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+def tesseractOcr = $ocrs.tesseract {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) // 添加中文
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    it.setApi(&quot;chi_sim+eng&quot;, 1)
+}
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+def results = tesseractOcr.analyzeDisplay(display.getId(), null)
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_36" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.ocr.api.OcrResults;
+import com.m8test.ocr.api.TesseractOcr;
+import com.m8test.ocr.api.TesseractOcrConfig;
+import com.m8test.script.core.api.display.Display;
+import kotlin.jvm.functions.Function1;
+
+import java.util.List;
+
+import static com.m8test.script.GlobalVariables.*;
+
+private static Display getDisplay() {
+    List&lt;Display&gt; allDisplays = $displays.getAll();
+    if (allDisplays.size() &gt; 0) return (Display) allDisplays.get(0);
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(new Function1() {
+        @Override
+        public Object invoke(Object o) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+            return null;
+        }
+    });
+}
+
+// 获取一个虚拟屏幕
+Display display = getDisplay();
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+TesseractOcr tesseractOcr = $ocrs.tesseract(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        TesseractOcrConfig it = (TesseractOcrConfig) o;
+        // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+        it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;); // 添加中文
+        it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;); // 添加英文
+        // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+        it.setApi(&quot;chi_sim+eng&quot;, 1);
+        return null;
+    }
+});
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+OcrResults results = tesseractOcr.analyzeDisplay(display.getId(), null);
+$console.log(results.getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_39" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ *
+ * @returns {Packages.com.m8test.script.core.api.display.Display}
+ */
+function getDisplay() {
+    let allDisplays = $displays.getAll()
+    if (allDisplays.size() &gt; 0) return allDisplays.get(0)
+    // 创建虚拟屏幕, create 方法会返回一个 Display 对象
+    return $displays.create(function (config) {
+        // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    })
+}
+
+// 获取一个虚拟屏幕
+let display = getDisplay()
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+let tesseractOcr = $ocrs.tesseract(function (it) {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) // 添加中文
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    it.setApi(&quot;chi_sim+eng&quot;, 1)
+})
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+let results = tesseractOcr.analyzeDisplay(display.getId(), null)
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_42" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+--- @return m8test_java.com.m8test.script.core.api.display.Display
+function getDisplay()
+    local allDisplays = _displays:getAll()
+    if not allDisplays:isEmpty() then
+        return allDisplays:get(0)
+    else
+        return _displays:create(function(config)
+            -- 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        end)
+    end
+end
+
+-- 获取一个虚拟屏幕
+local display = getDisplay()
+-- Ocrs.tesseract() 用于创建 TesseractOcr 对象
+local tesseractOcr = _ocrs:tesseract(function(it)
+    -- TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https:--github.com/tesseract-ocr/tessdata_fast 下载
+    it:addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) -- 添加中文
+    it:addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;)     -- 添加英文
+    -- 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    it:setApi(&quot;chi_sim+eng&quot;, 1)
+end)
+-- Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+local results = tesseractOcr:analyzeDisplay(display:getId(), nil)
+_console:log(results:getText(&quot;\n&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_45" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\display\Displays $displays */
+global $displays;
+/**
+ * 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+ * @param \m8test_java\com\m8test\script\core\api\display\Displays $displays
+ * @return \m8test_java\com\m8test\script\core\api\display\Display
+ */
+function getDisplay($displays)
+{
+    $allDisplays = $displays-&gt;getAll();
+    if ($allDisplays-&gt;size() &gt; 0) {
+        return $allDisplays-&gt;get(0);
+    } else {
+        return $displays-&gt;create(function ($config) {
+            // 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+        });
+    }
+}
+
+// 获取一个虚拟屏幕
+$display = getDisplay($displays);
+/** @var m8test_java\com\m8test\ocr\api\Ocrs $ocrs */
+global $ocrs;
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+$tesseractOcr = $ocrs-&gt;tesseract(function($it) {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    $it-&gt;addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;); // 添加中文
+    $it-&gt;addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;); // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    $it-&gt;setApi(&quot;chi_sim+eng&quot;, 1);
+});
+// Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+$results = $tesseractOcr-&gt;analyzeDisplay($display-&gt;getId(), null);
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+$console-&gt;log($results-&gt;getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_48" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _displays
+from m8test_java.com.m8test.script.GlobalVariables import _ocrs
+
+
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+def getDisplay():
+    allDisplays = _displays.getAll()
+    if allDisplays.size() &gt; 0:
+        return allDisplays.get(0)
+    else:
+        return _displays.create(lambda config:
+                                # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+                                config)
+
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+# Ocrs.tesseract() 用于创建 TesseractOcr 对象
+tesseractOcr = _ocrs.tesseract(lambda it:
+                               # TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https:#github.com/tesseract-ocr/tessdata_fast 下载
+                               (it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;),  # 添加中文
+                                it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;),  # 添加英文
+                                # 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+                                it.setApi(&quot;chi_sim+eng&quot;, 1)))
+# Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+results = tesseractOcr.analyzeDisplay(display.getId(), None)
+_console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_51" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+java_import 'com.m8test.script.core.api.display.Display'
+# 获取一个虚拟屏幕，如果已经存在的话则直接使用原有的，否则创建一个
+# @return [Display] 已存在或者新创建的虚拟屏幕
+def getDisplay
+  allDisplays = $displays.getAll
+  if allDisplays.size &gt; 0
+    allDisplays.get(0)
+  else
+    $displays.create { |config|
+      # 这里可以配置虚拟屏幕，推荐直接使用默认配置，如果出错的话再手动配置
+    }
+  end
+end
+
+# 获取一个虚拟屏幕
+display = getDisplay()
+java_import 'com.m8test.ocr.api.TesseractOcrConfig'
+# Ocrs.tesseract() 用于创建 TesseractOcr 对象
+tesseractOcr = $ocrs.tesseract {
+  # @type it [TesseractOcrConfig]
+  |it|
+  # TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https:#github.com/tesseract-ocr/tessdata_fast 下载
+  it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) # 添加中文
+  it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) # 添加英文
+  # 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+  it.setApi(&quot;chi_sim+eng&quot;, 1)
+}
+# Ocr.analyzeDisplay() 用于分析指定id的虚拟屏幕并获取结果(OcrResults), 第一个参数为虚拟屏幕id, 第二个参数为设置识别区域的函数,如果为null表示分析全屏
+results = tesseractOcr.analyzeDisplay(display.getId(), nil)
+$console.log(results.getText(&quot;\n&quot;))</div></div></div></section><section class="chapter"><h2 id="pbyf5a_11" data-toc="pbyf5a_11">在图片中识别</h2><div class="tabs" id="pbyf5a_103" data-group="languages" data-anchors="[pbyf5a_106,pbyf5a_109,pbyf5a_112,pbyf5a_115,pbyf5a_118,pbyf5a_121,pbyf5a_124,pbyf5a_127]"><div class="tabs__content" data-gtm="tab" id="pbyf5a_106" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables._console
+import com.m8test.script.GlobalVariables._ocrs
+
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+val tesseractOcr = _ocrs!!.tesseract {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) // 添加中文
+    addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    setApi(&quot;chi_sim+eng&quot;, 1)
+}
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+val results = tesseractOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+_console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_109" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+def tesseractOcr = $ocrs.tesseract {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) // 添加中文
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    it.setApi(&quot;chi_sim+eng&quot;, 1)
+}
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+def results = tesseractOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_112" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true">import com.m8test.ocr.api.OcrResults;
+import com.m8test.ocr.api.TesseractOcr;
+import com.m8test.ocr.api.TesseractOcrConfig;
+import kotlin.jvm.functions.Function1;
+
+import static com.m8test.script.GlobalVariables.$console;
+import static com.m8test.script.GlobalVariables.$ocrs;
+
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+TesseractOcr tesseractOcr = $ocrs.tesseract(new Function1() {
+    @Override
+    public Object invoke(Object o) {
+        TesseractOcrConfig it = (TesseractOcrConfig) o;
+        // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+        it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;); // 添加中文
+        it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;); // 添加英文
+        // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+        it.setApi(&quot;chi_sim+eng&quot;, 1);
+        return null;
+    }
+});
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+OcrResults results = tesseractOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null);
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_115" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+let tesseractOcr = $ocrs.tesseract(function (it) {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) // 添加中文
+    it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    it.setApi(&quot;chi_sim+eng&quot;, 1)
+})
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+let results = tesseractOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null)
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_118" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- Ocrs.tesseract() 用于创建 TesseractOcr 对象
+local tesseractOcr = _ocrs:tesseract(function(it)
+    -- TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https:--github.com/tesseract-ocr/tessdata_fast 下载
+    it:addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) -- 添加中文
+    it:addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;)     -- 添加英文
+    -- 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    it:setApi(&quot;chi_sim+eng&quot;, 1)
+end)
+-- Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+local results = tesseractOcr:analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, nil)
+-- OcrResults.getText() 用于获取 Ocr 识别结果
+_console:log(results:getText(&quot;\n&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_121" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\ocr\api\Ocrs $ocrs */
+global $ocrs;
+// Ocrs.tesseract() 用于创建 TesseractOcr 对象
+$tesseractOcr = $ocrs-&gt;tesseract(function ($it) {
+    // TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https://github.com/tesseract-ocr/tessdata_fast 下载
+    $it-&gt;addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;); // 添加中文
+    $it-&gt;addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;); // 添加英文
+    // 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+    $it-&gt;setApi(&quot;chi_sim+eng&quot;, 1);
+});
+// Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+$results = $tesseractOcr-&gt;analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, null);
+// OcrResults.getText() 用于获取 Ocr 识别结果
+$console-&gt;log($results-&gt;getText(&quot;\n&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_124" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _ocrs
+
+# Ocrs.tesseract() 用于创建 TesseractOcr 对象
+tesseractOcr = _ocrs.tesseract(lambda it:
+                               # TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https:#github.com/tesseract-ocr/tessdata_fast 下载
+                               (it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;),  # 添加中文
+                                it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;),  # 添加英文
+                                # 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+                                it.setApi(&quot;chi_sim+eng&quot;, 1)))
+# Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+results = tesseractOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, None)
+# OcrResults.getText() 用于获取 Ocr 识别结果
+_console.log(results.getText(&quot;\n&quot;))
+</div></div><div class="tabs__content" data-gtm="tab" id="pbyf5a_127" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">java_import &quot;com.m8test.ocr.api.TesseractOcrConfig&quot;
+# Ocrs.tesseract() 用于创建 TesseractOcr 对象
+tesseractOcr = $ocrs.tesseract {
+  # @type it [TesseractOcrConfig]
+  |it|
+  # TesseractOcrConfig.addTrainedData() 用于添加 Tesseract 训练数据文件, 可以在 https:#github.com/tesseract-ocr/tessdata_fast 下载
+  it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/chi_sim.traineddata&quot;) # 添加中文
+  it.addTrainedData(&quot;/sdcard/M8Test/ocr/tesseractdata/eng.traineddata&quot;) # 添加英文
+  # 设置 Tesseract api，指定识别语言和 OCR 引擎模式。
+  it.setApi(&quot;chi_sim+eng&quot;, 1)
+}
+# Ocr.analyzeImage() 用于分析图片并获取结果(OcrResults), 第一个参数为需要分析的图片路径，第二个参数为设置识别区域的函数，如果为null则表示分析整个图片
+results = tesseractOcr.analyzeImage(&quot;/sdcard/M8Test/groovy-screenshot.png&quot;, nil)
+# OcrResults.getText() 用于获取 Ocr 识别结果
+$console.log(results.getText(&quot;\n&quot;))</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="paddle-ocr.html" class="navigation-links__prev">Paddle OCR</a><a href="floating-windows.html" class="navigation-links__next">悬浮窗</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

@@ -1,0 +1,971 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:15.361507535"><title>状态 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"z6jeh8c_3","level":0,"title":"单状态","anchor":"#z6jeh8c_3"},{"id":"z6jeh8c_4","level":0,"title":"聚合状态","anchor":"#z6jeh8c_4"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="状态 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/declarative-ui-state.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="状态 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/declarative-ui-state.html#webpage",
+    "url": "writerside-documentation/declarative-ui-state.html",
+    "name": "状态 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="declarative-ui-state" data-main-title="状态" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="declarative-ui.md|声明式UI"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="declarative-ui-state" id="declarative-ui-state.md">状态</h1><section class="chapter"><h2 id="z6jeh8c_3" data-toc="z6jeh8c_3">单状态</h2><p id="z6jeh8c_5">状态是声明式UI中最重要的概念。当状态值发生改变时，UI会根据需要自动更新，无需像命令式UI那样通过代码手动更新UI。你只需改变状态值，例如按钮点击时：</p><ul class="list _bullet" id="z6jeh8c_6"><li class="list__item" id="z6jeh8c_16"><p id="z6jeh8c_18">声明式UI中只需改变状态值，如 <code class="code" id="z6jeh8c_19">state.setValue(state.getValue() + 1)</code> （每点击一次自增1）。当状态改变时，所有通过 <code class="code" id="z6jeh8c_20">trackSingleState</code> 添加该状态的Composable都会自动更新，无需手动操作。</p></li><li class="list__item" id="z6jeh8c_17"><p id="z6jeh8c_21">命令式UI中需要直接修改控件属性，如 <code class="code" id="z6jeh8c_22">textView.setText(textView.getText().toInt() + 1)</code> 。若存在多个关联组件，还需逐一修改，例如 <code class="code" id="z6jeh8c_23">textView2.setText(textView2.getText().toInt() + 1)</code>。</p></li></ul><div class="tabs" id="z6jeh8c_12" data-group="languages" data-anchors="[z6jeh8c_26,z6jeh8c_29,z6jeh8c_32,z6jeh8c_35,z6jeh8c_38,z6jeh8c_41,z6jeh8c_44,z6jeh8c_47]"><div class="tabs__content" data-gtm="tab" id="z6jeh8c_26" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // 这是一个非常简单的例子，当点击按钮时会将计数器(状态)的值加1，状态改变后，使用到该状态的文本会自动更新
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+        // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+        Column {
+            // 设置 Column 中 content 插槽的内容
+            setContent {
+                // 1. 创建一个可变状态，用于保存计数器的值
+                val count = mutableStateOf(0)
+                // 添加一个文件组件到 Column (垂直布局)中
+                Text {
+                    // 2. 在组件的某个属性中使用该状态的值
+                    setText(count.getValue().toString())
+                    // 3. 将状态添加到组件中，这样text组件就会监听该状态的改变，这个是必须的步骤，如果没有此步骤，那么 count 的值改变时，composable(text组件)不会重组（界面更新）
+                    trackSingleState(count)
+                }
+                // 添加一个文本按钮到 Column (垂直布局)中
+                TextButton {
+                    // 设置文本按钮的content插槽内容
+                    setContent {
+                        // 在插槽中添加一个文本
+                        Text {
+                            setText(&quot;点击我&quot;)
+                        }
+                    }
+                    // 设置按钮点击事件
+                    setOnClick {
+                        // 4. 当按钮被点击时，更新状态的值，这时使用到count的所有组件都会重组(界面更新), 必须要 trackSingleState
+                        count.setValue(count.getValue() + 1)
+                    }
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+// 下面的语句中的 '//-m8test-remove' 在实际编译时会被删除，也就是将会改成 'side1Run();', 但是不能省略，否则 side1Run 方法不会被执行
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_29" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 这是一个非常简单的例子，当点击按钮时会将计数器(状态)的值加1，状态改变后，使用到该状态的文本会自动更新
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column { column -&gt;
+        // 设置 Column 中 content 插槽的内容
+        column.setContent { columnSlot -&gt;
+            // 1. 创建一个可变状态，用于保存计数器的值
+            def count = columnSlot.mutableStateOf(0)
+            // 添加一个文件组件到 Column (垂直布局)中
+            columnSlot.Text { text -&gt;
+                // 2. 在组件的某个属性中使用该状态的值
+                text.setText(count.getValue().toString())
+                // 3. 将状态添加到组件中，这样text组件就会监听该状态的改变，这个是必须的步骤，如果没有此步骤，那么 count 的值改变时，composable(text组件)不会重组（界面更新）
+                text.trackSingleState(count)
+            }
+            // 添加一个文本按钮到 Column (垂直布局)中
+            columnSlot.TextButton { button -&gt;
+                // 设置文本按钮的content插槽内容
+                button.setContent { buttonSlot -&gt;
+                    // 在插槽中添加一个文本
+                    buttonSlot.Text { text -&gt;
+                        text.setText(&quot;点击我&quot;)
+                    }
+                }
+                // 设置按钮点击事件
+                button.setOnClick {
+                    // 4. 当按钮被点击时，更新状态的值，这时使用到count的所有组件都会重组(界面更新), 必须要 trackSingleState
+                    count.setValue(count.getValue() + 1)
+                }
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_32" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_35" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 这是一个非常简单的例子，当点击按钮时会将计数器(状态)的值加1，状态改变后，使用到该状态的文本会自动更新
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot.Column(column =&gt; {
+        // 设置 Column 中 content 插槽的内容
+        column.setContent(columnSlot =&gt; {
+            // 1. 创建一个可变状态，用于保存计数器的值
+            const count = columnSlot.mutableStateOf(0);
+            // 添加一个文件组件到 Column (垂直布局)中
+            columnSlot.Text(text =&gt; {
+                // 2. 在组件的某个属性中使用该状态的值
+                text.setText(count.getValue().toString());
+                // 3. 将状态添加到组件中，这样text组件就会监听该状态的改变，这个是必须的步骤，如果没有此步骤，那么 count 的值改变时，composable(text组件)不会重组（界面更新）
+                text.trackSingleState(count);
+            });
+            // 添加一个文本按钮到 Column (垂直布局)中
+            columnSlot.TextButton(button =&gt; {
+                // 设置文本按钮的content插槽内容
+                button.setContent(buttonSlot =&gt; {
+                    // 在插槽中添加一个文本
+                    buttonSlot.Text(text =&gt; {
+                        text.setText(&quot;点击我&quot;);
+                    });
+                });
+                // 设置按钮点击事件
+                button.setOnClick(() =&gt; {
+                    // 4. 当按钮被点击时，更新状态的值，这时使用到count的所有组件都会重组(界面更新), 必须要 trackSingleState
+                    count.setValue(count.getValue() + 1);
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_38" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 这是一个非常简单的例子，当点击按钮时会将计数器(状态)的值加1，状态改变后，使用到该状态的文本会自动更新
+-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    -- 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    slot:Column(function(column)
+        -- 设置 Column 中 content 插槽的内容
+        column:setContent(function(columnSlot)
+            -- 1. 创建一个可变状态，用于保存计数器的值
+            local count = columnSlot:mutableStateOf(0)
+            -- 添加一个文件组件到 Column (垂直布局)中
+            columnSlot:Text(function(text)
+                -- 2. 在组件的某个属性中使用该状态的值
+                text:setText(tostring(count:getValue()))
+                -- 3. 将状态添加到组件中，这样text组件就会监听该状态的改变，这个是必须的步骤，如果没有此步骤，那么 count 的值改变时，composable(text组件)不会重组（界面更新）
+                text:trackSingleState(count)
+            end)
+            -- 添加一个文本按钮到 Column (垂直布局)中
+            columnSlot:TextButton(function(button)
+                -- 设置文本按钮的content插槽内容
+                button:setContent(function(buttonSlot)
+                    -- 在插槽中添加一个文本
+                    buttonSlot:Text(function(text)
+                        text:setText(&quot;点击我&quot;)
+                    end)
+                end)
+                -- 设置按钮点击事件
+                button:setOnClick(function()
+                    -- 4. 当按钮被点击时，更新状态的值，这时使用到count的所有组件都会重组(界面更新), 必须要 trackSingleState
+                    count:setValue(count:getValue() + 1)
+                end)
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()
+</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_41" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+
+// 这是一个非常简单的例子，当点击按钮时会将计数器(状态)的值加1，状态改变后，使用到该状态的文本会自动更新
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    // 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+    // 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+    $slot-&gt;Column(function ($column) {
+        // 设置 Column 中 content 插槽的内容
+        $column-&gt;setContent(function ($columnSlot) {
+            // 1. 创建一个可变状态，用于保存计数器的值
+            $count = $columnSlot-&gt;mutableStateOf(0);
+            // 添加一个文件组件到 Column (垂直布局)中
+            $columnSlot-&gt;Text(function ($text) use ($count) {
+                // 2. 在组件的某个属性中使用该状态的值 (将数字转换为字符串)
+                $text-&gt;setText((string)$count-&gt;getValue());
+                // 3. 将状态添加到组件中，这样text组件就会监听该状态的改变，这个是必须的步骤，如果没有此步骤，那么 count 的值改变时，composable(text组件)不会重组（界面更新）
+                $text-&gt;trackSingleState($count);
+            });
+            // 添加一个文本按钮到 Column (垂直布局)中
+            $columnSlot-&gt;TextButton(function ($button) use ($count) {
+                // 设置文本按钮的content插槽内容
+                $button-&gt;setContent(function ($buttonSlot) {
+                    // 在插槽中添加一个文本
+                    $buttonSlot-&gt;Text(function ($text) {
+                        $text-&gt;setText(javaString(&quot;点击我&quot;));
+                    });
+                });
+                // 设置按钮点击事件
+                $button-&gt;setOnClick(function () use ($count) {
+                    // 4. 当按钮被点击时，更新状态的值，这时使用到count的所有组件都会重组(界面更新), 必须要 trackSingleState
+                    $count-&gt;setValue($count-&gt;getValue() + 1);
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_44" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量，每一行导入一个
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+
+# 这是一个非常简单的例子，当点击按钮时会将计数器(状态)的值加1，状态改变后，使用到该状态的文本会自动更新
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot:
+                    # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+                    # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+                    slot.Column(lambda column:
+                                # 设置 Column 中 content 插槽的内容
+                                column.setContent(lambda columnSlot: (
+                                    # 1. 创建一个可变状态，用于保存计数器的值
+                                    #    使用海象运算符 `:=` 在表达式内部进行赋值
+                                    (count := columnSlot.mutableStateOf(0)),
+                                    # 添加一个文件组件到 Column (垂直布局)中
+                                    #    因为 lambda 中需要执行多个操作，所以我们把它们放到一个元组里
+                                    columnSlot.Text(lambda text: (
+                                        # 2. 在组件的某个属性中使用该状态的值
+                                        #    Groovy 的 .toString() 相当于 Python 的 str()
+                                        text.setText(str(count.getValue())),
+                                        # 3. 将状态添加到组件中，这样text组件就会监听该状态的改变，这个是必须的步骤，如果没有此步骤，那么 count 的值改变时，composable(text组件)不会重组（界面更新）
+                                        text.trackSingleState(count)
+                                    )),
+                                    # 添加一个文本按钮到 Column (垂直布局)中
+                                    columnSlot.TextButton(lambda button: (
+                                        # 设置文本按钮的content插槽内容
+                                        button.setContent(lambda buttonSlot:
+                                                          # 在插槽中添加一个文本
+                                                          buttonSlot.Text(lambda text:
+                                                                          text.setText(&quot;点击我&quot;)
+                                                                          )
+                                                          ),
+                                        # 设置按钮点击事件
+                                        button.setOnClick(lambda:
+                                                          # 4. 当按钮被点击时，更新状态的值，这时使用到count的所有组件都会重组(界面更新), 必须要 trackSingleState
+                                                          count.setValue(count.getValue() + 1)
+                                                          )
+                                    ))
+                                ))
+                                )
+                    )
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_47" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# 这是一个非常简单的例子，当点击按钮时会将计数器(状态)的值加1，状态改变后，使用到该状态的文本会自动更新
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 插槽（Slot）是一种内容分发机制。它允许你在封装一个通用组件时，在组件内部预留一些“坑位”或“插槽”，然后让使用该组件的父组件来决定这些“坑位”里到底填充什么内容。
+  # 创建一个Column，Column是一种垂直布局，可以让其中的组件垂直排列
+  slot.Column do |column|
+    # 设置 Column 中 content 插槽的内容
+    column.setContent do |columnSlot|
+      # 1. 创建一个可变状态，用于保存计数器的值
+      count = columnSlot.mutableStateOf(0)
+
+      # 添加一个文件组件到 Column (垂直布局)中
+      columnSlot.Text do |text|
+        # 2. 在组件的某个属性中使用该状态的值
+        text.setText(count.getValue().to_s)
+
+        # 3. 将状态添加到组件中，这样text组件就会监听该状态的改变，这个是必须的步骤，如果没有此步骤，那么 count 的值改变时，composable(text组件)不会重组（界面更新）
+        text.trackSingleState(count)
+      end
+
+      # 添加一个文本按钮到 Column (垂直布局)中
+      columnSlot.TextButton do |button|
+        # 设置文本按钮的content插槽内容
+        button.setContent do |buttonSlot|
+          # 在插槽中添加一个文本
+          buttonSlot.Text do |text|
+            text.setText(&quot;点击我&quot;)
+          end
+        end
+        # 设置按钮点击事件
+        button.setOnClick do
+          # 4. 当按钮被点击时，更新状态的值，这时使用到count的所有组件都会重组(界面更新), 必须要 trackSingleState
+          count.setValue(count.getValue() + 1)
+        end
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div><p id="z6jeh8c_8">对于状态列表，可通过 <code class="code" id="z6jeh8c_96">LazyRow</code> 或 <code class="code" id="z6jeh8c_97">LazyColumn</code> 实现。当列表中的元素发生改变时， <code class="code" id="z6jeh8c_98">LazyRow</code> 或 <code class="code" id="z6jeh8c_99">LazyColumn</code> 会自动更新。</p><div class="tabs" id="z6jeh8c_15" data-group="languages" data-anchors="[z6jeh8c_102,z6jeh8c_105,z6jeh8c_108,z6jeh8c_111,z6jeh8c_114,z6jeh8c_117,z6jeh8c_120,z6jeh8c_123]"><div class="tabs__content" data-gtm="tab" id="z6jeh8c_102" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 1. 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+        val state = mutableStateListOf(_iterables.listOf(&quot;初始数据&quot;))
+        LazyColumn {
+            setModifier { fillMaxWidth(1f) }
+            // 2. 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+            trackSingleState(state)
+            // 设置懒列表内容
+            setContent {
+                // 设置列表固定头
+                stickyHeader(null, null) { index -&gt;
+                    // 添加一个 Button 到列表固定头
+                    Button {
+                        // 设置按钮内容
+                        setContent {
+                            // 添加文本到按钮中
+                            Text {
+                                // 设置按钮中文本显示的内容
+                                setText(&quot;添加项目&quot;)
+                            }
+                        }
+                        // 4. 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                        setOnClick { state.add(&quot;+++++&quot;) }
+                    }
+                }
+                // 3. 将状态列表中的数据显示到 LazyColumn 中
+                itemsIndexed(state, null, null) { index, item -&gt;
+                    // 状态列表中每个元素显示一个简单的 Text 组件
+                    Text {
+                        setModifier {
+                            height { d -&gt; d.fromInt(200) }
+                        }
+                        // 设置 Text 组件显示的内容
+                        setText(item)
+                    }
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_105" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 1. 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    def state = slot.mutableStateListOf($iterables.listOf(&quot;初始数据&quot;))
+    slot.LazyColumn { lc -&gt;
+        lc.setModifier { it.fillMaxWidth(1f) }
+        // 2. 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc.trackSingleState(state)
+        // 设置懒列表内容
+        lc.setContent { lls -&gt;
+            // 设置列表固定头
+            lls.stickyHeader(null, null) { llss, index -&gt;
+                // 添加一个 Button 到列表固定头
+                llss.Button { button -&gt;
+                    // 设置按钮内容
+                    button.setContent { bs -&gt;
+                        // 添加文本到按钮中
+                        bs.Text { text -&gt;
+                            // 设置按钮中文本显示的内容
+                            text.setText(&quot;添加项目&quot;)
+                        }
+                    }
+                    // 4. 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button.setOnClick { state.add(&quot;+++++&quot;) }
+                }
+            }
+            // 3. 将状态列表中的数据显示到 LazyColumn 中
+            lls.itemsIndexed(state, null, null) { llss, index, item -&gt;
+                // 状态列表中每个元素显示一个简单的 Text 组件
+                llss.Text { text -&gt;
+                    text.setModifier {
+                        it.height { d -&gt; d.fromInt(200) }
+                    }
+                    // 设置 Text 组件显示的内容
+                    text.setText(item)
+                }
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_108" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_111" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 1. 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    const state = slot.mutableStateListOf($iterables.listOf(&quot;初始数据&quot;));
+    slot.LazyColumn(lc =&gt; {
+        lc.setModifier(it =&gt; it.fillMaxWidth(1.0));
+        // 2. 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc.trackSingleState(state);
+        // 设置懒列表内容
+        lc.setContent(lls =&gt; {
+            // 设置列表固定头
+            lls.stickyHeader(null, null, (llss, index) =&gt; {
+                // 添加一个 Button 到列表固定头
+                llss.Button(button =&gt; {
+                    // 设置按钮内容
+                    button.setContent(bs =&gt; {
+                        // 添加文本到按钮中
+                        bs.Text(text =&gt; {
+                            // 设置按钮中文本显示的内容
+                            text.setText(&quot;添加项目&quot;);
+                        });
+                    });
+                    // 4. 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button.setOnClick(() =&gt; state.add(&quot;+++++&quot;));
+                });
+            });
+            // 3. 将状态列表中的数据显示到 LazyColumn 中
+            lls.itemsIndexed(state, null, null, (llss, index, item) =&gt; {
+                // 状态列表中每个元素显示一个简单的 Text 组件
+                llss.Text(text =&gt; {
+                    text.setModifier(it =&gt; {
+                        it.height(d =&gt; d.fromInt(200));
+                    });
+                    // 设置 Text 组件显示的内容
+                    text.setText(item);
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_114" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 1. 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    local state = slot:mutableStateListOf(_iterables:listOf(&quot;初始数据&quot;))
+    slot:LazyColumn(function(lc)
+        lc:setModifier(function(it)
+            it:fillMaxWidth(1)
+        end)
+        -- 2. 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc:trackSingleState(state)
+        -- 设置懒列表内容
+        lc:setContent(function(lls)
+            -- 设置列表固定头
+            lls:stickyHeader(nil, nil, function(llss, index)
+                -- 添加一个 Button 到列表固定头
+                llss:Button(function(button)
+                    -- 设置按钮内容
+                    button:setContent(function(bs)
+                        -- 添加文本到按钮中
+                        bs:Text(function(text)
+                            -- 设置按钮中文本显示的内容
+                            text:setText(&quot;添加项目&quot;)
+                        end)
+                    end)
+                    -- 4. 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button:setOnClick(function()
+                        state:add(&quot;+++++&quot;)
+                    end)
+                end)
+            end)
+            -- 3. 将状态列表中的数据显示到 LazyColumn 中
+            lls:itemsIndexed(state, nil, nil, function(llss, index, item)
+                -- 状态列表中每个元素显示一个简单的 Text 组件
+                llss:Text(function(text)
+                    text:setModifier(function(it)
+                        it:height(function(d) return d:fromInt(200) end)
+                    end)
+                    -- 设置 Text 组件显示的内容
+                    text:setText(item)
+                end)
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()
+</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_117" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    global $iterables;
+    // 1. 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    $state = $slot-&gt;mutableStateListOf($iterables-&gt;listOf(javaString(&quot;初始数据&quot;)));
+    $slot-&gt;LazyColumn(function ($lc) use ($state) {
+        $lc-&gt;setModifier(function ($it) {
+            $it-&gt;fillMaxWidth(1.0);
+        });
+        // 2. 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        $lc-&gt;trackSingleState($state);
+        // 设置懒列表内容
+        $lc-&gt;setContent(function ($lls) use ($state) {
+            // 设置列表固定头
+            $lls-&gt;stickyHeader(null, null, function ($llss, $index) use ($state) {
+                // 添加一个 Button 到列表固定头
+                $llss-&gt;Button(function ($button) use ($state) {
+                    // 设置按钮内容
+                    $button-&gt;setContent(function ($bs) {
+                        // 添加文本到按钮中
+                        $bs-&gt;Text(function ($text) {
+                            // 设置按钮中文本显示的内容
+                            $text-&gt;setText(javaString(&quot;添加项目&quot;));
+                        });
+                    });
+                    // 4. 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    $button-&gt;setOnClick(function () use ($state) {
+                        $state-&gt;add(javaString(&quot;+++++&quot;));
+                    });
+                });
+            });
+            // 3. 将状态列表中的数据显示到 LazyColumn 中
+            $lls-&gt;itemsIndexed($state, null, null, function ($llss, $index, $item) {
+                // 状态列表中每个元素显示一个简单的 Text 组件
+                $llss-&gt;Text(function ($text) use ($item) {
+                    $text-&gt;setModifier(function ($it) {
+                        $it-&gt;height(function ($d) {
+                            return $d-&gt;fromInt(200);
+                        });
+                    });
+                    // 设置 Text 组件显示的内容
+                    $text-&gt;setText($item);
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_120" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 1. 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    (state := slot.mutableStateListOf(_iterables.listOf(&quot;初始数据&quot;))),
+    slot.LazyColumn(lambda lc: (
+        lc.setModifier(lambda it: it.fillMaxWidth(1.0)),
+        # 2. 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc.trackSingleState(state),
+        # 设置懒列表内容
+        lc.setContent(lambda lls: (
+            # 设置列表固定头
+            lls.stickyHeader(None, None, lambda llss, index: (
+                # 添加一个 Button 到列表固定头
+                llss.Button(lambda button: (
+                    # 设置按钮内容
+                    button.setContent(lambda bs: (
+                        # 添加文本到按钮中
+                        bs.Text(lambda text: (
+                            # 设置按钮中文本显示的内容
+                            text.setText(&quot;添加项目&quot;)
+                        ))
+                    )),
+                    # 4. 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button.setOnClick(lambda: state.add(&quot;+++++&quot;))
+                ))
+            )),
+            # 3. 将状态列表中的数据显示到 LazyColumn 中
+            lls.itemsIndexed(state, None, None, lambda llss, index, item: (
+                # 状态列表中每个元素显示一个简单的 Text 组件
+                llss.Text(lambda text: (
+                    text.setModifier(lambda it: (
+                        it.height(lambda d: d.fromInt(200))
+                    )),
+                    # 设置 Text 组件显示的内容
+                    text.setText(item)
+                ))
+            ))
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()
+</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_123" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 1. 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+  state = slot.mutableStateListOf($iterables.listOf(&quot;初始数据&quot;))
+  slot.LazyColumn do |lc|
+    lc.setModifier { |it| it.fillMaxWidth(1.0) }
+    # 2. 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+    lc.trackSingleState(state)
+    # 设置懒列表内容
+    lc.setContent do |lls|
+      # 设置列表固定头
+      lls.stickyHeader(nil, nil) do |llss, index|
+        # 添加一个 Button 到列表固定头
+        llss.Button do |button|
+          # 设置按钮内容
+          button.setContent do |bs|
+            # 添加文本到按钮中
+            bs.Text do |text|
+              # 设置按钮中文本显示的内容
+              text.setText(&quot;添加项目&quot;)
+            end
+          end
+          # 4. 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+          button.setOnClick { state.add(&quot;+++++&quot;) }
+        end
+      end
+      # 3. 将状态列表中的数据显示到 LazyColumn 中
+      lls.itemsIndexed(state, nil, nil) do |llss, index, item|
+        # 状态列表中每个元素显示一个简单的 Text 组件
+        llss.Text do |text|
+          text.setModifier do |it|
+            it.height { |d| d.fromInt(200) }
+          end
+          # 设置 Text 组件显示的内容
+          text.setText(item)
+        end
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div></section><section class="chapter"><h2 id="z6jeh8c_4" data-toc="z6jeh8c_4">聚合状态</h2><p id="z6jeh8c_172">有些组件包含多个状态，M8Test 将其封装为聚合状态。你可以通过聚合状态对象修改所需的状态，例如：</p><div class="tabs" id="z6jeh8c_176" data-group="languages" data-anchors="[z6jeh8c_179,z6jeh8c_182,z6jeh8c_185,z6jeh8c_188,z6jeh8c_191,z6jeh8c_194,z6jeh8c_197,z6jeh8c_200]"><div class="tabs__content" data-gtm="tab" id="z6jeh8c_179" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+    _composeView.create {
+        // 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+        val state = mutableStateListOf(_iterables.listOf(&quot;初始数据&quot;))
+        // 1. 创建一个懒列表状态，用于控制 LazyColumn
+        val lazyState = newLazyListState {}
+        LazyColumn {
+            setModifier { fillMaxWidth(1f) }
+            // 2. 设置懒列表的状态
+            setState(lazyState)
+            // 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+            trackSingleState(state)
+            // 设置懒列表内容
+            setContent {
+                // 设置列表固定头
+                stickyHeader(null, null) { index -&gt;
+                    // 添加一个 Button 到列表固定头
+                    Button {
+                        // 设置按钮内容
+                        setContent {
+                            // 添加文本到按钮中
+                            Text {
+//                            trackAggregatedState(lazyState) // 这个代码会跟踪 lazyState 中所有的状态, 当任意一个状态发生改变时 Text 都会重组
+                                trackSingleState(lazyState.getFirstVisibleItemIndexState()) // 3. 这个代码仅仅会跟踪 lazyState 的第一个可见项目索引, 当该状态发生改变时 Text 会重组, 推荐使用这种方式, 只跟踪用到的状态
+                                // 4. 使用跟踪的状态值，如果该状态发生改变，那么 Text 文本会更新
+                                setText(&quot;添加项目${lazyState.getFirstVisibleItemIndexState().getValue()}&quot;)
+                            }
+                        }
+                        // 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                        setOnClick { state.add(&quot;+++++&quot;) }
+                    }
+                }
+                // 将状态列表中的数据显示到 LazyColumn 中
+                itemsIndexed(state, null, null) { index, item -&gt;
+                    // 状态列表中每个元素显示一个简单的 Text 组件
+                    Text {
+                        setModifier {
+                            height { d -&gt; d.fromInt(200) }
+                        }
+                        // 设置 Text 组件显示的内容
+                        setText(item)
+                    }
+                }
+            }
+        }
+    }
+    // 启动一个Activity用于显示脚本界面
+    _activity.start()
+}
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_182" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create { slot -&gt;
+    // 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    def state = slot.mutableStateListOf($iterables.listOf(&quot;初始数据&quot;))
+    // 1. 创建一个懒列表状态，用于控制 LazyColumn
+    def lazyState = slot.newLazyListState {}
+    slot.LazyColumn { lc -&gt;
+        lc.setModifier { it.fillMaxWidth(1f) }
+        // 2. 设置懒列表的状态
+        lc.setState(lazyState)
+        // 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc.trackSingleState(state)
+        // 设置懒列表内容
+        lc.setContent { lls -&gt;
+            // 设置列表固定头
+            lls.stickyHeader(null, null) { llss, index -&gt;
+                // 添加一个 Button 到列表固定头
+                llss.Button { button -&gt;
+                    // 设置按钮内容
+                    button.setContent { bs -&gt;
+                        // 添加文本到按钮中
+                        bs.Text { text -&gt;
+//                            text.trackAggregatedState(lazyState) // 这个代码会跟踪 lazyState 中所有的状态, 当任意一个状态发生改变时 Text 都会重组
+                            text.trackSingleState(lazyState.getFirstVisibleItemIndexState()) // 3. 这个代码仅仅会跟踪 lazyState 的第一个可见项目索引, 当该状态发生改变时 Text 会重组, 推荐使用这种方式, 只跟踪用到的状态
+                            // 4. 使用跟踪的状态值，如果该状态发生改变，那么 Text 文本会更新
+                            text.setText(&quot;添加项目&quot; + lazyState.getFirstVisibleItemIndexState().getValue())
+                        }
+                    }
+                    // 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button.setOnClick { state.add(&quot;+++++&quot;) }
+                }
+            }
+            // 将状态列表中的数据显示到 LazyColumn 中
+            lls.itemsIndexed(state, null, null) { llss, index, item -&gt;
+                // 状态列表中每个元素显示一个简单的 Text 组件
+                llss.Text { text -&gt;
+                    text.setModifier {
+                        it.height { d -&gt; d.fromInt(200) }
+                    }
+                    // 设置 Text 组件显示的内容
+                    text.setText(item)
+                }
+            }
+        }
+    }
+}
+// 启动一个Activity用于显示脚本界面
+$activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_185" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_188" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create(slot =&gt; {
+    // 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    const state = slot.mutableStateListOf($iterables.listOf(&quot;初始数据&quot;));
+    // 1. 创建一个懒列表状态，用于控制 LazyColumn
+    const lazyState = slot.newLazyListState(() =&gt; {});
+    slot.LazyColumn(lc =&gt; {
+        lc.setModifier(it =&gt; it.fillMaxWidth(1));
+        // 2. 设置懒列表的状态
+        lc.setState(lazyState);
+        // 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc.trackSingleState(state);
+        // 设置懒列表内容
+        lc.setContent(lls =&gt; {
+            // 设置列表固定头
+            lls.stickyHeader(null, null, (llss, index) =&gt; {
+                // 添加一个 Button 到列表固定头
+                llss.Button(button =&gt; {
+                    // 设置按钮内容
+                    button.setContent(bs =&gt; {
+                        // 添加文本到按钮中
+                        bs.Text(text =&gt; {
+                            // text.trackAggregatedState(lazyState) // 这个代码会跟踪 lazyState 中所有的状态, 当任意一个状态发生改变时 Text 都会重组
+                            text.trackSingleState(lazyState.getFirstVisibleItemIndexState()); // 3. 这个代码仅仅会跟踪 lazyState 的第一个可见项目索引, 当该状态发生改变时 Text 会重组, 推荐使用这种方式, 只跟踪用到的状态
+                            // 4. 使用跟踪的状态值，如果该状态发生改变，那么 Text 文本会更新
+                            text.setText(&quot;添加项目&quot; + lazyState.getFirstVisibleItemIndexState().getValue());
+                        });
+                    });
+                    // 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button.setOnClick(() =&gt; state.add(&quot;+++++&quot;));
+                });
+            });
+            // 将状态列表中的数据显示到 LazyColumn 中
+            lls.itemsIndexed(state, null, null, (llss, index, item) =&gt; {
+                // 状态列表中每个元素显示一个简单的 Text 组件
+                llss.Text(text =&gt; {
+                    text.setModifier(it =&gt; {
+                        it.height(d =&gt; d.fromInt(200));
+                    });
+                    // 设置 Text 组件显示的内容
+                    text.setText(item);
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity.start();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_191" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView:create(function(slot)
+    -- 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    local state = slot:mutableStateListOf(_iterables:listOf(&quot;初始数据&quot;))
+    -- 1. 创建一个懒列表状态，用于控制 LazyColumn
+    local lazyState = slot:newLazyListState(function() end)
+    slot:LazyColumn(function(lc)
+        lc:setModifier(function(it) return it:fillMaxWidth(1.0) end)
+        -- 2. 设置懒列表的状态
+        lc:setState(lazyState)
+        -- 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc:trackSingleState(state)
+        -- 设置懒列表内容
+        lc:setContent(function(lls)
+            -- 设置列表固定头
+            lls:stickyHeader(nil, nil, function(llss, index)
+                -- 添加一个 Button 到列表固定头
+                llss:Button(function(button)
+                    -- 设置按钮内容
+                    button:setContent(function(bs)
+                        -- 添加文本到按钮中
+                        bs:Text(function(text)
+                            -- text:trackAggregatedState(lazyState) -- 这个代码会跟踪 lazyState 中所有的状态, 当任意一个状态发生改变时 Text 都会重组
+                            text:trackSingleState(lazyState:getFirstVisibleItemIndexState()) -- 3. 这个代码仅仅会跟踪 lazyState 的第一个可见项目索引, 当该状态发生改变时 Text 会重组, 推荐使用这种方式, 只跟踪用到的状态
+                            -- 4. 使用跟踪的状态值，如果该状态发生改变，那么 Text 文本会更新
+                            text:setText(&quot;添加项目&quot; .. tostring(lazyState:getFirstVisibleItemIndexState():getValue()))
+                        end)
+                    end)
+                    -- 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button:setOnClick(function() state:add(&quot;+++++&quot;) end)
+                end)
+            end)
+            -- 将状态列表中的数据显示到 LazyColumn 中
+            lls:itemsIndexed(state, nil, nil, function(llss, index, item)
+                -- 状态列表中每个元素显示一个简单的 Text 组件
+                llss:Text(function(text)
+                    text:setModifier(function(it)
+                        return it:height(function(d) return d:fromInt(200) end)
+                    end)
+                    -- 设置 Text 组件显示的内容
+                    text:setText(item)
+                end)
+            end)
+        end)
+    end)
+end)
+-- 启动一个Activity用于显示脚本界面
+_activity:start()</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_194" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\ui\compose\ComposeView $composeView */
+global $composeView;
+/** @var m8test_java\com\m8test\script\core\api\ui\Activity $activity */
+global $activity;
+/** @var m8test_java\com\m8test\script\core\api\collections\Iterables $iterables */
+global $iterables;
+
+// 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView-&gt;create(function ($slot) {
+    global $iterables;
+    // 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    $state = $slot-&gt;mutableStateListOf($iterables-&gt;listOf(javaString(&quot;初始数据&quot;)));
+    // 1. 创建一个懒列表状态，用于控制 LazyColumn
+    $lazyState = $slot-&gt;newLazyListState(function () {
+    });
+    $slot-&gt;LazyColumn(function ($lc) use ($lazyState, $state) {
+        $lc-&gt;setModifier(function ($it) {
+            $it-&gt;fillMaxWidth(1.0);
+        });
+        // 2. 设置懒列表的状态
+        $lc-&gt;setState($lazyState);
+        // 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        $lc-&gt;trackSingleState($state);
+        // 设置懒列表内容
+        $lc-&gt;setContent(function ($lls) use ($lazyState, $state) {
+            // 设置列表固定头
+            $lls-&gt;stickyHeader(null, null, function ($llss, $index) use ($lazyState, $state) {
+                // 添加一个 Button 到列表固定头
+                $llss-&gt;Button(function ($button) use ($lazyState, $state) {
+                    // 设置按钮内容
+                    $button-&gt;setContent(function ($bs) use ($lazyState) {
+                        // 添加文本到按钮中
+                        $bs-&gt;Text(function ($text) use ($lazyState) {
+                            // $text-&gt;trackAggregatedState($lazyState); // 这个代码会跟踪 lazyState 中所有的状态, 当任意一个状态发生改变时 Text 都会重组
+                            $text-&gt;trackSingleState($lazyState-&gt;getFirstVisibleItemIndexState()); // 3. 这个代码仅仅会跟踪 lazyState 的第一个可见项目索引, 当该状态发生改变时 Text 会重组, 推荐使用这种方式, 只跟踪用到的状态
+                            // 4. 使用跟踪的状态值，如果该状态发生改变，那么 Text 文本会更新
+                            $text-&gt;setText(javaString(&quot;添加项目&quot;) . $lazyState-&gt;getFirstVisibleItemIndexState()-&gt;getValue());
+                        });
+                    });
+                    // 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    $button-&gt;setOnClick(function () use ($state) {
+                        $state-&gt;add(javaString(&quot;+++++&quot;));
+                    });
+                });
+            });
+            // 将状态列表中的数据显示到 LazyColumn 中
+            $lls-&gt;itemsIndexed($state, null, null, function ($llss, $index, $item) {
+                // 状态列表中每个元素显示一个简单的 Text 组件
+                $llss-&gt;Text(function ($text) use ($item) {
+                    $text-&gt;setModifier(function ($it) {
+                        $it-&gt;height(function ($d) {
+                            return $d-&gt;fromInt(200);
+                        });
+                    });
+                    // 设置 Text 组件显示的内容
+                    $text-&gt;setText($item);
+                });
+            });
+        });
+    });
+});
+// 启动一个Activity用于显示脚本界面
+$activity-&gt;start();</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_197" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _composeView
+from m8test_java.com.m8test.script.GlobalVariables import _iterables
+from m8test_java.com.m8test.script.GlobalVariables import _activity
+
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+_composeView.create(lambda slot: (
+    # 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+    (state := slot.mutableStateListOf(_iterables.listOf(&quot;初始数据&quot;))),
+    # 1. 创建一个懒列表状态，用于控制 LazyColumn
+    # [修复] 这里的lambda需要接收一个参数但可以忽略它
+    (lazyState := slot.newLazyListState(lambda _: None)),
+    slot.LazyColumn(lambda lc: (
+        lc.setModifier(lambda it: it.fillMaxWidth(1.0)),
+        # 2. 设置懒列表的状态
+        lc.setState(lazyState),
+        # 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+        lc.trackSingleState(state),
+        # 设置懒列表内容
+        lc.setContent(lambda lls: (
+            # 设置列表固定头
+            lls.stickyHeader(None, None, lambda llss, index: (
+                # 添加一个 Button 到列表固定头
+                llss.Button(lambda button: (
+                    # 设置按钮内容
+                    button.setContent(lambda bs: (
+                        # 添加文本到按钮中
+                        bs.Text(lambda text: (
+                            # text.trackAggregatedState(lazyState) # 这个代码会跟踪 lazyState 中所有的状态, 当任意一个状态发生改变时 Text 都会重组
+                            text.trackSingleState(lazyState.getFirstVisibleItemIndexState()), # 3. 这个代码仅仅会跟踪 lazyState 的第一个可见项目索引, 当该状态发生改变时 Text 会重组, 推荐使用这种方式, 只跟踪用到的状态
+                            # 4. 使用跟踪的状态值，如果该状态发生改变，那么 Text 文本会更新
+                            text.setText(&quot;添加项目&quot; + str(lazyState.getFirstVisibleItemIndexState().getValue()))
+                        ))
+                    )),
+                    # 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+                    button.setOnClick(lambda: state.add(&quot;+++++&quot;))
+                ))
+            )),
+            # 将状态列表中的数据显示到 LazyColumn 中
+            lls.itemsIndexed(state, None, None, lambda llss, index, item: (
+                # 状态列表中每个元素显示一个简单的 Text 组件
+                llss.Text(lambda text: (
+                    text.setModifier(lambda it: (
+                        it.height(lambda d: d.fromInt(200))
+                    )),
+                    # 设置 Text 组件显示的内容
+                    text.setText(item)
+                ))
+            ))
+        ))
+    ))
+))
+# 启动一个Activity用于显示脚本界面
+_activity.start()</div></div><div class="tabs__content" data-gtm="tab" id="z6jeh8c_200" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+# 创建一个 ComposeView, 可以通过声明式ui创建脚本界面
+$composeView.create do |slot|
+  # 创建一个状态列表，向 LazyColumn 提供数据，当其中的元素发生改变(增删改)时，用到该状态列表的组件会重组
+  state = slot.mutableStateListOf($iterables.listOf(&quot;初始数据&quot;))
+  # 1. 创建一个懒列表状态，用于控制 LazyColumn
+  lazyState = slot.newLazyListState {}
+  slot.LazyColumn do |lc|
+    lc.setModifier { |it| it.fillMaxWidth(1.0) }
+    # 2. 设置懒列表的状态
+    lc.setState(lazyState)
+    # 跟踪状态列表，当列表增删改时 LazyColumn 会重组
+    lc.trackSingleState(state)
+    # 设置懒列表内容
+    lc.setContent do |lls|
+      # 设置列表固定头
+      lls.stickyHeader(nil, nil) do |llss, index|
+        # 添加一个 Button 到列表固定头
+        llss.Button do |button|
+          # 设置按钮内容
+          button.setContent do |bs|
+            # 添加文本到按钮中
+            bs.Text do |text|
+              # text.trackAggregatedState(lazyState) // 这个代码会跟踪 lazyState 中所有的状态, 当任意一个状态发生改变时 Text 都会重组
+              text.trackSingleState(lazyState.getFirstVisibleItemIndexState()) # 3. 这个代码仅仅会跟踪 lazyState 的第一个可见项目索引, 当该状态发生改变时 Text 会重组, 推荐使用这种方式, 只跟踪用到的状态
+              # 4. 使用跟踪的状态值，如果该状态发生改变，那么 Text 文本会更新
+              text.setText(&quot;添加项目&quot; + lazyState.getFirstVisibleItemIndexState().getValue().to_s)
+            end
+          end
+          # 设置按钮点击事件，当按钮被点击时会将内容添加到状态列表中，此时 LazyColumn 会重组，并显示新的内容
+          button.setOnClick { state.add(&quot;+++++&quot;) }
+        end
+      end
+      # 将状态列表中的数据显示到 LazyColumn 中
+      lls.itemsIndexed(state, nil, nil) do |llss, index, item|
+        # 状态列表中每个元素显示一个简单的 Text 组件
+        llss.Text do |text|
+          text.setModifier do |it|
+            it.height { |d| d.fromInt(200) }
+          end
+          # 设置 Text 组件显示的内容
+          text.setText(item)
+        end
+      end
+    end
+  end
+end
+# 启动一个Activity用于显示脚本界面
+$activity.start()</div></div></div></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="declarative-ui-phases.html" class="navigation-links__prev">阶段</a><a href="declarative-ui-modifier.html" class="navigation-links__next">修饰符</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

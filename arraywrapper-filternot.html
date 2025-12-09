@@ -1,0 +1,94 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:36:16.837847302"><title>filterNot | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="filterNot | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/arraywrapper-filternot.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="filterNot | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/arraywrapper-filternot.html#webpage",
+    "url": "writerside-documentation/arraywrapper-filternot.html",
+    "name": "filterNot | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="ArrayWrapper.filterNot" data-main-title="filterNot" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="api.md|脚本 API///ArrayWrapper.md|ArrayWrapper"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="ArrayWrapper.filterNot" id="ArrayWrapper.filterNot.md">filterNot</h1><aside class="prompt" data-type="tip" data-title="" id="u20jv4_7"><p id="u20jv4_11">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.core.api.wrapper/-array-wrapper/filter-not.html" id="u20jv4_12" data-external="true" rel="noopener noreferrer" target="_blank">ArrayWrapper.filterNot()</a></p></aside><div class="tabs" id="u20jv4_10" data-group="languages" data-anchors="[u20jv4_15,u20jv4_18,u20jv4_21,u20jv4_24,u20jv4_27,u20jv4_30,u20jv4_33]"><div class="tabs__content" data-gtm="tab" id="u20jv4_15" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">val numbers = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+// 筛选出所有奇数（即不满足偶数条件的元素）
+val oddNumbers = numbers.filterNot { it % 2 == 0 }
+// 输出：奇数: [1, 3, 5, 7, 9]
+_console.log(&quot;奇数: &quot;, oddNumbers)
+val words = arrayOf(&quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;)
+// 筛选出长度不大于 5 的单词（即不满足长度大于 5 的条件）
+val shortWords = words.filterNot { it.count() &gt; 5 }
+// 输出：长度不大于 5 的单词: [hello, world]
+_console.log(&quot;长度不大于 5 的单词: &quot;, shortWords)</div><aside class="prompt" data-type="tip" data-title="" id="u20jv4_39"><p id="u20jv4_40"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ArrayWrapper/filterNot.kts" id="u20jv4_41" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/kotlin/api/ArrayWrapper/filterNot.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="u20jv4_18" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">def numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+// 筛选出所有奇数（即不满足偶数条件的元素）
+def oddNumbers = numbers.filterNot { it % 2 == 0 }
+// 输出：奇数: [1, 3, 5, 7, 9]
+$console.log(&quot;奇数: &quot;, oddNumbers)
+def words = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+// 筛选出长度不大于 5 的单词（即不满足长度大于 5 的条件）
+def shortWords = words.filterNot { $objectWrappers.wrap(it).count() &gt; 5 }
+// 输出：长度不大于 5 的单词: [hello, world]
+$console.log(&quot;长度不大于 5 的单词: &quot;, shortWords)</div><aside class="prompt" data-type="tip" data-title="" id="u20jv4_47"><p id="u20jv4_48"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ArrayWrapper/filterNot.groovy" id="u20jv4_49" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/groovy/api/ArrayWrapper/filterNot.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="u20jv4_21" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">let numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+// 筛选出所有奇数（即不满足偶数条件的元素）
+let oddNumbers = numbers.filterNot((it) =&gt; {
+    return it % 2 == 0
+})
+// 输出：奇数: [1, 3, 5, 7, 9]
+$console.log(&quot;奇数: &quot;, oddNumbers)
+let words = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+// 筛选出长度不大于 5 的单词（即不满足长度大于 5 的条件）
+let shortWords = words.filterNot((it) =&gt; $objectWrappers.wrap(it).count() &gt; 5)
+// 输出：长度不大于 5 的单词: [hello, world]
+$console.log(&quot;长度不大于 5 的单词: &quot;, shortWords)</div><aside class="prompt" data-type="tip" data-title="" id="u20jv4_55"><p id="u20jv4_56"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ArrayWrapper/filterNot.js" id="u20jv4_57" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/javascript/api/ArrayWrapper/filterNot.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="u20jv4_24" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">local numbers = _objectWrappers:wrap(_arrays:arrayOf(_plugins:loadClass(&quot;java.lang.Integer&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+-- 筛选出所有奇数（即不满足偶数条件的元素）
+local oddNumbers = numbers:filterNot(function(it)
+    return it % 2 == 0
+end)
+-- 输出：奇数: [1, 3, 5, 7, 9]
+_console:log(&quot;奇数: &quot;, oddNumbers)
+local words = _objectWrappers:wrap(_arrays:arrayOf(_plugins:loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+-- 筛选出长度不大于 5 的单词（即不满足长度大于 5 的条件）
+local shortWords = words:filterNot(function(it)
+    return _objectWrappers:wrap(it):count() &gt; 5
+end)
+-- 输出：长度不大于 5 的单词: [hello, world]
+_console:log(&quot;长度不大于 5 的单词: &quot;, shortWords)</div><aside class="prompt" data-type="tip" data-title="" id="u20jv4_63"><p id="u20jv4_64"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ArrayWrapper/filterNot.lua" id="u20jv4_65" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/lua/api/ArrayWrapper/filterNot.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="u20jv4_27" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$numbers = $objectWrappers-&gt;wrap($arrays-&gt;arrayOf($plugins-&gt;loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+// 筛选出所有奇数（即不满足偶数条件的元素）
+$oddNumbers = $numbers-&gt;filterNot(function ($it) {
+    return $it % 2 == 0;
+});
+// 输出：奇数: [1, 3, 5, 7, 9]
+$console-&gt;log(&quot;奇数: &quot;, $oddNumbers);
+$words = $objectWrappers-&gt;wrap($arrays-&gt;arrayOf($plugins-&gt;loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;));
+// 筛选出长度不大于 5 的单词（即不满足长度大于 5 的条件）
+$shortWords = $words-&gt;filterNot(function ($it) use ($objectWrappers) {
+    return $objectWrappers-&gt;wrap($it)-&gt;count() &gt; 5;
+});
+// 输出：长度不大于 5 的单词: [hello, world]
+$console-&gt;log(&quot;长度不大于 5 的单词: &quot;, $shortWords);</div><aside class="prompt" data-type="tip" data-title="" id="u20jv4_71"><p id="u20jv4_72"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ArrayWrapper/filterNot.php" id="u20jv4_73" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/php/api/ArrayWrapper/filterNot.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="u20jv4_30" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">numbers = _objectWrappers.wrap(_arrays.arrayOf(_plugins.loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+# 筛选出所有奇数（即不满足偶数条件的元素）
+oddNumbers = numbers.filterNot(lambda it: it % 2 == 0)
+# 输出：奇数: [1, 3, 5, 7, 9]
+_console.log(&quot;奇数: &quot;, oddNumbers)
+words = _objectWrappers.wrap(
+    _arrays.arrayOf(_plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+# 筛选出长度不大于 5 的单词（即不满足长度大于 5 的条件）
+shortWords = words.filterNot(lambda it: _objectWrappers.wrap(it).count() &gt; 5)
+# 输出：长度不大于 5 的单词: [hello, world]
+_console.log(&quot;长度不大于 5 的单词: &quot;, shortWords)
+</div><aside class="prompt" data-type="tip" data-title="" id="u20jv4_79"><p id="u20jv4_80"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ArrayWrapper/filterNot.py" id="u20jv4_81" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/python/api/ArrayWrapper/filterNot.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="u20jv4_33" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+numbers = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.Long&quot;), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+# 筛选出所有奇数（即不满足偶数条件的元素）
+oddNumbers = numbers.filterNot { |it| it % 2 == 0 }
+# 输出：奇数: [1, 3, 5, 7, 9]
+$console.log(&quot;奇数: &quot;, oddNumbers)
+words = $objectWrappers.wrap($arrays.arrayOf($plugins.loadClass(&quot;java.lang.String&quot;), &quot;hello&quot;, &quot;world&quot;, &quot;kotlin&quot;, &quot;android&quot;))
+# 筛选出长度不大于 5 的单词（即不满足长度大于 5 的条件）
+shortWords = words.filterNot { |it| $objectWrappers.wrap(it).count() &gt; 5 }
+# 输出：长度不大于 5 的单词: [hello, world]
+$console.log(&quot;长度不大于 5 的单词: &quot;, shortWords)</div><aside class="prompt" data-type="tip" data-title="" id="u20jv4_87"><p id="u20jv4_88"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ArrayWrapper/filterNot.rb" id="u20jv4_89" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/files/ruby/api/ArrayWrapper/filterNot.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="arraywrapper-filterindexedto.html" class="navigation-links__prev">filterIndexedTo</a><a href="arraywrapper-filternotto.html" class="navigation-links__next">filterNotTo</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

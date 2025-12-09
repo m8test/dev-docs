@@ -1,0 +1,103 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:33:21.728607784"><title>onMissing | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="onMissing | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/plugincontainer-onmissing.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="onMissing | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/plugincontainer-onmissing.html#webpage",
+    "url": "writerside-documentation/plugincontainer-onmissing.html",
+    "name": "onMissing | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="PluginContainer.onMissing" data-main-title="onMissing" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="project-based.md|项目化///builder-api.md|构建脚本 Api///PluginContainer.md|PluginContainer"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="PluginContainer.onMissing" id="PluginContainer.onMissing.md">onMissing</h1><aside class="prompt" data-type="tip" data-title="" id="y65v9o_9"><p id="y65v9o_13">方法文档 <a href="https://sdk-docs.m8test.com//sdk/com.m8test.script.builder.api/-plugin-container/on-missing.html" id="y65v9o_14" data-external="true" rel="noopener noreferrer" target="_blank">PluginContainer.onMissing()</a></p></aside><div class="tabs" id="y65v9o_12" data-group="languages" data-anchors="[y65v9o_17,y65v9o_20,y65v9o_23,y65v9o_26,y65v9o_29,y65v9o_32,y65v9o_35]"><div class="tabs__content" data-gtm="tab" id="y65v9o_17" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">_project.getPlugins().apply(&quot;kotlin&quot;)
+_project.setConfig {
+    setEntry(&quot;com/example/script/primary.kts&quot;)
+    setPackageName(&quot;com.example.script.kotlin&quot;)
+    setLogo(&quot;logo.png&quot;)
+}
+_project.getPlugins().onMissing { pluginId -&gt;
+    _console.log(&quot;missing plugin &quot; + pluginId)
+    null
+}
+_project.getPlugins().apply(&quot;com.example.pluginId&quot;)
+_project.getPlugins().apply(&quot;com.example.missing.plugin&quot;)</div><aside class="prompt" data-type="tip" data-title="" id="y65v9o_41"><p id="y65v9o_42"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/builder//PluginContainer/onMissing/build.kts" id="y65v9o_43" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/kotlin/api/builder//PluginContainer/onMissing/build.kts</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="y65v9o_20" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">$project.getPlugins().apply(&quot;groovy&quot;)
+$project.setConfig {
+    setEntry(&quot;com/example/script/primary.groovy&quot;)
+    setPackageName(&quot;com.example.script.groovy&quot;)
+    setLogo(&quot;logo.png&quot;)
+}
+$project.getPlugins().onMissing { pluginId -&gt;
+    $console.log(&quot;missing plugin &quot; + pluginId)
+}
+$project.getPlugins().apply(&quot;com.example.pluginId&quot;)
+$project.getPlugins().apply(&quot;com.example.missing.plugin&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="y65v9o_49"><p id="y65v9o_50"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/builder//PluginContainer/onMissing/build.groovy" id="y65v9o_51" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/groovy/api/builder//PluginContainer/onMissing/build.groovy</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="y65v9o_23" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">$project.getPlugins().apply(&quot;javascript&quot;)
+$project.setConfig(config =&gt; {
+    config.setEntry(&quot;com/example/script/primary.js&quot;)
+    config.setPackageName(&quot;com.example.script.js&quot;)
+    config.setLogo(&quot;logo.png&quot;)
+})
+$project.getPlugins().onMissing((pluginId) =&gt; {
+    $console.log(&quot;missing plugin &quot; + pluginId)
+})
+$project.getPlugins().apply(&quot;com.example.pluginId&quot;)
+$project.getPlugins().apply(&quot;com.example.missing.plugin&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="y65v9o_57"><p id="y65v9o_58"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/builder//PluginContainer/onMissing/build.js" id="y65v9o_59" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/javascript/api/builder//PluginContainer/onMissing/build.js</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="y65v9o_26" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">_project:getPlugins():apply(&quot;lua&quot;)
+_project:setConfig(function(c)
+    c:setEntry(&quot;com/example/script/primary.lua&quot;)
+    c:setPackageName(&quot;com.example.script.lua&quot;)
+    c:setLogo(&quot;logo.png&quot;)
+end)
+_project:getPlugins():onMissing(function(pluginId)
+    _console:log(&quot;missing plugin &quot; .. pluginId)
+end)
+_project:getPlugins():apply(&quot;com.example.pluginId&quot;)
+_project:getPlugins():apply(&quot;com.example.missing.plugin&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="y65v9o_65"><p id="y65v9o_66"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/builder//PluginContainer/onMissing/build.lua" id="y65v9o_67" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/lua/api/builder//PluginContainer/onMissing/build.lua</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="y65v9o_29" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+$project-&gt;getPlugins()-&gt;apply(&quot;php&quot;);
+$project-&gt;setConfig(function ($c) {
+    $c-&gt;setEntry(&quot;com/example/script/primary.php&quot;);
+    $c-&gt;setPackageName(&quot;com.example.script.php&quot;);
+    $c-&gt;setLogo(&quot;logo.png&quot;);
+});
+$project-&gt;getPlugins()-&gt;onMissing(function ($pluginId) use ($console) {
+    $console-&gt;log(&quot;missing plugin &quot; . $pluginId);
+});
+$project-&gt;getPlugins()-&gt;apply(&quot;com.example.pluginId&quot;);
+$project-&gt;getPlugins()-&gt;apply(&quot;com.example.missing.plugin&quot;);
+</div><aside class="prompt" data-type="tip" data-title="" id="y65v9o_73"><p id="y65v9o_74"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/builder//PluginContainer/onMissing/build.php" id="y65v9o_75" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/php/api/builder//PluginContainer/onMissing/build.php</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="y65v9o_32" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true">_project.getPlugins().apply(&quot;python&quot;)
+
+
+def configuration(config):
+    config.setEntry(&quot;com/example/script/primary.py&quot;)
+    config.setPackageName(&quot;com.example.script.py&quot;)
+    config.setLogo(&quot;logo.png&quot;)
+
+
+_project.setConfig(configuration)
+
+
+def fn(pluginId):
+    _console.log(&quot;missing plugin &quot; + pluginId)
+
+
+_project.getPlugins().onMissing(fn)
+_project.getPlugins().apply(&quot;com.example.pluginId&quot;)
+_project.getPlugins().apply(&quot;com.example.missing.plugin&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="y65v9o_81"><p id="y65v9o_82"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/builder//PluginContainer/onMissing/build.py" id="y65v9o_83" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/python/api/builder//PluginContainer/onMissing/build.py</a></p></aside></div><div class="tabs__content" data-gtm="tab" id="y65v9o_35" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true">$project.getPlugins().apply(&quot;ruby&quot;)
+$project.setConfig { |config|
+  config.setEntry(&quot;com/example/script/primary.rb&quot;)
+  config.setPackageName(&quot;com.example.script.rb&quot;)
+  config.setLogo(&quot;logo.png&quot;)
+}
+$project.getPlugins().onMissing { |pluginId|
+  $console.log(&quot;missing plugin &quot; + pluginId)
+}
+$project.getPlugins().apply(&quot;com.example.pluginId&quot;)
+$project.getPlugins().apply(&quot;com.example.missing.plugin&quot;)
+</div><aside class="prompt" data-type="tip" data-title="" id="y65v9o_89"><p id="y65v9o_90"><a href="https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/builder//PluginContainer/onMissing/build.rb" id="y65v9o_91" data-external="true" rel="noopener noreferrer" target="_blank">https://raw.githubusercontent.com/m8test/SampleCode/refs/heads/main/projects/ruby/api/builder//PluginContainer/onMissing/build.rb</a></p></aside></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="plugincontainer-has.html" class="navigation-links__prev">has</a><a href="plugincontainer-register.html" class="navigation-links__next">register</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

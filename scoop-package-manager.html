@@ -1,0 +1,51 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:17.086128929"><title>Scoop 包管理器 | M8Test</title><script type="application/json" id="virtual-toc-data">[{"id":"what-is-scoop","level":0,"title":"什么是 Scoop？","anchor":"#what-is-scoop"},{"id":"install-scoop","level":0,"title":"安装 Scoop","anchor":"#install-scoop"},{"id":"jcb4qi_5","level":0,"title":"基本使用命令","anchor":"#jcb4qi_5"},{"id":"jcb4qi_6","level":0,"title":"优缺点","anchor":"#jcb4qi_6"},{"id":"jcb4qi_7","level":0,"title":"适用场景","anchor":"#jcb4qi_7"},{"id":"jcb4qi_8","level":0,"title":"总结","anchor":"#jcb4qi_8"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Scoop 包管理器 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/scoop-package-manager.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Scoop 包管理器 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/scoop-package-manager.html#webpage",
+    "url": "writerside-documentation/scoop-package-manager.html",
+    "name": "Scoop 包管理器 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="scoop-package-manager" data-main-title="Scoop 包管理器" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="development-on-pc.md|在电脑端开发"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="scoop-package-manager" id="scoop-package-manager.md">Scoop 包管理器</h1><section class="chapter"><h2 id="what-is-scoop" data-toc="what-is-scoop">什么是 Scoop？</h2><p id="jcb4qi_9">Scoop 是一款专为 Windows 设计的命令行包管理工具，旨在简化软件的安装、更新和卸载流程。它借鉴了 Unix 系统中 <code class="code" id="jcb4qi_11">apt</code> （Debian/Ubuntu）、 <code class="code" id="jcb4qi_12">yum</code> （Red Hat/CentOS）和 macOS 中 <code class="code" id="jcb4qi_13">Homebrew</code> 等包管理器的理念，为 Windows 用户提供类似的高效软件管理体验。</p><p id="jcb4qi_10">与传统的 Windows 软件安装方式不同，Scoop 专注于命令行操作，特别适合开发者和习惯使用终端的用户。</p></section><section class="chapter"><h2 id="install-scoop" data-toc="install-scoop">安装 Scoop</h2><section class="chapter"><h3 id="jcb4qi_14" data-toc="jcb4qi_14">前置条件</h3><ul class="list _bullet" id="jcb4qi_16"><li class="list__item" id="jcb4qi_17"><p id="jcb4qi_20">Windows 7 或更高版本</p></li><li class="list__item" id="jcb4qi_18"><p id="jcb4qi_21">PowerShell 5.1 或更高版本（推荐 PowerShell 7+）</p></li><li class="list__item" id="jcb4qi_19"><p id="jcb4qi_22">已启用 PowerShell 脚本执行权限</p></li></ul></section><section class="chapter"><h3 id="jcb4qi_15" data-toc="jcb4qi_15">安装步骤</h3><figure id="jcb4qi_23"><img alt="414" src="/414.png" title="414" width="1920" height="1078"></figure><ol class="list _decimal" id="jcb4qi_24" type="1"><li class="list__item" id="jcb4qi_25"><p id="jcb4qi_29">打开 PowerShell（以普通用户身份，无需管理员权限）</p></li><li class="list__item" id="jcb4qi_26"><p id="jcb4qi_30">首先设置允许执行执行脚本：</p><div class="code-block" data-lang="powershell">
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+</div></li><li class="list__item" id="jcb4qi_27"><p id="jcb4qi_32">执行安装命令：</p><div class="code-block" data-lang="powershell">
+irm get.scoop.sh | iex
+</div></li><li class="list__item" id="jcb4qi_28"><p id="jcb4qi_34">验证安装是否成功：</p><div class="code-block" data-lang="powershell">
+scoop --version
+</div></li></ol></section></section><section class="chapter"><h2 id="jcb4qi_5" data-toc="jcb4qi_5">基本使用命令</h2><section class="chapter"><h3 id="jcb4qi_36" data-toc="jcb4qi_36">搜索软件</h3><div class="code-block" data-lang="powershell">
+scoop search &lt;软件名称&gt;
+</div></section><section class="chapter"><h3 id="jcb4qi_37" data-toc="jcb4qi_37">安装软件</h3><div class="code-block" data-lang="powershell">
+scoop install &lt;软件名称&gt;
+</div><p id="jcb4qi_43">示例：安装 Git</p><div class="code-block" data-lang="powershell">
+scoop install git
+</div></section><section class="chapter"><h3 id="jcb4qi_38" data-toc="jcb4qi_38">软件更新与卸载</h3><p id="jcb4qi_45">更新 Scoop 自身</p><div class="code-block" data-lang="powershell">
+scoop update
+</div><p id="jcb4qi_47">更新指定软件</p><div class="code-block" data-lang="powershell">
+scoop update &lt;软件名称&gt;
+</div><p id="jcb4qi_49">更新所有已安装软件</p><div class="code-block" data-lang="powershell">
+scoop update *
+</div><p id="jcb4qi_51">卸载软件</p><div class="code-block" data-lang="powershell">
+scoop uninstall &lt;软件名称&gt;
+</div></section><section class="chapter"><h3 id="jcb4qi_39" data-toc="jcb4qi_39">软件管理</h3><p id="jcb4qi_53">列出已安装软件</p><div class="code-block" data-lang="powershell">
+scoop list
+</div><p id="jcb4qi_55">查看软件信息</p><div class="code-block" data-lang="powershell">
+scoop info &lt;软件名称&gt;
+</div><p id="jcb4qi_57">清理旧版本软件</p><div class="code-block" data-lang="powershell">
+scoop cleanup &lt;软件名称&gt;
+</div><p id="jcb4qi_59">清理所有旧版本</p><div class="code-block" data-lang="powershell">
+scoop cleanup *
+</div></section><section class="chapter"><h3 id="jcb4qi_40" data-toc="jcb4qi_40">仓库管理</h3><p id="jcb4qi_61">查看已添加的仓库</p><div class="code-block" data-lang="powershell">
+scoop bucket list
+</div><p id="jcb4qi_63">添加额外仓库（如包含更多图形界面软件的 extras 仓库）</p><div class="code-block" data-lang="powershell">
+scoop bucket add extras
+</div><p id="jcb4qi_65">添加第三方仓库</p><div class="code-block" data-lang="powershell">
+scoop bucket add &lt;仓库名称&gt; &lt;仓库URL&gt;
+</div></section></section><section class="chapter"><h2 id="jcb4qi_6" data-toc="jcb4qi_6">优缺点</h2><section class="chapter"><h3 id="jcb4qi_67" data-toc="jcb4qi_67">优点</h3><ol class="list _decimal" id="jcb4qi_69" type="1"><li class="list__item" id="jcb4qi_70"><p id="jcb4qi_77"><span class="control" id="jcb4qi_78">无需管理员权限</span> ：默认安装在用户目录（<code class="code" id="jcb4qi_79">~/scoop</code> ），避免系统目录权限问题</p></li><li class="list__item" id="jcb4qi_71"><p id="jcb4qi_80"><span class="control" id="jcb4qi_81">命令行高效操作</span> ：摆脱图形界面的繁琐点击，适合自动化脚本</p></li><li class="list__item" id="jcb4qi_72"><p id="jcb4qi_82"><span class="control" id="jcb4qi_83">自动处理依赖</span> ：安装软件时会自动安装所需的依赖组件</p></li><li class="list__item" id="jcb4qi_73"><p id="jcb4qi_84"><span class="control" id="jcb4qi_85">干净的卸载</span> ：软件安装在独立目录，卸载时可彻底清除，无残留文件</p></li><li class="list__item" id="jcb4qi_74"><p id="jcb4qi_86"><span class="control" id="jcb4qi_87">版本管理</span> ：可保留多个版本，方便回滚到旧版本</p></li><li class="list__item" id="jcb4qi_75"><p id="jcb4qi_88"><span class="control" id="jcb4qi_89">便携性</span> ：可轻松迁移到其他系统，保持一致的开发环境</p></li><li class="list__item" id="jcb4qi_76"><p id="jcb4qi_90"><span class="control" id="jcb4qi_91">专注开发工具</span> ：默认仓库包含大量开发必备工具，安装配置一步到位</p></li></ol></section><section class="chapter"><h3 id="jcb4qi_68" data-toc="jcb4qi_68">缺点</h3><ol class="list _decimal" id="jcb4qi_92" type="1"><li class="list__item" id="jcb4qi_93"><p id="jcb4qi_98"><span class="control" id="jcb4qi_99">软件覆盖范围有限</span> ：相比 Chocolatey 等包管理器，默认仓库的图形界面软件较少</p></li><li class="list__item" id="jcb4qi_94"><p id="jcb4qi_100"><span class="control" id="jcb4qi_101">依赖网络环境</span> ：部分软件下载需要良好的网络连接，尤其对于国外软件</p></li><li class="list__item" id="jcb4qi_95"><p id="jcb4qi_102"><span class="control" id="jcb4qi_103">学习成本</span> ：对于习惯图形界面的用户需要一定的学习适应期</p></li><li class="list__item" id="jcb4qi_96"><p id="jcb4qi_104"><span class="control" id="jcb4qi_105">权限限制</span> ：无法安装需要系统级权限的软件</p></li><li class="list__item" id="jcb4qi_97"><p id="jcb4qi_106"><span class="control" id="jcb4qi_107">更新延迟</span> ：部分软件版本更新可能滞后于官方发布</p></li></ol></section></section><section class="chapter"><h2 id="jcb4qi_7" data-toc="jcb4qi_7">适用场景</h2><ul class="list _bullet" id="jcb4qi_108"><li class="list__item" id="jcb4qi_109"><p id="jcb4qi_114">开发者需要快速配置开发环境</p></li><li class="list__item" id="jcb4qi_110"><p id="jcb4qi_115">希望保持系统整洁，避免注册表臃肿</p></li><li class="list__item" id="jcb4qi_111"><p id="jcb4qi_116">偏好命令行操作的用户</p></li><li class="list__item" id="jcb4qi_112"><p id="jcb4qi_117">需要在多台电脑间同步软件配置</p></li><li class="list__item" id="jcb4qi_113"><p id="jcb4qi_118">经常需要安装/卸载各类开发工具</p></li></ul></section><section class="chapter"><h2 id="jcb4qi_8" data-toc="jcb4qi_8">总结</h2><p id="jcb4qi_119">Scoop 为 Windows 用户提供了一种高效、整洁的软件管理方式，尤其适合开发者构建和维护开发环境。虽然存在一些局限性，但其简洁的设计和专注开发者需求的特点，使其成为 Windows 平台上极具价值的工具。</p></section><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="plugin-features.html" class="navigation-links__prev">M8Test 插件功能</a><a href="development-on-pc-faqs.html" class="navigation-links__next">常见问题</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>

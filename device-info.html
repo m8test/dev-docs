@@ -1,0 +1,411 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2025-12-09T09:32:25.230977001"><title>设备信息 | M8Test</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="frontend/app.css" rel="stylesheet"><link rel="icon" type="image/x-icon" sizes="16x16" href="https://www.m8test.com/favicon.ico"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="设备信息 | M8Test"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="M8Test Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/device-info.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="设备信息 | M8Test"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "writerside-documentation/device-info.html#webpage",
+    "url": "writerside-documentation/device-info.html",
+    "name": "设备信息 | M8Test",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "writerside-documentation/#website",
+    "url": "writerside-documentation/",
+    "name": "M8Test Help"
+}</script><!-- End Schema.org --><script src="static/fuse.js"></script>
+<script src="static/search.js"></script></head><body data-id="device-info" data-main-title="设备信息" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="utility-tools.md|实用工具"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>M8Test  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="device-info" id="device-info.md">设备信息</h1><div class="tabs" id="-zgtdv6_6" data-group="languages" data-anchors="[-zgtdv6_12,-zgtdv6_15,-zgtdv6_18,-zgtdv6_21,-zgtdv6_24,-zgtdv6_27,-zgtdv6_30,-zgtdv6_9]"><div class="tabs__content" data-gtm="tab" id="-zgtdv6_9" data-sync-tabs="kotlin" data-title="kotlin"><div class="code-block" data-lang="kotlin" data-title="Kotlin" data-disable-link-processing="true">import com.m8test.script.GlobalVariables.*
+
+fun side1Run() {
+    // --- 开始测试设备接口 ---
+    _console.log(&quot;========== 开始 Device 接口测试 ==========&quot;)
+
+    // 1. 基础系统信息
+    _console.log(&quot;\n[基础系统信息]&quot;)
+    _console.log(&quot;品牌 (Brand):&quot;, _device.getBrand())
+    _console.log(&quot;型号 (Model):&quot;, _device.getModel())
+    _console.log(&quot;制造商 (Manufacturer):&quot;, _device.getManufacturer())
+    _console.log(&quot;产品名 (Product):&quot;, _device.getProduct())
+    _console.log(&quot;SDK 版本 (SDK Int):&quot;, _device.getSdkInt())
+    _console.log(&quot;系统版本 (Release):&quot;, _device.getRelease())
+    _console.log(&quot;语言环境 (Language):&quot;, _device.getLanguage())
+    _console.log(&quot;Android ID:&quot;, _device.getAndroidId())
+
+    // 2. 进阶硬件信息
+    _console.log(&quot;\n[进阶硬件信息]&quot;)
+    _console.log(&quot;CPU 架构 (ABI):&quot;, _device.getCpuAbi())
+    _console.log(&quot;Bootloader 版本:&quot;, _device.getBootloader())
+    _console.log(&quot;指纹信息 (Fingerprint):&quot;, _device.getFingerprint())
+    _console.log(&quot;序列号 (Serial):&quot;, _device.getSerial())
+
+    // 3. 屏幕信息
+    _console.log(&quot;\n[屏幕信息]&quot;)
+    _console.log(&quot;屏幕宽度:&quot;, _device.getScreenWidth(), &quot;px&quot;)
+    _console.log(&quot;屏幕高度:&quot;, _device.getScreenHeight(), &quot;px&quot;)
+    _console.log(&quot;逻辑密度 (Density):&quot;, _device.getScreenDensity())
+    _console.log(&quot;像素密度 (DPI):&quot;, _device.getScreenDensityDpi())
+
+    // 4. 存储与内存
+    // 定义一个简单的闭包(Lambda)将字节转换为 MB，方便查看
+    // 假设 getTotalRam 等方法返回的是 Long 类型
+    val toMB: (Long) -&gt; String = { bytes -&gt;
+        if (bytes == -1L) {
+            &quot;未知/错误&quot;
+        } else {
+            String.format(&quot;%.2f MB&quot;, bytes / 1024.0 / 1024.0)
+        }
+    }
+
+    _console.log(&quot;\n[存储与内存]&quot;)
+    _console.log(&quot;总内存 (Total RAM):&quot;, toMB(_device.getTotalRam()), &quot; (Raw: &quot; + _device.getTotalRam() + &quot;)&quot;)
+    _console.log(&quot;可用内存 (Avail RAM):&quot;, toMB(_device.getAvailableRam()), &quot; (Raw: &quot; + _device.getAvailableRam() + &quot;)&quot;)
+    _console.log(&quot;总存储 (Total Storage):&quot;, toMB(_device.getTotalStorage()), &quot; (Raw: &quot; + _device.getTotalStorage() + &quot;)&quot;)
+    _console.log(&quot;可用存储 (Avail Storage):&quot;, toMB(_device.getAvailableStorage()), &quot; (Raw: &quot; + _device.getAvailableStorage() + &quot;)&quot;)
+
+    // 5. 网络与状态
+    _console.log(&quot;\n[网络与状态]&quot;)
+    _console.log(&quot;IP 地址:&quot;, _device.getIpAddress())
+    _console.log(&quot;MAC 地址:&quot;, _device.getMacAddress())
+    _console.log(&quot;当前电量:&quot;, _device.getBatteryLevel(), &quot;%&quot;)
+    _console.log(&quot;是否正在充电:&quot;, _device.isCharging())
+
+    // 6. 交互测试 (震动)
+    _console.log(&quot;\n[交互测试]&quot;)
+    _console.log(&quot;正在测试震动功能 (500ms)...&quot;)
+    _device.vibrate(500)
+
+    _console.log(&quot;\n========== Device 接口测试结束 ==========&quot;)
+}
+// 下面的语句中的 '//-m8test-remove' 在实际编译时会被删除，也就是将会改成 'side1Run();', 但是不能省略，否则 side1Run 方法不会被执行
+//-m8test-remove side1Run();</div></div><div class="tabs__content" data-gtm="tab" id="-zgtdv6_12" data-sync-tabs="groovy" data-title="groovy"><div class="code-block" data-lang="groovy" data-title="Groovy" data-disable-link-processing="true">// --- 开始测试设备接口 ---
+$console.log(&quot;========== 开始 Device 接口测试 ==========&quot;)
+
+// 1. 基础系统信息
+$console.log(&quot;\n[基础系统信息]&quot;)
+$console.log(&quot;品牌 (Brand):&quot;, $device.getBrand())
+$console.log(&quot;型号 (Model):&quot;, $device.getModel())
+$console.log(&quot;制造商 (Manufacturer):&quot;, $device.getManufacturer())
+$console.log(&quot;产品名 (Product):&quot;, $device.getProduct())
+$console.log(&quot;SDK 版本 (SDK Int):&quot;, $device.getSdkInt())
+$console.log(&quot;系统版本 (Release):&quot;, $device.getRelease())
+$console.log(&quot;语言环境 (Language):&quot;, $device.getLanguage())
+$console.log(&quot;Android ID:&quot;, $device.getAndroidId())
+
+// 2. 进阶硬件信息
+$console.log(&quot;\n[进阶硬件信息]&quot;)
+$console.log(&quot;CPU 架构 (ABI):&quot;, $device.getCpuAbi())
+$console.log(&quot;Bootloader 版本:&quot;, $device.getBootloader())
+$console.log(&quot;指纹信息 (Fingerprint):&quot;, $device.getFingerprint())
+$console.log(&quot;序列号 (Serial):&quot;, $device.getSerial())
+
+// 3. 屏幕信息
+$console.log(&quot;\n[屏幕信息]&quot;)
+$console.log(&quot;屏幕宽度:&quot;, $device.getScreenWidth(), &quot;px&quot;)
+$console.log(&quot;屏幕高度:&quot;, $device.getScreenHeight(), &quot;px&quot;)
+$console.log(&quot;逻辑密度 (Density):&quot;, $device.getScreenDensity())
+$console.log(&quot;像素密度 (DPI):&quot;, $device.getScreenDensityDpi())
+
+// 4. 存储与内存
+// 定义一个简单的闭包将字节转换为 MB，方便查看
+def toMB = { bytes -&gt;
+    if (bytes == -1) return &quot;未知/错误&quot;
+    return String.format(&quot;%.2f MB&quot;, bytes / 1024.0 / 1024.0)
+}
+
+$console.log(&quot;\n[存储与内存]&quot;)
+$console.log(&quot;总内存 (Total RAM):&quot;, toMB($device.getTotalRam()), &quot; (Raw: &quot; + $device.getTotalRam() + &quot;)&quot;)
+$console.log(&quot;可用内存 (Avail RAM):&quot;, toMB($device.getAvailableRam()), &quot; (Raw: &quot; + $device.getAvailableRam() + &quot;)&quot;)
+$console.log(&quot;总存储 (Total Storage):&quot;, toMB($device.getTotalStorage()), &quot; (Raw: &quot; + $device.getTotalStorage() + &quot;)&quot;)
+$console.log(&quot;可用存储 (Avail Storage):&quot;, toMB($device.getAvailableStorage()), &quot; (Raw: &quot; + $device.getAvailableStorage() + &quot;)&quot;)
+
+// 5. 网络与状态
+$console.log(&quot;\n[网络与状态]&quot;)
+$console.log(&quot;IP 地址:&quot;, $device.getIpAddress())
+$console.log(&quot;MAC 地址:&quot;, $device.getMacAddress())
+$console.log(&quot;当前电量:&quot;, $device.getBatteryLevel(), &quot;%&quot;)
+$console.log(&quot;是否正在充电:&quot;, $device.isCharging())
+
+// 6. 交互测试 (震动)
+$console.log(&quot;\n[交互测试]&quot;)
+$console.log(&quot;正在测试震动功能 (500ms)...&quot;)
+$device.vibrate(500)
+
+$console.log(&quot;\n========== Device 接口测试结束 ==========&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-zgtdv6_15" data-sync-tabs="java" data-title="java"><div class="code-block" data-lang="java" data-title="Java" data-disable-link-processing="true"></div></div><div class="tabs__content" data-gtm="tab" id="-zgtdv6_18" data-sync-tabs="javascript" data-title="javascript"><div class="code-block" data-lang="javascript" data-title="JavaScript" data-disable-link-processing="true">// --- 开始测试设备接口 ---
+$console.log(&quot;========== 开始 Device 接口测试 ==========&quot;);
+
+// 1. 基础系统信息
+$console.log(&quot;\n[基础系统信息]&quot;);
+$console.log(&quot;品牌 (Brand):&quot;, $device.getBrand());
+$console.log(&quot;型号 (Model):&quot;, $device.getModel());
+$console.log(&quot;制造商 (Manufacturer):&quot;, $device.getManufacturer());
+$console.log(&quot;产品名 (Product):&quot;, $device.getProduct());
+$console.log(&quot;SDK 版本 (SDK Int):&quot;, $device.getSdkInt());
+$console.log(&quot;系统版本 (Release):&quot;, $device.getRelease());
+$console.log(&quot;语言环境 (Language):&quot;, $device.getLanguage());
+$console.log(&quot;Android ID:&quot;, $device.getAndroidId());
+
+// 2. 进阶硬件信息
+$console.log(&quot;\n[进阶硬件信息]&quot;);
+$console.log(&quot;CPU 架构 (ABI):&quot;, $device.getCpuAbi());
+$console.log(&quot;Bootloader 版本:&quot;, $device.getBootloader());
+$console.log(&quot;指纹信息 (Fingerprint):&quot;, $device.getFingerprint());
+$console.log(&quot;序列号 (Serial):&quot;, $device.getSerial());
+
+// 3. 屏幕信息
+$console.log(&quot;\n[屏幕信息]&quot;);
+$console.log(&quot;屏幕宽度:&quot;, $device.getScreenWidth(), &quot;px&quot;);
+$console.log(&quot;屏幕高度:&quot;, $device.getScreenHeight(), &quot;px&quot;);
+$console.log(&quot;逻辑密度 (Density):&quot;, $device.getScreenDensity());
+$console.log(&quot;像素密度 (DPI):&quot;, $device.getScreenDensityDpi());
+
+// 4. 存储与内存
+// 定义一个简单的函数将字节转换为 MB，方便查看
+const toMB = (bytes) =&gt; {
+    if (bytes === -1) return &quot;未知/错误&quot;;
+    // 使用 toFixed(2) 来实现与 String.format(&quot;%.2f&quot;, ...) 相同的效果
+    return (bytes / 1024.0 / 1024.0).toFixed(2) + &quot; MB&quot;;
+};
+
+$console.log(&quot;\n[存储与内存]&quot;);
+$console.log(&quot;总内存 (Total RAM):&quot;, toMB($device.getTotalRam()), &quot; (Raw: &quot; + $device.getTotalRam() + &quot;)&quot;);
+$console.log(&quot;可用内存 (Avail RAM):&quot;, toMB($device.getAvailableRam()), &quot; (Raw: &quot; + $device.getAvailableRam() + &quot;)&quot;);
+$console.log(&quot;总存储 (Total Storage):&quot;, toMB($device.getTotalStorage()), &quot; (Raw: &quot; + $device.getTotalStorage() + &quot;)&quot;);
+$console.log(&quot;可用存储 (Avail Storage):&quot;, toMB($device.getAvailableStorage()), &quot; (Raw: &quot; + $device.getAvailableStorage() + &quot;)&quot;);
+
+// 5. 网络与状态
+$console.log(&quot;\n[网络与状态]&quot;);
+$console.log(&quot;IP 地址:&quot;, $device.getIpAddress());
+$console.log(&quot;MAC 地址:&quot;, $device.getMacAddress());
+$console.log(&quot;当前电量:&quot;, $device.getBatteryLevel(), &quot;%&quot;);
+$console.log(&quot;是否正在充电:&quot;, $device.isCharging());
+
+// 6. 交互测试 (震动)
+$console.log(&quot;\n[交互测试]&quot;);
+$console.log(&quot;正在测试震动功能 (500ms)...&quot;);
+$device.vibrate(500);
+
+$console.log(&quot;\n========== Device 接口测试结束 ==========&quot;);</div></div><div class="tabs__content" data-gtm="tab" id="-zgtdv6_21" data-sync-tabs="lua" data-title="lua"><div class="code-block" data-lang="lua" data-title="Lua" data-disable-link-processing="true">-- --- 开始测试设备接口 ---
+_console:log(&quot;========== 开始 Device 接口测试 ==========&quot;)
+
+-- 1. 基础系统信息
+_console:log(&quot;\n[基础系统信息]&quot;)
+_console:log(&quot;品牌 (Brand):&quot;, _device:getBrand())
+_console:log(&quot;型号 (Model):&quot;, _device:getModel())
+_console:log(&quot;制造商 (Manufacturer):&quot;, _device:getManufacturer())
+_console:log(&quot;产品名 (Product):&quot;, _device:getProduct())
+_console:log(&quot;SDK 版本 (SDK Int):&quot;, _device:getSdkInt())
+_console:log(&quot;系统版本 (Release):&quot;, _device:getRelease())
+_console:log(&quot;语言环境 (Language):&quot;, _device:getLanguage())
+_console:log(&quot;Android ID:&quot;, _device:getAndroidId())
+
+-- 2. 进阶硬件信息
+_console:log(&quot;\n[进阶硬件信息]&quot;)
+_console:log(&quot;CPU 架构 (ABI):&quot;, _device:getCpuAbi())
+_console:log(&quot;Bootloader 版本:&quot;, _device:getBootloader())
+_console:log(&quot;指纹信息 (Fingerprint):&quot;, _device:getFingerprint())
+_console:log(&quot;序列号 (Serial):&quot;, _device:getSerial())
+
+-- 3. 屏幕信息
+_console:log(&quot;\n[屏幕信息]&quot;)
+_console:log(&quot;屏幕宽度:&quot;, _device:getScreenWidth(), &quot;px&quot;)
+_console:log(&quot;屏幕高度:&quot;, _device:getScreenHeight(), &quot;px&quot;)
+_console:log(&quot;逻辑密度 (Density):&quot;, _device:getScreenDensity())
+_console:log(&quot;像素密度 (DPI):&quot;, _device:getScreenDensityDpi())
+
+-- 4. 存储与内存
+-- 定义一个简单的function将字节转换为 MB，方便查看
+local toMB = function(bytes)
+    if bytes == -1 then
+        return &quot;未知/错误&quot;
+    end
+    -- 使用 lua 内置的 string.format
+    return string.format(&quot;%.2f MB&quot;, bytes / 1024.0 / 1024.0)
+end
+
+_console:log(&quot;\n[存储与内存]&quot;)
+-- 在 lua 中, 字符串拼接使用 ..
+_console:log(&quot;总内存 (Total RAM):&quot;, toMB(_device:getTotalRam()), &quot; (Raw: &quot; .. _device:getTotalRam() .. &quot;)&quot;)
+_console:log(&quot;可用内存 (Avail RAM):&quot;, toMB(_device:getAvailableRam()), &quot; (Raw: &quot; .. _device:getAvailableRam() .. &quot;)&quot;)
+_console:log(&quot;总存储 (Total Storage):&quot;, toMB(_device:getTotalStorage()), &quot; (Raw: &quot; .. _device:getTotalStorage() .. &quot;)&quot;)
+_console:log(&quot;可用存储 (Avail Storage):&quot;, toMB(_device:getAvailableStorage()), &quot; (Raw: &quot; .. _device:getAvailableStorage() .. &quot;)&quot;)
+
+-- 5. 网络与状态
+_console:log(&quot;\n[网络与状态]&quot;)
+_console:log(&quot;IP 地址:&quot;, _device:getIpAddress())
+_console:log(&quot;MAC 地址:&quot;, _device:getMacAddress())
+_console:log(&quot;当前电量:&quot;, _device:getBatteryLevel(), &quot;%&quot;)
+_console:log(&quot;是否正在充电:&quot;, _device:isCharging())
+
+-- 6. 交互测试 (震动)
+_console:log(&quot;\n[交互测试]&quot;)
+_console:log(&quot;正在测试震动功能 (500ms)...&quot;)
+_device:vibrate(500)
+
+_console:log(&quot;\n========== Device 接口测试结束 ==========&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-zgtdv6_24" data-sync-tabs="php" data-title="php"><div class="code-block" data-lang="php" data-title="PHP" data-disable-link-processing="true">&lt;?php
+/** @var m8test_java\com\m8test\script\core\api\console\Console $console */
+global $console;
+/** @var m8test_java\com\m8test\script\core\api\device\Device $device */
+global $device;
+
+// --- 开始测试设备接口 ---
+$console-&gt;log(javaString(&quot;========== 开始 Device 接口测试 ==========&quot;));
+
+// 1. 基础系统信息
+$console-&gt;log(javaString(&quot;\n[基础系统信息]&quot;));
+$console-&gt;log(javaString(&quot;品牌 (Brand):&quot;), $device-&gt;getBrand());
+$console-&gt;log(javaString(&quot;型号 (Model):&quot;), $device-&gt;getModel());
+$console-&gt;log(javaString(&quot;制造商 (Manufacturer):&quot;), $device-&gt;getManufacturer());
+$console-&gt;log(javaString(&quot;产品名 (Product):&quot;), $device-&gt;getProduct());
+$console-&gt;log(javaString(&quot;SDK 版本 (SDK Int):&quot;), $device-&gt;getSdkInt());
+$console-&gt;log(javaString(&quot;系统版本 (Release):&quot;), $device-&gt;getRelease());
+$console-&gt;log(javaString(&quot;语言环境 (Language):&quot;), $device-&gt;getLanguage());
+$console-&gt;log(javaString(&quot;Android ID:&quot;), $device-&gt;getAndroidId());
+
+// 2. 进阶硬件信息
+$console-&gt;log(javaString(&quot;\n[进阶硬件信息]&quot;));
+$console-&gt;log(javaString(&quot;CPU 架构 (ABI):&quot;), $device-&gt;getCpuAbi());
+$console-&gt;log(javaString(&quot;Bootloader 版本:&quot;), $device-&gt;getBootloader());
+$console-&gt;log(javaString(&quot;指纹信息 (Fingerprint):&quot;), $device-&gt;getFingerprint());
+$console-&gt;log(javaString(&quot;序列号 (Serial):&quot;), $device-&gt;getSerial());
+
+// 3. 屏幕信息
+$console-&gt;log(javaString(&quot;\n[屏幕信息]&quot;));
+$console-&gt;log(javaString(&quot;屏幕宽度:&quot;), $device-&gt;getScreenWidth(), javaString(&quot;px&quot;));
+$console-&gt;log(javaString(&quot;屏幕高度:&quot;), $device-&gt;getScreenHeight(), javaString(&quot;px&quot;));
+$console-&gt;log(javaString(&quot;逻辑密度 (Density):&quot;), $device-&gt;getScreenDensity());
+$console-&gt;log(javaString(&quot;像素密度 (DPI):&quot;), $device-&gt;getScreenDensityDpi());
+
+// 4. 存储与内存
+$console-&gt;log(javaString(&quot;\n[存储与内存]&quot;));
+$console-&gt;log(javaString(&quot;总内存 (Total RAM):&quot;), $device-&gt;getTotalRam(), javaString(&quot; (Raw: &quot;), $device-&gt;getTotalRam() . javaString(&quot;)&quot;));
+$console-&gt;log(javaString(&quot;可用内存 (Avail RAM):&quot;), $device-&gt;getAvailableRam(), javaString(&quot; (Raw: &quot;), $device-&gt;getAvailableRam() . javaString(&quot;)&quot;));
+$console-&gt;log(javaString(&quot;总存储 (Total Storage):&quot;), $device-&gt;getTotalStorage(), javaString(&quot; (Raw: &quot;), $device-&gt;getTotalStorage() . javaString(&quot;)&quot;));
+$console-&gt;log(javaString(&quot;可用存储 (Avail Storage):&quot;), $device-&gt;getAvailableStorage(), javaString(&quot; (Raw: &quot;), $device-&gt;getAvailableStorage() . javaString(&quot;)&quot;));
+
+// 5. 网络与状态
+$console-&gt;log(javaString(&quot;\n[网络与状态]&quot;));
+$console-&gt;log(javaString(&quot;IP 地址:&quot;), $device-&gt;getIpAddress());
+$console-&gt;log(javaString(&quot;MAC 地址:&quot;), $device-&gt;getMacAddress());
+$console-&gt;log(javaString(&quot;当前电量:&quot;), $device-&gt;getBatteryLevel(), javaString(&quot;%&quot;));
+$console-&gt;log(javaString(&quot;是否正在充电:&quot;), $device-&gt;isCharging());
+
+// 6. 交互测试 (震动)
+$console-&gt;log(javaString(&quot;\n[交互测试]&quot;));
+$console-&gt;log(javaString(&quot;正在测试震动功能 (500ms)...&quot;));
+$device-&gt;vibrate(500);
+
+$console-&gt;log(javaString(&quot;\n========== Device 接口测试结束 ==========&quot;));</div></div><div class="tabs__content" data-gtm="tab" id="-zgtdv6_27" data-sync-tabs="python" data-title="python"><div class="code-block" data-lang="python" data-title="Python" data-disable-link-processing="true"># 导入所需的全局变量
+from m8test_java.com.m8test.script.GlobalVariables import _console
+from m8test_java.com.m8test.script.GlobalVariables import _device
+
+# --- 开始测试设备接口 ---
+_console.log(&quot;========== 开始 Device 接口测试 ==========&quot;)
+
+# 1. 基础系统信息
+_console.log(&quot;\n[基础系统信息]&quot;)
+_console.log(&quot;品牌 (Brand):&quot;, _device.getBrand())
+_console.log(&quot;型号 (Model):&quot;, _device.getModel())
+_console.log(&quot;制造商 (Manufacturer):&quot;, _device.getManufacturer())
+_console.log(&quot;产品名 (Product):&quot;, _device.getProduct())
+_console.log(&quot;SDK 版本 (SDK Int):&quot;, _device.getSdkInt())
+_console.log(&quot;系统版本 (Release):&quot;, _device.getRelease())
+_console.log(&quot;语言环境 (Language):&quot;, _device.getLanguage())
+_console.log(&quot;Android ID:&quot;, _device.getAndroidId())
+
+# 2. 进阶硬件信息
+_console.log(&quot;\n[进阶硬件信息]&quot;)
+_console.log(&quot;CPU 架构 (ABI):&quot;, _device.getCpuAbi())
+_console.log(&quot;Bootloader 版本:&quot;, _device.getBootloader())
+_console.log(&quot;指纹信息 (Fingerprint):&quot;, _device.getFingerprint())
+_console.log(&quot;序列号 (Serial):&quot;, _device.getSerial())
+
+# 3. 屏幕信息
+_console.log(&quot;\n[屏幕信息]&quot;)
+_console.log(&quot;屏幕宽度:&quot;, _device.getScreenWidth(), &quot;px&quot;)
+_console.log(&quot;屏幕高度:&quot;, _device.getScreenHeight(), &quot;px&quot;)
+_console.log(&quot;逻辑密度 (Density):&quot;, _device.getScreenDensity())
+_console.log(&quot;像素密度 (DPI):&quot;, _device.getScreenDensityDpi())
+
+# 4. 存储与内存
+# 定义一个辅助函数将字节转换为 MB，方便查看
+def to_mb(bytes_val):
+    if bytes_val == -1:
+        return &quot;未知/错误&quot;
+    # 使用 f-string 进行格式化，更符合 Python 风格
+    return f&quot;{(bytes_val / 1024.0 / 1024.0):.2f} MB&quot;
+
+_console.log(&quot;\n[存储与内存]&quot;)
+_console.log(&quot;总内存 (Total RAM):&quot;, to_mb(_device.getTotalRam()), f&quot;(Raw: {_device.getTotalRam()})&quot;)
+_console.log(&quot;可用内存 (Avail RAM):&quot;, to_mb(_device.getAvailableRam()), f&quot;(Raw: {_device.getAvailableRam()})&quot;)
+_console.log(&quot;总存储 (Total Storage):&quot;, to_mb(_device.getTotalStorage()), f&quot;(Raw: {_device.getTotalStorage()})&quot;)
+_console.log(&quot;可用存储 (Avail Storage):&quot;, to_mb(_device.getAvailableStorage()), f&quot;(Raw: {_device.getAvailableStorage()})&quot;)
+
+# 5. 网络与状态
+_console.log(&quot;\n[网络与状态]&quot;)
+_console.log(&quot;IP 地址:&quot;, _device.getIpAddress())
+_console.log(&quot;MAC 地址:&quot;, _device.getMacAddress())
+_console.log(&quot;当前电量:&quot;, _device.getBatteryLevel(), &quot;%&quot;)
+_console.log(&quot;是否正在充电:&quot;, _device.isCharging())
+
+# 6. 交互测试 (震动)
+_console.log(&quot;\n[交互测试]&quot;)
+_console.log(&quot;正在测试震动功能 (500ms)...&quot;)
+_device.vibrate(500)
+
+_console.log(&quot;\n========== Device 接口测试结束 ==========&quot;)</div></div><div class="tabs__content" data-gtm="tab" id="-zgtdv6_30" data-sync-tabs="ruby" data-title="ruby"><div class="code-block" data-lang="ruby" data-title="Ruby" data-disable-link-processing="true"># encoding: utf-8
+
+# --- 开始测试设备接口 ---
+$console.log(&quot;========== 开始 Device 接口测试 ==========&quot;)
+
+# 1. 基础系统信息
+$console.log(&quot;\n[基础系统信息]&quot;)
+$console.log(&quot;品牌 (Brand):&quot;, $device.getBrand())
+$console.log(&quot;型号 (Model):&quot;, $device.getModel())
+$console.log(&quot;制造商 (Manufacturer):&quot;, $device.getManufacturer())
+$console.log(&quot;产品名 (Product):&quot;, $device.getProduct())
+$console.log(&quot;SDK 版本 (SDK Int):&quot;, $device.getSdkInt())
+$console.log(&quot;系统版本 (Release):&quot;, $device.getRelease())
+$console.log(&quot;语言环境 (Language):&quot;, $device.getLanguage())
+$console.log(&quot;Android ID:&quot;, $device.getAndroidId())
+
+# 2. 进阶硬件信息
+$console.log(&quot;\n[进阶硬件信息]&quot;)
+$console.log(&quot;CPU 架构 (ABI):&quot;, $device.getCpuAbi())
+$console.log(&quot;Bootloader 版本:&quot;, $device.getBootloader())
+$console.log(&quot;指纹信息 (Fingerprint):&quot;, $device.getFingerprint())
+$console.log(&quot;序列号 (Serial):&quot;, $device.getSerial())
+
+# 3. 屏幕信息
+$console.log(&quot;\n[屏幕信息]&quot;)
+$console.log(&quot;屏幕宽度:&quot;, $device.getScreenWidth(), &quot;px&quot;)
+$console.log(&quot;屏幕高度:&quot;, $device.getScreenHeight(), &quot;px&quot;)
+$console.log(&quot;逻辑密度 (Density):&quot;, $device.getScreenDensity())
+$console.log(&quot;像素密度 (DPI):&quot;, $device.getScreenDensityDpi())
+
+# 4. 存储与内存
+# 定义一个简单的闭包将字节转换为 MB，方便查看
+to_mb = lambda do |bytes|
+  return &quot;未知/错误&quot; if bytes == -1
+  return sprintf(&quot;%.2f MB&quot;, bytes / 1024.0 / 1024.0)
+end
+
+$console.log(&quot;\n[存储与内存]&quot;)
+# Ruby 中字符串拼接非字符串类型需要显式调用 .to_s
+$console.log(&quot;总内存 (Total RAM):&quot;, to_mb.call($device.getTotalRam()), &quot; (Raw: &quot; + $device.getTotalRam().to_s + &quot;)&quot;)
+$console.log(&quot;可用内存 (Avail RAM):&quot;, to_mb.call($device.getAvailableRam()), &quot; (Raw: &quot; + $device.getAvailableRam().to_s + &quot;)&quot;)
+$console.log(&quot;总存储 (Total Storage):&quot;, to_mb.call($device.getTotalStorage()), &quot; (Raw: &quot; + $device.getTotalStorage().to_s + &quot;)&quot;)
+$console.log(&quot;可用存储 (Avail Storage):&quot;, to_mb.call($device.getAvailableStorage()), &quot; (Raw: &quot; + $device.getAvailableStorage().to_s + &quot;)&quot;)
+
+# 5. 网络与状态
+$console.log(&quot;\n[网络与状态]&quot;)
+$console.log(&quot;IP 地址:&quot;, $device.getIpAddress())
+$console.log(&quot;MAC 地址:&quot;, $device.getMacAddress())
+$console.log(&quot;当前电量:&quot;, $device.getBatteryLevel(), &quot;%&quot;)
+$console.log(&quot;是否正在充电:&quot;, $device.isCharging())
+
+# 6. 交互测试 (震动)
+$console.log(&quot;\n[交互测试]&quot;)
+$console.log(&quot;正在测试震动功能 (500ms)...&quot;)
+$device.vibrate(500)
+
+$console.log(&quot;\n========== Device 接口测试结束 ==========&quot;)</div></div></div><div class="last-modified">09 December 2025</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="utility-tools.html" class="navigation-links__prev">实用工具</a><a href="clipboard.html" class="navigation-links__next">剪切板</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="frontend/app.js"></script></body></html>
